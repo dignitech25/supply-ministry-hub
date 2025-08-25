@@ -82,17 +82,6 @@ const HeroSection = () => {
                 alt="Healthcare professional with client using assistive technology"
                 className="rounded-2xl shadow-xl w-full h-auto"
               />
-              <div className="absolute -bottom-6 -left-6 bg-card rounded-xl shadow-lg p-6 border border-border">
-                <div className="flex items-center space-x-4">
-                  <div className="bg-primary/10 rounded-full p-3">
-                    <CheckCircle className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">NDIS Approved</p>
-                    <p className="text-sm text-muted-foreground">Registered Provider</p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
