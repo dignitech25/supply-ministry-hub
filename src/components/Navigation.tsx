@@ -78,16 +78,60 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="lg:hidden border-t border-border bg-background/95 backdrop-blur-sm">
-            <nav className="py-6 space-y-6 px-2">
-              <a href="#home" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Home</a>
-              <a href="#about" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">About</a>
-              <a href="#products" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Products & Solutions</a>
-              <a href="#sleep-choice" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Sleep Choice</a>
-              <a href="#suppliers" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Suppliers</a>
-              <a href="#testimonials" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Testimonials</a>
-              <a href="#contact" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Contact</a>
-              <div className="pt-6 border-t border-border">
+          <div className="lg:hidden absolute top-full left-0 right-0 border-t border-border bg-background/95 backdrop-blur-sm shadow-lg z-40">
+            <nav className="py-4 px-6">
+              <div className="space-y-1">
+                <a 
+                  href="#home" 
+                  className="block text-foreground hover:text-primary hover:bg-primary/5 transition-colors font-medium text-base py-3 px-4 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Home
+                </a>
+                <a 
+                  href="#about" 
+                  className="block text-foreground hover:text-primary hover:bg-primary/5 transition-colors font-medium text-base py-3 px-4 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  About
+                </a>
+                <a 
+                  href="#products" 
+                  className="block text-foreground hover:text-primary hover:bg-primary/5 transition-colors font-medium text-base py-3 px-4 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Products
+                </a>
+                <a 
+                  href="#sleep-choice" 
+                  className="block text-foreground hover:text-primary hover:bg-primary/5 transition-colors font-medium text-base py-3 px-4 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sleep Choice
+                </a>
+                <a 
+                  href="#suppliers" 
+                  className="block text-foreground hover:text-primary hover:bg-primary/5 transition-colors font-medium text-base py-3 px-4 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Suppliers
+                </a>
+                <a 
+                  href="#testimonials" 
+                  className="block text-foreground hover:text-primary hover:bg-primary/5 transition-colors font-medium text-base py-3 px-4 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Testimonials
+                </a>
+                <a 
+                  href="#contact" 
+                  className="block text-foreground hover:text-primary hover:bg-primary/5 transition-colors font-medium text-base py-3 px-4 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Contact
+                </a>
+              </div>
+              <div className="mt-4 pt-4 border-t border-border">
                 <Button 
                   size="lg"
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
