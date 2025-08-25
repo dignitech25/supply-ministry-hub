@@ -6,43 +6,43 @@ const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="bg-card border-b border-border sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+    <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 shadow-sm">
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-4">
             <img 
               src="/lovable-uploads/8b8891df-f694-415b-acab-b469a45766cb.png" 
               alt="Supply Ministry Logo" 
-              className="h-8 w-auto"
+              className="h-10 w-auto"
             />
             <div>
-              <h1 className="text-xl font-bold text-foreground">Supply Ministry</h1>
-              <p className="text-xs text-muted-foreground">Connects Care With Solutions</p>
+              <h1 className="text-2xl font-bold text-foreground">Supply Ministry</h1>
+              <p className="text-xs text-muted-foreground hidden sm:block">Connects Care With Solutions</p>
             </div>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-6">
-            <a href="#home" className="text-muted-foreground hover:text-primary transition-colors font-medium">Home</a>
-            <a href="#about" className="text-muted-foreground hover:text-primary transition-colors font-medium">About</a>
-            <a href="#products" className="text-muted-foreground hover:text-primary transition-colors font-medium">Products & Solutions</a>
-            <a href="#quick-ship" className="text-muted-foreground hover:text-primary transition-colors font-medium">Quick Ship & Promotions</a>
-            <a href="#sleep-choice" className="text-muted-foreground hover:text-primary transition-colors font-medium">Sleep Choice</a>
-            <a href="#suppliers" className="text-muted-foreground hover:text-primary transition-colors font-medium">Suppliers</a>
-            <a href="#testimonials" className="text-muted-foreground hover:text-primary transition-colors font-medium">Testimonials</a>
-            <a href="#quote-form" className="text-muted-foreground hover:text-primary transition-colors font-medium">Request a Quote</a>
-            <a href="#contact" className="text-muted-foreground hover:text-primary transition-colors font-medium">Contact</a>
+          <nav className="hidden xl:flex items-center space-x-8">
+            <a href="#home" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Home</a>
+            <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium text-sm">About</a>
+            <a href="#products" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Products & Solutions</a>
+            <a href="#quick-ship" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Quick Ship</a>
+            <a href="#sleep-choice" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Sleep Choice</a>
+            <a href="#suppliers" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Suppliers</a>
+            <a href="#testimonials" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Testimonials</a>
+            <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Contact</a>
           </nav>
 
           {/* Desktop CTA */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <div className="flex items-center text-muted-foreground">
-              <Phone className="h-4 w-4 mr-2" />
-              <span className="text-sm font-medium">1300 786 711</span>
+          <div className="hidden xl:flex items-center space-x-6">
+            <div className="flex items-center text-foreground bg-muted/30 rounded-full px-4 py-2">
+              <Phone className="h-4 w-4 mr-2 text-primary" />
+              <span className="text-sm font-semibold">1300 786 711</span>
             </div>
             <Button 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
               onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Request a Quote
@@ -51,7 +51,7 @@ const Navigation = () => {
 
           {/* Mobile menu button */}
           <button
-            className="lg:hidden text-foreground"
+            className="xl:hidden text-foreground p-2"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -60,24 +60,24 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="lg:hidden border-t border-border">
-            <nav className="py-4 space-y-4">
-              <a href="#home" className="block text-muted-foreground hover:text-primary transition-colors font-medium">Home</a>
-              <a href="#about" className="block text-muted-foreground hover:text-primary transition-colors font-medium">About</a>
-              <a href="#products" className="block text-muted-foreground hover:text-primary transition-colors font-medium">Products & Solutions</a>
-              <a href="#quick-ship" className="block text-muted-foreground hover:text-primary transition-colors font-medium">Quick Ship & Promotions</a>
-              <a href="#sleep-choice" className="block text-muted-foreground hover:text-primary transition-colors font-medium">Sleep Choice</a>
-              <a href="#suppliers" className="block text-muted-foreground hover:text-primary transition-colors font-medium">Suppliers</a>
-              <a href="#testimonials" className="block text-muted-foreground hover:text-primary transition-colors font-medium">Testimonials</a>
-              <a href="#quote-form" className="block text-muted-foreground hover:text-primary transition-colors font-medium">Request a Quote</a>
-              <a href="#contact" className="block text-muted-foreground hover:text-primary transition-colors font-medium">Contact</a>
-              <div className="pt-4 border-t border-border">
-                <div className="flex items-center text-muted-foreground mb-3">
-                  <Phone className="h-4 w-4 mr-2" />
-                  <span className="text-sm font-medium">1300 786 711</span>
+          <div className="xl:hidden border-t border-border bg-background/95 backdrop-blur-sm">
+            <nav className="py-6 space-y-6 px-2">
+              <a href="#home" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Home</a>
+              <a href="#about" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">About</a>
+              <a href="#products" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Products & Solutions</a>
+              <a href="#quick-ship" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Quick Ship</a>
+              <a href="#sleep-choice" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Sleep Choice</a>
+              <a href="#suppliers" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Suppliers</a>
+              <a href="#testimonials" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Testimonials</a>
+              <a href="#contact" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Contact</a>
+              <div className="pt-6 border-t border-border">
+                <div className="flex items-center text-foreground bg-muted/30 rounded-full px-4 py-3 mb-4">
+                  <Phone className="h-4 w-4 mr-2 text-primary" />
+                  <span className="text-sm font-semibold">1300 786 711</span>
                 </div>
                 <Button 
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                  size="lg"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
                   onClick={() => {
                     setIsOpen(false);
                     document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' });
