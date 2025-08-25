@@ -11,15 +11,20 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex items-center py-2 pr-8">
-            <img 
-              src="/lovable-uploads/3275b48c-3032-4c7a-acc5-22d9564590c2.png" 
-              alt="Supply Ministry - Connects Care With Solutions" 
-              className="h-10 sm:h-12 md:h-14 w-auto max-w-[280px] object-contain"
-              onError={(e) => {
-                console.log('Logo failed to load:', e.currentTarget.src);
-                e.currentTarget.src = '/placeholder.svg';
-              }}
-            />
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+              <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-xl p-4 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 hover:bg-card/90">
+                <img 
+                  src="/lovable-uploads/3275b48c-3032-4c7a-acc5-22d9564590c2.png" 
+                  alt="Supply Ministry - Connects Care With Solutions" 
+                  className="h-12 sm:h-14 md:h-16 lg:h-18 w-auto object-contain filter brightness-100 contrast-110"
+                  onError={(e) => {
+                    console.log('Logo failed to load:', e.currentTarget.src);
+                    e.currentTarget.src = '/placeholder.svg';
+                  }}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Desktop Navigation */}
