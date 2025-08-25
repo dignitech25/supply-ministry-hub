@@ -15,8 +15,8 @@ const HeroSection = () => {
             </h1>
             
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              With our industry contacts, we bring you the largest range of mobility 
-              and home modification solutions for your clients across Australia.
+              We bring you a wide range of mobility and home modification solutions 
+              for your clients across Greater Metropolitan Melbourne.
             </p>
 
             {/* Key Benefits */}
@@ -38,7 +38,7 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
                 size="lg" 
-                className="bg-gradient-hero hover:bg-primary-dark text-lg px-8"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8"
                 onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Request a Quote
