@@ -10,13 +10,14 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center py-2 pr-8">
             <img 
               src="/lovable-uploads/52086afc-be92-4ca9-b632-b96246eef858.png" 
               alt="Supply Ministry - Connects Care With Solutions" 
-              className="h-16 w-auto"
+              className="h-12 sm:h-14 md:h-16 lg:h-18 w-auto max-w-[200px] object-contain transition-all duration-300 hover:scale-105"
               onError={(e) => {
                 console.log('Logo failed to load:', e.currentTarget.src);
+                e.currentTarget.src = '/placeholder.svg';
               }}
             />
           </div>
