@@ -15,7 +15,7 @@ const Navigation = () => {
             <img 
               src="/lovable-uploads/6ae28d3a-6dd2-47fe-82f8-0fd5e2870808.png" 
               alt="Supply Ministry - Connects Care With Solutions"
-              className="h-[60px] w-auto object-contain"
+              className="h-[75px] w-auto object-contain"
               onError={(e) => {
                 console.log('Logo failed to load:', e.currentTarget.src);
                 e.currentTarget.src = '/placeholder.svg';
@@ -52,7 +52,7 @@ const Navigation = () => {
                 <img 
                   src="/lovable-uploads/6ae28d3a-6dd2-47fe-82f8-0fd5e2870808.png" 
                   alt="Supply Ministry - Connects Care With Solutions"
-                  className="h-[54px] w-auto object-contain"
+                  className="h-[68px] w-auto object-contain"
                 onError={(e) => {
                   console.log('Logo failed to load:', e.currentTarget.src);
                   e.currentTarget.src = '/placeholder.svg';
