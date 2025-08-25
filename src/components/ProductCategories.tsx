@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Car, Home, Shield, Bed, ArrowRight } from "lucide-react";
 
 const categories = [
@@ -58,14 +59,17 @@ const ProductCategories = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 mb-6">
+                  <div className="flex flex-wrap gap-2 mb-6">
                     {category.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="text-sm text-muted-foreground flex items-center">
-                        <div className="w-2 h-2 bg-primary rounded-full mr-3 flex-shrink-0"></div>
+                      <Badge 
+                        key={featureIndex} 
+                        variant="secondary" 
+                        className="text-xs bg-primary/10 text-primary hover:bg-primary/20"
+                      >
                         {feature}
-                      </li>
+                      </Badge>
                     ))}
-                  </ul>
+                  </div>
                   <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                     View Products
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -76,23 +80,18 @@ const ProductCategories = () => {
           })}
         </div>
 
-        {/* CTA Section */}
+        {/* Contact Expert Section - Single CTA */}
         <div className="text-center bg-card rounded-2xl p-8 border border-border">
           <h3 className="text-2xl font-semibold text-foreground mb-4">
-            Need help choosing the right solution?
+            Need expert guidance choosing the right solution?
           </h3>
           <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
             Our experienced team can guide you through our complete range and help you find 
             the perfect assistive technology solution for your client's specific needs.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-hero hover:bg-primary-dark">
-              Request a Quote
-            </Button>
-            <Button variant="outline" size="lg">
-              Speak with Expert
-            </Button>
-          </div>
+          <Button variant="outline" size="lg">
+            Speak with Expert
+          </Button>
         </div>
       </div>
     </section>

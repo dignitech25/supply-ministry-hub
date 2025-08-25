@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle } from "lucide-react";
-import heroImage from "@/assets/hero-image.jpg";
+import heroImage from "@/assets/hero-senior-assistive.jpg";
 
 const HeroSection = () => {
   return (
@@ -9,7 +9,7 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="lg:pr-8">
-            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-6 leading-tight">
+            <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
               Achieve Greater{" "}
               <span className="text-primary">Comfort and Safety</span>
             </h1>
@@ -79,9 +79,11 @@ const HeroSection = () => {
             <div className="relative">
               <img
                 src={heroImage}
-                alt="Healthcare professional with client using assistive technology"
+                alt="Smiling senior woman using assistive technology with confidence"
                 className="rounded-2xl shadow-xl w-full h-auto"
               />
+              {/* Purple overlay for text contrast */}
+              <div className="absolute inset-0 bg-primary/20 rounded-2xl"></div>
             </div>
           </div>
         </div>

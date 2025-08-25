@@ -8,15 +8,51 @@ const Navigation = () => {
   return (
     <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-6">
-        {/* Universal Layout - Hamburger Menu */}
-        <div className="flex items-center h-28">
+        {/* Desktop Horizontal Navigation */}
+        <div className="hidden lg:flex items-center justify-between h-20">
+          {/* Logo */}
+          <div className="flex items-center">
+            <img 
+              src="/lovable-uploads/6ae28d3a-6dd2-47fe-82f8-0fd5e2870808.png" 
+              alt="Supply Ministry - Connects Care With Solutions"
+              className="h-12 w-auto object-contain"
+              onError={(e) => {
+                console.log('Logo failed to load:', e.currentTarget.src);
+                e.currentTarget.src = '/placeholder.svg';
+              }}
+            />
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="flex items-center space-x-8">
+            <a href="#home" className="text-foreground hover:text-primary transition-colors font-medium">Home</a>
+            <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium">About</a>
+            <a href="#products" className="text-foreground hover:text-primary transition-colors font-medium">Products</a>
+            <a href="#sleep-choice" className="text-foreground hover:text-primary transition-colors font-medium">Sleep Choice</a>
+            <a href="#suppliers" className="text-foreground hover:text-primary transition-colors font-medium">Suppliers</a>
+            <a href="#testimonials" className="text-foreground hover:text-primary transition-colors font-medium">Testimonials</a>
+            <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium">Contact</a>
+          </nav>
+
+          {/* Desktop CTA */}
+          <Button 
+            size="lg"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
+            onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            Request a Quote
+          </Button>
+        </div>
+
+        {/* Mobile Layout - Hamburger Menu */}
+        <div className="lg:hidden flex items-center h-20">
           {/* Centered Logo on Mobile */}
           <div className="flex-1 flex items-center justify-center">
             <div>
               <img 
-                src="/lovable-uploads/565faeaf-a974-4cf2-a20d-4a06e02bd147.png" 
+                src="/lovable-uploads/6ae28d3a-6dd2-47fe-82f8-0fd5e2870808.png" 
                 alt="Supply Ministry - Connects Care With Solutions"
-                className="h-24 w-auto object-contain"
+                className="h-10 w-auto object-contain"
                 onError={(e) => {
                   console.log('Logo failed to load:', e.currentTarget.src);
                   e.currentTarget.src = '/placeholder.svg';
@@ -27,16 +63,16 @@ const Navigation = () => {
 
           {/* Mobile menu button */}
           <button
-            className="absolute right-6 text-foreground p-2"
+            className="absolute right-6 text-foreground p-2 lg:hidden"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
-        {/* Navigation Dropdown */}
+        {/* Mobile Navigation Dropdown */}
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 border-t border-border bg-background/95 backdrop-blur-sm shadow-lg z-40">
+          <div className="lg:hidden absolute top-full left-0 right-0 border-t border-border bg-background/95 backdrop-blur-sm shadow-lg z-40">
             <nav className="py-4 px-6">
               <div className="space-y-1">
                 <a 

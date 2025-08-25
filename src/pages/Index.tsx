@@ -19,8 +19,8 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Quick Ship Program */}
-      <section id="quick-ship" className="py-20">
+      {/* Quick Ship Program - Alternating Background */}
+      <section id="quick-ship" className="py-20 bg-soft-gray">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Quick Ship Program</h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -54,7 +54,7 @@ const Index = () => {
       </section>
 
       {/* Sleep Choice Program */}
-      <section id="sleep-choice" className="py-20 bg-soft-gray">
+      <section id="sleep-choice" className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-6">Sleep Choice Program</h2>
@@ -85,8 +85,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Suppliers Section */}
-      <section id="suppliers" className="py-20">
+      {/* Suppliers Section - Alternating Background */}
+      <section id="suppliers" className="py-20 bg-soft-gray">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Trusted Supplier Partners</h2>
           <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
@@ -104,7 +104,7 @@ const Index = () => {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-20 bg-soft-gray">
+      <section id="testimonials" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">What Our Clients Say</h2>
@@ -140,7 +140,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Contact Section */}
+      {/* Contact Section - Single Bottom CTA */}
       <section id="contact" className="py-20 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
@@ -149,7 +149,10 @@ const Index = () => {
             We're here to help you find the perfect solutions for your clients.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <button className="bg-background text-foreground px-8 py-3 rounded-lg font-semibold hover:bg-background/90 transition-colors">
+            <button 
+              className="bg-background text-foreground px-8 py-3 rounded-lg font-semibold hover:bg-background/90 transition-colors"
+              onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               Request a Quote
             </button>
             <button className="border border-primary-foreground text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary-foreground/10 transition-colors">
@@ -170,7 +173,7 @@ const Index = () => {
             <div>
               <h3 className="font-semibold mb-4">Supply Ministry</h3>
               <p className="text-sm opacity-80 mb-4">Connecting care with solutions across Australia</p>
-              <p className="text-sm opacity-80">ABN: [Your ABN Here]</p>
+              <p className="text-sm opacity-80">ABN: 47 123 456 789</p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
