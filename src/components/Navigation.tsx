@@ -9,7 +9,7 @@ const Navigation = () => {
     <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-6">
         {/* Desktop Layout - 3 Column Grid */}
-        <div className="hidden lg:grid lg:grid-cols-3 lg:items-center h-24">
+        <div className="hidden lg:grid lg:grid-cols-3 lg:items-center h-32">
           {/* Left Navigation */}
           <nav className="flex items-center justify-start space-x-3">
             <a href="#home" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Home</a>
@@ -20,11 +20,11 @@ const Navigation = () => {
 
           {/* Centered Logo */}
           <div className="flex items-center justify-center">
-            <div className="bg-white/10 rounded-lg p-2 shadow-md">
+            <div>
               <img 
                 src="/lovable-uploads/3275b48c-3032-4c7a-acc5-22d9564590c2.png" 
                 alt="Supply Ministry - Connects Care With Solutions" 
-                className="h-20 w-auto object-contain"
+                className="h-32 w-auto object-contain"
                 onError={(e) => {
                   console.log('Logo failed to load:', e.currentTarget.src);
                   e.currentTarget.src = '/placeholder.svg';
@@ -56,14 +56,14 @@ const Navigation = () => {
         </div>
 
         {/* Mobile/Tablet Layout */}
-        <div className="lg:hidden flex items-center h-20">
+        <div className="lg:hidden flex items-center h-28">
           {/* Centered Logo on Mobile */}
           <div className="flex-1 flex items-center justify-center">
-            <div className="bg-white/10 rounded-lg p-2 shadow-md">
+            <div>
               <img 
                 src="/lovable-uploads/3275b48c-3032-4c7a-acc5-22d9564590c2.png" 
                 alt="Supply Ministry - Connects Care With Solutions" 
-                className="h-16 w-auto object-contain"
+                className="h-24 w-auto object-contain"
                 onError={(e) => {
                   console.log('Logo failed to load:', e.currentTarget.src);
                   e.currentTarget.src = '/placeholder.svg';
