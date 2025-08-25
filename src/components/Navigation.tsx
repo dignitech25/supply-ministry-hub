@@ -21,7 +21,7 @@ const Navigation = () => {
           <div className="flex items-center justify-center">
             <div>
               <img 
-                src="/lovable-uploads/b9a257b9-262f-44b7-ad6e-fad94615bfeb.png"
+                src="/lovable-uploads/565faeaf-a974-4cf2-a20d-4a06e02bd147.png"
                 alt="Supply Ministry - Connects Care With Solutions"
                 className="h-28 w-auto object-contain"
                 onError={(e) => {
@@ -56,7 +56,7 @@ const Navigation = () => {
           <div className="flex-1 flex items-center justify-center">
             <div>
               <img 
-                src="/lovable-uploads/b9a257b9-262f-44b7-ad6e-fad94615bfeb.png" 
+                src="/lovable-uploads/565faeaf-a974-4cf2-a20d-4a06e02bd147.png" 
                 alt="Supply Ministry - Connects Care With Solutions"
                 className="h-24 w-auto object-contain"
                 onError={(e) => {
