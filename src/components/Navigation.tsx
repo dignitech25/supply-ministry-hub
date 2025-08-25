@@ -10,19 +10,15 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center">
             <img 
-              src="/lovable-uploads/8b8891df-f694-415b-acab-b469a45766cb.png" 
-              alt="Supply Ministry Logo" 
-              className="h-12 w-auto"
+              src="/lovable-uploads/671b1b98-4484-4ee1-b4fd-a75bdbb5b419.png" 
+              alt="Supply Ministry - Connects Care With Solutions" 
+              className="h-16 w-auto"
               onError={(e) => {
                 console.log('Logo failed to load:', e.currentTarget.src);
               }}
             />
-            <div>
-              <h1 className="text-xl font-bold text-foreground">Supply Ministry</h1>
-              <p className="text-xs text-muted-foreground hidden sm:block">Connects Care With Solutions</p>
-            </div>
           </div>
 
           {/* Desktop Navigation */}
