@@ -12,7 +12,7 @@ const Navigation = () => {
           {/* Logo */}
           <div className="flex items-center">
             <img 
-              src="/lovable-uploads/671b1b98-4484-4ee1-b4fd-a75bdbb5b419.png" 
+              src="/lovable-uploads/52086afc-be92-4ca9-b632-b96246eef858.png" 
               alt="Supply Ministry - Connects Care With Solutions" 
               className="h-16 w-auto"
               onError={(e) => {
