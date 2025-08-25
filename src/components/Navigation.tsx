@@ -8,50 +8,8 @@ const Navigation = () => {
   return (
     <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-6">
-        {/* Desktop Layout - 3 Column Grid */}
-        <div className="hidden lg:grid lg:grid-cols-3 lg:items-center h-32">
-          {/* Left Navigation */}
-          <nav className="flex items-center justify-start space-x-3">
-            <a href="#home" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Home</a>
-            <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium text-sm">About</a>
-            <a href="#products" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Products</a>
-          </nav>
-
-          {/* Centered Logo */}
-          <div className="flex items-center justify-center">
-            <div>
-              <img 
-                src="/lovable-uploads/565faeaf-a974-4cf2-a20d-4a06e02bd147.png"
-                alt="Supply Ministry - Connects Care With Solutions"
-                className="h-28 w-auto object-contain"
-                onError={(e) => {
-                  console.log('Logo failed to load:', e.currentTarget.src);
-                  e.currentTarget.src = '/placeholder.svg';
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Right Navigation & CTA */}
-          <div className="flex items-center justify-end space-x-4">
-            <nav className="flex items-center space-x-3">
-              <a href="#sleep-choice" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Sleep Choice</a>
-              <a href="#suppliers" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Suppliers</a>
-              <a href="#testimonials" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Testimonials</a>
-              <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Contact</a>
-            </nav>
-            <Button 
-              size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
-              onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Request a Quote
-            </Button>
-          </div>
-        </div>
-
-        {/* Mobile/Tablet Layout */}
-        <div className="lg:hidden flex items-center h-28">
+        {/* Universal Layout - Hamburger Menu */}
+        <div className="flex items-center h-28">
           {/* Centered Logo on Mobile */}
           <div className="flex-1 flex items-center justify-center">
             <div>
@@ -76,9 +34,9 @@ const Navigation = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Navigation Dropdown */}
         {isOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 border-t border-border bg-background/95 backdrop-blur-sm shadow-lg z-40">
+          <div className="absolute top-full left-0 right-0 border-t border-border bg-background/95 backdrop-blur-sm shadow-lg z-40">
             <nav className="py-4 px-6">
               <div className="space-y-1">
                 <a 
