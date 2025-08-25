@@ -9,6 +9,59 @@ import { Send, CheckCircle } from "lucide-react";
 
 const QuoteForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const formatAustralianPhone = (value: string) => {
+    // Remove all non-digits
+    const digits = value.replace(/\D/g, '');
+    
+    // Handle different Australian phone number formats
+    if (digits.startsWith('61')) {
+      // International format +61
+      if (digits.length <= 3) return `+${digits}`;
+      if (digits.length <= 4) return `+61 ${digits.slice(2)}`;
+      if (digits.length <= 7) return `+61 ${digits.slice(2, 3)} ${digits.slice(3)}`;
+      if (digits.length <= 11) return `+61 ${digits.slice(2, 3)} ${digits.slice(3, 7)} ${digits.slice(7)}`;
+      return `+61 ${digits.slice(2, 3)} ${digits.slice(3, 7)} ${digits.slice(7, 11)}`;
+    } else if (digits.startsWith('04')) {
+      // Mobile format 04XX XXX XXX
+      if (digits.length <= 4) return digits;
+      if (digits.length <= 7) return `${digits.slice(0, 4)} ${digits.slice(4)}`;
+      return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7, 10)}`;
+    } else if (digits.startsWith('13') || digits.startsWith('18')) {
+      // 13XX XXX XXX or 18XX XXX XXX
+      if (digits.length <= 4) return digits;
+      if (digits.length <= 7) return `${digits.slice(0, 4)} ${digits.slice(4)}`;
+      return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7, 10)}`;
+    } else if (digits.startsWith('0')) {
+      // Landline format 0X XXXX XXXX
+      if (digits.length <= 2) return digits;
+      if (digits.length <= 6) return `${digits.slice(0, 2)} ${digits.slice(2)}`;
+      return `${digits.slice(0, 2)} ${digits.slice(2, 6)} ${digits.slice(6, 10)}`;
+    }
+    
+    return value;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatAustralianPhone(e.target.value);
+    setPhoneNumber(formatted);
+  };
+
+  const isValidAustralianPhone = (phone: string) => {
+    const digits = phone.replace(/\D/g, '');
+    return (
+      // Mobile
+      /^04\d{8}$/.test(digits) ||
+      // Landline
+      /^0[2-8]\d{8}$/.test(digits) ||
+      // Toll-free
+      /^(13|18)\d{8}$/.test(digits) ||
+      // International
+      /^61[2-8]\d{8}$/.test(digits) ||
+      /^614\d{8}$/.test(digits)
+    );
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +116,19 @@ const QuoteForm = () => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>
-              <Input id="phone" type="tel" placeholder="1300 123 456" />
+              <Input 
+                id="phone" 
+                type="tel" 
+                value={phoneNumber}
+                onChange={handlePhoneChange}
+                placeholder="0412 345 678 or 02 1234 5678"
+                className={phoneNumber && !isValidAustralianPhone(phoneNumber) ? "border-destructive" : ""}
+              />
+              {phoneNumber && !isValidAustralianPhone(phoneNumber) && (
+                <p className="text-sm text-destructive">
+                  Please enter a valid Australian phone number
+                </p>
+              )}
             </div>
           </div>
 
