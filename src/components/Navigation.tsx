@@ -10,16 +10,18 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div className="flex items-center py-2 pr-8">
-            <img 
-              src="/lovable-uploads/52086afc-be92-4ca9-b632-b96246eef858.png" 
-              alt="Supply Ministry - Connects Care With Solutions" 
-              className="h-12 sm:h-14 md:h-16 lg:h-18 w-auto max-w-[200px] object-contain transition-all duration-300 hover:scale-105"
-              onError={(e) => {
-                console.log('Logo failed to load:', e.currentTarget.src);
-                e.currentTarget.src = '/placeholder.svg';
-              }}
-            />
+          <div className="flex items-center py-1 pr-8">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 shadow-lg border border-white/10 hover:bg-white/10 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20">
+              <img 
+                src="/lovable-uploads/52086afc-be92-4ca9-b632-b96246eef858.png" 
+                alt="Supply Ministry - Connects Care With Solutions" 
+                className="h-14 sm:h-16 md:h-18 lg:h-20 w-auto max-w-[280px] object-contain transition-all duration-300 hover:scale-105 filter brightness-110"
+                onError={(e) => {
+                  console.log('Logo failed to load:', e.currentTarget.src);
+                  e.currentTarget.src = '/placeholder.svg';
+                }}
+              />
+            </div>
           </div>
 
           {/* Desktop Navigation */}
