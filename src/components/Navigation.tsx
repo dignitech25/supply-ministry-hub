@@ -15,7 +15,7 @@ const Navigation = () => {
             <img 
               src="/lovable-uploads/6ae28d3a-6dd2-47fe-82f8-0fd5e2870808.png" 
               alt="Supply Ministry - Connects Care With Solutions"
-              className="h-12 w-auto object-contain"
+              className="h-18 w-auto object-contain"
               onError={(e) => {
                 console.log('Logo failed to load:', e.currentTarget.src);
                 e.currentTarget.src = '/placeholder.svg';
@@ -49,10 +49,10 @@ const Navigation = () => {
           {/* Centered Logo on Mobile */}
           <div className="flex-1 flex items-center justify-center">
             <div>
-              <img 
-                src="/lovable-uploads/6ae28d3a-6dd2-47fe-82f8-0fd5e2870808.png" 
-                alt="Supply Ministry - Connects Care With Solutions"
-                className="h-10 w-auto object-contain"
+                <img 
+                  src="/lovable-uploads/6ae28d3a-6dd2-47fe-82f8-0fd5e2870808.png" 
+                  alt="Supply Ministry - Connects Care With Solutions"
+                  className="h-15 w-auto object-contain"
                 onError={(e) => {
                   console.log('Logo failed to load:', e.currentTarget.src);
                   e.currentTarget.src = '/placeholder.svg';
