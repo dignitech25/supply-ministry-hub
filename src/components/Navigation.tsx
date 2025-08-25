@@ -15,14 +15,13 @@ const Navigation = () => {
             <a href="#home" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Home</a>
             <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium text-sm">About</a>
             <a href="#products" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Products</a>
-            <a href="#quick-ship" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Quick Ship</a>
           </nav>
 
           {/* Centered Logo */}
           <div className="flex items-center justify-center">
             <div>
               <img 
-                src="/lovable-uploads/a7c3e772-2d59-47d8-9145-448b83baed11.png"
+                src="/lovable-uploads/db3c3505-f6b8-4636-9c2b-65a46b8c4bb6.png"
                 alt="Supply Ministry - Connects Care With Solutions"
                 className="h-28 w-auto object-contain"
                 onError={(e) => {
@@ -41,10 +40,6 @@ const Navigation = () => {
               <a href="#testimonials" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Testimonials</a>
               <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Contact</a>
             </nav>
-            <div className="flex items-center text-foreground bg-muted/30 rounded-full px-4 py-2">
-              <Phone className="h-4 w-4 mr-2 text-primary" />
-              <span className="text-sm font-semibold">1300 786 711</span>
-            </div>
             <Button 
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
@@ -61,7 +56,7 @@ const Navigation = () => {
           <div className="flex-1 flex items-center justify-center">
             <div>
               <img 
-                src="/lovable-uploads/a7c3e772-2d59-47d8-9145-448b83baed11.png" 
+                src="/lovable-uploads/db3c3505-f6b8-4636-9c2b-65a46b8c4bb6.png" 
                 alt="Supply Ministry - Connects Care With Solutions"
                 className="h-24 w-auto object-contain"
                 onError={(e) => {
@@ -88,16 +83,11 @@ const Navigation = () => {
               <a href="#home" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Home</a>
               <a href="#about" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">About</a>
               <a href="#products" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Products & Solutions</a>
-              <a href="#quick-ship" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Quick Ship</a>
               <a href="#sleep-choice" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Sleep Choice</a>
               <a href="#suppliers" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Suppliers</a>
               <a href="#testimonials" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Testimonials</a>
               <a href="#contact" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Contact</a>
               <div className="pt-6 border-t border-border">
-                <div className="flex items-center text-foreground bg-muted/30 rounded-full px-4 py-3 mb-4">
-                  <Phone className="h-4 w-4 mr-2 text-primary" />
-                  <span className="text-sm font-semibold">1300 786 711</span>
-                </div>
                 <Button 
                   size="lg"
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
