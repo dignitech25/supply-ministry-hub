@@ -22,7 +22,7 @@ const Navigation = () => {
           <div className="flex items-center justify-center">
             <div>
               <img 
-                src="/lovable-uploads/ed1f0d71-6aa5-4c54-bba4-d2457dc90cc2.png"
+                src="/lovable-uploads/a7c3e772-2d59-47d8-9145-448b83baed11.png"
                 alt="Supply Ministry - Connects Care With Solutions"
                 className="h-28 w-auto object-contain"
                 onError={(e) => {
@@ -61,7 +61,7 @@ const Navigation = () => {
           <div className="flex-1 flex items-center justify-center">
             <div>
               <img 
-                src="/lovable-uploads/ed1f0d71-6aa5-4c54-bba4-d2457dc90cc2.png" 
+                src="/lovable-uploads/a7c3e772-2d59-47d8-9145-448b83baed11.png" 
                 alt="Supply Ministry - Connects Care With Solutions"
                 className="h-24 w-auto object-contain"
                 onError={(e) => {
