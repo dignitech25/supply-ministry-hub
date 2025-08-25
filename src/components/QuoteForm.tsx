@@ -97,10 +97,9 @@ const QuoteForm = () => {
     try {
       console.log('Submitting quote request:', data);
 
-      // Insert quote request into Supabase
-      const { data: quoteRequest, error: insertError } = await supabase
-        .from('quote_requests')
-        .insert({
+      // Submit quote request via edge function
+      const { data: result, error } = await supabase.functions.invoke('submit-quote-request', {
+        body: {
           first_name: data.firstName,
           last_name: data.lastName,
           email: data.email,
@@ -111,35 +110,23 @@ const QuoteForm = () => {
           timeline: data.timeline,
           source_url: window.location.href,
           user_agent: navigator.userAgent,
-        })
-        .select()
-        .single();
-
-      if (insertError) {
-        throw new Error(`Failed to save quote request: ${insertError.message}`);
-      }
-
-      console.log('Quote request saved:', quoteRequest);
-
-      // Send email notification
-      const { error: emailError } = await supabase.functions.invoke('send-quote-notification', {
-        body: quoteRequest,
+        }
       });
 
-      if (emailError) {
-        console.error('Email notification failed:', emailError);
-        // Don't throw error here - quote is still saved even if email fails
-        toast({
-          title: "Quote Request Submitted",
-          description: "Your quote request has been saved, but there was an issue sending the notification email. We'll still contact you soon!",
-        });
-      } else {
-        console.log('Email notification sent successfully');
-        toast({
-          title: "Quote Request Submitted Successfully!",
-          description: "Thank you for your interest. We'll review your requirements and get back to you within 24 hours.",
-        });
+      if (error) {
+        throw new Error(`Failed to submit quote request: ${error.message}`);
       }
+
+      if (!result?.success) {
+        throw new Error(result?.error || 'Unknown error occurred');
+      }
+
+      console.log('Quote request submitted successfully:', result.quote);
+
+      toast({
+        title: "Quote Request Submitted Successfully!",
+        description: "Thank you for your interest. We'll review your requirements and get back to you within 24 hours.",
+      });
 
       // Reset form
       form.reset();
