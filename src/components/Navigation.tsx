@@ -9,7 +9,7 @@ const Navigation = () => {
     <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-6">
         {/* Desktop Layout - 3 Column Grid */}
-        <div className="hidden lg:grid lg:grid-cols-3 lg:items-center h-48">
+        <div className="hidden lg:grid lg:grid-cols-3 lg:items-center h-32">
           {/* Left Navigation */}
           <nav className="flex items-center justify-start space-x-3">
             <a href="#home" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Home</a>
@@ -24,7 +24,7 @@ const Navigation = () => {
               <img 
                 src="/lovable-uploads/ed1f0d71-6aa5-4c54-bba4-d2457dc90cc2.png"
                 alt="Supply Ministry - Connects Care With Solutions"
-                className="h-48 w-auto object-contain"
+                className="h-28 w-auto object-contain"
                 onError={(e) => {
                   console.log('Logo failed to load:', e.currentTarget.src);
                   e.currentTarget.src = '/placeholder.svg';
@@ -56,14 +56,14 @@ const Navigation = () => {
         </div>
 
         {/* Mobile/Tablet Layout */}
-        <div className="lg:hidden flex items-center h-40">
+        <div className="lg:hidden flex items-center h-28">
           {/* Centered Logo on Mobile */}
           <div className="flex-1 flex items-center justify-center">
             <div>
               <img 
                 src="/lovable-uploads/ed1f0d71-6aa5-4c54-bba4-d2457dc90cc2.png" 
                 alt="Supply Ministry - Connects Care With Solutions"
-                className="h-36 w-auto object-contain"
+                className="h-24 w-auto object-contain"
                 onError={(e) => {
                   console.log('Logo failed to load:', e.currentTarget.src);
                   e.currentTarget.src = '/placeholder.svg';
