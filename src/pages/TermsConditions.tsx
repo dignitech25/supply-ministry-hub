@@ -1,0 +1,105 @@
+import Navigation from "@/components/Navigation";
+
+const TermsConditions = () => {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      
+      <main className="container mx-auto px-4 py-20">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl font-bold text-foreground mb-8">Terms & Conditions</h1>
+          
+          <div className="prose prose-lg max-w-none">
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">General Terms</h2>
+              <p className="text-muted-foreground mb-4">
+                By using Supply Ministry's services, you agree to be bound by these terms and conditions. 
+                These terms apply to all products and services provided by Supply Ministry.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Products & Services</h2>
+              <p className="text-muted-foreground mb-4">
+                Supply Ministry provides assistive technology solutions, mobility aids, and related services. 
+                All products are subject to availability and specifications may change without notice.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Pricing & Payment</h2>
+              <p className="text-muted-foreground mb-4">
+                All prices are subject to change without notice. Payment terms will be specified on individual quotes. 
+                Supply Ministry reserves the right to modify pricing based on market conditions.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Delivery & Returns</h2>
+              <p className="text-muted-foreground mb-4">
+                We aim for 48-hour dispatch on most items. Delivery times may vary based on location and product availability. 
+                Returns are accepted within 30 days of delivery for unused items in original condition.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Privacy Policy</h2>
+              <h3 className="text-xl font-medium text-foreground mb-3">Information Collection</h3>
+              <p className="text-muted-foreground mb-4">
+                We collect information you provide when requesting quotes, placing orders, or contacting us. 
+                This may include name, contact details, organization information, and product requirements.
+              </p>
+              
+              <h3 className="text-xl font-medium text-foreground mb-3">Use of Information</h3>
+              <p className="text-muted-foreground mb-4">
+                Your information is used to provide quotes, process orders, communicate about products and services, 
+                and improve our offerings. We do not sell or share personal information with third parties without consent.
+              </p>
+              
+              <h3 className="text-xl font-medium text-foreground mb-3">Data Security</h3>
+              <p className="text-muted-foreground mb-4">
+                We implement appropriate security measures to protect your personal information against unauthorized access, 
+                alteration, disclosure, or destruction.
+              </p>
+              
+              <h3 className="text-xl font-medium text-foreground mb-3">Contact for Privacy Matters</h3>
+              <p className="text-muted-foreground mb-4">
+                For privacy-related questions or to access, update, or delete your personal information, 
+                please contact us using the details provided on our contact page.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Liability</h2>
+              <p className="text-muted-foreground mb-4">
+                Supply Ministry's liability is limited to the value of products or services provided. 
+                We are not liable for indirect, consequential, or special damages.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Contact Information</h2>
+              <p className="text-muted-foreground mb-2">
+                For questions about these terms and conditions, please contact:
+              </p>
+              <div className="bg-soft-gray p-4 rounded-lg">
+                <p className="text-foreground">
+                  <strong>Alex:</strong> alex@supplyministry.com.au | 0452 002 450<br />
+                  <strong>David:</strong> david@supplyministry.com.au | 0404 593 090
+                </p>
+              </div>
+            </section>
+
+            <section>
+              <p className="text-sm text-muted-foreground">
+                Last updated: {new Date().toLocaleDateString()}
+              </p>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default TermsConditions;

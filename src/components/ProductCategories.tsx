@@ -7,26 +7,22 @@ const categories = [
   {
     icon: Car,
     title: "Mobility Aids",
-    description: "Wheelchairs, walking frames, scooters and mobility accessories to enhance independence and freedom of movement.",
-    features: ["Manual & Electric Wheelchairs", "Walking Frames & Rollators", "Mobility Scooters", "Ramps & Access Equipment"]
+    description: "Comprehensive mobility solutions including manual and electric wheelchairs, walking frames and rollators, mobility scooters, plus ramps and access equipment to enhance independence and freedom of movement.",
   },
   {
     icon: Home,
-    title: "Daily Living Aids",
-    description: "Essential tools and equipment to make everyday tasks easier and more manageable for independent living.",
-    features: ["Bathroom Safety Equipment", "Kitchen & Dining Aids", "Dressing & Grooming Tools", "Reaching & Gripping Aids"]
+    title: "Daily Living Aids", 
+    description: "Essential tools for independent living including bathroom safety equipment, kitchen and dining aids, dressing and grooming tools, plus reaching and gripping aids to make everyday tasks easier and more manageable.",
   },
   {
     icon: Shield,
     title: "Home Safety & Security",
-    description: "Comprehensive safety solutions to create secure, accessible environments that prevent accidents and injuries.",
-    features: ["Fall Prevention Systems", "Emergency Alert Devices", "Grab Rails & Handrails", "Lighting & Visibility Aids"]
+    description: "Complete safety solutions featuring fall prevention systems, emergency alert devices, grab rails and handrails, plus lighting and visibility aids to create secure, accessible environments that prevent accidents.",
   },
   {
     icon: Bed,
     title: "Bedroom & Comfort",
-    description: "Specialized beds, mattresses, and comfort solutions designed for therapeutic needs and enhanced rest quality.",
-    features: ["Adjustable Hospital Beds", "Pressure Relief Mattresses", "Recliners & Lift Chairs", "Positioning Aids"]
+    description: "Specialized comfort solutions including adjustable hospital beds, pressure relief mattresses, recliners and lift chairs, plus positioning aids designed for therapeutic needs and enhanced rest quality.",
   }
 ];
 
@@ -59,17 +55,6 @@ const ProductCategories = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {category.features.map((feature, featureIndex) => (
-                      <Badge 
-                        key={featureIndex} 
-                        variant="secondary" 
-                        className="text-xs bg-primary/10 text-primary hover:bg-primary/20"
-                      >
-                        {feature}
-                      </Badge>
-                    ))}
-                  </div>
                   <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                     View Products
                     <ArrowRight className="ml-2 h-4 w-4" />

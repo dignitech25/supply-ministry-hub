@@ -155,12 +155,10 @@ const Index = () => {
             >
               Request a Quote
             </button>
-            <button className="border border-primary-foreground text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary-foreground/10 transition-colors">
-              Call 1300 786 711
-            </button>
           </div>
-          <div className="text-sm opacity-75">
-            <p>Email: enquiries@supplyministry.com.au</p>
+          <div className="text-sm opacity-75 space-y-2">
+            <p><strong>Alex:</strong> alex@supplyministry.com.au | 0452 002 450</p>
+            <p><strong>David:</strong> david@supplyministry.com.au | 0404 593 090</p>
             <p>Business Hours: Monday - Friday, 8:30 AM - 5:00 PM AEST</p>
           </div>
         </div>
@@ -173,7 +171,6 @@ const Index = () => {
             <div>
               <h3 className="font-semibold mb-4">Supply Ministry</h3>
               <p className="text-sm opacity-80 mb-4">Connecting care with solutions across Australia</p>
-              <p className="text-sm opacity-80">ABN: 47 123 456 789</p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
@@ -196,14 +193,16 @@ const Index = () => {
             <div>
               <h4 className="font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-sm opacity-80">
-                <li>Phone: 1300 786 711</li>
-                <li>Email: enquiries@supplyministry.com.au</li>
+                <li><strong>Alex:</strong> alex@supplyministry.com.au</li>
+                <li>Mobile: 0452 002 450</li>
+                <li><strong>David:</strong> david@supplyministry.com.au</li>
+                <li>Mobile: 0404 593 090</li>
                 <li>Mon-Fri: 8:30 AM - 5:00 PM AEST</li>
               </ul>
             </div>
           </div>
           <div className="border-t border-background/20 mt-8 pt-8 text-center text-sm opacity-60">
-            <p>&copy; 2024 Supply Ministry. All rights reserved. | Privacy Policy | Terms of Service</p>
+            <p>&copy; 2024 Supply Ministry. All rights reserved. | <a href="/terms" className="hover:opacity-100">Terms & Conditions</a></p>
           </div>
         </div>
       </footer>

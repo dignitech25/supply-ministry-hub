@@ -13,7 +13,7 @@ const Navigation = () => {
           {/* Logo */}
           <div className="flex items-center">
             <img 
-              src="/lovable-uploads/6ae28d3a-6dd2-47fe-82f8-0fd5e2870808.png" 
+              src="/lovable-uploads/a33417e9-34da-4d88-a5ac-bbd147fd89aa.png" 
               alt="Supply Ministry - Connects Care With Solutions"
               className="h-[75px] w-auto object-contain"
               onError={(e) => {
@@ -24,14 +24,15 @@ const Navigation = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="flex items-center space-x-8">
-            <a href="#home" className="text-foreground hover:text-primary transition-colors font-medium">Home</a>
-            <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium">About</a>
-            <a href="#products" className="text-foreground hover:text-primary transition-colors font-medium">Products</a>
-            <a href="#sleep-choice" className="text-foreground hover:text-primary transition-colors font-medium">Sleep Choice</a>
-            <a href="#suppliers" className="text-foreground hover:text-primary transition-colors font-medium">Suppliers</a>
-            <a href="#testimonials" className="text-foreground hover:text-primary transition-colors font-medium">Testimonials</a>
-            <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium">Contact</a>
+          <nav className="flex items-center space-x-6">
+            <a href="#home" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Home</a>
+            <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium text-sm">About</a>
+            <a href="#products" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Products & Solutions</a>
+            <a href="#quick-ship" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Quick Ship & Promotions</a>
+            <a href="#sleep-choice" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Sleep Choice</a>
+            <a href="#suppliers" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Suppliers</a>
+            <a href="#testimonials" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Testimonials</a>
+            <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Contact</a>
           </nav>
 
           {/* Desktop CTA */}
@@ -50,7 +51,7 @@ const Navigation = () => {
           <div className="flex-1 flex items-center justify-center">
             <div>
                 <img 
-                  src="/lovable-uploads/6ae28d3a-6dd2-47fe-82f8-0fd5e2870808.png" 
+                  src="/lovable-uploads/a33417e9-34da-4d88-a5ac-bbd147fd89aa.png" 
                   alt="Supply Ministry - Connects Care With Solutions"
                   className="h-[68px] w-auto object-contain"
                 onError={(e) => {
@@ -94,7 +95,14 @@ const Navigation = () => {
                   className="block text-foreground hover:text-primary hover:bg-primary/5 transition-colors font-medium text-base py-3 px-4 rounded-lg"
                   onClick={() => setIsOpen(false)}
                 >
-                  Products
+                  Products & Solutions
+                </a>
+                <a 
+                  href="#quick-ship" 
+                  className="block text-foreground hover:text-primary hover:bg-primary/5 transition-colors font-medium text-base py-3 px-4 rounded-lg"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Quick Ship & Promotions
                 </a>
                 <a 
                   href="#sleep-choice" 
