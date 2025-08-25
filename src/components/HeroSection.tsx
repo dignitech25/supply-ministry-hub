@@ -74,16 +74,16 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Hero Image */}
+          {/* Hero Image - Expanded for Desktop */}
           <div className="lg:pl-8">
             <div className="relative">
               <img
                 src={heroImage}
                 alt="Smiling senior woman using assistive technology with confidence"
-                className="rounded-2xl shadow-xl w-full h-auto"
+                className="rounded-2xl shadow-xl w-full h-[400px] lg:h-[600px] object-cover"
               />
               {/* Purple overlay for text contrast */}
-              <div className="absolute inset-0 bg-primary/20 rounded-2xl"></div>
+              <div className="absolute inset-0 bg-primary/10 rounded-2xl"></div>
             </div>
           </div>
         </div>

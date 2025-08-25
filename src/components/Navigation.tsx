@@ -29,7 +29,7 @@ const Navigation = () => {
             <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium text-sm">About</a>
             <a href="#products" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Products & Solutions</a>
             <a href="#quick-ship" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Quick Ship & Promotions</a>
-            <a href="#sleep-choice" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Sleep Choice</a>
+            <a href="/sleep-choice" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Sleep Choice</a>
             <a href="#suppliers" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Suppliers</a>
             <a href="#testimonials" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Testimonials</a>
             <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Contact</a>
@@ -105,7 +105,7 @@ const Navigation = () => {
                   Quick Ship & Promotions
                 </a>
                 <a 
-                  href="#sleep-choice" 
+                  href="/sleep-choice" 
                   className="block text-foreground hover:text-primary hover:bg-primary/5 transition-colors font-medium text-base py-3 px-4 rounded-lg"
                   onClick={() => setIsOpen(false)}
                 >

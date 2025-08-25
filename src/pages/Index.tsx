@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import ProductCategories from "@/components/ProductCategories";
 import AboutSection from "@/components/AboutSection";
 import QuoteForm from "@/components/QuoteForm";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   return (
@@ -53,7 +54,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Sleep Choice Program */}
+      {/* Sleep Choice Program - with CTA to external site */}
       <section id="sleep-choice" className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -61,7 +62,7 @@ const Index = () => {
             <p className="text-xl text-muted-foreground mb-8">
               Take the guesswork out of bed and mattress selection with our risk-free 7-day trial program.
             </p>
-            <div className="bg-card rounded-xl p-8 border border-border">
+            <div className="bg-card rounded-xl p-8 border border-border mb-8">
               <h3 className="text-2xl font-semibold mb-4">How It Works</h3>
               <div className="grid md:grid-cols-3 gap-6 text-left">
                 <div>
@@ -81,11 +82,31 @@ const Index = () => {
                 </div>
               </div>
             </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                asChild
+              >
+                <a href="https://sleepchoice.com.au" target="_blank" rel="noopener noreferrer">
+                  Visit Sleep Choice Website
+                </a>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg"
+                asChild
+              >
+                <a href="/sleep-choice">
+                  Learn More
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Suppliers Section - Alternating Background */}
+      {/* Suppliers Section - Updated with Partner Logos */}
       <section id="suppliers" className="py-20 bg-soft-gray">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Trusted Supplier Partners</h2>
@@ -93,12 +114,42 @@ const Index = () => {
             We've built strong relationships with Australia's leading assistive technology manufacturers 
             to bring you competitive pricing and reliable supply chains.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 items-center max-w-4xl mx-auto">
-            {['Novis', 'Avante', 'Aidacare', 'Forté Healthcare', 'icare Medical Group'].map((supplier, index) => (
-              <div key={index} className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow">
-                <h3 className="font-semibold text-foreground">{supplier}</h3>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center max-w-5xl mx-auto">
+            <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow flex items-center justify-center h-24">
+              <img 
+                src="/lovable-uploads/cc605216-27d1-40e0-a4c3-bed5d920fd14.png" 
+                alt="Novis Healthcare" 
+                className="max-h-12 max-w-full object-contain"
+              />
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow flex items-center justify-center h-24">
+              <img 
+                src="/lovable-uploads/67943b8c-a970-4bf5-8df6-0e555261eb62.png" 
+                alt="Aidacare Healthcare Equipment" 
+                className="max-h-12 max-w-full object-contain"
+              />
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow flex items-center justify-center h-24">
+              <img 
+                src="/lovable-uploads/496b4f80-f607-49dd-9fac-beeabae55741.png" 
+                alt="Forté Healthcare" 
+                className="max-h-12 max-w-full object-contain"
+              />
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow flex items-center justify-center h-24">
+              <img 
+                src="/lovable-uploads/46b949d7-43d7-423f-9add-ed3ac3bb0669.png" 
+                alt="icare Medical Group" 
+                className="max-h-12 max-w-full object-contain"
+              />
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow flex items-center justify-center h-24">
+              <img 
+                src="/lovable-uploads/3203fff7-35d5-4c26-814d-17666d297a02.png" 
+                alt="Sleep Choice" 
+                className="max-h-12 max-w-full object-contain"
+              />
+            </div>
           </div>
         </div>
       </section>
