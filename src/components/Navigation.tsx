@@ -9,35 +9,37 @@ const Navigation = () => {
     <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-6">
         {/* Desktop Layout - 3 Column Grid */}
-        <div className="hidden xl:grid xl:grid-cols-3 xl:items-center h-20">
+        <div className="hidden lg:grid lg:grid-cols-3 lg:items-center h-28">
           {/* Left Navigation */}
-          <nav className="flex items-center justify-start space-x-6">
-            <a href="#home" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Home</a>
-            <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium text-sm">About</a>
-            <a href="#products" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Products & Solutions</a>
-            <a href="#quick-ship" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Quick Ship</a>
+          <nav className="flex items-center justify-start space-x-4">
+            <a href="#home" className="text-foreground hover:text-primary transition-colors font-medium text-xs">Home</a>
+            <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium text-xs">About</a>
+            <a href="#products" className="text-foreground hover:text-primary transition-colors font-medium text-xs">Products & Solutions</a>
+            <a href="#quick-ship" className="text-foreground hover:text-primary transition-colors font-medium text-xs">Quick Ship</a>
           </nav>
 
           {/* Centered Logo */}
           <div className="flex items-center justify-center">
-            <img 
-              src="/lovable-uploads/3275b48c-3032-4c7a-acc5-22d9564590c2.png" 
-              alt="Supply Ministry - Connects Care With Solutions" 
-              className="h-16 lg:h-20 w-auto max-w-[400px] object-contain"
-              onError={(e) => {
-                console.log('Logo failed to load:', e.currentTarget.src);
-                e.currentTarget.src = '/placeholder.svg';
-              }}
-            />
+            <div className="bg-white/5 rounded-lg p-2 shadow-sm">
+              <img 
+                src="/lovable-uploads/3275b48c-3032-4c7a-acc5-22d9564590c2.png" 
+                alt="Supply Ministry - Connects Care With Solutions" 
+                className="h-24 w-auto object-contain"
+                onError={(e) => {
+                  console.log('Logo failed to load:', e.currentTarget.src);
+                  e.currentTarget.src = '/placeholder.svg';
+                }}
+              />
+            </div>
           </div>
 
           {/* Right Navigation & CTA */}
-          <div className="flex items-center justify-end space-x-6">
-            <nav className="flex items-center space-x-6">
-              <a href="#sleep-choice" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Sleep Choice</a>
-              <a href="#suppliers" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Suppliers</a>
-              <a href="#testimonials" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Testimonials</a>
-              <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium text-sm">Contact</a>
+          <div className="flex items-center justify-end space-x-4">
+            <nav className="flex items-center space-x-4">
+              <a href="#sleep-choice" className="text-foreground hover:text-primary transition-colors font-medium text-xs">Sleep Choice</a>
+              <a href="#suppliers" className="text-foreground hover:text-primary transition-colors font-medium text-xs">Suppliers</a>
+              <a href="#testimonials" className="text-foreground hover:text-primary transition-colors font-medium text-xs">Testimonials</a>
+              <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium text-xs">Contact</a>
             </nav>
             <div className="flex items-center text-foreground bg-muted/30 rounded-full px-4 py-2">
               <Phone className="h-4 w-4 mr-2 text-primary" />
@@ -54,18 +56,20 @@ const Navigation = () => {
         </div>
 
         {/* Mobile/Tablet Layout */}
-        <div className="xl:hidden flex items-center h-20">
+        <div className="lg:hidden flex items-center h-24">
           {/* Centered Logo on Mobile */}
           <div className="flex-1 flex items-center justify-center">
-            <img 
-              src="/lovable-uploads/3275b48c-3032-4c7a-acc5-22d9564590c2.png" 
-              alt="Supply Ministry - Connects Care With Solutions" 
-              className="h-12 sm:h-14 md:h-16 w-auto max-w-[280px] sm:max-w-[320px] object-contain"
-              onError={(e) => {
-                console.log('Logo failed to load:', e.currentTarget.src);
-                e.currentTarget.src = '/placeholder.svg';
-              }}
-            />
+            <div className="bg-white/5 rounded-lg p-2 shadow-sm">
+              <img 
+                src="/lovable-uploads/3275b48c-3032-4c7a-acc5-22d9564590c2.png" 
+                alt="Supply Ministry - Connects Care With Solutions" 
+                className="h-16 sm:h-20 md:h-20 w-auto object-contain"
+                onError={(e) => {
+                  console.log('Logo failed to load:', e.currentTarget.src);
+                  e.currentTarget.src = '/placeholder.svg';
+                }}
+              />
+            </div>
           </div>
 
           {/* Mobile menu button */}
@@ -79,7 +83,7 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="xl:hidden border-t border-border bg-background/95 backdrop-blur-sm">
+          <div className="lg:hidden border-t border-border bg-background/95 backdrop-blur-sm">
             <nav className="py-6 space-y-6 px-2">
               <a href="#home" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">Home</a>
               <a href="#about" className="block text-foreground hover:text-primary transition-colors font-medium text-base py-2">About</a>
