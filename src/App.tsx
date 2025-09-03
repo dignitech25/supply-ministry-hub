@@ -3,27 +3,40 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QuoteProvider } from "@/contexts/QuoteContext";
+import { QuoteDrawer } from "@/components/QuoteDrawer";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import TermsConditions from "./pages/TermsConditions";
 import SleepChoice from "./pages/SleepChoice";
+import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
+import Category from "./pages/Category";
+import Brand from "./pages/Brand";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/terms" element={<TermsConditions />} />
-          <Route path="/sleep-choice" element={<SleepChoice />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <QuoteProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/terms" element={<TermsConditions />} />
+            <Route path="/sleep-choice" element={<SleepChoice />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/product/:slug" element={<ProductDetail />} />
+            <Route path="/category/:slug" element={<Category />} />
+            <Route path="/brand/:slug" element={<Brand />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <QuoteDrawer />
+        </BrowserRouter>
+      </TooltipProvider>
+    </QuoteProvider>
   </QueryClientProvider>
 );
 
