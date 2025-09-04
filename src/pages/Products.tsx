@@ -39,8 +39,8 @@ export default function Products() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedBrand, setSelectedBrand] = useState<string>('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedBrand, setSelectedBrand] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,16 +90,16 @@ export default function Products() {
                          product.brand_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.sm_sku.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesBrand = !selectedBrand || product.brand_slug === selectedBrand;
-    const matchesCategory = !selectedCategory || product.category_slug === selectedCategory;
+    const matchesBrand = selectedBrand === 'all' || product.brand_slug === selectedBrand;
+    const matchesCategory = selectedCategory === 'all' || product.category_slug === selectedCategory;
 
     return matchesSearch && matchesBrand && matchesCategory;
   });
 
   const handleClearFilters = () => {
     setSearchTerm('');
-    setSelectedBrand('');
-    setSelectedCategory('');
+    setSelectedBrand('all');
+    setSelectedCategory('all');
   };
 
   return (
@@ -139,7 +139,7 @@ export default function Products() {
                     <SelectValue placeholder="All Brands" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Brands</SelectItem>
+                    <SelectItem value="all">All Brands</SelectItem>
                     {brands.map((brand) => (
                       <SelectItem key={brand.id} value={brand.slug}>
                         {brand.name}
@@ -156,7 +156,7 @@ export default function Products() {
                     <SelectValue placeholder="All Categories" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Categories</SelectItem>
+                    <SelectItem value="all">All Categories</SelectItem>
                     {categories.map((category) => (
                       <SelectItem key={category.id} value={category.slug}>
                         {category.name}
