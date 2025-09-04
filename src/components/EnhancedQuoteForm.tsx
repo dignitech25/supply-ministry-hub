@@ -55,7 +55,7 @@ const EnhancedQuoteForm: React.FC<EnhancedQuoteFormProps> = ({ onSuccess }) => {
       otEmail: '',
       otPhone: '',
       organization: '',
-      fundingType: '',
+      fundingType: undefined,
       deliveryPostcode: '',
       notes: '',
     },
@@ -204,30 +204,30 @@ const EnhancedQuoteForm: React.FC<EnhancedQuoteFormProps> = ({ onSuccess }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="fundingType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Funding Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select funding type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="ndis">NDIS</SelectItem>
-                        <SelectItem value="dva">DVA</SelectItem>
-                        <SelectItem value="private">Private</SelectItem>
-                        <SelectItem value="insurance">Insurance</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="fundingType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Funding Type</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value || ""}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select funding type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="ndis">NDIS</SelectItem>
+                          <SelectItem value="dva">DVA</SelectItem>
+                          <SelectItem value="private">Private</SelectItem>
+                          <SelectItem value="insurance">Insurance</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
               <FormField
                 control={form.control}
