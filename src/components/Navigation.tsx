@@ -1,36 +1,14 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone, ShoppingCart } from "lucide-react";
+import { Menu, X, Search, User, ShoppingCart } from "lucide-react";
 import { useQuote } from "@/contexts/QuoteContext";
-
-const BuildQuoteButton = () => {
-  const { toggleDrawer, totalItems } = useQuote();
-  
-  return (
-    <Button 
-      onClick={toggleDrawer}
-      className="bg-primary hover:bg-primary/90 text-primary-foreground relative"
-    >
-      <ShoppingCart className="h-4 w-4 mr-2" />
-      Build a Quote
-      {totalItems > 0 && (
-        <span className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-          {totalItems}
-        </span>
-      )}
-    </Button>
-  );
-};
+import { SearchDialog } from "./SearchDialog";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const [searchOpen, setSearchOpen] = useState(false);
+  const { toggleDrawer, totalItems } = useQuote();
 
   return (
     <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 shadow-sm">
@@ -38,7 +16,7 @@ const Navigation = () => {
         {/* Desktop Layout */}
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
             <img 
               src="/lovable-uploads/a33417e9-34da-4d88-a5ac-bbd147fd89aa.png" 
               alt="Supply Ministry"
@@ -47,110 +25,152 @@ const Navigation = () => {
                 e.currentTarget.src = '/placeholder.svg';
               }}
             />
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <nav className="flex items-center space-x-6">
-              <button 
-                onClick={() => scrollToSection('hero')}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Home
-              </button>
-              <button 
-                onClick={() => scrollToSection('about')}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                About
-              </button>
-              <a
-                href="/products"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Products
-              </a>
-              <button 
-                onClick={() => scrollToSection('partners')}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Partners
-              </button>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Contact
-              </button>
-            </nav>
-            <BuildQuoteButton />
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link 
+              to="/products"
+              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+            >
+              Shop
+            </Link>
+            <Link 
+              to="/products?filter=new"
+              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+            >
+              New
+            </Link>
+            <Link 
+              to="/products?filter=best-sellers"
+              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+            >
+              Best Sellers
+            </Link>
+            <Link 
+              to="/products?filter=sale"
+              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+            >
+              Sale
+            </Link>
+          </nav>
+
+          {/* Desktop Icons */}
+          <div className="hidden md:flex items-center space-x-2">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setSearchOpen(true)}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              asChild
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <Link to="/account">
+                <User className="h-5 w-5" />
+              </Link>
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={toggleDrawer}
+              className="text-muted-foreground hover:text-foreground relative"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                  {totalItems}
+                </span>
+              )}
+            </Button>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden text-foreground p-2"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+          {/* Mobile Icons + Menu Button */}
+          <div className="flex md:hidden items-center space-x-2">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setSearchOpen(true)}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={toggleDrawer}
+              className="text-muted-foreground hover:text-foreground relative"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                  {totalItems}
+                </span>
+              )}
+            </Button>
+            <button
+              className="text-foreground p-2"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
         {isOpen && (
           <div className="md:hidden border-t border-border">
             <div className="py-4">
-              <nav className="flex flex-col space-y-4 pt-4 border-t">
-                <button 
-                  onClick={() => {
-                    scrollToSection('hero');
-                    setIsOpen(false);
-                  }}
-                  className="text-left text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Home
-                </button>
-                <button 
-                  onClick={() => {
-                    scrollToSection('about');
-                    setIsOpen(false);
-                  }}
-                  className="text-left text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  About
-                </button>
-                <a
-                  href="/products"
-                  className="text-left text-muted-foreground hover:text-foreground transition-colors"
+              <nav className="flex flex-col space-y-4">
+                <Link 
+                  to="/products"
+                  className="text-left text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
                   onClick={() => setIsOpen(false)}
                 >
-                  Products
-                </a>
-                <button 
-                  onClick={() => {
-                    scrollToSection('partners');
-                    setIsOpen(false);
-                  }}
-                  className="text-left text-muted-foreground hover:text-foreground transition-colors"
+                  Shop
+                </Link>
+                <Link 
+                  to="/products?filter=new"
+                  className="text-left text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
+                  onClick={() => setIsOpen(false)}
                 >
-                  Partners
-                </button>
-                <button 
-                  onClick={() => {
-                    scrollToSection('contact');
-                    setIsOpen(false);
-                  }}
-                  className="text-left text-muted-foreground hover:text-foreground transition-colors"
+                  New
+                </Link>
+                <Link 
+                  to="/products?filter=best-sellers"
+                  className="text-left text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
+                  onClick={() => setIsOpen(false)}
                 >
-                  Contact
-                </button>
-                <div className="pt-4">
-                  <BuildQuoteButton />
+                  Best Sellers
+                </Link>
+                <Link 
+                  to="/products?filter=sale"
+                  className="text-left text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sale
+                </Link>
+                <div className="pt-4 border-t border-border">
+                  <Link 
+                    to="/account"
+                    className="text-left text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 py-2"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <User className="h-4 w-4" />
+                    Account
+                  </Link>
                 </div>
               </nav>
             </div>
           </div>
         )}
       </div>
+      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
     </header>
   );
 };
