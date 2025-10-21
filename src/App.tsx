@@ -11,8 +11,8 @@ import TermsConditions from "./pages/TermsConditions";
 import SleepChoice from "./pages/SleepChoice";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
-import Category from "./pages/Category";
-import Brand from "./pages/Brand";
+// import Category from "./pages/Category";
+// import Brand from "./pages/Brand";
 
 const queryClient = new QueryClient();
 
@@ -28,9 +28,10 @@ const App = () => (
             <Route path="/terms" element={<TermsConditions />} />
             <Route path="/sleep-choice" element={<SleepChoice />} />
             <Route path="/products" element={<Products />} />
-            <Route path="/product/:slug" element={<ProductDetail />} />
-            <Route path="/category/:slug" element={<Category />} />
-            <Route path="/brand/:slug" element={<Brand />} />
+            <Route path="/products/:sku" element={<ProductDetail />} />
+            {/* Category and Brand pages temporarily disabled - need updating to new schema */}
+            {/* <Route path="/category/:slug" element={<Category />} /> */}
+            {/* <Route path="/brand/:slug" element={<Brand />} /> */}
             <Route path="*" element={<NotFound />} />
           </Routes>
           <QuoteDrawer />

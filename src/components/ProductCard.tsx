@@ -1,22 +1,20 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Plus } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { useQuote } from '@/contexts/QuoteContext';
 import { useToast } from '@/hooks/use-toast';
+import { formatPrice, getImagePlaceholder, isOnSale } from '@/utils/productHelpers';
 
 interface Product {
   id: string;
-  name: string;
-  slug: string;
-  brand_name: string;
-  brand_slug: string;
-  sm_sku: string;
-  primary_image_url?: string;
-  price_ex_gst?: number;
-  featured?: boolean;
+  sku: string;
+  title: string;
+  brand: string;
+  product_type?: string;
+  price_rrp?: number;
+  price_discounted?: number;
+  image_url?: string;
 }
 
 interface ProductCardProps {
@@ -30,79 +28,91 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleAddToQuote = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     addItem({
-      id: `${product.id}-${Date.now()}`,
+      id: product.id,
       productId: product.id,
-      productName: product.name,
-      brandName: product.brand_name,
-      smSku: product.sm_sku,
-      primaryImageUrl: product.primary_image_url,
-      unitPrice: product.price_ex_gst,
+      smSku: product.sku,
+      productName: product.title,
+      brandName: product.brand,
+      quantity: 1,
+      unitPrice: product.price_discounted || product.price_rrp || 0,
+      lineNotes: '',
     });
 
     toast({
-      title: "Added to quote",
-      description: `${product.name} has been added to your quote.`,
+      title: 'Added to quote',
+      description: `${product.title} has been added to your quote.`,
     });
   };
 
+  const displayImage = product.image_url || getImagePlaceholder();
+  const onSale = isOnSale(product.price_rrp, product.price_discounted);
+
   return (
-    <Card className="group hover:shadow-lg transition-shadow duration-200">
-      <Link to={`/product/${product.slug}`}>
-        <CardContent className="p-4">
-          <div className="aspect-square bg-muted rounded-lg mb-4 overflow-hidden">
-            {product.primary_image_url ? (
-              <img
-                src={product.primary_image_url}
-                alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                <span className="text-sm">No Image</span>
-              </div>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            {product.featured && (
-              <Badge variant="secondary" className="text-xs">
-                Featured
-              </Badge>
-            )}
-            
-            <h3 className="font-medium text-sm leading-tight line-clamp-2">
-              {product.name}
+    <Link to={`/products/${product.sku}`}>
+      <Card className="group overflow-hidden transition-all hover:shadow-lg hover:scale-[1.02] duration-200">
+        <div className="aspect-square relative overflow-hidden bg-gray-100">
+          <img
+            src={displayImage}
+            alt={`${product.brand} ${product.title}`}
+            className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-200"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = getImagePlaceholder();
+            }}
+          />
+          {onSale && (
+            <div className="absolute top-2 right-2 bg-supply-lavender text-white px-3 py-1 rounded-full text-sm font-semibold">
+              Sale
+            </div>
+          )}
+        </div>
+        
+        <div className="p-6 space-y-3">
+          <div className="space-y-1">
+            <p className="text-sm text-muted-foreground">{product.brand}</p>
+            <h3 className="font-semibold text-lg line-clamp-2 min-h-[3.5rem]">
+              {product.title}
             </h3>
-            
-            <p className="text-sm text-muted-foreground">
-              {product.brand_name}
-            </p>
-            
-            <p className="text-xs text-muted-foreground">
-              SKU: {product.sm_sku}
-            </p>
-            
-            {product.price_ex_gst && (
-              <p className="text-sm font-medium text-primary">
-                From ${product.price_ex_gst.toFixed(2)} ex GST
+          </div>
+
+          <div className="space-y-1">
+            {product.price_discounted ? (
+              <>
+                <p className="text-2xl font-bold text-supply-lavender">
+                  {formatPrice(product.price_discounted)}
+                </p>
+                {product.price_rrp && onSale && (
+                  <p className="text-sm text-muted-foreground line-through">
+                    {formatPrice(product.price_rrp)}
+                  </p>
+                )}
+              </>
+            ) : (
+              <p className="text-2xl font-bold text-foreground">
+                {formatPrice(product.price_rrp)}
               </p>
             )}
           </div>
-        </CardContent>
-      </Link>
-      
-      <CardFooter className="p-4 pt-0">
-        <Button
-          onClick={handleAddToQuote}
-          className="w-full"
-          size="sm"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add to Quote
-        </Button>
-      </CardFooter>
-    </Card>
+
+          <div className="flex gap-2 pt-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1"
+            >
+              View Details
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleAddToQuote}
+              className="bg-supply-lavender hover:bg-supply-lavender-dark text-white"
+            >
+              <ShoppingCart className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </Card>
+    </Link>
   );
 };

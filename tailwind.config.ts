@@ -19,6 +19,8 @@ export default {
 		},
 		extend: {
 			colors: {
+				'supply-lavender': '#C4B5FD',
+				'supply-lavender-dark': '#A78BFA',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
