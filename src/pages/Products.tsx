@@ -38,14 +38,27 @@ export default function Products() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('products')
-        .select('id, sku, title, brand, product_type, subtype, price_rrp, price_discounted, image_url')
-        .order('created_at', { ascending: false })
-        .limit(10000);
+      let allProducts: Product[] = [];
+      let from = 0;
+      const batchSize = 1000;
+      
+      while (true) {
+        const { data, error } = await supabase
+          .from('products')
+          .select('id, sku, title, brand, product_type, subtype, price_rrp, price_discounted, image_url')
+          .order('created_at', { ascending: false })
+          .range(from, from + batchSize - 1);
 
-      if (error) throw error;
-      setProducts(data || []);
+        if (error) throw error;
+        if (!data || data.length === 0) break;
+        
+        allProducts = [...allProducts, ...data];
+        
+        if (data.length < batchSize) break; // Last batch
+        from += batchSize;
+      }
+      
+      setProducts(allProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
