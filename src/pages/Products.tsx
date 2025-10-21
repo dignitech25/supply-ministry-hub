@@ -41,7 +41,8 @@ export default function Products() {
       const { data, error } = await supabase
         .from('products')
         .select('id, sku, title, brand, product_type, subtype, price_rrp, price_discounted, image_url')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(10000);
 
       if (error) throw error;
       setProducts(data || []);
