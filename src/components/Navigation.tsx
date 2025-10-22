@@ -11,10 +11,16 @@ const Navigation = () => {
   const { toggleDrawer, totalItems } = useQuote();
 
   return (
-    <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 shadow-sm">
-      <div className="container mx-auto px-6">
-        {/* Desktop Layout */}
-        <div className="flex items-center justify-between h-20">
+    <>
+      {/* Promotional Ribbon */}
+      <div className="bg-primary text-primary-foreground sticky top-0 z-50 py-2 text-center font-semibold text-sm shadow-md">
+        We will beat any quote by 5%
+      </div>
+      
+      <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-40 shadow-sm">
+        <div className="container mx-auto px-6">
+          {/* Desktop Layout */}
+          <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
             <img 
@@ -27,27 +33,16 @@ const Navigation = () => {
             />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link 
-              to="/products?filter=new"
-              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+          {/* Desktop CTA */}
+          <div className="hidden md:flex items-center justify-center flex-1">
+            <Button 
+              onClick={toggleDrawer}
+              size="lg"
+              className="font-semibold"
             >
-              New
-            </Link>
-            <Link 
-              to="/products?filter=best-sellers"
-              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
-            >
-              Best Sellers
-            </Link>
-            <Link 
-              to="/products?filter=sale"
-              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
-            >
-              Sale
-            </Link>
-          </nav>
+              Request a Quote
+            </Button>
+          </div>
 
           {/* Desktop Icons */}
           <div className="hidden md:flex items-center space-x-2">
@@ -121,27 +116,16 @@ const Navigation = () => {
           <div className="md:hidden border-t border-border">
             <div className="py-4">
               <nav className="flex flex-col space-y-4">
-                <Link 
-                  to="/products?filter=new"
-                  className="text-left text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
-                  onClick={() => setIsOpen(false)}
+                <Button 
+                  onClick={() => {
+                    toggleDrawer();
+                    setIsOpen(false);
+                  }}
+                  size="lg"
+                  className="font-semibold w-full"
                 >
-                  New
-                </Link>
-                <Link 
-                  to="/products?filter=best-sellers"
-                  className="text-left text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Best Sellers
-                </Link>
-                <Link 
-                  to="/products?filter=sale"
-                  className="text-left text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Sale
-                </Link>
+                  Request a Quote
+                </Button>
                 <div className="pt-4 border-t border-border">
                   <Link 
                     to="/account"
@@ -157,8 +141,9 @@ const Navigation = () => {
           </div>
         )}
       </div>
+      </header>
       <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
-    </header>
+    </>
   );
 };
 
