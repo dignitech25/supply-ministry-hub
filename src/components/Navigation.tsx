@@ -30,12 +30,6 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link 
-              to="/products"
-              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
-            >
-              Shop
-            </Link>
-            <Link 
               to="/products?filter=new"
               className="text-muted-foreground hover:text-foreground transition-colors font-medium"
             >
@@ -127,13 +121,6 @@ const Navigation = () => {
           <div className="md:hidden border-t border-border">
             <div className="py-4">
               <nav className="flex flex-col space-y-4">
-                <Link 
-                  to="/products"
-                  className="text-left text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Shop
-                </Link>
                 <Link 
                   to="/products?filter=new"
                   className="text-left text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
