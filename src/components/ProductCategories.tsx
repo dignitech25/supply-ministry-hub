@@ -35,39 +35,44 @@ const ProductCategories = () => {
         // Fetch actual categories from products to ensure they match
         const { data: productsData, error: productsError } = await supabase
           .from('products_categorized' as any)
-          .select('top_level_category, subcategory') as { 
-            data: { top_level_category: string | null; subcategory: string | null }[] | null; 
+          .select('top_level_category') as { 
+            data: { top_level_category: string | null }[] | null; 
             error: any 
           };
 
         if (productsError) throw productsError;
 
-        // Group by top_level_category and count subcategories
-        const categoryMap = new Map<string, Set<string>>();
-        
-        (productsData || []).forEach(product => {
-          if (product.top_level_category) {
-            if (!categoryMap.has(product.top_level_category)) {
-              categoryMap.set(product.top_level_category, new Set());
-            }
-            if (product.subcategory) {
-              categoryMap.get(product.top_level_category)?.add(product.subcategory);
-            }
-          }
-        });
+        // Get unique categories
+        const uniqueCategories = Array.from(
+          new Set((productsData || []).map(p => p.top_level_category).filter(Boolean))
+        );
 
-        // Convert to array format
-        const categoriesWithCounts = Array.from(categoryMap.entries())
-          .map(([name, subcategories]) => ({
+        // Fetch category descriptions from the categories table
+        const { data: categoriesData, error: categoriesError } = await supabase
+          .from('categories')
+          .select('name, description')
+          .eq('is_active', true)
+          .is('parent_id', null);
+
+        if (categoriesError) throw categoriesError;
+
+        // Create a map of category descriptions
+        const descriptionMap = new Map(
+          (categoriesData || []).map(cat => [cat.name, cat.description])
+        );
+
+        // Convert to array format with descriptions
+        const categoriesWithDescriptions = uniqueCategories
+          .map(name => ({
             id: name,
             name: name,
             slug: name.toLowerCase().replace(/\s+/g, '-'),
-            description: null,
-            subcategory_count: subcategories.size,
+            description: descriptionMap.get(name) || null,
+            subcategory_count: 0,
           }))
           .sort((a, b) => a.name.localeCompare(b.name));
 
-        setCategories(categoriesWithCounts);
+        setCategories(categoriesWithDescriptions);
       } catch (error) {
         console.error('Error fetching categories:', error);
       } finally {
@@ -132,11 +137,6 @@ const ProductCategories = () => {
                       <CardDescription className="text-muted-foreground">
                         {category.description}
                       </CardDescription>
-                    )}
-                    {category.subcategory_count > 0 && (
-                      <Badge variant="secondary" className="mt-2">
-                        {category.subcategory_count} subcategories
-                      </Badge>
                     )}
                   </CardHeader>
                   <CardContent>
