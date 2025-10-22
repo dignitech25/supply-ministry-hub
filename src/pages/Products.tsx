@@ -126,7 +126,8 @@ export default function Products() {
     try {
       let query = supabase
         .from('products_categorized' as any)
-        .select('handle, title, brand, subcategory, top_level_category, image_url, price_discounted, price_rrp, sku');
+        .select('handle, title, brand, subcategory, top_level_category, image_url, price_discounted, price_rrp, sku')
+        .limit(5000); // Fetch all products (currently ~3376 SKUs)
 
       // Search filter - improved to include SKU
       if (debouncedSearch) {
