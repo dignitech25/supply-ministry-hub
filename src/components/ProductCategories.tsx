@@ -32,31 +32,40 @@ const ProductCategories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        // Fetch categories from the categories table
-        const { data: categoriesData, error: categoriesError } = await supabase
-          .from('categories')
-          .select('id, name, slug, description')
-          .eq('is_active', true)
-          .is('parent_id', null)
-          .order('sort_order', { ascending: true });
+        // Fetch actual categories from products to ensure they match
+        const { data: productsData, error: productsError } = await supabase
+          .from('products_categorized' as any)
+          .select('top_level_category, subcategory') as { 
+            data: { top_level_category: string | null; subcategory: string | null }[] | null; 
+            error: any 
+          };
 
-        if (categoriesError) throw categoriesError;
+        if (productsError) throw productsError;
 
-        // For each category, count subcategories
-        const categoriesWithCounts = await Promise.all(
-          (categoriesData || []).map(async (category) => {
-            const { count } = await supabase
-              .from('categories')
-              .select('*', { count: 'exact', head: true })
-              .eq('parent_id', category.id)
-              .eq('is_active', true);
+        // Group by top_level_category and count subcategories
+        const categoryMap = new Map<string, Set<string>>();
+        
+        (productsData || []).forEach(product => {
+          if (product.top_level_category) {
+            if (!categoryMap.has(product.top_level_category)) {
+              categoryMap.set(product.top_level_category, new Set());
+            }
+            if (product.subcategory) {
+              categoryMap.get(product.top_level_category)?.add(product.subcategory);
+            }
+          }
+        });
 
-            return {
-              ...category,
-              subcategory_count: count || 0,
-            };
-          })
-        );
+        // Convert to array format
+        const categoriesWithCounts = Array.from(categoryMap.entries())
+          .map(([name, subcategories]) => ({
+            id: name,
+            name: name,
+            slug: name.toLowerCase().replace(/\s+/g, '-'),
+            description: null,
+            subcategory_count: subcategories.size,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name));
 
         setCategories(categoriesWithCounts);
       } catch (error) {
