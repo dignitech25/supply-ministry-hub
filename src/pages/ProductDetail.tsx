@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,86 +18,136 @@ import Navigation from '@/components/Navigation';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuote } from '@/contexts/QuoteContext';
 import { useToast } from '@/hooks/use-toast';
-import {
-  formatPrice,
-  parseClinicalUseCases,
-  parseSpecifications,
-  cleanDescription,
-  getImagePlaceholder,
-  isOnSale,
-} from '@/utils/productHelpers';
+import { Skeleton } from '@/components/ui/skeleton';
 
-interface ProductDetail {
-  id: string;
+interface ProductVariant {
   sku: string;
+  handle: string;
   title: string;
-  description?: string;
-  product_type?: string;
-  subtype?: string;
-  specifications?: any;
-  clinical_use_case?: string;
-  funding_context?: string;
-  price_rrp?: number;
-  price_discounted?: number;
-  brand?: string;
-  size?: string;
-  color?: string;
-  image_url?: string;
-  brochure_url?: string;
-  url?: string;
+  brand: string;
+  description_long: string | null;
+  description_short: string | null;
+  image_url: string | null;
+  price_discounted: string | null;
+  price_rrp: number | null;
+  size_normalized: string | null;
+  size: string | null;
+  color_normalized: string | null;
+  clinical_use_case: string | null;
+  category_path: string | null;
+  is_consumable: string | null;
+  top_level_category: string;
+  subcategory: string;
+  spec_length_mm: string | null;
+  spec_width_mm: string | null;
+  spec_height_mm: string | null;
+  spec_weight_kg: string | null;
+  spec_dimensions_text: string | null;
 }
 
 export default function ProductDetail() {
-  const { sku } = useParams<{ sku: string }>();
-  const [product, setProduct] = useState<ProductDetail | null>(null);
+  const { handle, sku } = useParams<{ handle?: string; sku?: string }>();
+  const [variants, setVariants] = useState<ProductVariant[]>([]);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [lineNotes, setLineNotes] = useState('');
   const { addItem } = useQuote();
   const { toast } = useToast();
 
+  // Fetch all variants for this handle
   useEffect(() => {
-    if (sku) {
-      fetchProduct();
-    }
-  }, [sku]);
+    const fetchVariants = async () => {
+      const identifier = handle || sku;
+      if (!identifier) return;
 
-  const fetchProduct = async () => {
-    setLoading(true);
-    try {
+      setLoading(true);
       const { data, error } = await supabase
-        .from('products')
+        .from('product_catagorized')
         .select('*')
-        .eq('sku', sku)
-        .single();
+        .eq(handle ? 'handle' : 'sku', identifier)
+        .order('size_normalized', { ascending: true, nullsFirst: false });
 
-      if (error) throw error;
-      setProduct(data);
-    } catch (error) {
-      console.error('Error fetching product:', error);
-      setProduct(null);
-    } finally {
+      if (error) {
+        console.error('Error fetching variants:', error);
+        setLoading(false);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        setVariants(data);
+        setSelectedVariant(data[0]);
+      }
       setLoading(false);
+    };
+
+    fetchVariants();
+  }, [handle, sku]);
+
+  // Extract unique sizes and colors
+  const sizes = Array.from(
+    new Set(
+      variants
+        .map((v) => v.size_normalized || v.size)
+        .filter(Boolean)
+    )
+  );
+
+  const colors = Array.from(
+    new Set(
+      variants
+        .map((v) => v.color_normalized)
+        .filter(Boolean)
+    )
+  );
+
+  // Variant selection logic
+  const selectVariant = (sizeChoice?: string, colorChoice?: string) => {
+    const eq = (a: string | null | undefined, b: string | undefined) =>
+      a?.toLowerCase() === b?.toLowerCase();
+
+    const currentSize = sizeChoice || (selectedVariant?.size_normalized || selectedVariant?.size);
+    const currentColor = colorChoice || selectedVariant?.color_normalized;
+
+    let variant = variants.find(
+      (v) =>
+        eq(v.size_normalized || v.size, currentSize) &&
+        eq(v.color_normalized, currentColor)
+    );
+
+    if (!variant && currentSize) {
+      variant = variants.find((v) => eq(v.size_normalized || v.size, currentSize));
     }
+
+    if (!variant && currentColor) {
+      variant = variants.find((v) => eq(v.color_normalized, currentColor));
+    }
+
+    setSelectedVariant(variant || variants[0]);
   };
 
   const handleAddToQuote = () => {
-    if (!product) return;
+    if (!selectedVariant) return;
+
+    const unitPrice = selectedVariant.price_discounted 
+      ? parseFloat(selectedVariant.price_discounted) 
+      : selectedVariant.price_rrp || undefined;
 
     addItem({
-      id: product.id,
-      productId: product.id,
-      smSku: product.sku,
-      productName: product.title,
-      brandName: product.brand || '',
+      id: selectedVariant.sku,
+      productId: selectedVariant.sku,
+      productName: selectedVariant.title,
+      brandName: selectedVariant.brand || '',
+      smSku: selectedVariant.sku,
+      primaryImageUrl: selectedVariant.image_url || undefined,
+      unitPrice,
       quantity,
-      unitPrice: product.price_discounted || product.price_rrp || 0,
-      lineNotes: lineNotes,
+      lineNotes,
     });
 
     toast({
       title: 'Added to quote',
-      description: `${quantity}x ${product.title} has been added to your quote.`,
+      description: `${quantity}x ${selectedVariant.title} has been added to your quote.`,
     });
 
     setQuantity(1);
@@ -124,7 +175,7 @@ export default function ProductDetail() {
     );
   }
 
-  if (!product) {
+  if (!selectedVariant) {
     return (
       <div className="min-h-screen bg-background">
         <Navigation />
@@ -143,10 +194,20 @@ export default function ProductDetail() {
     );
   }
 
-  const displayImage = product.image_url || getImagePlaceholder();
-  const clinicalUseCases = parseClinicalUseCases(product.clinical_use_case);
-  const specifications = parseSpecifications(product.specifications);
-  const onSale = isOnSale(product.price_rrp, product.price_discounted);
+  const breadcrumbs = selectedVariant.category_path?.split('>').map((s) => s.trim()) || [];
+  const displayPrice =
+    selectedVariant.price_discounted && selectedVariant.price_discounted.trim() !== ''
+      ? `$${selectedVariant.price_discounted}`
+      : selectedVariant.price_rrp
+      ? `$${selectedVariant.price_rrp}`
+      : 'Price on request';
+
+  const clinicalUseCases = selectedVariant.clinical_use_case
+    ?.split('|')
+    .map((c) => c.trim())
+    .filter(Boolean) || [];
+
+  const displayImage = selectedVariant.image_url || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23C4B5FD" width="400" height="400"/%3E%3Ctext fill="%23ffffff" font-family="sans-serif" font-size="24" text-anchor="middle" x="200" y="200"%3ENo Image%3C/text%3E%3C/svg%3E';
 
   return (
     <div className="min-h-screen bg-background">
@@ -169,25 +230,21 @@ export default function ProductDetail() {
                 <Link to="/products">Products</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
-            {product.product_type && (
-              <>
+            {breadcrumbs.map((crumb, i) => (
+              <span key={i}>
                 <BreadcrumbSeparator>
                   <ChevronRight className="h-4 w-4" />
                 </BreadcrumbSeparator>
                 <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link to={`/products?type=${product.product_type}`}>
-                      {product.product_type}
-                    </Link>
-                  </BreadcrumbLink>
+                  <BreadcrumbLink>{crumb}</BreadcrumbLink>
                 </BreadcrumbItem>
-              </>
-            )}
+              </span>
+            ))}
             <BreadcrumbSeparator>
               <ChevronRight className="h-4 w-4" />
             </BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbPage>{product.title}</BreadcrumbPage>
+              <BreadcrumbPage>{selectedVariant.title}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -199,15 +256,12 @@ export default function ProductDetail() {
             <div className="aspect-square rounded-xl overflow-hidden bg-gray-100 relative">
               <img
                 src={displayImage}
-                alt={`${product.brand} ${product.title}`}
+                alt={`${selectedVariant.brand} ${selectedVariant.title}`}
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = getImagePlaceholder();
-                }}
               />
-              {onSale && (
-                <Badge className="absolute top-4 right-4 bg-supply-lavender text-white text-lg px-4 py-2">
-                  Sale
+              {selectedVariant.is_consumable === 'Y' && (
+                <Badge className="absolute top-4 right-4">
+                  Consumable
                 </Badge>
               )}
             </div>
@@ -215,35 +269,66 @@ export default function ProductDetail() {
 
           {/* Product Info */}
           <div className="space-y-6">
-            {product.brand && (
-              <Badge variant="secondary" className="text-base px-4 py-1 bg-supply-lavender/20 text-supply-lavender-dark">
-                {product.brand}
+            {selectedVariant.brand && (
+              <Badge variant="secondary" className="text-base px-4 py-1">
+                {selectedVariant.brand}
               </Badge>
             )}
             
             <div>
-              <h1 className="text-4xl font-bold mb-2">{product.title}</h1>
-              <p className="text-muted-foreground">SKU: {product.sku}</p>
+              <h1 className="text-4xl font-bold mb-2">{selectedVariant.title}</h1>
+              <p className="text-muted-foreground">SKU: {selectedVariant.sku}</p>
+              <p className="text-sm text-muted-foreground">{selectedVariant.subcategory}</p>
             </div>
 
             <div className="space-y-2">
-              {product.price_discounted ? (
-                <>
-                  <p className="text-4xl font-bold text-supply-lavender">
-                    {formatPrice(product.price_discounted)}
-                  </p>
-                  {product.price_rrp && onSale && (
-                    <p className="text-xl text-muted-foreground line-through">
-                      RRP: {formatPrice(product.price_rrp)}
-                    </p>
-                  )}
-                </>
-              ) : (
-                <p className="text-4xl font-bold text-foreground">
-                  {formatPrice(product.price_rrp)}
-                </p>
-              )}
+              <p className="text-4xl font-bold text-primary">
+                {displayPrice}
+              </p>
             </div>
+
+            {/* Variant Selectors */}
+            {sizes.length > 1 && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Size</label>
+                <Select
+                  value={selectedVariant.size_normalized || selectedVariant.size || ''}
+                  onValueChange={(value) => selectVariant(value, undefined)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background z-50">
+                    {sizes.map((size) => (
+                      <SelectItem key={size} value={size!}>
+                        {size}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {colors.length > 1 && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Color</label>
+                <Select
+                  value={selectedVariant.color_normalized || ''}
+                  onValueChange={(value) => selectVariant(undefined, value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background z-50">
+                    {colors.map((color) => (
+                      <SelectItem key={color} value={color!}>
+                        {color}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
             {/* Add to Quote Form */}
             <Card className="p-6 space-y-4 bg-gray-50">
@@ -282,31 +367,20 @@ export default function ProductDetail() {
 
               <Button
                 onClick={handleAddToQuote}
-                className="w-full bg-supply-lavender hover:bg-supply-lavender-dark text-white text-lg py-6"
+                className="w-full text-lg py-6"
               >
                 Add to Quote
               </Button>
             </Card>
-
-            {product.size && (
-              <p className="text-sm text-muted-foreground">
-                <span className="font-medium">Size:</span> {product.size}
-              </p>
-            )}
-            {product.color && (
-              <p className="text-sm text-muted-foreground">
-                <span className="font-medium">Color:</span> {product.color}
-              </p>
-            )}
           </div>
         </div>
 
         {/* Description */}
-        {product.description && (
+        {(selectedVariant.description_long || selectedVariant.description_short) && (
           <Card className="p-8 mb-8">
             <h2 className="text-2xl font-bold mb-4">Description</h2>
             <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-              {cleanDescription(product.description)}
+              {selectedVariant.description_long || selectedVariant.description_short}
             </p>
           </Card>
         )}
@@ -318,7 +392,7 @@ export default function ProductDetail() {
             <ul className="space-y-3">
               {clinicalUseCases.map((useCase, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <span className="h-2 w-2 rounded-full bg-supply-lavender mt-2 flex-shrink-0" />
+                  <span className="h-2 w-2 rounded-full bg-primary mt-2 flex-shrink-0" />
                   <span className="text-muted-foreground leading-relaxed">{useCase}</span>
                 </li>
               ))}
@@ -327,79 +401,51 @@ export default function ProductDetail() {
         )}
 
         {/* Specifications */}
-        {specifications.length > 0 && (
+        {(selectedVariant.spec_length_mm ||
+          selectedVariant.spec_width_mm ||
+          selectedVariant.spec_height_mm ||
+          selectedVariant.spec_weight_kg ||
+          selectedVariant.spec_dimensions_text) && (
           <Card className="p-8 mb-8">
             <h2 className="text-2xl font-bold mb-4">Specifications</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <tbody>
-                  {specifications.map((spec, index) => (
-                    <tr
-                      key={index}
-                      className={index % 2 === 0 ? 'bg-gray-50' : ''}
-                    >
-                      <td className="py-3 px-4 font-medium">{spec.key}</td>
-                      <td className="py-3 px-4 text-muted-foreground">{spec.value}</td>
+                  {selectedVariant.spec_dimensions_text && (
+                    <tr className="border-b">
+                      <td className="py-3 px-4 font-medium">Dimensions</td>
+                      <td className="py-3 px-4 text-muted-foreground">{selectedVariant.spec_dimensions_text}</td>
                     </tr>
-                  ))}
+                  )}
+                  {selectedVariant.spec_length_mm && (
+                    <tr className="border-b bg-gray-50">
+                      <td className="py-3 px-4 font-medium">Length</td>
+                      <td className="py-3 px-4 text-muted-foreground">{selectedVariant.spec_length_mm} mm</td>
+                    </tr>
+                  )}
+                  {selectedVariant.spec_width_mm && (
+                    <tr className="border-b">
+                      <td className="py-3 px-4 font-medium">Width</td>
+                      <td className="py-3 px-4 text-muted-foreground">{selectedVariant.spec_width_mm} mm</td>
+                    </tr>
+                  )}
+                  {selectedVariant.spec_height_mm && (
+                    <tr className="border-b bg-gray-50">
+                      <td className="py-3 px-4 font-medium">Height</td>
+                      <td className="py-3 px-4 text-muted-foreground">{selectedVariant.spec_height_mm} mm</td>
+                    </tr>
+                  )}
+                  {selectedVariant.spec_weight_kg && (
+                    <tr className="border-b">
+                      <td className="py-3 px-4 font-medium">Weight</td>
+                      <td className="py-3 px-4 text-muted-foreground">{selectedVariant.spec_weight_kg} kg</td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
           </Card>
         )}
-
-        {/* Funding Context */}
-        {product.funding_context && (
-          <Card className="p-8 mb-8 bg-blue-50 border-blue-200">
-            <h2 className="text-2xl font-bold mb-4">Funding Information</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              {cleanDescription(product.funding_context)}
-            </p>
-          </Card>
-        )}
-
-        {/* Downloads & Links */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {product.brochure_url && (
-            <Card className="p-6">
-              <h3 className="font-semibold mb-4">Product Resources</h3>
-              <Button
-                asChild
-                variant="outline"
-                className="w-full"
-              >
-                <a
-                  href={product.brochure_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Download Brochure
-                </a>
-              </Button>
-            </Card>
-          )}
-
-          {product.url && (
-            <Card className="p-6">
-              <h3 className="font-semibold mb-4">External Links</h3>
-              <Button
-                asChild
-                variant="outline"
-                className="w-full"
-              >
-                <a
-                  href={product.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  View on Supplier Website
-                </a>
-              </Button>
-            </Card>
-          )}
-        </div>
       </main>
     </div>
   );

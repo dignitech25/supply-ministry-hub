@@ -1,41 +1,40 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Filter, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { ProductCard } from '@/components/ProductCard';
+import { Card } from '@/components/ui/card';
 import Navigation from '@/components/Navigation';
 import { supabase } from '@/integrations/supabase/client';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from '@/components/ui/pagination';
 import { Skeleton } from '@/components/ui/skeleton';
 
-interface Product {
-  id: string;
-  sku: string;
+interface GroupedProduct {
+  handle: string;
   title: string;
   brand: string;
-  product_type: string;
-  subtype: string;
-  price_rrp?: number;
-  price_discounted?: number;
-  image_url?: string;
+  top_level_category: string;
+  subcategory: string;
+  image_url: string | null;
+  display_price: string | null;
+  variant_count: number;
 }
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<GroupedProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [debouncedSearch, setDebouncedSearch] = useState(searchParams.get('search') || '');
-  const [selectedType, setSelectedType] = useState<string>(searchParams.get('type') || 'all');
-  const [selectedSubtype, setSelectedSubtype] = useState<string>(searchParams.get('subtype') || 'all');
+  const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'all');
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>(searchParams.get('subcategory') || 'all');
   const [selectedBrand, setSelectedBrand] = useState<string>(searchParams.get('brand') || 'all');
   const [sortBy, setSortBy] = useState<string>(searchParams.get('sort') || 'recent');
   const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1'));
   const [totalCount, setTotalCount] = useState(0);
-  const [filterOptions, setFilterOptions] = useState({ types: [], subtypes: [], brands: [] });
+  const [filterOptions, setFilterOptions] = useState({ categories: [], subcategories: [], brands: [] });
   
   const productsPerPage = 24;
   const totalPages = Math.ceil(totalCount / productsPerPage);
@@ -54,44 +53,67 @@ export default function Products() {
     fetchFilterOptions();
   }, []);
 
+  // Fetch subcategories when category changes
+  useEffect(() => {
+    const fetchSubcategories = async () => {
+      if (!selectedCategory || selectedCategory === 'all') {
+        setFilterOptions(prev => ({ ...prev, subcategories: [] }));
+        setSelectedSubcategory('all');
+        return;
+      }
+
+      const { data } = await supabase
+        .from('product_catagorized')
+        .select('subcategory')
+        .eq('top_level_category', selectedCategory)
+        .not('subcategory', 'is', null);
+
+      const uniqueSubcategories = Array.from(
+        new Set(data?.map(p => p.subcategory).filter(Boolean))
+      ) as string[];
+
+      setFilterOptions(prev => ({ ...prev, subcategories: uniqueSubcategories.sort() }));
+    };
+
+    fetchSubcategories();
+  }, [selectedCategory]);
+
   // Fetch products when filters change
   useEffect(() => {
     fetchProducts();
-  }, [debouncedSearch, selectedType, selectedSubtype, selectedBrand, sortBy, currentPage]);
+  }, [debouncedSearch, selectedCategory, selectedSubcategory, selectedBrand, sortBy, currentPage]);
 
   // Update URL params when filters change
   useEffect(() => {
     const params: Record<string, string> = {};
     if (debouncedSearch) params.search = debouncedSearch;
-    if (selectedType !== 'all') params.type = selectedType;
-    if (selectedSubtype !== 'all') params.subtype = selectedSubtype;
+    if (selectedCategory !== 'all') params.category = selectedCategory;
+    if (selectedSubcategory !== 'all') params.subcategory = selectedSubcategory;
     if (selectedBrand !== 'all') params.brand = selectedBrand;
     if (sortBy !== 'recent') params.sort = sortBy;
     if (currentPage > 1) params.page = currentPage.toString();
     setSearchParams(params);
-  }, [debouncedSearch, selectedType, selectedSubtype, selectedBrand, sortBy, currentPage]);
+  }, [debouncedSearch, selectedCategory, selectedSubcategory, selectedBrand, sortBy, currentPage]);
 
   const fetchFilterOptions = async () => {
     try {
       const { data, error } = await supabase
-        .from('products')
-        .select('product_type, subtype, brand');
+        .from('product_catagorized')
+        .select('top_level_category, brand');
 
       if (error) throw error;
       
-      const types = new Set<string>();
-      const subtypes = new Set<string>();
+      const categories = new Set<string>();
       const brands = new Set<string>();
 
       data?.forEach(product => {
-        if (product.product_type) types.add(product.product_type);
-        if (product.subtype) subtypes.add(product.subtype);
+        if (product.top_level_category) categories.add(product.top_level_category);
         if (product.brand) brands.add(product.brand);
       });
 
       setFilterOptions({
-        types: Array.from(types).sort(),
-        subtypes: Array.from(subtypes).sort(),
+        categories: Array.from(categories).sort(),
+        subcategories: [],
         brands: Array.from(brands).sort(),
       });
     } catch (error) {
@@ -103,22 +125,22 @@ export default function Products() {
     setLoading(true);
     try {
       let query = supabase
-        .from('products')
-        .select('id, sku, title, brand, product_type, subtype, price_rrp, price_discounted, image_url', { count: 'exact' });
+        .from('product_catagorized')
+        .select('handle, title, brand, subcategory, top_level_category, image_url, price_discounted, price_rrp');
 
       // Search filter
       if (debouncedSearch) {
-        query = query.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,sku.ilike.%${debouncedSearch}%`);
+        query = query.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,description_long.ilike.%${debouncedSearch}%`);
       }
 
-      // Type filter
-      if (selectedType !== 'all') {
-        query = query.eq('product_type', selectedType);
+      // Category filter
+      if (selectedCategory !== 'all') {
+        query = query.eq('top_level_category', selectedCategory);
       }
 
-      // Subtype filter
-      if (selectedSubtype !== 'all') {
-        query = query.eq('subtype', selectedSubtype);
+      // Subcategory filter
+      if (selectedSubcategory !== 'all') {
+        query = query.eq('subcategory', selectedSubcategory);
       }
 
       // Brand filter
@@ -128,32 +150,44 @@ export default function Products() {
 
       // Sorting
       switch (sortBy) {
-        case 'price-asc':
-          query = query.order('price_discounted', { ascending: true, nullsFirst: false })
-                       .order('price_rrp', { ascending: true, nullsFirst: false });
-          break;
-        case 'price-desc':
-          query = query.order('price_discounted', { ascending: false, nullsFirst: false })
-                       .order('price_rrp', { ascending: false, nullsFirst: false });
-          break;
         case 'brand-az':
           query = query.order('brand', { ascending: true });
           break;
         default:
-          query = query.order('created_at', { ascending: false });
+          query = query.order('brand').order('title');
       }
 
-      // Pagination
-      const from = (currentPage - 1) * productsPerPage;
-      const to = from + productsPerPage - 1;
-      query = query.range(from, to);
-
-      const { data, count, error } = await query;
+      const { data, error } = await query;
 
       if (error) throw error;
       
-      setProducts(data || []);
-      setTotalCount(count || 0);
+      // Group by handle
+      const grouped = data?.reduce((acc, product) => {
+        const key = product.handle;
+        if (!acc[key]) {
+          const displayPrice = product.price_discounted || product.price_rrp?.toString() || null;
+          acc[key] = {
+            handle: product.handle,
+            title: product.title,
+            brand: product.brand,
+            subcategory: product.subcategory,
+            top_level_category: product.top_level_category,
+            image_url: product.image_url,
+            display_price: displayPrice,
+            variant_count: 0,
+          };
+        }
+        acc[key].variant_count += 1;
+        return acc;
+      }, {} as Record<string, GroupedProduct>);
+
+      const groupedProducts = Object.values(grouped || {});
+      
+      // Apply pagination to grouped results
+      const from = (currentPage - 1) * productsPerPage;
+      const to = from + productsPerPage;
+      setProducts(groupedProducts.slice(from, to));
+      setTotalCount(groupedProducts.length);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -164,8 +198,8 @@ export default function Products() {
   const handleClearFilters = () => {
     setSearchTerm('');
     setDebouncedSearch('');
-    setSelectedType('all');
-    setSelectedSubtype('all');
+    setSelectedCategory('all');
+    setSelectedSubcategory('all');
     setSelectedBrand('all');
     setSortBy('recent');
     setCurrentPage(1);
@@ -179,8 +213,8 @@ export default function Products() {
 
   const activeFilterCount = [
     searchTerm !== '',
-    selectedType !== 'all',
-    selectedSubtype !== 'all',
+    selectedCategory !== 'all',
+    selectedSubcategory !== 'all',
     selectedBrand !== 'all',
   ].filter(Boolean).length;
 
@@ -217,38 +251,40 @@ export default function Products() {
             {/* Filter Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Product Type</label>
-                <Select value={selectedType} onValueChange={setSelectedType}>
+                <label className="text-sm font-medium">Category</label>
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                   <SelectTrigger>
-                    <SelectValue placeholder="All Types" />
+                    <SelectValue placeholder="All Categories" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    {filterOptions.types.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type}
+                  <SelectContent className="bg-background z-50">
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {filterOptions.categories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Subtype</label>
-                <Select value={selectedSubtype} onValueChange={setSelectedSubtype}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Subtypes" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Subtypes</SelectItem>
-                    {filterOptions.subtypes.map((subtype) => (
-                      <SelectItem key={subtype} value={subtype}>
-                        {subtype}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              {selectedCategory !== 'all' && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Subcategory</label>
+                  <Select value={selectedSubcategory} onValueChange={setSelectedSubcategory}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All Subcategories" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background z-50">
+                      <SelectItem value="all">All Subcategories</SelectItem>
+                      {filterOptions.subcategories.map((sub) => (
+                        <SelectItem key={sub} value={sub}>
+                          {sub}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Brand</label>
@@ -256,7 +292,7 @@ export default function Products() {
                   <SelectTrigger>
                     <SelectValue placeholder="All Brands" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-background z-50">
                     <SelectItem value="all">All Brands</SelectItem>
                     {filterOptions.brands.map((brand) => (
                       <SelectItem key={brand} value={brand}>
@@ -273,10 +309,8 @@ export default function Products() {
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-background z-50">
                     <SelectItem value="recent">Recently Added</SelectItem>
-                    <SelectItem value="price-asc">Price: Low to High</SelectItem>
-                    <SelectItem value="price-desc">Price: High to Low</SelectItem>
                     <SelectItem value="brand-az">Brand: A-Z</SelectItem>
                   </SelectContent>
                 </Select>
@@ -343,7 +377,36 @@ export default function Products() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <Link key={product.handle} to={`/product/${product.handle}`}>
+                  <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full">
+                    <div className="aspect-square bg-muted relative">
+                      {product.image_url ? (
+                        <img
+                          src={product.image_url}
+                          alt={product.title}
+                          className="object-cover w-full h-full"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-muted-foreground">
+                          No Image
+                        </div>
+                      )}
+                      {product.variant_count > 1 && (
+                        <Badge className="absolute top-2 right-2">
+                          {product.variant_count} variants
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <p className="text-xs text-muted-foreground mb-1">{product.brand}</p>
+                      <h3 className="font-semibold mb-1 line-clamp-2">{product.title}</h3>
+                      <p className="text-xs text-muted-foreground mb-2">{product.subcategory}</p>
+                      <p className="text-lg font-bold text-primary">
+                        {product.display_price ? `$${product.display_price}` : "Price on request"}
+                      </p>
+                    </div>
+                  </Card>
+                </Link>
               ))}
             </div>
 

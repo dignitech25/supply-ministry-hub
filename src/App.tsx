@@ -11,10 +11,7 @@ import TermsConditions from "./pages/TermsConditions";
 import SleepChoice from "./pages/SleepChoice";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
-import Shop from "./pages/Shop";
-import ProductDetailNew from "./pages/ProductDetailNew";
 import AdminCategoryQA from "./pages/AdminCategoryQA";
-import { Navigate } from "react-router-dom";
 // import Category from "./pages/Category";
 // import Brand from "./pages/Brand";
 
@@ -32,14 +29,13 @@ const App = () => (
             <Route path="/terms" element={<TermsConditions />} />
             <Route path="/sleep-choice" element={<SleepChoice />} />
             
-            {/* New shop routes using product_catagorized table */}
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/product/:handle" element={<ProductDetailNew />} />
-            <Route path="/admin/category-qa" element={<AdminCategoryQA />} />
-            
-            {/* Legacy routes - redirect to new structure */}
+            {/* Product routes using product_catagorized table */}
             <Route path="/products" element={<Products />} />
             <Route path="/products/:sku" element={<ProductDetail />} />
+            <Route path="/product/:handle" element={<ProductDetail />} />
+            
+            {/* Admin routes */}
+            <Route path="/admin/category-qa" element={<AdminCategoryQA />} />
             
             {/* Category and Brand pages temporarily disabled - need updating to new schema */}
             {/* <Route path="/category/:slug" element={<Category />} /> */}
