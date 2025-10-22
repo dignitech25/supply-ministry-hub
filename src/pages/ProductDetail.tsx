@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ChevronRight, Download, ExternalLink, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -193,14 +193,23 @@ export default function ProductDetail() {
               </BreadcrumbLink>
             </BreadcrumbItem>
             {breadcrumbs.map((crumb, i) => (
-              <span key={i}>
+              <React.Fragment key={i}>
                 <BreadcrumbSeparator>
                   <ChevronRight className="h-4 w-4" />
                 </BreadcrumbSeparator>
                 <BreadcrumbItem>
-                  <BreadcrumbLink>{crumb}</BreadcrumbLink>
+                  <BreadcrumbLink asChild>
+                    <Link 
+                      to={i === 0 
+                        ? `/products?category=${encodeURIComponent(parent.category || '')}`
+                        : `/products?category=${encodeURIComponent(parent.category || '')}&subcategory=${encodeURIComponent(parent.subcategory || '')}`
+                      }
+                    >
+                      {crumb}
+                    </Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
-              </span>
+              </React.Fragment>
             ))}
             <BreadcrumbSeparator>
               <ChevronRight className="h-4 w-4" />
