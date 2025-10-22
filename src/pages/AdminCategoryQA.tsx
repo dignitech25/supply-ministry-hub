@@ -31,16 +31,16 @@ const AdminCategoryQA = () => {
     const fetchQAProducts = async () => {
       setLoading(true);
       const { data, error } = await supabase
-        .from("product_catagorized")
+        .from("products_categorized" as any)
         .select("sku, handle, title, brand, category_path, category_rule, category_alternatives, category_confidence")
         .in("category_confidence", ["low", "none"])
         .order("brand")
-        .order("title");
+        .order("title") as { data: any[] | null; error: any };
 
       if (error) {
         console.error("Error fetching QA products:", error);
       } else {
-        setProducts(data || []);
+        setProducts((data || []) as QAProduct[]);
       }
       setLoading(false);
     };

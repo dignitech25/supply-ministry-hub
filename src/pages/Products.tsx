@@ -63,13 +63,13 @@ export default function Products() {
       }
 
       const { data } = await supabase
-        .from('product_catagorized')
+        .from('products_categorized' as any)
         .select('subcategory')
         .eq('top_level_category', selectedCategory)
-        .not('subcategory', 'is', null);
+        .not('subcategory', 'is', null) as { data: any[] | null };
 
       const uniqueSubcategories = Array.from(
-        new Set(data?.map(p => p.subcategory).filter(Boolean))
+        new Set((data || []).map(p => p.subcategory).filter(Boolean))
       ) as string[];
 
       setFilterOptions(prev => ({ ...prev, subcategories: uniqueSubcategories.sort() }));
@@ -98,15 +98,15 @@ export default function Products() {
   const fetchFilterOptions = async () => {
     try {
       const { data, error } = await supabase
-        .from('product_catagorized')
-        .select('top_level_category, brand');
-
+        .from('products_categorized' as any)
+        .select('top_level_category, brand') as { data: any[] | null; error: any };
+      
       if (error) throw error;
       
       const categories = new Set<string>();
       const brands = new Set<string>();
 
-      data?.forEach(product => {
+      (data || []).forEach(product => {
         if (product.top_level_category) categories.add(product.top_level_category);
         if (product.brand) brands.add(product.brand);
       });
@@ -125,12 +125,12 @@ export default function Products() {
     setLoading(true);
     try {
       let query = supabase
-        .from('product_catagorized')
-        .select('handle, title, brand, subcategory, top_level_category, image_url, price_discounted, price_rrp');
+        .from('products_categorized' as any)
+        .select('handle, title, brand, subcategory, top_level_category, image_url, price_discounted, price_rrp, sku');
 
-      // Search filter
+      // Search filter - improved to include SKU
       if (debouncedSearch) {
-        query = query.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,description_long.ilike.%${debouncedSearch}%`);
+        query = query.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,description_long.ilike.%${debouncedSearch}%,sku.ilike.%${debouncedSearch}%`);
       }
 
       // Category filter
@@ -157,12 +157,12 @@ export default function Products() {
           query = query.order('brand').order('title');
       }
 
-      const { data, error } = await query;
+      const { data, error } = await query as { data: any[] | null; error: any };
 
       if (error) throw error;
       
       // Group by handle
-      const grouped = data?.reduce((acc, product) => {
+      const grouped = (data || []).reduce((acc, product) => {
         const key = product.handle;
         if (!acc[key]) {
           const displayPrice = product.price_discounted || product.price_rrp?.toString() || null;
@@ -186,7 +186,7 @@ export default function Products() {
       // Apply pagination to grouped results
       const from = (currentPage - 1) * productsPerPage;
       const to = from + productsPerPage;
-      setProducts(groupedProducts.slice(from, to));
+      setProducts(groupedProducts.slice(from, to) as GroupedProduct[]);
       setTotalCount(groupedProducts.length);
     } catch (error) {
       console.error('Error fetching products:', error);

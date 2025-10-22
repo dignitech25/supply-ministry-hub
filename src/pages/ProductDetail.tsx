@@ -63,10 +63,10 @@ export default function ProductDetail() {
 
       setLoading(true);
       const { data, error } = await supabase
-        .from('product_catagorized')
+        .from('products_categorized' as any)
         .select('*')
         .eq(handle ? 'handle' : 'sku', identifier)
-        .order('size_normalized', { ascending: true, nullsFirst: false });
+        .order('size_normalized', { ascending: true, nullsFirst: false }) as { data: any[] | null; error: any };
 
       if (error) {
         console.error('Error fetching variants:', error);
@@ -75,8 +75,8 @@ export default function ProductDetail() {
       }
 
       if (data && data.length > 0) {
-        setVariants(data);
-        setSelectedVariant(data[0]);
+        setVariants(data as ProductVariant[]);
+        setSelectedVariant(data[0] as ProductVariant);
       }
       setLoading(false);
     };
