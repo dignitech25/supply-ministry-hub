@@ -205,6 +205,147 @@ export type Database = {
         }
         Relationships: []
       }
+      product_catagorized: {
+        Row: {
+          barcode: string | null
+          brand: string | null
+          category_alternatives: string | null
+          category_confidence: string | null
+          category_path: string | null
+          category_rule: string | null
+          category_score: string | null
+          clinical_use_case: string | null
+          color_normalized: string | null
+          description: string | null
+          description_long: string | null
+          description_short: string | null
+          description_source_concat: string | null
+          handle: string | null
+          image_url: string | null
+          is_consumable: string | null
+          option1_name: string | null
+          option1_value: string | null
+          option2_name: string | null
+          option2_value: string | null
+          price_discounted: string | null
+          price_rrp: number | null
+          product_id: string
+          product_type: string | null
+          size: string | null
+          size_normalized: string | null
+          size_normalized_1: string | null
+          sku: string
+          sku_clean: string | null
+          spec_depth_mm: string | null
+          spec_dimensions_text: string | null
+          spec_height_mm: string | null
+          spec_json_raw: string | null
+          spec_length_mm: string | null
+          spec_swl_kg: string | null
+          spec_thickness_mm: string | null
+          spec_weight_kg: string | null
+          spec_width_mm: string | null
+          specifications: string | null
+          subcategory: string | null
+          subtype: string | null
+          title: string | null
+          top_level_category: string | null
+          vendor: string | null
+        }
+        Insert: {
+          barcode?: string | null
+          brand?: string | null
+          category_alternatives?: string | null
+          category_confidence?: string | null
+          category_path?: string | null
+          category_rule?: string | null
+          category_score?: string | null
+          clinical_use_case?: string | null
+          color_normalized?: string | null
+          description?: string | null
+          description_long?: string | null
+          description_short?: string | null
+          description_source_concat?: string | null
+          handle?: string | null
+          image_url?: string | null
+          is_consumable?: string | null
+          option1_name?: string | null
+          option1_value?: string | null
+          option2_name?: string | null
+          option2_value?: string | null
+          price_discounted?: string | null
+          price_rrp?: number | null
+          product_id: string
+          product_type?: string | null
+          size?: string | null
+          size_normalized?: string | null
+          size_normalized_1?: string | null
+          sku: string
+          sku_clean?: string | null
+          spec_depth_mm?: string | null
+          spec_dimensions_text?: string | null
+          spec_height_mm?: string | null
+          spec_json_raw?: string | null
+          spec_length_mm?: string | null
+          spec_swl_kg?: string | null
+          spec_thickness_mm?: string | null
+          spec_weight_kg?: string | null
+          spec_width_mm?: string | null
+          specifications?: string | null
+          subcategory?: string | null
+          subtype?: string | null
+          title?: string | null
+          top_level_category?: string | null
+          vendor?: string | null
+        }
+        Update: {
+          barcode?: string | null
+          brand?: string | null
+          category_alternatives?: string | null
+          category_confidence?: string | null
+          category_path?: string | null
+          category_rule?: string | null
+          category_score?: string | null
+          clinical_use_case?: string | null
+          color_normalized?: string | null
+          description?: string | null
+          description_long?: string | null
+          description_short?: string | null
+          description_source_concat?: string | null
+          handle?: string | null
+          image_url?: string | null
+          is_consumable?: string | null
+          option1_name?: string | null
+          option1_value?: string | null
+          option2_name?: string | null
+          option2_value?: string | null
+          price_discounted?: string | null
+          price_rrp?: number | null
+          product_id?: string
+          product_type?: string | null
+          size?: string | null
+          size_normalized?: string | null
+          size_normalized_1?: string | null
+          sku?: string
+          sku_clean?: string | null
+          spec_depth_mm?: string | null
+          spec_dimensions_text?: string | null
+          spec_height_mm?: string | null
+          spec_json_raw?: string | null
+          spec_length_mm?: string | null
+          spec_swl_kg?: string | null
+          spec_thickness_mm?: string | null
+          spec_weight_kg?: string | null
+          spec_width_mm?: string | null
+          specifications?: string | null
+          subcategory?: string | null
+          subtype?: string | null
+          title?: string | null
+          top_level_category?: string | null
+          vendor?: string | null
+        }
+        Relationships: []
+      }
       product_catalogue_list: {
         Row: {
           Brand: string | null
@@ -352,6 +493,210 @@ export type Database = {
           subtype?: string | null
           title?: string | null
           url?: string | null
+        }
+        Relationships: []
+      }
+      products_backup_20251022: {
+        Row: {
+          brand: string | null
+          brochure_url: string | null
+          clinical_use_case: string | null
+          color: string | null
+          created_at: string | null
+          description: string | null
+          funding_context: string | null
+          id: string | null
+          image_url: string | null
+          price_discounted: number | null
+          price_rrp: number | null
+          product_type: string | null
+          size: string | null
+          sku: string | null
+          specifications: Json | null
+          subtype: string | null
+          title: string | null
+          url: string | null
+        }
+        Insert: {
+          brand?: string | null
+          brochure_url?: string | null
+          clinical_use_case?: string | null
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          funding_context?: string | null
+          id?: string | null
+          image_url?: string | null
+          price_discounted?: number | null
+          price_rrp?: number | null
+          product_type?: string | null
+          size?: string | null
+          sku?: string | null
+          specifications?: Json | null
+          subtype?: string | null
+          title?: string | null
+          url?: string | null
+        }
+        Update: {
+          brand?: string | null
+          brochure_url?: string | null
+          clinical_use_case?: string | null
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          funding_context?: string | null
+          id?: string | null
+          image_url?: string | null
+          price_discounted?: number | null
+          price_rrp?: number | null
+          product_type?: string | null
+          size?: string | null
+          sku?: string | null
+          specifications?: Json | null
+          subtype?: string | null
+          title?: string | null
+          url?: string | null
+        }
+        Relationships: []
+      }
+      products_catagorized: {
+        Row: {
+          barcode: string | null
+          brand: string | null
+          category_alternatives: string | null
+          category_confidence: string | null
+          category_path: string | null
+          category_rule: string | null
+          category_score: string | null
+          clinical_use_case: string | null
+          color_normalized: string | null
+          description: string | null
+          description_long: string | null
+          description_short: string | null
+          description_source_concat: string | null
+          handle: string | null
+          image_url: string | null
+          is_consumable: string | null
+          option1_name: string | null
+          option1_value: string | null
+          option2_name: string | null
+          option2_value: string | null
+          price_discounted: string | null
+          price_rrp: number | null
+          product_id: string | null
+          product_type: string | null
+          size: string | null
+          size_normalized: string | null
+          size_normalized_1: string | null
+          sku: string | null
+          sku_clean: string | null
+          spec_depth_mm: string | null
+          spec_dimensions_text: string | null
+          spec_height_mm: string | null
+          spec_json_raw: string | null
+          spec_length_mm: string | null
+          spec_swl_kg: string | null
+          spec_thickness_mm: string | null
+          spec_weight_kg: string | null
+          spec_width_mm: string | null
+          specifications: string | null
+          subcategory: string | null
+          subtype: string | null
+          title: string | null
+          top_level_category: string | null
+          vendor: string | null
+        }
+        Insert: {
+          barcode?: string | null
+          brand?: string | null
+          category_alternatives?: string | null
+          category_confidence?: string | null
+          category_path?: string | null
+          category_rule?: string | null
+          category_score?: string | null
+          clinical_use_case?: string | null
+          color_normalized?: string | null
+          description?: string | null
+          description_long?: string | null
+          description_short?: string | null
+          description_source_concat?: string | null
+          handle?: string | null
+          image_url?: string | null
+          is_consumable?: string | null
+          option1_name?: string | null
+          option1_value?: string | null
+          option2_name?: string | null
+          option2_value?: string | null
+          price_discounted?: string | null
+          price_rrp?: number | null
+          product_id?: string | null
+          product_type?: string | null
+          size?: string | null
+          size_normalized?: string | null
+          size_normalized_1?: string | null
+          sku?: string | null
+          sku_clean?: string | null
+          spec_depth_mm?: string | null
+          spec_dimensions_text?: string | null
+          spec_height_mm?: string | null
+          spec_json_raw?: string | null
+          spec_length_mm?: string | null
+          spec_swl_kg?: string | null
+          spec_thickness_mm?: string | null
+          spec_weight_kg?: string | null
+          spec_width_mm?: string | null
+          specifications?: string | null
+          subcategory?: string | null
+          subtype?: string | null
+          title?: string | null
+          top_level_category?: string | null
+          vendor?: string | null
+        }
+        Update: {
+          barcode?: string | null
+          brand?: string | null
+          category_alternatives?: string | null
+          category_confidence?: string | null
+          category_path?: string | null
+          category_rule?: string | null
+          category_score?: string | null
+          clinical_use_case?: string | null
+          color_normalized?: string | null
+          description?: string | null
+          description_long?: string | null
+          description_short?: string | null
+          description_source_concat?: string | null
+          handle?: string | null
+          image_url?: string | null
+          is_consumable?: string | null
+          option1_name?: string | null
+          option1_value?: string | null
+          option2_name?: string | null
+          option2_value?: string | null
+          price_discounted?: string | null
+          price_rrp?: number | null
+          product_id?: string | null
+          product_type?: string | null
+          size?: string | null
+          size_normalized?: string | null
+          size_normalized_1?: string | null
+          sku?: string | null
+          sku_clean?: string | null
+          spec_depth_mm?: string | null
+          spec_dimensions_text?: string | null
+          spec_height_mm?: string | null
+          spec_json_raw?: string | null
+          spec_length_mm?: string | null
+          spec_swl_kg?: string | null
+          spec_thickness_mm?: string | null
+          spec_weight_kg?: string | null
+          spec_width_mm?: string | null
+          specifications?: string | null
+          subcategory?: string | null
+          subtype?: string | null
+          title?: string | null
+          top_level_category?: string | null
+          vendor?: string | null
         }
         Relationships: []
       }

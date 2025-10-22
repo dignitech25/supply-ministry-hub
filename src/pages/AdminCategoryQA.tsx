@@ -1,0 +1,128 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import Navigation from "@/components/Navigation";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ExternalLink } from "lucide-react";
+
+interface QAProduct {
+  sku: string;
+  handle: string;
+  title: string;
+  brand: string;
+  category_path: string | null;
+  category_rule: string | null;
+  category_alternatives: string | null;
+  category_confidence: string | null;
+}
+
+const AdminCategoryQA = () => {
+  const [products, setProducts] = useState<QAProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchQAProducts = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("product_catagorized")
+        .select("sku, handle, title, brand, category_path, category_rule, category_alternatives, category_confidence")
+        .in("category_confidence", ["low", "none"])
+        .order("brand")
+        .order("title");
+
+      if (error) {
+        console.error("Error fetching QA products:", error);
+      } else {
+        setProducts(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchQAProducts();
+  }, []);
+
+  const openProduct = (handle: string) => {
+    window.open(`/product/${handle}`, "_blank");
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-6">Category QA Review</h1>
+        <p className="text-muted-foreground mb-8">
+          Products with low or no category confidence that need review.
+        </p>
+
+        {loading ? (
+          <div className="space-y-2">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="h-16 w-full" />
+            ))}
+          </div>
+        ) : products.length === 0 ? (
+          <p className="text-center text-muted-foreground py-12">
+            No products need review. All categories have medium or high confidence!
+          </p>
+        ) : (
+          <div className="border rounded-lg overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>SKU</TableHead>
+                  <TableHead>Brand</TableHead>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Category Path</TableHead>
+                  <TableHead>Rule</TableHead>
+                  <TableHead>Alternatives</TableHead>
+                  <TableHead>Confidence</TableHead>
+                  <TableHead className="w-20"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {products.map((product) => (
+                  <TableRow
+                    key={product.sku}
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => openProduct(product.handle)}
+                  >
+                    <TableCell className="font-mono text-xs">{product.sku}</TableCell>
+                    <TableCell>{product.brand}</TableCell>
+                    <TableCell className="max-w-xs truncate">{product.title}</TableCell>
+                    <TableCell className="text-sm">{product.category_path || "—"}</TableCell>
+                    <TableCell className="text-sm">{product.category_rule || "—"}</TableCell>
+                    <TableCell className="text-sm">{product.category_alternatives || "—"}</TableCell>
+                    <TableCell>
+                      <span
+                        className={`inline-block px-2 py-1 rounded text-xs font-medium ${
+                          product.category_confidence === "none"
+                            ? "bg-destructive/10 text-destructive"
+                            : "bg-yellow-500/10 text-yellow-700"
+                        }`}
+                      >
+                        {product.category_confidence}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default AdminCategoryQA;
