@@ -8,6 +8,8 @@ import { ProductCard } from '@/components/ProductCard';
 import Navigation from '@/components/Navigation';
 import { supabase } from '@/integrations/supabase/client';
 import { useSearchParams } from 'react-router-dom';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from '@/components/ui/pagination';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Product {
   id: string;
@@ -26,39 +28,132 @@ export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+  const [debouncedSearch, setDebouncedSearch] = useState(searchParams.get('search') || '');
   const [selectedType, setSelectedType] = useState<string>(searchParams.get('type') || 'all');
   const [selectedSubtype, setSelectedSubtype] = useState<string>(searchParams.get('subtype') || 'all');
   const [selectedBrand, setSelectedBrand] = useState<string>(searchParams.get('brand') || 'all');
   const [sortBy, setSortBy] = useState<string>(searchParams.get('sort') || 'recent');
+  const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1'));
+  const [totalCount, setTotalCount] = useState(0);
+  const [filterOptions, setFilterOptions] = useState({ types: [], subtypes: [], brands: [] });
+  
+  const productsPerPage = 24;
+  const totalPages = Math.ceil(totalCount / productsPerPage);
 
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+      setCurrentPage(1); // Reset to page 1 on search
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  // Fetch filter options once on mount
+  useEffect(() => {
+    fetchFilterOptions();
+  }, []);
+
+  // Fetch products when filters change
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [debouncedSearch, selectedType, selectedSubtype, selectedBrand, sortBy, currentPage]);
+
+  // Update URL params when filters change
+  useEffect(() => {
+    const params: Record<string, string> = {};
+    if (debouncedSearch) params.search = debouncedSearch;
+    if (selectedType !== 'all') params.type = selectedType;
+    if (selectedSubtype !== 'all') params.subtype = selectedSubtype;
+    if (selectedBrand !== 'all') params.brand = selectedBrand;
+    if (sortBy !== 'recent') params.sort = sortBy;
+    if (currentPage > 1) params.page = currentPage.toString();
+    setSearchParams(params);
+  }, [debouncedSearch, selectedType, selectedSubtype, selectedBrand, sortBy, currentPage]);
+
+  const fetchFilterOptions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('product_type, subtype, brand');
+
+      if (error) throw error;
+      
+      const types = new Set<string>();
+      const subtypes = new Set<string>();
+      const brands = new Set<string>();
+
+      data?.forEach(product => {
+        if (product.product_type) types.add(product.product_type);
+        if (product.subtype) subtypes.add(product.subtype);
+        if (product.brand) brands.add(product.brand);
+      });
+
+      setFilterOptions({
+        types: Array.from(types).sort(),
+        subtypes: Array.from(subtypes).sort(),
+        brands: Array.from(brands).sort(),
+      });
+    } catch (error) {
+      console.error('Error fetching filter options:', error);
+    }
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      let allProducts: Product[] = [];
-      let from = 0;
-      const batchSize = 1000;
-      
-      while (true) {
-        const { data, error } = await supabase
-          .from('products')
-          .select('id, sku, title, brand, product_type, subtype, price_rrp, price_discounted, image_url')
-          .order('created_at', { ascending: false })
-          .range(from, from + batchSize - 1);
+      let query = supabase
+        .from('products')
+        .select('id, sku, title, brand, product_type, subtype, price_rrp, price_discounted, image_url', { count: 'exact' });
 
-        if (error) throw error;
-        if (!data || data.length === 0) break;
-        
-        allProducts = [...allProducts, ...data];
-        
-        if (data.length < batchSize) break; // Last batch
-        from += batchSize;
+      // Search filter
+      if (debouncedSearch) {
+        query = query.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,sku.ilike.%${debouncedSearch}%`);
       }
+
+      // Type filter
+      if (selectedType !== 'all') {
+        query = query.eq('product_type', selectedType);
+      }
+
+      // Subtype filter
+      if (selectedSubtype !== 'all') {
+        query = query.eq('subtype', selectedSubtype);
+      }
+
+      // Brand filter
+      if (selectedBrand !== 'all') {
+        query = query.eq('brand', selectedBrand);
+      }
+
+      // Sorting
+      switch (sortBy) {
+        case 'price-asc':
+          query = query.order('price_discounted', { ascending: true, nullsFirst: false })
+                       .order('price_rrp', { ascending: true, nullsFirst: false });
+          break;
+        case 'price-desc':
+          query = query.order('price_discounted', { ascending: false, nullsFirst: false })
+                       .order('price_rrp', { ascending: false, nullsFirst: false });
+          break;
+        case 'brand-az':
+          query = query.order('brand', { ascending: true });
+          break;
+        default:
+          query = query.order('created_at', { ascending: false });
+      }
+
+      // Pagination
+      const from = (currentPage - 1) * productsPerPage;
+      const to = from + productsPerPage - 1;
+      query = query.range(from, to);
+
+      const { data, count, error } = await query;
+
+      if (error) throw error;
       
-      setProducts(allProducts);
+      setProducts(data || []);
+      setTotalCount(count || 0);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -66,64 +161,20 @@ export default function Products() {
     }
   };
 
-  // Extract unique filter values
-  const filterOptions = useMemo(() => {
-    const types = new Set<string>();
-    const subtypes = new Set<string>();
-    const brands = new Set<string>();
-
-    products.forEach(product => {
-      if (product.product_type) types.add(product.product_type);
-      if (product.subtype) subtypes.add(product.subtype);
-      if (product.brand) brands.add(product.brand);
-    });
-
-    return {
-      types: Array.from(types).sort(),
-      subtypes: Array.from(subtypes).sort(),
-      brands: Array.from(brands).sort(),
-    };
-  }, [products]);
-
-  // Filter and sort products
-  const filteredProducts = useMemo(() => {
-    let filtered = products.filter((product) => {
-      const matchesSearch = searchTerm === '' || 
-        product.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.sku?.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesType = selectedType === 'all' || product.product_type === selectedType;
-      const matchesSubtype = selectedSubtype === 'all' || product.subtype === selectedSubtype;
-      const matchesBrand = selectedBrand === 'all' || product.brand === selectedBrand;
-
-      return matchesSearch && matchesType && matchesSubtype && matchesBrand;
-    });
-
-    // Apply sorting
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'price-asc':
-          return (a.price_discounted || a.price_rrp || 0) - (b.price_discounted || b.price_rrp || 0);
-        case 'price-desc':
-          return (b.price_discounted || b.price_rrp || 0) - (a.price_discounted || a.price_rrp || 0);
-        case 'brand-az':
-          return (a.brand || '').localeCompare(b.brand || '');
-        default:
-          return 0; // Keep original order (recent)
-      }
-    });
-
-    return filtered;
-  }, [products, searchTerm, selectedType, selectedSubtype, selectedBrand, sortBy]);
-
   const handleClearFilters = () => {
     setSearchTerm('');
+    setDebouncedSearch('');
     setSelectedType('all');
     setSelectedSubtype('all');
     setSelectedBrand('all');
     setSortBy('recent');
+    setCurrentPage(1);
     setSearchParams({});
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const activeFilterCount = [
@@ -254,8 +305,10 @@ export default function Products() {
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-muted-foreground">
-            Showing <span className="font-semibold text-foreground">{filteredProducts.length}</span> of{' '}
-            <span className="font-semibold text-foreground">{products.length}</span> products
+            Showing <span className="font-semibold text-foreground">
+              {loading ? '...' : `${products.length === 0 ? 0 : (currentPage - 1) * productsPerPage + 1}-${Math.min(currentPage * productsPerPage, totalCount)}`}
+            </span> of{' '}
+            <span className="font-semibold text-foreground">{loading ? '...' : totalCount}</span> products
           </p>
         </div>
 
@@ -273,7 +326,7 @@ export default function Products() {
               </div>
             ))}
           </div>
-        ) : filteredProducts.length === 0 ? (
+        ) : products.length === 0 ? (
           <div className="text-center py-16 bg-card rounded-xl border">
             <Filter className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-2">No products found</h3>
@@ -287,11 +340,66 @@ export default function Products() {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                      className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                    />
+                  </PaginationItem>
+                  
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                    // Show first page, last page, current page, and pages around current
+                    const showPage = page === 1 || 
+                                    page === totalPages || 
+                                    (page >= currentPage - 1 && page <= currentPage + 1);
+                    
+                    const showEllipsisBefore = page === currentPage - 2 && currentPage > 3;
+                    const showEllipsisAfter = page === currentPage + 2 && currentPage < totalPages - 2;
+
+                    if (showEllipsisBefore || showEllipsisAfter) {
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                      );
+                    }
+
+                    if (!showPage) return null;
+
+                    return (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          onClick={() => handlePageChange(page)}
+                          isActive={currentPage === page}
+                          className="cursor-pointer"
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
+                  })}
+
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                      className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            )}
+          </>
         )}
       </main>
     </div>
