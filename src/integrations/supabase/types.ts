@@ -205,147 +205,6 @@ export type Database = {
         }
         Relationships: []
       }
-      product_catagorized: {
-        Row: {
-          barcode: string | null
-          brand: string | null
-          category_alternatives: string | null
-          category_confidence: string | null
-          category_path: string | null
-          category_rule: string | null
-          category_score: string | null
-          clinical_use_case: string | null
-          color_normalized: string | null
-          description: string | null
-          description_long: string | null
-          description_short: string | null
-          description_source_concat: string | null
-          handle: string | null
-          image_url: string | null
-          is_consumable: string | null
-          option1_name: string | null
-          option1_value: string | null
-          option2_name: string | null
-          option2_value: string | null
-          price_discounted: string | null
-          price_rrp: number | null
-          product_id: string
-          product_type: string | null
-          size: string | null
-          size_normalized: string | null
-          size_normalized_1: string | null
-          sku: string
-          sku_clean: string | null
-          spec_depth_mm: string | null
-          spec_dimensions_text: string | null
-          spec_height_mm: string | null
-          spec_json_raw: string | null
-          spec_length_mm: string | null
-          spec_swl_kg: string | null
-          spec_thickness_mm: string | null
-          spec_weight_kg: string | null
-          spec_width_mm: string | null
-          specifications: string | null
-          subcategory: string | null
-          subtype: string | null
-          title: string | null
-          top_level_category: string | null
-          vendor: string | null
-        }
-        Insert: {
-          barcode?: string | null
-          brand?: string | null
-          category_alternatives?: string | null
-          category_confidence?: string | null
-          category_path?: string | null
-          category_rule?: string | null
-          category_score?: string | null
-          clinical_use_case?: string | null
-          color_normalized?: string | null
-          description?: string | null
-          description_long?: string | null
-          description_short?: string | null
-          description_source_concat?: string | null
-          handle?: string | null
-          image_url?: string | null
-          is_consumable?: string | null
-          option1_name?: string | null
-          option1_value?: string | null
-          option2_name?: string | null
-          option2_value?: string | null
-          price_discounted?: string | null
-          price_rrp?: number | null
-          product_id: string
-          product_type?: string | null
-          size?: string | null
-          size_normalized?: string | null
-          size_normalized_1?: string | null
-          sku: string
-          sku_clean?: string | null
-          spec_depth_mm?: string | null
-          spec_dimensions_text?: string | null
-          spec_height_mm?: string | null
-          spec_json_raw?: string | null
-          spec_length_mm?: string | null
-          spec_swl_kg?: string | null
-          spec_thickness_mm?: string | null
-          spec_weight_kg?: string | null
-          spec_width_mm?: string | null
-          specifications?: string | null
-          subcategory?: string | null
-          subtype?: string | null
-          title?: string | null
-          top_level_category?: string | null
-          vendor?: string | null
-        }
-        Update: {
-          barcode?: string | null
-          brand?: string | null
-          category_alternatives?: string | null
-          category_confidence?: string | null
-          category_path?: string | null
-          category_rule?: string | null
-          category_score?: string | null
-          clinical_use_case?: string | null
-          color_normalized?: string | null
-          description?: string | null
-          description_long?: string | null
-          description_short?: string | null
-          description_source_concat?: string | null
-          handle?: string | null
-          image_url?: string | null
-          is_consumable?: string | null
-          option1_name?: string | null
-          option1_value?: string | null
-          option2_name?: string | null
-          option2_value?: string | null
-          price_discounted?: string | null
-          price_rrp?: number | null
-          product_id?: string
-          product_type?: string | null
-          size?: string | null
-          size_normalized?: string | null
-          size_normalized_1?: string | null
-          sku?: string
-          sku_clean?: string | null
-          spec_depth_mm?: string | null
-          spec_dimensions_text?: string | null
-          spec_height_mm?: string | null
-          spec_json_raw?: string | null
-          spec_length_mm?: string | null
-          spec_swl_kg?: string | null
-          spec_thickness_mm?: string | null
-          spec_weight_kg?: string | null
-          spec_width_mm?: string | null
-          specifications?: string | null
-          subcategory?: string | null
-          subtype?: string | null
-          title?: string | null
-          top_level_category?: string | null
-          vendor?: string | null
-        }
-        Relationships: []
-      }
       product_catalogue_list: {
         Row: {
           Brand: string | null
@@ -559,7 +418,7 @@ export type Database = {
         }
         Relationships: []
       }
-      products_catagorized: {
+      products_categorized: {
         Row: {
           barcode: string | null
           brand: string | null
@@ -587,8 +446,8 @@ export type Database = {
           product_type: string | null
           size: string | null
           size_normalized: string | null
-          size_normalized_1: string | null
-          sku: string | null
+          "size_normalized.1": string | null
+          sku: string
           sku_clean: string | null
           spec_depth_mm: string | null
           spec_dimensions_text: string | null
@@ -633,8 +492,8 @@ export type Database = {
           product_type?: string | null
           size?: string | null
           size_normalized?: string | null
-          size_normalized_1?: string | null
-          sku?: string | null
+          "size_normalized.1"?: string | null
+          sku: string
           sku_clean?: string | null
           spec_depth_mm?: string | null
           spec_dimensions_text?: string | null
@@ -679,8 +538,8 @@ export type Database = {
           product_type?: string | null
           size?: string | null
           size_normalized?: string | null
-          size_normalized_1?: string | null
-          sku?: string | null
+          "size_normalized.1"?: string | null
+          sku?: string
           sku_clean?: string | null
           spec_depth_mm?: string | null
           spec_dimensions_text?: string | null
@@ -952,42 +811,9 @@ export type Database = {
       }
     }
     Functions: {
-      generate_quote_ref_code: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      gtrgm_compress: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      gtrgm_decompress: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      gtrgm_in: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      gtrgm_options: {
-        Args: { "": unknown }
-        Returns: undefined
-      }
-      gtrgm_out: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      set_limit: {
-        Args: { "": number }
-        Returns: number
-      }
-      show_limit: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      show_trgm: {
-        Args: { "": string }
-        Returns: string[]
-      }
+      generate_quote_ref_code: { Args: never; Returns: string }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
       [_ in never]: never
