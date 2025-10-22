@@ -124,10 +124,10 @@ export default function Products() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
+      // Fetch ALL products without pagination first
       let query = supabase
         .from('products_categorized' as any)
-        .select('handle, title, brand, subcategory, top_level_category, image_url, price_discounted, price_rrp, sku', { count: 'exact' })
-        .range(0, 9999); // Fetch up to 10,000 products
+        .select('handle, title, brand, subcategory, top_level_category, image_url, price_discounted, price_rrp, sku');
 
       // Search filter - improved to include SKU
       if (debouncedSearch) {
@@ -158,12 +158,30 @@ export default function Products() {
           query = query.order('brand').order('title');
       }
 
-      const { data, error } = await query as { data: any[] | null; error: any };
+      // Fetch all data in batches if needed
+      let allData: any[] = [];
+      let from = 0;
+      const batchSize = 1000;
+      let hasMore = true;
 
-      if (error) throw error;
+      while (hasMore) {
+        const { data, error } = await query.range(from, from + batchSize - 1) as { data: any[] | null; error: any };
+        
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          allData = [...allData, ...data];
+          from += batchSize;
+          hasMore = data.length === batchSize; // Continue if we got a full batch
+        } else {
+          hasMore = false;
+        }
+      }
+
+      console.log(`Fetched ${allData.length} total SKUs`);
       
       // Group by handle
-      const grouped = (data || []).reduce((acc, product) => {
+      const grouped = allData.reduce((acc, product) => {
         const key = product.handle;
         if (!acc[key]) {
           const displayPrice = product.price_discounted || product.price_rrp?.toString() || null;
@@ -182,12 +200,13 @@ export default function Products() {
         return acc;
       }, {} as Record<string, GroupedProduct>);
 
-      const groupedProducts = Object.values(grouped || {});
+      const groupedProducts = Object.values(grouped);
+      console.log(`Grouped into ${groupedProducts.length} unique products`);
       
       // Apply pagination to grouped results
-      const from = (currentPage - 1) * productsPerPage;
-      const to = from + productsPerPage;
-      setProducts(groupedProducts.slice(from, to) as GroupedProduct[]);
+      const from_page = (currentPage - 1) * productsPerPage;
+      const to_page = from_page + productsPerPage;
+      setProducts(groupedProducts.slice(from_page, to_page) as GroupedProduct[]);
       setTotalCount(groupedProducts.length);
     } catch (error) {
       console.error('Error fetching products:', error);
