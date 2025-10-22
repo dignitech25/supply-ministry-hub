@@ -19,35 +19,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuote } from '@/contexts/QuoteContext';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
-
-interface ProductVariant {
-  sku: string;
-  handle: string;
-  title: string;
-  brand: string;
-  description_long: string | null;
-  description_short: string | null;
-  image_url: string | null;
-  price_discounted: string | null;
-  price_rrp: number | null;
-  size_normalized: string | null;
-  size: string | null;
-  color_normalized: string | null;
-  clinical_use_case: string | null;
-  category_path: string | null;
-  is_consumable: string | null;
-  top_level_category: string;
-  subcategory: string;
-  spec_length_mm: string | null;
-  spec_width_mm: string | null;
-  spec_height_mm: string | null;
-  spec_weight_kg: string | null;
-  spec_dimensions_text: string | null;
-}
+import { fetchParentProduct, fetchParentProductBySku } from '@/utils/parentProductHelpers';
+import { ParentProduct, ProductVariant } from '@/utils/variantHelpers';
+import { formatPrice } from '@/utils/productHelpers';
 
 export default function ProductDetail() {
   const { handle, sku } = useParams<{ handle?: string; sku?: string }>();
-  const [variants, setVariants] = useState<ProductVariant[]>([]);
+  const [parent, setParent] = useState<ParentProduct | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -55,99 +33,90 @@ export default function ProductDetail() {
   const { addItem } = useQuote();
   const { toast } = useToast();
 
-  // Fetch all variants for this handle
+  // Fetch parent product and variants
   useEffect(() => {
-    const fetchVariants = async () => {
+    const fetchProduct = async () => {
       const identifier = handle || sku;
       if (!identifier) return;
 
       setLoading(true);
-      const { data, error } = await supabase
-        .from('products_categorized' as any)
-        .select('*')
-        .eq(handle ? 'handle' : 'sku', identifier)
-        .order('size_normalized', { ascending: true, nullsFirst: false }) as { data: any[] | null; error: any };
+      try {
+        let parentData: ParentProduct | null = null;
+        
+        // Check if identifier is a parent slug (contains underscore) or SKU
+        if (identifier.includes('_')) {
+          // It's a parent slug
+          parentData = await fetchParentProduct(identifier);
+        } else {
+          // It's likely a SKU, fetch by SKU
+          parentData = await fetchParentProductBySku(identifier);
+        }
 
-      if (error) {
-        console.error('Error fetching variants:', error);
+        if (parentData) {
+          setParent(parentData);
+          setSelectedVariant(parentData.defaultVariant);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      if (data && data.length > 0) {
-        setVariants(data as ProductVariant[]);
-        setSelectedVariant(data[0] as ProductVariant);
-      }
-      setLoading(false);
     };
 
-    fetchVariants();
+    fetchProduct();
   }, [handle, sku]);
-
-  // Extract unique sizes and colors
-  const sizes = Array.from(
-    new Set(
-      variants
-        .map((v) => v.size_normalized || v.size)
-        .filter(Boolean)
-    )
-  );
-
-  const colors = Array.from(
-    new Set(
-      variants
-        .map((v) => v.color_normalized)
-        .filter(Boolean)
-    )
-  );
 
   // Variant selection logic
   const selectVariant = (sizeChoice?: string, colorChoice?: string) => {
+    if (!parent) return;
+
     const eq = (a: string | null | undefined, b: string | undefined) =>
       a?.toLowerCase() === b?.toLowerCase();
 
-    const currentSize = sizeChoice || (selectedVariant?.size_normalized || selectedVariant?.size);
-    const currentColor = colorChoice || selectedVariant?.color_normalized;
+    const currentSize = sizeChoice || selectedVariant?.size;
+    const currentColor = colorChoice || selectedVariant?.color;
 
-    let variant = variants.find(
+    let variant = parent.variants.find(
       (v) =>
-        eq(v.size_normalized || v.size, currentSize) &&
-        eq(v.color_normalized, currentColor)
+        eq(v.size, currentSize) &&
+        eq(v.color, currentColor)
     );
 
     if (!variant && currentSize) {
-      variant = variants.find((v) => eq(v.size_normalized || v.size, currentSize));
+      variant = parent.variants.find((v) => eq(v.size, currentSize));
     }
 
     if (!variant && currentColor) {
-      variant = variants.find((v) => eq(v.color_normalized, currentColor));
+      variant = parent.variants.find((v) => eq(v.color, currentColor));
     }
 
-    setSelectedVariant(variant || variants[0]);
+    if (variant) {
+      setSelectedVariant(variant);
+    }
   };
 
   const handleAddToQuote = () => {
-    if (!selectedVariant) return;
+    if (!selectedVariant || !parent) return;
 
-    const unitPrice = selectedVariant.price_discounted 
-      ? parseFloat(selectedVariant.price_discounted) 
-      : selectedVariant.price_rrp || undefined;
+    const unitPrice = selectedVariant.priceDiscounted || selectedVariant.priceRrp || undefined;
 
     addItem({
       id: selectedVariant.sku,
       productId: selectedVariant.sku,
-      productName: selectedVariant.title,
-      brandName: selectedVariant.brand || '',
+      productName: parent.baseName,
+      brandName: parent.brand,
       smSku: selectedVariant.sku,
-      primaryImageUrl: selectedVariant.image_url || undefined,
+      primaryImageUrl: selectedVariant.imageUrl || undefined,
       unitPrice,
       quantity,
       lineNotes,
+      variantSize: selectedVariant.size,
+      variantColor: selectedVariant.color,
     });
 
     toast({
       title: 'Added to quote',
-      description: `${quantity}x ${selectedVariant.title} has been added to your quote.`,
+      description: `${quantity}x ${parent.baseName}${selectedVariant.size ? ` (${selectedVariant.size})` : ''} has been added to your quote.`,
     });
 
     setQuantity(1);
@@ -175,7 +144,7 @@ export default function ProductDetail() {
     );
   }
 
-  if (!selectedVariant) {
+  if (!parent || !selectedVariant) {
     return (
       <div className="min-h-screen bg-background">
         <Navigation />
@@ -194,20 +163,13 @@ export default function ProductDetail() {
     );
   }
 
-  const breadcrumbs = selectedVariant.category_path?.split('>').map((s) => s.trim()) || [];
-  const displayPrice =
-    selectedVariant.price_discounted && selectedVariant.price_discounted.trim() !== ''
-      ? `$${selectedVariant.price_discounted}`
-      : selectedVariant.price_rrp
-      ? `$${selectedVariant.price_rrp}`
-      : 'Price on request';
-
-  const clinicalUseCases = selectedVariant.clinical_use_case
+  const breadcrumbs = [parent.category, parent.subcategory].filter(Boolean);
+  const clinicalUseCases = parent.clinicalUseCase
     ?.split('|')
     .map((c) => c.trim())
     .filter(Boolean) || [];
 
-  const displayImage = selectedVariant.image_url || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23C4B5FD" width="400" height="400"/%3E%3Ctext fill="%23ffffff" font-family="sans-serif" font-size="24" text-anchor="middle" x="200" y="200"%3ENo Image%3C/text%3E%3C/svg%3E';
+  const displayImage = selectedVariant.imageUrl || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23C4B5FD" width="400" height="400"/%3E%3Ctext fill="%23ffffff" font-family="sans-serif" font-size="24" text-anchor="middle" x="200" y="200"%3ENo Image%3C/text%3E%3C/svg%3E';
 
   return (
     <div className="min-h-screen bg-background">
@@ -244,7 +206,7 @@ export default function ProductDetail() {
               <ChevronRight className="h-4 w-4" />
             </BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbPage>{selectedVariant.title}</BreadcrumbPage>
+              <BreadcrumbPage>{parent.baseName}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -256,44 +218,39 @@ export default function ProductDetail() {
             <div className="aspect-square rounded-xl overflow-hidden bg-gray-100 relative">
               <img
                 src={displayImage}
-                alt={`${selectedVariant.brand} ${selectedVariant.title}`}
+                alt={`${parent.brand} ${parent.baseName}`}
                 className="w-full h-full object-cover"
               />
-              {selectedVariant.is_consumable === 'Y' && (
-                <Badge className="absolute top-4 right-4">
-                  Consumable
-                </Badge>
-              )}
             </div>
           </div>
 
           {/* Product Info */}
           <div className="space-y-6">
-            {selectedVariant.brand && (
+            {parent.brand && (
               <Badge variant="secondary" className="text-base px-4 py-1">
-                {selectedVariant.brand}
+                {parent.brand}
               </Badge>
             )}
             
             <div>
-              <h1 className="text-4xl font-bold mb-2">{selectedVariant.title}</h1>
+              <h1 className="text-4xl font-bold mb-2">{parent.baseName}</h1>
               <p className="text-muted-foreground">SKU: {selectedVariant.sku}</p>
-              <p className="text-sm text-muted-foreground">{selectedVariant.subcategory}</p>
+              <p className="text-sm text-muted-foreground">{parent.subcategory}</p>
             </div>
 
             <div className="space-y-2">
-              {selectedVariant.price_discounted && selectedVariant.price_discounted.trim() !== '' && selectedVariant.price_rrp ? (
+              {selectedVariant.priceDiscounted && selectedVariant.priceRrp ? (
                 <>
                   <p className="text-4xl font-bold text-primary">
-                    ${Math.round(parseFloat(selectedVariant.price_discounted))}
+                    {formatPrice(selectedVariant.priceDiscounted)}
                   </p>
                   <p className="text-lg text-muted-foreground line-through">
-                    RRP ${Math.round(selectedVariant.price_rrp)}
+                    RRP {formatPrice(selectedVariant.priceRrp)}
                   </p>
                 </>
-              ) : selectedVariant.price_rrp ? (
+              ) : selectedVariant.priceRrp ? (
                 <p className="text-4xl font-bold text-primary">
-                  ${Math.round(selectedVariant.price_rrp)}
+                  {formatPrice(selectedVariant.priceRrp)}
                 </p>
               ) : (
                 <p className="text-2xl text-muted-foreground">
@@ -303,19 +260,19 @@ export default function ProductDetail() {
             </div>
 
             {/* Variant Selectors */}
-            {sizes.length > 1 && (
+            {parent.uniqueSizes.length > 1 && (
               <div className="space-y-2">
                 <label className="text-sm font-medium">Size</label>
                 <Select
-                  value={selectedVariant.size_normalized || selectedVariant.size || ''}
+                  value={selectedVariant.size || ''}
                   onValueChange={(value) => selectVariant(value, undefined)}
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-background z-50">
-                    {sizes.map((size) => (
-                      <SelectItem key={size} value={size!}>
+                    {parent.uniqueSizes.map((size) => (
+                      <SelectItem key={size} value={size}>
                         {size}
                       </SelectItem>
                     ))}
@@ -324,19 +281,19 @@ export default function ProductDetail() {
               </div>
             )}
 
-            {colors.length > 1 && (
+            {parent.uniqueColors.length > 1 && (
               <div className="space-y-2">
                 <label className="text-sm font-medium">Color</label>
                 <Select
-                  value={selectedVariant.color_normalized || ''}
+                  value={selectedVariant.color || ''}
                   onValueChange={(value) => selectVariant(undefined, value)}
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-background z-50">
-                    {colors.map((color) => (
-                      <SelectItem key={color} value={color!}>
+                    {parent.uniqueColors.map((color) => (
+                      <SelectItem key={color} value={color}>
                         {color}
                       </SelectItem>
                     ))}
@@ -391,11 +348,11 @@ export default function ProductDetail() {
         </div>
 
         {/* Description */}
-        {(selectedVariant.description_long || selectedVariant.description_short) && (
+        {(parent.descriptionLong || parent.description) && (
           <Card className="p-8 mb-8">
             <h2 className="text-2xl font-bold mb-4">Description</h2>
             <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-              {selectedVariant.description_long || selectedVariant.description_short}
+              {parent.descriptionLong || parent.description}
             </p>
           </Card>
         )}
@@ -416,46 +373,18 @@ export default function ProductDetail() {
         )}
 
         {/* Specifications */}
-        {(selectedVariant.spec_length_mm ||
-          selectedVariant.spec_width_mm ||
-          selectedVariant.spec_height_mm ||
-          selectedVariant.spec_weight_kg ||
-          selectedVariant.spec_dimensions_text) && (
+        {selectedVariant.specifications && (
           <Card className="p-8 mb-8">
             <h2 className="text-2xl font-bold mb-4">Specifications</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <tbody>
-                  {selectedVariant.spec_dimensions_text && (
-                    <tr className="border-b">
-                      <td className="py-3 px-4 font-medium">Dimensions</td>
-                      <td className="py-3 px-4 text-muted-foreground">{selectedVariant.spec_dimensions_text}</td>
+                  {Object.entries(JSON.parse(selectedVariant.specifications || '{}')).map(([key, value], index) => (
+                    <tr key={key} className={index % 2 === 0 ? 'border-b' : 'border-b bg-gray-50'}>
+                      <td className="py-3 px-4 font-medium capitalize">{key.replace(/_/g, ' ')}</td>
+                      <td className="py-3 px-4 text-muted-foreground">{String(value)}</td>
                     </tr>
-                  )}
-                  {selectedVariant.spec_length_mm && (
-                    <tr className="border-b bg-gray-50">
-                      <td className="py-3 px-4 font-medium">Length</td>
-                      <td className="py-3 px-4 text-muted-foreground">{selectedVariant.spec_length_mm} mm</td>
-                    </tr>
-                  )}
-                  {selectedVariant.spec_width_mm && (
-                    <tr className="border-b">
-                      <td className="py-3 px-4 font-medium">Width</td>
-                      <td className="py-3 px-4 text-muted-foreground">{selectedVariant.spec_width_mm} mm</td>
-                    </tr>
-                  )}
-                  {selectedVariant.spec_height_mm && (
-                    <tr className="border-b bg-gray-50">
-                      <td className="py-3 px-4 font-medium">Height</td>
-                      <td className="py-3 px-4 text-muted-foreground">{selectedVariant.spec_height_mm} mm</td>
-                    </tr>
-                  )}
-                  {selectedVariant.spec_weight_kg && (
-                    <tr className="border-b">
-                      <td className="py-3 px-4 font-medium">Weight</td>
-                      <td className="py-3 px-4 text-muted-foreground">{selectedVariant.spec_weight_kg} kg</td>
-                    </tr>
-                  )}
+                  ))}
                 </tbody>
               </table>
             </div>

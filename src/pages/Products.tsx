@@ -10,22 +10,23 @@ import { supabase } from '@/integrations/supabase/client';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from '@/components/ui/pagination';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ParentProduct, groupIntoParents } from '@/utils/variantHelpers';
+import { formatPrice } from '@/utils/productHelpers';
 
-interface GroupedProduct {
-  handle: string;
-  title: string;
+interface DisplayProduct {
+  slug: string;
+  baseName: string;
   brand: string;
-  top_level_category: string;
+  category: string;
   subcategory: string;
-  image_url: string | null;
-  price_discounted: string | null;
-  price_rrp: number | null;
-  variant_count: number;
+  imageUrl: string | null;
+  fromPrice: number | null;
+  variantCount: number;
 }
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [products, setProducts] = useState<GroupedProduct[]>([]);
+  const [products, setProducts] = useState<DisplayProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [debouncedSearch, setDebouncedSearch] = useState(searchParams.get('search') || '');
@@ -128,7 +129,7 @@ export default function Products() {
       // Fetch ALL products without pagination first
       let query = supabase
         .from('products_categorized' as any)
-        .select('handle, title, brand, subcategory, top_level_category, image_url, price_discounted, price_rrp, sku');
+        .select('*');
 
       // Search filter - improved to include SKU
       if (debouncedSearch) {
@@ -148,15 +149,6 @@ export default function Products() {
       // Brand filter
       if (selectedBrand !== 'all') {
         query = query.eq('brand', selectedBrand);
-      }
-
-      // Sorting
-      switch (sortBy) {
-        case 'brand-az':
-          query = query.order('brand', { ascending: true });
-          break;
-        default:
-          query = query.order('brand').order('title');
       }
 
       // Fetch all data in batches if needed
@@ -181,34 +173,44 @@ export default function Products() {
 
       console.log(`Fetched ${allData.length} total SKUs`);
       
-      // Group by handle
-      const grouped = allData.reduce((acc, product) => {
-        const key = product.handle;
-        if (!acc[key]) {
-          acc[key] = {
-            handle: product.handle,
-            title: product.title,
-            brand: product.brand,
-            subcategory: product.subcategory,
-            top_level_category: product.top_level_category,
-            image_url: product.image_url,
-            price_discounted: product.price_discounted,
-            price_rrp: product.price_rrp,
-            variant_count: 0,
-          };
-        }
-        acc[key].variant_count += 1;
-        return acc;
-      }, {} as Record<string, GroupedProduct>);
-
-      const groupedProducts = Object.values(grouped);
-      console.log(`Grouped into ${groupedProducts.length} unique products`);
+      // Group into parent products
+      const parentMap = groupIntoParents(allData);
+      let parents = Array.from(parentMap.values());
       
-      // Apply pagination to grouped results
+      // Apply sorting
+      switch (sortBy) {
+        case 'brand-az':
+          parents.sort((a, b) => a.brand.localeCompare(b.brand));
+          break;
+        case 'price-low':
+          parents.sort((a, b) => (a.fromPrice || Infinity) - (b.fromPrice || Infinity));
+          break;
+        case 'price-high':
+          parents.sort((a, b) => (b.fromPrice || 0) - (a.fromPrice || 0));
+          break;
+        default:
+          parents.sort((a, b) => a.brand.localeCompare(b.brand) || a.baseName.localeCompare(b.baseName));
+      }
+      
+      console.log(`Grouped into ${parents.length} parent products`);
+      
+      // Convert to display format
+      const displayProducts: DisplayProduct[] = parents.map(parent => ({
+        slug: parent.slug,
+        baseName: parent.baseName,
+        brand: parent.brand,
+        category: parent.category || '',
+        subcategory: parent.subcategory || '',
+        imageUrl: parent.defaultVariant.imageUrl || null,
+        fromPrice: parent.fromPrice,
+        variantCount: parent.variants.length,
+      }));
+      
+      // Apply pagination
       const from_page = (currentPage - 1) * productsPerPage;
       const to_page = from_page + productsPerPage;
-      setProducts(groupedProducts.slice(from_page, to_page) as GroupedProduct[]);
-      setTotalCount(groupedProducts.length);
+      setProducts(displayProducts.slice(from_page, to_page));
+      setTotalCount(displayProducts.length);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -333,6 +335,8 @@ export default function Products() {
                   <SelectContent className="bg-background z-50">
                     <SelectItem value="recent">Recently Added</SelectItem>
                     <SelectItem value="brand-az">Brand: A-Z</SelectItem>
+                    <SelectItem value="price-low">Price: Low to High</SelectItem>
+                    <SelectItem value="price-high">Price: High to Low</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -398,13 +402,13 @@ export default function Products() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {products.map((product) => (
-                <Link key={product.handle} to={`/product/${product.handle}`}>
+                <Link key={product.slug} to={`/product/${product.slug}`}>
                   <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full">
                     <div className="aspect-square bg-muted relative">
-                      {product.image_url ? (
+                      {product.imageUrl ? (
                         <img
-                          src={product.image_url}
-                          alt={product.title}
+                          src={product.imageUrl}
+                          alt={product.baseName}
                           className="object-cover w-full h-full"
                         />
                       ) : (
@@ -412,30 +416,23 @@ export default function Products() {
                           No Image
                         </div>
                       )}
-                      {product.variant_count > 1 && (
+                      {product.variantCount > 1 && (
                         <Badge className="absolute top-2 right-2">
-                          {product.variant_count} variants
+                          {product.variantCount} variants
                         </Badge>
                       )}
                     </div>
                     <div className="p-4">
                       <p className="text-xs text-muted-foreground mb-1">{product.brand}</p>
-                      <h3 className="font-semibold mb-1 line-clamp-2">{product.title}</h3>
+                      <h3 className="font-semibold mb-1 line-clamp-2">{product.baseName}</h3>
                       <p className="text-xs text-muted-foreground mb-2">{product.subcategory}</p>
                       <div className="space-y-1">
-                        {product.price_discounted && product.price_rrp ? (
+                        {product.fromPrice !== null ? (
                           <>
                             <p className="text-lg font-bold text-primary">
-                              ${Math.round(parseFloat(product.price_discounted))}
-                            </p>
-                            <p className="text-xs text-muted-foreground line-through">
-                              RRP ${Math.round(product.price_rrp)}
+                              {product.variantCount > 1 ? 'From ' : ''}{formatPrice(product.fromPrice)}
                             </p>
                           </>
-                        ) : product.price_rrp ? (
-                          <p className="text-lg font-bold text-primary">
-                            ${Math.round(product.price_rrp)}
-                          </p>
                         ) : (
                           <p className="text-sm text-muted-foreground">
                             Price on request

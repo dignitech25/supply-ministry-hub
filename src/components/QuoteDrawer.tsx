@@ -75,6 +75,11 @@ export const QuoteDrawer: React.FC = () => {
                         <h4 className="font-medium text-sm leading-tight">
                           {item.productName}
                         </h4>
+                        {(item.variantSize || item.variantColor) && (
+                          <p className="text-xs text-muted-foreground">
+                            {[item.variantSize, item.variantColor].filter(Boolean).join(' • ')}
+                          </p>
+                        )}
                         <p className="text-sm text-muted-foreground">
                           {item.brandName}
                         </p>
@@ -83,7 +88,7 @@ export const QuoteDrawer: React.FC = () => {
                         </p>
                         {item.unitPrice && (
                           <p className="text-sm font-medium">
-                            From ${item.unitPrice.toFixed(2)} ex GST
+                            ${Math.round(item.unitPrice)}
                           </p>
                         )}
                       </div>

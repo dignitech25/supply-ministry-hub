@@ -10,6 +10,8 @@ export interface QuoteItem {
   quantity: number;
   lineNotes?: string;
   unitPrice?: number;
+  variantSize?: string;
+  variantColor?: string;
 }
 
 interface QuoteState {
