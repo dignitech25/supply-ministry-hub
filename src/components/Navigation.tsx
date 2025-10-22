@@ -33,17 +33,6 @@ const Navigation = () => {
             />
           </Link>
 
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center justify-center flex-1">
-            <Button 
-              onClick={toggleDrawer}
-              size="lg"
-              className="font-semibold"
-            >
-              Request a Quote
-            </Button>
-          </div>
-
           {/* Desktop Icons */}
           <div className="hidden md:flex items-center space-x-2">
             <Button 
@@ -116,26 +105,14 @@ const Navigation = () => {
           <div className="md:hidden border-t border-border">
             <div className="py-4">
               <nav className="flex flex-col space-y-4">
-                <Button 
-                  onClick={() => {
-                    toggleDrawer();
-                    setIsOpen(false);
-                  }}
-                  size="lg"
-                  className="font-semibold w-full"
+                <Link 
+                  to="/account"
+                  className="text-left text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 py-2"
+                  onClick={() => setIsOpen(false)}
                 >
-                  Request a Quote
-                </Button>
-                <div className="pt-4 border-t border-border">
-                  <Link 
-                    to="/account"
-                    className="text-left text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 py-2"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <User className="h-4 w-4" />
-                    Account
-                  </Link>
-                </div>
+                  <User className="h-4 w-4" />
+                  Account
+                </Link>
               </nav>
             </div>
           </div>
