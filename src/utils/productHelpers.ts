@@ -3,7 +3,7 @@
  */
 
 /**
- * Format a numeric price as currency
+ * Format a numeric price as currency without decimals
  */
 export function formatPrice(price: number | null | undefined): string {
   if (price === null || price === undefined) {
@@ -12,6 +12,8 @@ export function formatPrice(price: number | null | undefined): string {
   return new Intl.NumberFormat('en-AU', {
     style: 'currency',
     currency: 'AUD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(price);
 }
 

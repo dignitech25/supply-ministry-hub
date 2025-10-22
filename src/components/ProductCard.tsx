@@ -77,20 +77,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
 
           <div className="space-y-1">
-            {product.price_discounted ? (
+            {product.price_discounted && product.price_rrp ? (
               <>
                 <p className="text-2xl font-bold text-supply-lavender">
                   {formatPrice(product.price_discounted)}
                 </p>
-                {product.price_rrp && onSale && (
-                  <p className="text-sm text-muted-foreground line-through">
-                    {formatPrice(product.price_rrp)}
-                  </p>
-                )}
+                <p className="text-sm text-muted-foreground line-through">
+                  RRP {formatPrice(product.price_rrp)}
+                </p>
               </>
-            ) : (
+            ) : product.price_rrp ? (
               <p className="text-2xl font-bold text-foreground">
                 {formatPrice(product.price_rrp)}
+              </p>
+            ) : (
+              <p className="text-lg text-muted-foreground">
+                Contact for pricing
               </p>
             )}
           </div>

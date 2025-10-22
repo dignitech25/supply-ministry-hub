@@ -282,9 +282,24 @@ export default function ProductDetail() {
             </div>
 
             <div className="space-y-2">
-              <p className="text-4xl font-bold text-primary">
-                {displayPrice}
-              </p>
+              {selectedVariant.price_discounted && selectedVariant.price_discounted.trim() !== '' && selectedVariant.price_rrp ? (
+                <>
+                  <p className="text-4xl font-bold text-primary">
+                    ${Math.round(parseFloat(selectedVariant.price_discounted))}
+                  </p>
+                  <p className="text-lg text-muted-foreground line-through">
+                    RRP ${Math.round(selectedVariant.price_rrp)}
+                  </p>
+                </>
+              ) : selectedVariant.price_rrp ? (
+                <p className="text-4xl font-bold text-primary">
+                  ${Math.round(selectedVariant.price_rrp)}
+                </p>
+              ) : (
+                <p className="text-2xl text-muted-foreground">
+                  Price on request
+                </p>
+              )}
             </div>
 
             {/* Variant Selectors */}

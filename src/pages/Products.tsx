@@ -18,7 +18,8 @@ interface GroupedProduct {
   top_level_category: string;
   subcategory: string;
   image_url: string | null;
-  display_price: string | null;
+  price_discounted: string | null;
+  price_rrp: number | null;
   variant_count: number;
 }
 
@@ -184,7 +185,6 @@ export default function Products() {
       const grouped = allData.reduce((acc, product) => {
         const key = product.handle;
         if (!acc[key]) {
-          const displayPrice = product.price_discounted || product.price_rrp?.toString() || null;
           acc[key] = {
             handle: product.handle,
             title: product.title,
@@ -192,7 +192,8 @@ export default function Products() {
             subcategory: product.subcategory,
             top_level_category: product.top_level_category,
             image_url: product.image_url,
-            display_price: displayPrice,
+            price_discounted: product.price_discounted,
+            price_rrp: product.price_rrp,
             variant_count: 0,
           };
         }
@@ -421,9 +422,26 @@ export default function Products() {
                       <p className="text-xs text-muted-foreground mb-1">{product.brand}</p>
                       <h3 className="font-semibold mb-1 line-clamp-2">{product.title}</h3>
                       <p className="text-xs text-muted-foreground mb-2">{product.subcategory}</p>
-                      <p className="text-lg font-bold text-primary">
-                        {product.display_price ? `$${product.display_price}` : "Price on request"}
-                      </p>
+                      <div className="space-y-1">
+                        {product.price_discounted && product.price_rrp ? (
+                          <>
+                            <p className="text-lg font-bold text-primary">
+                              ${Math.round(parseFloat(product.price_discounted))}
+                            </p>
+                            <p className="text-xs text-muted-foreground line-through">
+                              RRP ${Math.round(product.price_rrp)}
+                            </p>
+                          </>
+                        ) : product.price_rrp ? (
+                          <p className="text-lg font-bold text-primary">
+                            ${Math.round(product.price_rrp)}
+                          </p>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">
+                            Price on request
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </Card>
                 </Link>
