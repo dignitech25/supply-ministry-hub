@@ -615,30 +615,45 @@ export type Database = {
       }
       quote_items: {
         Row: {
+          colour: string | null
           created_at: string
           id: string
           line_notes: string | null
+          price_source: string | null
           product_id: string | null
           quantity: number
           quote_id: string | null
+          size: string | null
+          sku: string | null
+          title: string | null
           unit_price: number | null
         }
         Insert: {
+          colour?: string | null
           created_at?: string
           id?: string
           line_notes?: string | null
+          price_source?: string | null
           product_id?: string | null
           quantity?: number
           quote_id?: string | null
+          size?: string | null
+          sku?: string | null
+          title?: string | null
           unit_price?: number | null
         }
         Update: {
+          colour?: string | null
           created_at?: string
           id?: string
           line_notes?: string | null
+          price_source?: string | null
           product_id?: string | null
           quantity?: number
           quote_id?: string | null
+          size?: string | null
+          sku?: string | null
+          title?: string | null
           unit_price?: number | null
         }
         Relationships: [
