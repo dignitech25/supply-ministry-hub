@@ -704,7 +704,11 @@ export type Database = {
       }
       quotes: {
         Row: {
+          client_name: string | null
+          client_ndis_number: string | null
+          clinical_context: string | null
           created_at: string
+          delivery_address: string | null
           delivery_postcode: string | null
           funding_type: string | null
           id: string
@@ -713,12 +717,24 @@ export type Database = {
           ot_email: string
           ot_name: string
           ot_phone: string
+          raw_form: Json | null
           ref_code: string
+          requester_email: string | null
+          requester_name: string | null
+          requester_organisation: string | null
+          requester_phone: string | null
+          requester_type: string | null
           status: string
+          subtotal: number | null
           total_items: number | null
+          urgency: string | null
         }
         Insert: {
+          client_name?: string | null
+          client_ndis_number?: string | null
+          clinical_context?: string | null
           created_at?: string
+          delivery_address?: string | null
           delivery_postcode?: string | null
           funding_type?: string | null
           id?: string
@@ -727,12 +743,24 @@ export type Database = {
           ot_email: string
           ot_name: string
           ot_phone: string
-          ref_code: string
+          raw_form?: Json | null
+          ref_code?: string
+          requester_email?: string | null
+          requester_name?: string | null
+          requester_organisation?: string | null
+          requester_phone?: string | null
+          requester_type?: string | null
           status?: string
+          subtotal?: number | null
           total_items?: number | null
+          urgency?: string | null
         }
         Update: {
+          client_name?: string | null
+          client_ndis_number?: string | null
+          clinical_context?: string | null
           created_at?: string
+          delivery_address?: string | null
           delivery_postcode?: string | null
           funding_type?: string | null
           id?: string
@@ -741,9 +769,17 @@ export type Database = {
           ot_email?: string
           ot_name?: string
           ot_phone?: string
+          raw_form?: Json | null
           ref_code?: string
+          requester_email?: string | null
+          requester_name?: string | null
+          requester_organisation?: string | null
+          requester_phone?: string | null
+          requester_type?: string | null
           status?: string
+          subtotal?: number | null
           total_items?: number | null
+          urgency?: string | null
         }
         Relationships: []
       }
@@ -811,7 +847,15 @@ export type Database = {
       }
     }
     Functions: {
+      create_quote_with_items: {
+        Args: { p_payload: Json }
+        Returns: {
+          quote_id: string
+          ref_code: string
+        }[]
+      }
       generate_quote_ref_code: { Args: never; Returns: string }
+      make_quote_number: { Args: never; Returns: string }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
     }
