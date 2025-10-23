@@ -728,10 +728,6 @@ export type Database = {
           funding_type: string | null
           id: string
           notes: string | null
-          organization: string | null
-          ot_email: string
-          ot_name: string
-          ot_phone: string
           raw_form: Json | null
           ref_code: string
           requester_email: string | null
@@ -754,10 +750,6 @@ export type Database = {
           funding_type?: string | null
           id?: string
           notes?: string | null
-          organization?: string | null
-          ot_email: string
-          ot_name: string
-          ot_phone: string
           raw_form?: Json | null
           ref_code?: string
           requester_email?: string | null
@@ -780,10 +772,6 @@ export type Database = {
           funding_type?: string | null
           id?: string
           notes?: string | null
-          organization?: string | null
-          ot_email?: string
-          ot_name?: string
-          ot_phone?: string
           raw_form?: Json | null
           ref_code?: string
           requester_email?: string | null
