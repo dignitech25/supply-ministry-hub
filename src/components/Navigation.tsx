@@ -13,11 +13,11 @@ const Navigation = () => {
   return (
     <>
       {/* Promotional Ribbon */}
-      <div className="bg-primary text-primary-foreground sticky top-0 z-50 py-2 text-center font-semibold text-sm shadow-md">
+      <div className="bg-primary text-primary-foreground py-2 text-center font-semibold text-sm shadow-md">
         We will beat any quote by 5%
       </div>
       
-      <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-40 shadow-sm">
+      <header className="bg-background/95 backdrop-blur-sm border-b border-border shadow-sm">
         <div className="container mx-auto px-6">
           {/* Desktop Layout */}
           <div className="flex items-center justify-between h-20">
