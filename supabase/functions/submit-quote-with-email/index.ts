@@ -57,10 +57,10 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Quote created:", rpcResult);
 
-    const quoteNumber = rpcResult[0]?.quote_number;
+    const quoteNumber = rpcResult[0]?.ref_code;
     
     if (!quoteNumber) {
-      throw new Error("No quote number returned from RPC");
+      throw new Error("No quote reference returned from RPC");
     }
 
     // Prepare email content
