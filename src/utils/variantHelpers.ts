@@ -60,19 +60,14 @@ const COLOR_TOKENS = [
 ];
 
 /**
- * Extract base name from product title by removing size and color tokens
+ * Extract base name from product title by removing ONLY size and dimension tokens
+ * Keep material types (Fabric, Vinyl, Leather) as they define distinct products
  */
 export function extractBaseName(title: string): string {
   let baseName = title;
   
   // Remove size tokens (case insensitive, word boundaries)
   SIZE_TOKENS.forEach(token => {
-    const regex = new RegExp(`\\b${token}\\b`, 'gi');
-    baseName = baseName.replace(regex, '');
-  });
-  
-  // Remove color tokens
-  COLOR_TOKENS.forEach(token => {
     const regex = new RegExp(`\\b${token}\\b`, 'gi');
     baseName = baseName.replace(regex, '');
   });
