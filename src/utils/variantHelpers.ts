@@ -182,40 +182,12 @@ export function groupIntoParents(products: any[]): Map<string, ParentProduct> {
       const brand = product.brand || 'Unknown';
       const title = product.title || '';
       
-      // Extract base name
+      // Use full title for grouping to get exact brand+title matches
+      // extractBaseName() is kept for display purposes only
       const baseName = extractBaseName(title);
       
-      // If base name is empty or too short, treat as single-variant parent
-      if (!baseName || baseName.length < 3) {
-        unparsableProducts.push({ 
-          product, 
-          reason: 'Could not extract valid base name' 
-        });
-        // Use full title as base name
-        const fallbackSlug = generateParentSlug(brand, title);
-        if (!parentMap.has(fallbackSlug)) {
-          const variant = normalizeVariant(product);
-          parentMap.set(fallbackSlug, {
-            slug: fallbackSlug,
-            baseName: title,
-            brand,
-            category: product.top_level_category,
-            subcategory: product.subcategory,
-            description: product.description_short,
-            descriptionLong: product.description_long,
-            clinicalUseCase: product.clinical_use_case,
-            variants: [variant],
-            uniqueSizes: variant.size ? [variant.size] : [],
-            uniqueColors: variant.color ? [variant.color] : [],
-            fromPrice: variant.priceDiscounted || variant.priceRrp,
-            defaultVariant: variant,
-          });
-        }
-        return;
-      }
-      
-      // Generate parent slug
-      const slug = generateParentSlug(brand, baseName);
+      // Generate parent slug using full title (not baseName)
+      const slug = generateParentSlug(brand, title);
       
       // Normalize variant
       const variant = normalizeVariant(product);
