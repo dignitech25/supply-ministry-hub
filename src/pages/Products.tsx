@@ -151,19 +151,43 @@ export default function Products() {
         query = query.eq('brand', selectedBrand);
       }
 
-      // Fetch all data in batches if needed
+      // Fetch all data - PostgREST may have row limits, so fetch in smaller batches
       let allData: any[] = [];
       let from = 0;
-      const batchSize = 1000;
+      const batchSize = 500; // Smaller batch size to avoid hitting limits
       let hasMore = true;
 
-      while (hasMore) {
-        const { data, error } = await query.range(from, from + batchSize - 1) as { data: any[] | null; error: any };
+      while (hasMore && from < 10000) { // Safety limit to prevent infinite loops
+        // Create a fresh query for each batch to avoid any cached limits
+        let batchQuery = supabase
+          .from('products_categorized' as any)
+          .select('*');
         
-        if (error) throw error;
+        // Reapply all filters to the batch query
+        if (debouncedSearch) {
+          batchQuery = batchQuery.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,description_long.ilike.%${debouncedSearch}%,sku.ilike.%${debouncedSearch}%`);
+        }
+        if (selectedCategory !== 'all') {
+          batchQuery = batchQuery.eq('top_level_category', selectedCategory);
+        }
+        if (selectedSubcategory !== 'all') {
+          batchQuery = batchQuery.eq('subcategory', selectedSubcategory);
+        }
+        if (selectedBrand !== 'all') {
+          batchQuery = batchQuery.eq('brand', selectedBrand);
+        }
+
+        const { data, error, count } = await batchQuery
+          .range(from, from + batchSize - 1) as { data: any[] | null; error: any; count: number | null };
+        
+        if (error) {
+          console.error('Batch fetch error:', error);
+          throw error;
+        }
         
         if (data && data.length > 0) {
           allData = [...allData, ...data];
+          console.log(`Fetched batch: ${from}-${from + data.length}, total so far: ${allData.length}`);
           from += batchSize;
           hasMore = data.length === batchSize; // Continue if we got a full batch
         } else {
