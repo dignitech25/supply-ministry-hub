@@ -11,6 +11,18 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// HTML escape function to prevent XSS in email content
+const escapeHtml = (str: string | undefined | null): string => {
+  if (!str) return '';
+  return str.replace(/[&<>"']/g, (m) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[m] || m));
+};
+
 interface QuotePayload {
   requester_type: string;
   requester_name: string;
@@ -63,27 +75,27 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("No quote reference returned from RPC");
     }
 
-    // Prepare email content
+    // Prepare email content with HTML escaping for security
     const itemsList = payload.items.map(item => 
-      `• ${item.title} [${item.sku}] ${item.size || ''} ${item.colour || ''} x${item.quantity} @ $${item.unit_price || 'TBC'}`
+      `• ${escapeHtml(item.title)} [${escapeHtml(item.sku)}] ${escapeHtml(item.size)} ${escapeHtml(item.colour)} x${item.quantity} @ $${escapeHtml(item.unit_price)}`
     ).join('<br/>');
 
     const emailHtml = `
-      <p>Hi ${payload.requester_name},</p>
+      <p>Hi ${escapeHtml(payload.requester_name)},</p>
       
-      <p>Thank you for your quote request. Your reference number is <strong>${quoteNumber}</strong>.</p>
+      <p>Thank you for your quote request. Your reference number is <strong>${escapeHtml(quoteNumber)}</strong>.</p>
       
       <p>Our team will review and confirm pricing shortly.</p>
       
       <p>
-        <strong>Requester Type:</strong> ${payload.requester_type}<br/>
-        ${payload.requester_organisation ? `<strong>Organisation:</strong> ${payload.requester_organisation}<br/>` : ''}
-        <strong>Client:</strong> ${payload.client_name}<br/>
-        ${payload.client_ndis_number ? `<strong>NDIS Number:</strong> ${payload.client_ndis_number}<br/>` : ''}
-        <strong>Funding:</strong> ${payload.funding_type}<br/>
-        <strong>Delivery Address:</strong> ${payload.delivery_address}<br/>
-        <strong>Urgency:</strong> ${payload.urgency}<br/>
-        ${payload.clinical_context ? `<strong>Clinical Context:</strong> ${payload.clinical_context}<br/>` : ''}
+        <strong>Requester Type:</strong> ${escapeHtml(payload.requester_type)}<br/>
+        ${payload.requester_organisation ? `<strong>Organisation:</strong> ${escapeHtml(payload.requester_organisation)}<br/>` : ''}
+        <strong>Client:</strong> ${escapeHtml(payload.client_name)}<br/>
+        ${payload.client_ndis_number ? `<strong>NDIS Number:</strong> ${escapeHtml(payload.client_ndis_number)}<br/>` : ''}
+        <strong>Funding:</strong> ${escapeHtml(payload.funding_type)}<br/>
+        <strong>Delivery Address:</strong> ${escapeHtml(payload.delivery_address)}<br/>
+        <strong>Urgency:</strong> ${escapeHtml(payload.urgency)}<br/>
+        ${payload.clinical_context ? `<strong>Clinical Context:</strong> ${escapeHtml(payload.clinical_context)}<br/>` : ''}
       </p>
       
       <p><strong>Items:</strong><br/>${itemsList}</p>
