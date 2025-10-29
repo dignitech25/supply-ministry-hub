@@ -127,33 +127,9 @@ export default function Products() {
     setLoading(true);
     try {
       // Fetch ALL products without pagination first
-      let query = supabase
-        .from('products_categorized' as any)
-        .select('*');
-
-      // Search filter - improved to include SKU
-      if (debouncedSearch) {
-        query = query.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,description_long.ilike.%${debouncedSearch}%,sku.ilike.%${debouncedSearch}%`);
-      }
-
-      // Category filter
-      if (selectedCategory !== 'all') {
-        query = query.eq('top_level_category', selectedCategory);
-      }
-
-      // Subcategory filter
-      if (selectedSubcategory !== 'all') {
-        query = query.eq('subcategory', selectedSubcategory);
-      }
-
-      // Brand filter
-      if (selectedBrand !== 'all') {
-        query = query.eq('brand', selectedBrand);
-      }
-
       // Fetch all data using cursor-based pagination to bypass PostgREST limits
       let allData: any[] = [];
-      let lastSku: string | null = null;
+      let lastId: string | null = null;
       const batchSize = 500;
       let hasMore = true;
       let batchCount = 0;
@@ -178,13 +154,13 @@ export default function Products() {
           batchQuery = batchQuery.eq('brand', selectedBrand);
         }
 
-        // Cursor-based pagination: fetch records after lastSku
-        if (lastSku !== null) {
-          batchQuery = batchQuery.gt('sku', lastSku);
+        // Cursor-based pagination: fetch records after lastId
+        if (lastId !== null) {
+          batchQuery = batchQuery.gt('id', lastId);
         }
         
-        // Order by sku and limit to batch size
-        batchQuery = batchQuery.order('sku', { ascending: true }).limit(batchSize);
+        // Order by id and limit to batch size
+        batchQuery = batchQuery.order('id', { ascending: true }).limit(batchSize);
 
         const { data, error } = await batchQuery as { data: any[] | null; error: any };
         
@@ -195,13 +171,18 @@ export default function Products() {
         
         if (data && data.length > 0) {
           allData = [...allData, ...data];
-          lastSku = data[data.length - 1].sku; // Update cursor to last fetched sku
-          console.log(`Batch ${batchCount + 1}: Fetched ${data.length} items, total: ${allData.length}, lastSku: ${lastSku}`);
+          lastId = data[data.length - 1].id; // Update cursor to last fetched id
+          console.log(`Batch ${batchCount + 1}: Fetched ${data.length} items, total: ${allData.length}, lastId: ${lastId}`);
           hasMore = data.length === batchSize;
           batchCount++;
         } else {
+          console.log('No more data to fetch');
           hasMore = false;
         }
+      }
+
+      if (batchCount >= 50) {
+        console.warn('⚠️ Hit safety limit of 50 batches');
       }
 
       console.log(`✅ Fetched ${allData.length} total products in ${batchCount} batches`);
