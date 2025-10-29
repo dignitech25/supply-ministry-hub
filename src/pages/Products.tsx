@@ -10,7 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from '@/components/ui/pagination';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ParentProduct, groupIntoParents } from '@/utils/variantHelpers';
+
 import { formatPrice } from '@/utils/productHelpers';
 
 interface DisplayProduct {
@@ -158,38 +158,34 @@ export default function Products() {
       const allData = data || [];
       console.log(`✅ Fetched ${allData.length} total products`);
       
-      // Group into parent products
-      const parentMap = groupIntoParents(allData);
-      let parents = Array.from(parentMap.values());
+      // Convert each SKU to display format (no grouping)
+      let displayProducts: DisplayProduct[] = allData.map(product => ({
+        slug: product.sku,
+        baseName: product.title || 'Untitled Product',
+        brand: product.brand || 'Unknown',
+        category: product.top_level_category || '',
+        subcategory: product.subcategory || '',
+        imageUrl: product.image_url || null,
+        fromPrice: product.price_discounted || product.price_rrp || null,
+        variantCount: 1,
+      }));
       
       // Apply sorting
       switch (sortBy) {
         case 'brand-az':
-          parents.sort((a, b) => a.brand.localeCompare(b.brand));
+          displayProducts.sort((a, b) => a.brand.localeCompare(b.brand));
           break;
         case 'price-low':
-          parents.sort((a, b) => (a.fromPrice || Infinity) - (b.fromPrice || Infinity));
+          displayProducts.sort((a, b) => (a.fromPrice || Infinity) - (b.fromPrice || Infinity));
           break;
         case 'price-high':
-          parents.sort((a, b) => (b.fromPrice || 0) - (a.fromPrice || 0));
+          displayProducts.sort((a, b) => (b.fromPrice || 0) - (a.fromPrice || 0));
           break;
         default:
-          parents.sort((a, b) => a.brand.localeCompare(b.brand) || a.baseName.localeCompare(b.baseName));
+          displayProducts.sort((a, b) => a.brand.localeCompare(b.brand) || a.baseName.localeCompare(b.baseName));
       }
       
-      console.log(`Grouped into ${parents.length} parent products`);
-      
-      // Convert to display format
-      const displayProducts: DisplayProduct[] = parents.map(parent => ({
-        slug: parent.slug,
-        baseName: parent.baseName,
-        brand: parent.brand,
-        category: parent.category || '',
-        subcategory: parent.subcategory || '',
-        imageUrl: parent.defaultVariant.imageUrl || null,
-        fromPrice: parent.fromPrice,
-        variantCount: parent.variants.length,
-      }));
+      console.log(`Displaying ${displayProducts.length} individual products`);
       
       // Apply pagination
       const from_page = (currentPage - 1) * productsPerPage;
