@@ -126,68 +126,37 @@ export default function Products() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      // Fetch ALL products without pagination first
-      // Fetch all data using cursor-based pagination to bypass PostgREST limits
-      let allData: any[] = [];
-      let lastId: string | null = null;
-      const batchSize = 500;
-      let hasMore = true;
-      let batchCount = 0;
-
-      while (hasMore && batchCount < 50) { // Safety limit: 50 batches × 500 = 25,000 max
-        // Create a fresh query for each batch
-        let batchQuery = supabase
-          .from('products_categorized' as any)
-          .select('*');
-        
-        // Apply all filters to the batch query
-        if (debouncedSearch) {
-          batchQuery = batchQuery.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,description_long.ilike.%${debouncedSearch}%,sku.ilike.%${debouncedSearch}%`);
-        }
-        if (selectedCategory !== 'all') {
-          batchQuery = batchQuery.eq('top_level_category', selectedCategory);
-        }
-        if (selectedSubcategory !== 'all') {
-          batchQuery = batchQuery.eq('subcategory', selectedSubcategory);
-        }
-        if (selectedBrand !== 'all') {
-          batchQuery = batchQuery.eq('brand', selectedBrand);
-        }
-
-        // Cursor-based pagination: fetch records after lastId
-        if (lastId !== null) {
-          batchQuery = batchQuery.gt('id', lastId);
-        }
-        
-        // Order by id and limit to batch size
-        batchQuery = batchQuery.order('id', { ascending: true }).limit(batchSize);
-
-        const { data, error } = await batchQuery as { data: any[] | null; error: any };
-        
-        if (error) {
-          console.error('Batch fetch error:', error);
-          throw error;
-        }
-        
-        if (data && data.length > 0) {
-          allData = [...allData, ...data];
-          lastId = data[data.length - 1].id; // Update cursor to last fetched id
-          console.log(`Batch ${batchCount + 1}: Fetched ${data.length} items, total: ${allData.length}, lastId: ${lastId}`);
-          hasMore = data.length === batchSize;
-          batchCount++;
-        } else {
-          console.log('No more data to fetch');
-          hasMore = false;
-        }
+      // Build query with filters
+      let query = supabase
+        .from('products_categorized' as any)
+        .select('*');
+      
+      // Apply all filters
+      if (debouncedSearch) {
+        query = query.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,description_long.ilike.%${debouncedSearch}%,sku.ilike.%${debouncedSearch}%`);
+      }
+      if (selectedCategory !== 'all') {
+        query = query.eq('top_level_category', selectedCategory);
+      }
+      if (selectedSubcategory !== 'all') {
+        query = query.eq('subcategory', selectedSubcategory);
+      }
+      if (selectedBrand !== 'all') {
+        query = query.eq('brand', selectedBrand);
       }
 
-      if (batchCount >= 50) {
-        console.warn('⚠️ Hit safety limit of 50 batches');
+      // Fetch all data with high limit
+      query = query.limit(10000);
+
+      const { data, error } = await query as { data: any[] | null; error: any };
+      
+      if (error) {
+        console.error('Fetch error:', error);
+        throw error;
       }
 
-      console.log(`✅ Fetched ${allData.length} total products in ${batchCount} batches`);
-
-      console.log(`Fetched ${allData.length} total SKUs`);
+      const allData = data || [];
+      console.log(`✅ Fetched ${allData.length} total products`);
       
       // Group into parent products
       const parentMap = groupIntoParents(allData);
