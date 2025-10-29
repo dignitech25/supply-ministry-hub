@@ -12,6 +12,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { formatPrice } from '@/utils/productHelpers';
+import { groupIntoParents } from '@/utils/variantHelpers';
 
 interface DisplayProduct {
   slug: string;
@@ -169,18 +170,19 @@ export default function Products() {
         }
       }
 
-      console.log(`✅ Fetched ${allData.length} total products`);
+      console.log(`✅ Fetched ${allData.length} total variants`);
       
-      // Convert each SKU to display format (no grouping)
-      let displayProducts: DisplayProduct[] = allData.map(product => ({
-        slug: product.sku,
-        baseName: product.title || 'Untitled Product',
-        brand: product.brand || 'Unknown',
-        category: product.top_level_category || '',
-        subcategory: product.subcategory || '',
-        imageUrl: product.image_url || null,
-        fromPrice: product.price_discounted || product.price_rrp || null,
-        variantCount: 1,
+      // Group variants into parent products
+      const parentMap = groupIntoParents(allData);
+      let displayProducts: DisplayProduct[] = Array.from(parentMap.values()).map(parent => ({
+        slug: parent.slug,
+        baseName: parent.baseName,
+        brand: parent.brand,
+        category: parent.category || '',
+        subcategory: parent.subcategory || '',
+        imageUrl: parent.defaultVariant.imageUrl || null,
+        fromPrice: parent.fromPrice,
+        variantCount: parent.variants.length,
       }));
       
       // Apply sorting
@@ -198,7 +200,7 @@ export default function Products() {
           displayProducts.sort((a, b) => a.brand.localeCompare(b.brand) || a.baseName.localeCompare(b.baseName));
       }
       
-      console.log(`Displaying ${displayProducts.length} individual products`);
+      console.log(`Displaying ${displayProducts.length} parent products (from ${allData.length} variants)`);
       
       // Apply pagination
       const from_page = (currentPage - 1) * productsPerPage;
