@@ -145,17 +145,30 @@ export default function Products() {
         query = query.eq('brand', selectedBrand);
       }
 
-      // Fetch all data with high limit
-      query = query.limit(10000);
+      // Fetch all data in batches (PostgREST has 1000 row limit per request)
+      let allData: any[] = [];
+      const batchSize = 1000;
+      let offset = 0;
+      let hasMore = true;
 
-      const { data, error } = await query as { data: any[] | null; error: any };
-      
-      if (error) {
-        console.error('Fetch error:', error);
-        throw error;
+      while (hasMore) {
+        const batchQuery = query.range(offset, offset + batchSize - 1);
+        const { data, error } = await batchQuery as { data: any[] | null; error: any };
+        
+        if (error) {
+          console.error('Fetch error:', error);
+          throw error;
+        }
+
+        if (data && data.length > 0) {
+          allData = [...allData, ...data];
+          hasMore = data.length === batchSize;
+          offset += batchSize;
+        } else {
+          hasMore = false;
+        }
       }
 
-      const allData = data || [];
       console.log(`✅ Fetched ${allData.length} total products`);
       
       // Convert each SKU to display format (no grouping)
