@@ -7,6 +7,94 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Rate limiting configuration
+const RATE_LIMIT_IP_PER_HOUR = 5;
+const RATE_LIMIT_EMAIL_MINUTES = 10;
+
+// Check rate limits for IP and email
+async function checkRateLimits(
+  supabase: any,
+  clientIp: string,
+  email: string,
+  endpoint: string
+): Promise<{ allowed: boolean; reason?: string }> {
+  const now = new Date();
+  const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+  const tenMinutesAgo = new Date(now.getTime() - RATE_LIMIT_EMAIL_MINUTES * 60 * 1000);
+
+  // Check IP-based rate limit (5 per hour)
+  const { data: ipLimits } = await supabase
+    .from('rate_limits')
+    .select('request_count')
+    .eq('identifier', clientIp)
+    .eq('identifier_type', 'ip')
+    .eq('endpoint', endpoint)
+    .gte('window_start', oneHourAgo.toISOString())
+    .order('window_start', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (ipLimits && ipLimits.request_count >= RATE_LIMIT_IP_PER_HOUR) {
+    return { allowed: false, reason: 'Too many requests from this IP. Please try again later.' };
+  }
+
+  // Check email-based rate limit (once per 10 minutes)
+  const { count: emailCount } = await supabase
+    .from('quote_requests')
+    .select('*', { count: 'exact', head: true })
+    .eq('email', email)
+    .gte('created_at', tenMinutesAgo.toISOString());
+
+  if (emailCount && emailCount > 0) {
+    return { allowed: false, reason: 'Please wait before submitting another quote request.' };
+  }
+
+  return { allowed: true };
+}
+
+// Record rate limit attempt
+async function recordRateLimit(
+  supabase: any,
+  identifier: string,
+  identifierType: string,
+  endpoint: string
+): Promise<void> {
+  const now = new Date();
+  const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+
+  // Try to increment existing record
+  const { data: existing } = await supabase
+    .from('rate_limits')
+    .select('id, request_count')
+    .eq('identifier', identifier)
+    .eq('identifier_type', identifierType)
+    .eq('endpoint', endpoint)
+    .gte('window_start', oneHourAgo.toISOString())
+    .order('window_start', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (existing) {
+    await supabase
+      .from('rate_limits')
+      .update({ 
+        request_count: existing.request_count + 1,
+        updated_at: now.toISOString()
+      })
+      .eq('id', existing.id);
+  } else {
+    await supabase
+      .from('rate_limits')
+      .insert({
+        identifier,
+        identifier_type: identifierType,
+        endpoint,
+        request_count: 1,
+        window_start: now.toISOString()
+      });
+  }
+}
+
 interface QuoteRequestData {
   first_name: string;
   last_name: string;
@@ -50,6 +138,34 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    // Get client IP for rate limiting
+    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    
+    // Check rate limits
+    const rateLimitCheck = await checkRateLimits(
+      supabase,
+      clientIp,
+      quoteData.email,
+      'submit-quote-request'
+    );
+
+    if (!rateLimitCheck.allowed) {
+      console.log('Rate limit exceeded:', { clientIp, email: quoteData.email });
+      return new Response(
+        JSON.stringify({ 
+          error: rateLimitCheck.reason,
+          success: false 
+        }),
+        {
+          status: 429,
+          headers: { "Content-Type": "application/json", ...corsHeaders }
+        }
+      );
+    }
+
+    // Record this request for rate limiting
+    await recordRateLimit(supabase, clientIp, 'ip', 'submit-quote-request');
+
     // Insert quote request into database
     const { data: insertedQuote, error: insertError } = await supabase
       .from("quote_requests")
@@ -71,7 +187,16 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (insertError) {
       console.error("Database insert error:", insertError);
-      throw new Error(`Failed to save quote request: ${insertError.message}`);
+      return new Response(
+        JSON.stringify({ 
+          error: "Unable to save quote request. Please try again.",
+          success: false 
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...corsHeaders }
+        }
+      );
     }
 
     console.log("Quote request saved successfully:", insertedQuote.id);
@@ -129,7 +254,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.error("Error in submit-quote-request function:", error);
     return new Response(
       JSON.stringify({ 
-        error: error.message || "An unexpected error occurred",
+        error: "Unable to process request. Please try again.",
         success: false 
       }),
       {

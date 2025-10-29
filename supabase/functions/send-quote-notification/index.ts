@@ -96,7 +96,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.error("Error in send-quote-notification function:", error);
     return new Response(
       JSON.stringify({ 
-        error: error.message,
+        error: "Unable to process request. Please try again.",
         success: false 
       }),
       {

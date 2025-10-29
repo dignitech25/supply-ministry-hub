@@ -786,6 +786,39 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          created_at: string
+          endpoint: string
+          id: string
+          identifier: string
+          identifier_type: string
+          request_count: number
+          updated_at: string
+          window_start: string
+        }
+        Insert: {
+          created_at?: string
+          endpoint: string
+          id?: string
+          identifier: string
+          identifier_type: string
+          request_count?: number
+          updated_at?: string
+          window_start?: string
+        }
+        Update: {
+          created_at?: string
+          endpoint?: string
+          id?: string
+          identifier?: string
+          identifier_type?: string
+          request_count?: number
+          updated_at?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       products_public: {
