@@ -22,13 +22,13 @@ export const InlineSearch = ({ className }: InlineSearchProps) => {
 
   return (
     <form onSubmit={handleSearch} className={cn("relative", className)}>
-      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
       <Input
         type="text"
         placeholder="Search by product name, SKU, or brand..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full pl-12 pr-4 h-12 text-base border-2 focus-visible:border-primary rounded-full"
+        className="w-full pl-12 pr-4 h-8 text-sm border-2 focus-visible:border-primary rounded-full"
       />
     </form>
   );
