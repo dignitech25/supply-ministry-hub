@@ -51,6 +51,11 @@ export default function Products() {
   const productsPerPage = 24;
   const totalPages = Math.ceil(totalCount / productsPerPage);
 
+  // Scroll to top when navigating to products page
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [searchParams.toString()]);
+
   // Debounce search input
   useEffect(() => {
     const timer = setTimeout(() => {
