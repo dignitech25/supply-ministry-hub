@@ -317,44 +317,16 @@ export default function Products() {
           </p>
         </div>
 
-        {/* Mobile Filter Button */}
-        {isMobile && (
-          <div className="mb-4">
-            <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="w-full">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-80 overflow-y-auto">
-                <ProductFilterSidebar
-                  searchTerm={searchTerm}
-                  onSearchChange={setSearchTerm}
-                  categories={filterOptions.categories}
-                  selectedCategories={selectedCategories}
-                  onCategoryToggle={handleCategoryToggle}
-                  subcategories={filterOptions.subcategories}
-                  selectedSubcategories={selectedSubcategories}
-                  onSubcategoryToggle={handleSubcategoryToggle}
-                  brands={filterOptions.brands}
-                  selectedBrands={selectedBrands}
-                  onBrandToggle={handleBrandToggle}
-                  sortBy={sortBy}
-                  onSortChange={setSortBy}
-                  onClearAll={handleClearFilters}
-                  activeFilterCount={activeFilterCount}
-                />
-              </SheetContent>
-            </Sheet>
-          </div>
-        )}
-
-        {/* Two-column layout: Sidebar + Content */}
-        <div className="flex gap-6">
-          {/* Left Sidebar - Desktop only */}
-          {!isMobile && (
-            <aside className="w-64 flex-shrink-0">
+        {/* Filter Button */}
+        <div className="mb-6">
+          <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline">
+                <Filter className="h-4 w-4 mr-2" />
+                Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-80 overflow-y-auto">
               <ProductFilterSidebar
                 searchTerm={searchTerm}
                 onSearchChange={setSearchTerm}
@@ -372,11 +344,12 @@ export default function Products() {
                 onClearAll={handleClearFilters}
                 activeFilterCount={activeFilterCount}
               />
-            </aside>
-          )}
+            </SheetContent>
+          </Sheet>
+        </div>
 
-          {/* Right Content Area */}
-          <div className="flex-1 min-w-0">
+        {/* Content Area */}
+        <div className="w-full">
             {/* Active Filter Tags */}
             <ActiveFilterTags
               filters={activeFilters}
@@ -522,7 +495,6 @@ export default function Products() {
               </Pagination>
             )}
           </div>
-        </div>
       </main>
     </div>
   );
