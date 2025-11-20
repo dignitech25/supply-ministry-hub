@@ -28,7 +28,7 @@ const Navigation = () => {
               <img 
                 src="/Supply_Ministry_horizontal_no_phrase_updatedA-4.svg" 
                 alt="Supply Ministry"
-                className="h-[72px] sm:h-[90px] md:h-[108px] lg:h-[124px] w-auto object-contain"
+                className="h-[108px] sm:h-[108px] md:h-[124px] lg:h-[140px] w-auto object-contain"
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder.svg';
                 }}
@@ -66,7 +66,7 @@ const Navigation = () => {
       </header>
 
       {/* Sticky Category Navigation */}
-      <nav className="bg-background border-b border-border sticky top-[140px] z-30 shadow-sm">
+      <nav className="bg-background border-b border-border sticky top-[128px] md:top-[144px] lg:top-[160px] z-30 shadow-sm">
         <div className="container mx-auto">
           <div className="py-0">
             <CategoryNavigation />

@@ -22,7 +22,7 @@ export const CategoryNavigation = () => {
   };
 
   return (
-    <div className="px-4 py-2">
+    <div className="px-4 py-1">
       {/* Desktop - Category buttons + Shop Now */}
       <div className="hidden md:flex items-center justify-center gap-3 flex-wrap">
         {categories.map((category) => (
