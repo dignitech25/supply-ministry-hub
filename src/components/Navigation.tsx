@@ -26,9 +26,9 @@ const Navigation = () => {
             {/* Logo - Centered */}
             <Link to="/" className="flex justify-center hover:opacity-80 transition-opacity">
               <img 
-                src="/Supply_Ministry_horizontal_new.svg" 
+                src="/Supply_Ministry_horizontal_no_phrase_updatedA-4.svg" 
                 alt="Supply Ministry"
-                className="h-[80px] sm:h-[100px] md:h-[120px] lg:h-[140px] w-auto object-contain"
+                className="h-[72px] sm:h-[90px] md:h-[108px] lg:h-[124px] w-auto object-contain"
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder.svg';
                 }}
