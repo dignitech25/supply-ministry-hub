@@ -117,10 +117,11 @@ export default function Products() {
       // Use predefined clean categories
       const cleanCategories = [
         'Mobility',
-        'Bedroom and Comfort',
-        'Seating and Chairs',
-        'Bath and Shower',
-        'Other Items'
+        'Bedroom & Comfort',
+        'Seating & Chairs',
+        'Bathroom & Toileting',
+        'Accessible & Consumables',
+        'Home & Safety'
       ];
 
       const { data, error } = await supabase
