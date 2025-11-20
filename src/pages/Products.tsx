@@ -114,22 +114,29 @@ export default function Products() {
 
   const fetchFilterOptions = async () => {
     try {
+      // Use predefined clean categories
+      const cleanCategories = [
+        'Mobility',
+        'Bedroom and Comfort',
+        'Seating and Chairs',
+        'Bath and Shower',
+        'Other Items'
+      ];
+
       const { data, error } = await supabase
         .from('products_categorized' as any)
-        .select('top_level_category, brand') as { data: any[] | null; error: any };
+        .select('brand') as { data: any[] | null; error: any };
       
       if (error) throw error;
       
-      const categories = new Set<string>();
       const brands = new Set<string>();
 
       (data || []).forEach(product => {
-        if (product.top_level_category) categories.add(product.top_level_category);
         if (product.brand) brands.add(product.brand);
       });
 
       setFilterOptions({
-        categories: Array.from(categories).sort(),
+        categories: cleanCategories,
         subcategories: [],
         brands: Array.from(brands).sort(),
       });
