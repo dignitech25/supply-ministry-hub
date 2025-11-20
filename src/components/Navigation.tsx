@@ -18,7 +18,7 @@ const Navigation = () => {
       
       {/* Header */}
       <header className="bg-background border-b border-border sticky top-[36px] z-40">
-        <div className="container mx-auto px-6 py-3">
+        <div className="container mx-auto px-6 py-2">
           <div className="grid grid-cols-3 items-center gap-4">
             {/* Left spacer */}
             <div></div>
@@ -28,7 +28,7 @@ const Navigation = () => {
               <img 
                 src="/Supply_Ministry_horizontal_new.svg" 
                 alt="Supply Ministry"
-                className="h-[160px] sm:h-[200px] md:h-[240px] lg:h-[280px] w-auto object-contain"
+                className="h-[80px] sm:h-[100px] md:h-[120px] lg:h-[140px] w-auto object-contain"
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder.svg';
                 }}
@@ -66,7 +66,7 @@ const Navigation = () => {
       </header>
 
       {/* Sticky Category Navigation */}
-      <nav className="bg-background border-b border-border sticky top-[120px] z-30 shadow-sm">
+      <nav className="bg-background border-b border-border sticky top-[90px] z-30 shadow-sm">
         <div className="container mx-auto">
           <div className="py-3">
             <CategoryNavigation />
