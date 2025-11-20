@@ -19,9 +19,12 @@ const Navigation = () => {
       {/* Header */}
       <header className="bg-background border-b border-border sticky top-[36px] z-40">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between gap-4">
-            {/* Logo */}
-            <Link to="/" className="flex-shrink-0 hover:opacity-80 transition-opacity">
+          <div className="grid grid-cols-3 items-center gap-4">
+            {/* Left spacer */}
+            <div></div>
+            
+            {/* Logo - Centered */}
+            <Link to="/" className="flex justify-center hover:opacity-80 transition-opacity">
               <img 
                 src="/Supply_Ministry_horizontal.svg" 
                 alt="Supply Ministry"
@@ -32,8 +35,8 @@ const Navigation = () => {
               />
             </Link>
 
-            {/* Utility Icons */}
-            <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Utility Icons - Right */}
+            <div className="flex items-center gap-2 justify-end">
               <Button 
                 variant="ghost" 
                 size="icon"
