@@ -18,7 +18,7 @@ const Navigation = () => {
       
       {/* Header */}
       <header className="bg-background border-b border-border sticky top-[36px] z-40">
-        <div className="container mx-auto px-6 py-4">
+        <div className="container mx-auto px-6 py-3">
           <div className="grid grid-cols-3 items-center gap-4">
             {/* Left spacer */}
             <div></div>
@@ -26,10 +26,9 @@ const Navigation = () => {
             {/* Logo - Centered */}
             <Link to="/" className="flex justify-center hover:opacity-80 transition-opacity">
               <img 
-                src="/Supply_Ministry_horizontal.svg" 
+                src="/Supply_Ministry_horizontal_new.svg" 
                 alt="Supply Ministry"
-                className="h-[80px] sm:h-[96px] md:h-[112px] lg:h-[128px] w-auto object-contain"
-                style={{ imageRendering: 'crisp-edges' }}
+                className="h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px] w-auto object-contain"
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder.svg';
                 }}
