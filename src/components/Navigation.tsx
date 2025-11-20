@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, ShoppingCart } from "lucide-react";
 import { useQuote } from "@/contexts/QuoteContext";
-import { InlineSearch } from "./InlineSearch";
 import { CategoryNavigation } from "./CategoryNavigation";
 
 const Navigation = () => {
@@ -17,29 +16,24 @@ const Navigation = () => {
         We will beat any quote by 5%
       </div>
       
-      {/* Search-Centric Header */}
+      {/* Header */}
       <header className="bg-background border-b border-border sticky top-[36px] z-40">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex flex-col md:flex-row md:items-center gap-4">
+          <div className="flex items-center justify-between gap-4">
             {/* Logo */}
-            <Link to="/" className="flex-shrink-0 mx-auto md:mx-0 hover:opacity-80 transition-opacity">
+            <Link to="/" className="flex-shrink-0 hover:opacity-80 transition-opacity">
               <img 
                 src="/Supply_Ministry_horizontal.svg" 
                 alt="Supply Ministry"
-                className="h-[40px] sm:h-[45px] md:h-[55px] lg:h-[65px] w-auto object-contain"
+                className="h-[40px] sm:h-[48px] md:h-[56px] lg:h-[64px] w-auto object-contain"
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder.svg';
                 }}
               />
             </Link>
 
-            {/* Prominent Search Bar */}
-            <div className="flex-1 max-w-2xl mx-auto w-full">
-              <InlineSearch />
-            </div>
-
             {/* Utility Icons */}
-            <div className="flex items-center gap-2 justify-center md:justify-end flex-shrink-0">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <Button 
                 variant="ghost" 
                 size="icon"
