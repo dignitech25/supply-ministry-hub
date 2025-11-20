@@ -9,10 +9,10 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="lg:pr-8">
-            <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Achieve Greater{" "}
-              <span className="text-primary">Comfort and Safety</span>
-            </h1>
+          <h1 className="text-3xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">
+            Achieve Greater{" "}
+            <span className="text-primary">Comfort and Safety</span>
+          </h1>
             
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
               We bring you a wide range of mobility and home modification solutions 
