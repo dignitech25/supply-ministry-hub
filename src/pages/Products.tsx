@@ -70,6 +70,23 @@ export default function Products() {
     fetchFilterOptions();
   }, []);
 
+  // Sync state with URL params when they change
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    const subcategoryParam = searchParams.get('subcategory');
+    const brandParam = searchParams.get('brand');
+    const searchParam = searchParams.get('search');
+    const sortParam = searchParams.get('sort');
+    const pageParam = searchParams.get('page');
+
+    setSelectedCategories(categoryParam?.split(',').filter(Boolean) || []);
+    setSelectedSubcategories(subcategoryParam?.split(',').filter(Boolean) || []);
+    setSelectedBrands(brandParam?.split(',').filter(Boolean) || []);
+    setSearchTerm(searchParam || '');
+    setSortBy(sortParam || 'recent');
+    setCurrentPage(parseInt(pageParam || '1'));
+  }, [searchParams]);
+
   // Fetch subcategories when categories change
   useEffect(() => {
     const fetchSubcategories = async () => {
