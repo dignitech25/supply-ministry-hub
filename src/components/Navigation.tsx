@@ -24,7 +24,7 @@ const Navigation = () => {
             {/* Logo */}
             <Link to="/" className="flex-shrink-0 mx-auto md:mx-0 hover:opacity-80 transition-opacity">
               <img 
-                src="/Supply_Ministry.svg?v=3" 
+                src="/Supply_Ministry_horizontal_-_NEW-2.svg" 
                 alt="Supply Ministry"
                 className="h-[40px] sm:h-[45px] md:h-[55px] lg:h-[65px] w-auto object-contain"
                 onError={(e) => {
