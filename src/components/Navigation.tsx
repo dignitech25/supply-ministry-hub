@@ -25,7 +25,7 @@ const Navigation = () => {
               <img 
                 src="/Supply_Ministry_horizontal.svg" 
                 alt="Supply Ministry"
-                className="h-[40px] sm:h-[48px] md:h-[56px] lg:h-[64px] w-auto object-contain"
+                className="h-[56px] sm:h-[64px] md:h-[80px] lg:h-[96px] w-auto object-contain"
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder.svg';
                 }}
