@@ -22,7 +22,7 @@ export const CategoryNavigation = () => {
   };
 
   return (
-    <div className="px-4 py-1">
+    <div className="px-2 py-0 md:px-4 md:py-1">
       {/* Desktop - Category buttons + Shop Now */}
       <div className="hidden md:flex items-center justify-center gap-3 flex-wrap">
         {categories.map((category) => (
@@ -41,7 +41,7 @@ export const CategoryNavigation = () => {
       </div>
 
       {/* Mobile - Just Shop Now */}
-      <div className="md:hidden flex items-center justify-center">
+      <div className="md:hidden flex items-center justify-center py-1">
         <Button onClick={handleShopNowClick}>Shop Now</Button>
       </div>
     </div>
