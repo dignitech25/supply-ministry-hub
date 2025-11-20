@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 export const CategoryNavigation = () => {
   const categories = [
     "Mobility",
-    "Bedroom and Comfort",
-    "Seating and Chairs",
-    "Bath and Shower",
-    "Other Items"
+    "Bedroom & Comfort",
+    "Seating & Chairs",
+    "Bathroom & Toileting",
+    "Accessible & Consumables",
+    "Home & Safety"
   ];
 
   return (
