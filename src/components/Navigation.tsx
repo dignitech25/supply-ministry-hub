@@ -109,7 +109,7 @@ const Navigation = () => {
       </header>
 
       {/* Sticky Category Navigation */}
-      <nav className="bg-background border-b border-border sticky top-[106px] md:top-[144px] lg:top-[160px] z-30 shadow-sm">
+      <nav className="bg-background border-b border-border sticky top-[107px] md:top-[144px] lg:top-[160px] z-40 shadow-sm">
         <div className="container mx-auto">
           <div className="py-0">
             <CategoryNavigation />
