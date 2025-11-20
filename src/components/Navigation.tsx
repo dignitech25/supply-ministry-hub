@@ -12,13 +12,13 @@ const Navigation = () => {
   return (
     <>
       {/* Promotional Ribbon */}
-      <div className="bg-primary text-primary-foreground sticky top-0 z-50 py-2 text-center font-semibold text-sm shadow-md">
+      <div className="bg-primary text-primary-foreground sticky top-0 z-50 py-1 text-center font-semibold text-xs shadow-md">
         We will beat any quote by 5%
       </div>
       
       {/* Header */}
       <header className="bg-background border-b border-border sticky top-[36px] z-40">
-        <div className="container mx-auto px-6 py-1">
+        <div className="container mx-auto px-6 py-0">
           <div className="grid grid-cols-3 items-center gap-2">
             {/* Left spacer */}
             <div></div>
@@ -66,9 +66,9 @@ const Navigation = () => {
       </header>
 
       {/* Sticky Category Navigation */}
-      <nav className="bg-background border-b border-border sticky top-[120px] z-30 shadow-sm">
+      <nav className="bg-background border-b border-border sticky top-[100px] z-30 shadow-sm">
         <div className="container mx-auto">
-          <div className="py-3">
+          <div className="py-1">
             <CategoryNavigation />
           </div>
         </div>
