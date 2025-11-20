@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export const CategoryNavigation = () => {
+  const navigate = useNavigate();
+  
   const categories = [
     "Mobility",
     "Bedroom & Comfort",
@@ -11,27 +13,36 @@ export const CategoryNavigation = () => {
     "Home & Safety"
   ];
 
+  const handleCategoryClick = (category: string) => {
+    navigate(`/products?category=${encodeURIComponent(category)}`);
+  };
+
+  const handleShopNowClick = () => {
+    navigate('/products');
+  };
+
   return (
     <div className="px-4 py-2">
       {/* Desktop - Category buttons + Shop Now */}
       <div className="hidden md:flex items-center justify-center gap-3 flex-wrap">
         {categories.map((category) => (
-          <Link key={category} to={`/products?category=${encodeURIComponent(category)}`}>
-            <Button variant="outline" size="sm">
-              {category}
-            </Button>
-          </Link>
+          <Button 
+            key={category}
+            variant="outline" 
+            size="sm"
+            onClick={() => handleCategoryClick(category)}
+          >
+            {category}
+          </Button>
         ))}
-        <Link to="/products">
-          <Button size="sm">Shop Now</Button>
-        </Link>
+        <Button size="sm" onClick={handleShopNowClick}>
+          Shop Now
+        </Button>
       </div>
 
       {/* Mobile - Just Shop Now */}
       <div className="md:hidden flex items-center justify-center">
-        <Link to="/products">
-          <Button>Shop Now</Button>
-        </Link>
+        <Button onClick={handleShopNowClick}>Shop Now</Button>
       </div>
     </div>
   );
