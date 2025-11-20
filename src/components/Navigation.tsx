@@ -25,16 +25,14 @@ const Navigation = () => {
             
             {/* Logo - Centered */}
             <Link to="/" className="flex justify-center hover:opacity-80 transition-opacity">
-              <div className="h-[120px] sm:h-[130px] md:h-[120px] lg:h-[130px] w-full flex items-center justify-center overflow-hidden">
-                <img 
-                  src="/Supply_Ministry_horizontal_no_phrase_updatedA-4.svg" 
-                  alt="Supply Ministry"
-                  className="h-[170%] sm:h-[160%] md:h-[140%] lg:h-[130%] object-contain"
-                  onError={(e) => {
-                    e.currentTarget.src = '/placeholder.svg';
-                  }}
-                />
-              </div>
+              <img 
+                src="/Supply_Ministry_horizontal_no_phrase_updatedA-4.svg" 
+                alt="Supply Ministry"
+                className="w-[260px] sm:w-[300px] md:w-[340px] lg:w-[380px] h-auto object-contain"
+                onError={(e) => {
+                  e.currentTarget.src = '/placeholder.svg';
+                }}
+              />
             </Link>
 
             {/* Utility Icons - Right */}
