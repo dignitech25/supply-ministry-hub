@@ -20,40 +20,6 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Quick Ship Program - Alternating Background */}
-      <section id="quick-ship" className="py-20 bg-soft-gray">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Quick Ship Program</h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Need it fast? Our Quick Ship items are dispatched within 48 hours, 
-            ensuring your clients get their equipment when they need it most.
-          </p>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">48</span>
-              </div>
-              <h3 className="font-semibold mb-2">Hour Dispatch</h3>
-              <p className="text-muted-foreground text-sm">Orders placed by 2PM ship same day</p>
-            </div>
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">200+</span>
-              </div>
-              <h3 className="font-semibold mb-2">Available Products</h3>
-              <p className="text-muted-foreground text-sm">Most popular items in stock</p>
-            </div>
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">✓</span>
-              </div>
-              <h3 className="font-semibold mb-2">Same Price</h3>
-              <p className="text-muted-foreground text-sm">No rush charges or hidden fees</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Sleep Choice Program - with CTA to external site */}
       <section id="sleep-choice" className="py-20">
         <div className="container mx-auto px-4">
@@ -228,7 +194,6 @@ const Index = () => {
               <ul className="space-y-2 text-sm opacity-80">
                 <li><a href="#about" className="hover:opacity-100">About Us</a></li>
                 <li><a href="#products" className="hover:opacity-100">Products</a></li>
-                <li><a href="#quick-ship" className="hover:opacity-100">Quick Ship</a></li>
                 <li><a href="#sleep-choice" className="hover:opacity-100">Sleep Choice</a></li>
               </ul>
             </div>
