@@ -17,8 +17,8 @@ const Navigation = () => {
       </div>
       
       {/* Header */}
-      <header className="bg-background border-b border-border sticky top-[36px] z-40">
-        <div className="container mx-auto px-6 py-0 -mb-1">
+      <header className="bg-background border-b border-border sticky top-[20px] z-40">
+        <div className="container mx-auto px-6 py-0">
           <div className="grid grid-cols-3 items-center gap-2">
             {/* Left spacer */}
             <div></div>
@@ -66,9 +66,9 @@ const Navigation = () => {
       </header>
 
       {/* Sticky Category Navigation */}
-      <nav className="bg-background border-b border-border sticky top-[90px] z-30 shadow-sm">
+      <nav className="bg-background border-b border-border sticky top-[140px] z-30 shadow-sm">
         <div className="container mx-auto">
-          <div className="py-0 -mt-1">
+          <div className="py-0">
             <CategoryNavigation />
           </div>
         </div>
