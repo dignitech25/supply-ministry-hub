@@ -153,7 +153,6 @@ const SleepChoice = () => {
               <ul className="space-y-2 text-sm opacity-80">
                 <li><a href="/#about" className="hover:opacity-100">About Us</a></li>
                 <li><a href="/#products" className="hover:opacity-100">Products</a></li>
-                <li><a href="/#quick-ship" className="hover:opacity-100">Quick Ship</a></li>
                 <li><a href="/sleep-choice" className="hover:opacity-100">Sleep Choice</a></li>
               </ul>
             </div>
