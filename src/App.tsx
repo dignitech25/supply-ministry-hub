@@ -13,6 +13,8 @@ import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import AdminCategoryQA from "./pages/AdminCategoryQA";
 import QuoteConfirm from "./pages/QuoteConfirm";
+import Resources from "./pages/Resources";
+import Contact from "./pages/Contact";
 // import Category from "./pages/Category";
 // import Brand from "./pages/Brand";
 
@@ -30,6 +32,8 @@ const App = () => (
             <Route path="/terms" element={<TermsConditions />} />
             <Route path="/sleep-choice" element={<SleepChoice />} />
             <Route path="/quote-confirm" element={<QuoteConfirm />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/contact" element={<Contact />} />
             
             {/* Product routes using product_catagorized table */}
             <Route path="/products" element={<Products />} />
