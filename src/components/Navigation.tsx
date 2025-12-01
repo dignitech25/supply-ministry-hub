@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { useQuote } from "@/contexts/QuoteContext";
+import { CategoryNavigation } from "./CategoryNavigation";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -94,6 +95,15 @@ const Navigation = () => {
           )}
         </div>
       </header>
+
+      {/* Category Navigation Bar */}
+      <nav className="bg-background border-b border-border shadow-sm">
+        <div className="container mx-auto">
+          <div className="py-0">
+            <CategoryNavigation />
+          </div>
+        </div>
+      </nav>
     </div>
   );
 };
