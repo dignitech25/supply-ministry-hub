@@ -48,9 +48,11 @@ const HeroSection = () => {
                 variant="outline" 
                 size="lg" 
                 className="text-lg px-8"
-                onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
+                asChild
               >
-                View Products
+                <a href="/products">
+                  View Products
+                </a>
               </Button>
             </div>
 
