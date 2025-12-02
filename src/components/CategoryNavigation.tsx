@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export const CategoryNavigation = () => {
   const navigate = useNavigate();
@@ -39,9 +40,10 @@ export const CategoryNavigation = () => {
         <Button 
           size="sm" 
           onClick={handleShopNowClick}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 transition ml-2"
+          className="bg-gradient-to-r from-primary to-purple-700 text-white px-6 py-2 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 font-semibold ml-2"
         >
           Shop Now
+          <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
 
@@ -49,9 +51,10 @@ export const CategoryNavigation = () => {
       <div className="md:hidden flex items-center justify-center py-2">
         <Button 
           onClick={handleShopNowClick}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 transition w-full max-w-xs"
+          className="bg-gradient-to-r from-primary to-purple-700 text-white px-6 py-2 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 font-semibold w-full max-w-xs"
         >
           Shop Now
+          <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
     </div>
