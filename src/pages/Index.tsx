@@ -193,17 +193,17 @@ const Index = () => {
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-sm opacity-80">
                 <li><a href="#about" className="hover:opacity-100">About Us</a></li>
-                <li><a href="#products" className="hover:opacity-100">Products</a></li>
+                <li><a href="/products" className="hover:opacity-100">Products</a></li>
                 <li><a href="#sleep-choice" className="hover:opacity-100">Sleep Choice</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Resources</h4>
               <ul className="space-y-2 text-sm opacity-80">
-                <li><a href="#" className="hover:opacity-100">Resource Library</a></li>
-                <li><a href="#" className="hover:opacity-100">Supply Line Blog</a></li>
-                <li><a href="#" className="hover:opacity-100">FAQ</a></li>
-                <li><a href="#" className="hover:opacity-100">NDIS Information</a></li>
+                <li><a href="/resources" className="hover:opacity-100">Resource Library</a></li>
+                <li><a href="/resources#blog" className="hover:opacity-100">Supply Line Blog</a></li>
+                <li><a href="/resources#faq" className="hover:opacity-100">FAQ</a></li>
+                <li><a href="/resources#ndis" className="hover:opacity-100">NDIS Information</a></li>
               </ul>
             </div>
             <div>
