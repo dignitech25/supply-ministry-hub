@@ -1,17 +1,20 @@
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
-import ProductCategories from "@/components/ProductCategories";
+import ProductCategoryCards from "@/components/ProductCategoryCards";
 import AboutSection from "@/components/AboutSection";
 import QuoteForm from "@/components/QuoteForm";
+import FloatingQuoteButton from "@/components/FloatingQuoteButton";
 import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
       <HeroSection />
-      <ProductCategories />
+      <ProductCategoryCards />
       <AboutSection />
+      <FloatingQuoteButton />
       
       {/* Quote Form Section */}
       <section id="quote-form" className="py-20 bg-soft-gray">
@@ -132,22 +135,41 @@ const Index = () => {
               {
                 company: "Si Care Solutions",
                 quote: "Supply Ministry has transformed how we source assistive technology. Their quick dispatch program means our clients get what they need when they need it.",
-                role: "Operations Manager"
+                role: "Operations Manager",
+                rating: 5
               },
               {
                 company: "Jewish Care",
                 quote: "The personal service and expert advice we receive from Supply Ministry is unmatched. They truly understand our clients' needs.",
-                role: "Occupational Therapist"
+                role: "Occupational Therapist",
+                rating: 5
               },
               {
                 company: "Renew Living",
                 quote: "From mobility aids to home modifications, Supply Ministry consistently delivers quality products and exceptional service.",
-                role: "Support Coordinator"
+                role: "Support Coordinator",
+                rating: 5
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-card rounded-xl p-6 border border-border">
-                <p className="text-muted-foreground mb-4 italic">"{testimonial.quote}"</p>
-                <div>
+              <div 
+                key={index} 
+                className="bg-card rounded-xl p-6 border border-border hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {/* Star Rating */}
+                <div className="flex gap-1 mb-4">
+                  {Array.from({ length: testimonial.rating }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-orange-500 text-orange-500" />
+                  ))}
+                </div>
+                
+                {/* Quote with decorative marks */}
+                <div className="relative">
+                  <span className="absolute -top-2 -left-2 text-4xl text-primary/20 font-serif">"</span>
+                  <p className="text-muted-foreground mb-4 italic relative z-10">{testimonial.quote}</p>
+                </div>
+                
+                <div className="mt-4 pt-4 border-t border-border">
                   <p className="font-semibold text-foreground">{testimonial.company}</p>
                   <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                 </div>
