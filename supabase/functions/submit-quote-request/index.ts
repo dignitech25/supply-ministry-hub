@@ -96,6 +96,18 @@ async function recordRateLimit(
   }
 }
 
+// HTML escape function to prevent XSS in email content
+const escapeHtml = (str: string | undefined | null): string => {
+  if (!str) return '';
+  return str.replace(/[&<>"']/g, (m) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[m] || m));
+};
+
 // Zod validation schema for quote request
 const quoteRequestSchema = z.object({
   first_name: z.string().min(2).max(100),
@@ -229,25 +241,25 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await resend.emails.send({
       from: "Supply Ministry <notifications@resend.dev>",
       to: ["info@supplyministry.com.au"],
-      subject: `New Quote Request from ${quoteData.first_name} ${quoteData.last_name}`,
+      subject: `New Quote Request from ${escapeHtml(quoteData.first_name)} ${escapeHtml(quoteData.last_name)}`,
       html: `
         <h2>New Quote Request Received</h2>
         
         <h3>Contact Information:</h3>
-        <p><strong>Name:</strong> ${quoteData.first_name} ${quoteData.last_name}</p>
-        <p><strong>Email:</strong> ${quoteData.email}</p>
-        <p><strong>Phone:</strong> ${quoteData.phone}</p>
-        ${quoteData.organization ? `<p><strong>Organization:</strong> ${quoteData.organization}</p>` : ''}
+        <p><strong>Name:</strong> ${escapeHtml(quoteData.first_name)} ${escapeHtml(quoteData.last_name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(quoteData.email)}</p>
+        <p><strong>Phone:</strong> ${escapeHtml(quoteData.phone)}</p>
+        ${quoteData.organization ? `<p><strong>Organization:</strong> ${escapeHtml(quoteData.organization)}</p>` : ''}
         
         <h3>Request Details:</h3>
-        <p><strong>Category:</strong> ${quoteData.category}</p>
-        <p><strong>Timeline:</strong> ${quoteData.timeline}</p>
+        <p><strong>Category:</strong> ${escapeHtml(quoteData.category)}</p>
+        <p><strong>Timeline:</strong> ${escapeHtml(quoteData.timeline)}</p>
         
         <h3>Requirements:</h3>
-        <p>${quoteData.requirements.replace(/\n/g, '<br>')}</p>
+        <p>${escapeHtml(quoteData.requirements).replace(/\n/g, '<br>')}</p>
         
         <hr>
-        <p><small>Request ID: ${insertedQuote.id}</small></p>
+        <p><small>Request ID: ${escapeHtml(insertedQuote.id)}</small></p>
         <p><small>Submitted: ${new Date(insertedQuote.created_at).toLocaleString()}</small></p>
       `,
     });
