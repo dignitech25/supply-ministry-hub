@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.56.0";
 import { Resend } from "npm:resend@2.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -95,18 +96,21 @@ async function recordRateLimit(
   }
 }
 
-interface QuoteRequestData {
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-  organization?: string;
-  category: string;
-  requirements: string;
-  timeline: string;
-  source_url?: string;
-  user_agent?: string;
-}
+// Zod validation schema for quote request
+const quoteRequestSchema = z.object({
+  first_name: z.string().min(2).max(100),
+  last_name: z.string().min(2).max(100),
+  email: z.string().email().max(255),
+  phone: z.string().min(8).max(20),
+  organization: z.string().max(200).optional(),
+  category: z.string().min(1).max(100),
+  requirements: z.string().min(10).max(5000),
+  timeline: z.string().min(1).max(100),
+  source_url: z.string().url().max(500).optional(),
+  user_agent: z.string().max(500).optional(),
+});
+
+type QuoteRequestData = z.infer<typeof quoteRequestSchema>;
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -125,9 +129,27 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const quoteData: QuoteRequestData = await req.json();
+    // Parse and validate input
+    const rawData = await req.json();
+    const validationResult = quoteRequestSchema.safeParse(rawData);
     
-    console.log("Received quote request:", { 
+    if (!validationResult.success) {
+      console.error("Validation error:", validationResult.error);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid input data. Please check your submission and try again.',
+          success: false 
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders }
+        }
+      );
+    }
+    
+    const quoteData = validationResult.data;
+    
+    console.log("Received validated quote request:", { 
       email: quoteData.email, 
       category: quoteData.category 
     });

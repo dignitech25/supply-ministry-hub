@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { Resend } from "npm:resend@2.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -111,28 +112,33 @@ const escapeHtml = (str: string | undefined | null): string => {
   }[m] || m));
 };
 
-interface QuotePayload {
-  requester_type: string;
-  requester_name: string;
-  requester_organisation?: string;
-  requester_email: string;
-  requester_phone?: string;
-  client_name: string;
-  client_ndis_number?: string;
-  funding_type: string;
-  delivery_address: string;
-  clinical_context?: string;
-  urgency: string;
-  items: Array<{
-    sku: string;
-    title: string;
-    size?: string;
-    colour?: string;
-    quantity: number;
-    unit_price?: string;
-    price_source?: string;
-  }>;
-}
+// Zod validation schema for quote payload
+const quoteItemSchema = z.object({
+  sku: z.string().min(1).max(50),
+  title: z.string().min(1).max(500),
+  size: z.string().max(100).optional(),
+  colour: z.string().max(100).optional(),
+  quantity: z.number().int().min(1).max(10000),
+  unit_price: z.string().max(20).optional(),
+  price_source: z.string().max(100).optional(),
+});
+
+const quotePayloadSchema = z.object({
+  requester_type: z.string().min(1).max(100),
+  requester_name: z.string().min(2).max(200),
+  requester_organisation: z.string().max(200).optional(),
+  requester_email: z.string().email().max(255),
+  requester_phone: z.string().min(8).max(20).optional(),
+  client_name: z.string().min(2).max(200),
+  client_ndis_number: z.string().max(50).optional(),
+  funding_type: z.string().min(1).max(100),
+  delivery_address: z.string().min(5).max(500),
+  clinical_context: z.string().max(5000).optional(),
+  urgency: z.string().min(1).max(100),
+  items: z.array(quoteItemSchema).min(1).max(100),
+});
+
+type QuotePayload = z.infer<typeof quotePayloadSchema>;
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -140,8 +146,26 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const payload: QuotePayload = await req.json();
-    console.log("Received quote payload:", payload);
+    // Parse and validate input
+    const rawPayload = await req.json();
+    const validationResult = quotePayloadSchema.safeParse(rawPayload);
+    
+    if (!validationResult.success) {
+      console.error("Validation error:", validationResult.error);
+      return new Response(
+        JSON.stringify({ 
+          success: false,
+          error: 'Invalid input data. Please check your submission and try again.' 
+        }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        }
+      );
+    }
+    
+    const payload = validationResult.data;
+    console.log("Received validated quote payload:", payload);
 
     // Create Supabase client
     const supabase = createClient(supabaseUrl, supabaseKey);
