@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Shield } from "lucide-react";
+import { ArrowRight, CheckCircle } from "lucide-react";
 import heroImage from "@/assets/hero-senior-assistive.jpg";
 import { useCountUp } from "@/hooks/useCountUp";
 import { useInView } from "@/hooks/useInView";
@@ -110,14 +110,6 @@ const HeroSection = () => {
               />
               {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent rounded-2xl"></div>
-              
-              {/* Floating NDIS badge */}
-              <div className="absolute top-4 right-4 bg-background/95 backdrop-blur-sm rounded-lg px-4 py-2 shadow-lg animate-bounce-subtle">
-                <div className="flex items-center space-x-2">
-                  <Shield className="h-4 w-4 text-success" />
-                  <span className="text-sm font-semibold text-foreground">NDIS Registered</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
