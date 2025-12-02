@@ -133,19 +133,19 @@ const Index = () => {
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
               {
-                company: "Si Care Solutions",
+                company: "Disability Support Provider",
                 quote: "Supply Ministry has transformed how we source assistive technology. Their quick dispatch program means our clients get what they need when they need it.",
                 role: "Operations Manager",
                 rating: 5
               },
               {
-                company: "Jewish Care",
+                company: "Aged Care Facility",
                 quote: "The personal service and expert advice we receive from Supply Ministry is unmatched. They truly understand our clients' needs.",
                 role: "Occupational Therapist",
                 rating: 5
               },
               {
-                company: "Renew Living",
+                company: "Community Services Organization",
                 quote: "From mobility aids to home modifications, Supply Ministry consistently delivers quality products and exceptional service.",
                 role: "Support Coordinator",
                 rating: 5
