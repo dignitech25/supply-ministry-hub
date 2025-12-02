@@ -14,7 +14,11 @@ const Navigation = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-center py-4 lg:py-5">
             {/* Logo - Centered */}
-            <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
+            <Link 
+              to="/" 
+              className="flex items-center hover:opacity-80 transition-opacity"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               <img 
                 src="/Supply_Ministry_horizontal_no_phrase_updatedA-4.svg" 
                 alt="Supply Ministry" 
