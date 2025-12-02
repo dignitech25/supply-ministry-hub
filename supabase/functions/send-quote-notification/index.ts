@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -9,18 +10,33 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface QuoteRequest {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-  organization?: string;
-  category: string;
-  requirements: string;
-  timeline: string;
-  created_at: string;
-}
+// HTML escape function to prevent XSS in email content
+const escapeHtml = (str: string | undefined | null): string => {
+  if (!str) return '';
+  return str.replace(/[&<>"']/g, (m) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[m] || m));
+};
+
+// Zod validation schema for quote notification
+const quoteRequestSchema = z.object({
+  id: z.string().uuid(),
+  first_name: z.string().min(1).max(100),
+  last_name: z.string().min(1).max(100),
+  email: z.string().email().max(255),
+  phone: z.string().min(8).max(20),
+  organization: z.string().max(200).optional(),
+  category: z.string().min(1).max(100),
+  requirements: z.string().min(1).max(5000),
+  timeline: z.string().min(1).max(100),
+  created_at: z.string(),
+});
+
+type QuoteRequest = z.infer<typeof quoteRequestSchema>;
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -29,7 +45,25 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const quoteData: QuoteRequest = await req.json();
+    // Parse and validate input
+    const rawData = await req.json();
+    const validationResult = quoteRequestSchema.safeParse(rawData);
+    
+    if (!validationResult.success) {
+      console.error("Validation error:", validationResult.error);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid quote notification data',
+          success: false 
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders }
+        }
+      );
+    }
+    
+    const quoteData = validationResult.data;
 
     console.log("Sending quote notification email for:", quoteData.id);
 
@@ -45,26 +79,26 @@ const handler = async (req: Request): Promise<Response> => {
           
           <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h2 style="color: #0066cc; margin-top: 0;">Contact Information</h2>
-            <p><strong>Name:</strong> ${quoteData.first_name} ${quoteData.last_name}</p>
-            <p><strong>Email:</strong> <a href="mailto:${quoteData.email}">${quoteData.email}</a></p>
-            <p><strong>Phone:</strong> <a href="tel:${quoteData.phone}">${quoteData.phone}</a></p>
-            ${quoteData.organization ? `<p><strong>Organization:</strong> ${quoteData.organization}</p>` : ''}
+            <p><strong>Name:</strong> ${escapeHtml(quoteData.first_name)} ${escapeHtml(quoteData.last_name)}</p>
+            <p><strong>Email:</strong> <a href="mailto:${escapeHtml(quoteData.email)}">${escapeHtml(quoteData.email)}</a></p>
+            <p><strong>Phone:</strong> <a href="tel:${escapeHtml(quoteData.phone)}">${escapeHtml(quoteData.phone)}</a></p>
+            ${quoteData.organization ? `<p><strong>Organization:</strong> ${escapeHtml(quoteData.organization)}</p>` : ''}
           </div>
 
           <div style="background-color: #fff; border: 1px solid #dee2e6; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h2 style="color: #0066cc; margin-top: 0;">Quote Details</h2>
-            <p><strong>Product Category:</strong> ${quoteData.category}</p>
-            <p><strong>Timeline:</strong> ${quoteData.timeline}</p>
+            <p><strong>Product Category:</strong> ${escapeHtml(quoteData.category)}</p>
+            <p><strong>Timeline:</strong> ${escapeHtml(quoteData.timeline)}</p>
             
             <h3 style="color: #666; margin-top: 20px;">Requirements:</h3>
             <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #0066cc; margin: 10px 0;">
-              ${quoteData.requirements.replace(/\n/g, '<br>')}
+              ${escapeHtml(quoteData.requirements).replace(/\n/g, '<br>')}
             </div>
           </div>
 
           <div style="margin-top: 30px; padding: 15px; background-color: #e3f2fd; border-radius: 8px;">
             <p style="margin: 0; color: #0066cc; font-size: 14px;">
-              <strong>Quote ID:</strong> ${quoteData.id}<br>
+              <strong>Quote ID:</strong> ${escapeHtml(quoteData.id)}<br>
               <strong>Submitted:</strong> ${new Date(quoteData.created_at).toLocaleString('en-AU', { 
                 timeZone: 'Australia/Sydney',
                 year: 'numeric',
