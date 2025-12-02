@@ -32,7 +32,7 @@ const SleepChoice = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Button 
                 size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8"
+                className="bg-orange-500 text-white hover:bg-orange-600 transition-colors text-lg px-8"
                 asChild
               >
                 <a href="https://sleepchoice.com.au" target="_blank" rel="noopener noreferrer">
@@ -128,7 +128,7 @@ const SleepChoice = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg"
-              className="bg-background text-foreground px-8 py-3 hover:bg-background/90"
+              className="bg-orange-500 text-white px-8 py-3 hover:bg-orange-600 transition-colors"
               asChild
             >
               <a href="https://sleepchoice.com.au" target="_blank" rel="noopener noreferrer">

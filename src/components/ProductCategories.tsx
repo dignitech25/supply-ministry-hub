@@ -12,7 +12,7 @@ const ProductCategories = () => {
             Our experienced team can guide you through our complete range and help you find 
             the perfect assistive technology solution for your client's specific needs.
           </p>
-          <Button size="lg">
+          <Button size="lg" className="bg-orange-500 text-white hover:bg-orange-600 transition-colors">
             Speak with Expert
           </Button>
         </div>

@@ -51,7 +51,7 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                className="bg-orange-500 text-white hover:bg-orange-600 transition-colors"
                 asChild
               >
                 <a href="https://sleepchoice.com.au" target="_blank" rel="noopener noreferrer">
@@ -167,7 +167,7 @@ const Index = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <button 
-              className="bg-background text-foreground px-8 py-3 rounded-lg font-semibold hover:bg-background/90 transition-colors"
+              className="bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
               onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Request a Quote

@@ -122,7 +122,7 @@ const AboutSection = () => {
               a streamlined experience that puts care providers back in control of their time 
               while ensuring their clients get the best possible outcomes.
             </p>
-            <Button size="lg" className="bg-gradient-hero hover:bg-primary-dark">
+            <Button size="lg" className="bg-orange-500 text-white hover:bg-orange-600 transition-colors">
               Get in Touch
             </Button>
           </div>

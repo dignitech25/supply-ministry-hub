@@ -40,7 +40,7 @@ export const CategoryNavigation = () => {
         <Button 
           size="sm" 
           onClick={handleShopNowClick}
-          className="bg-primary text-white px-6 py-2.5 rounded-md hover:bg-primary/90 transition-colors font-semibold ml-2"
+          className="bg-orange-500 text-white px-6 py-2.5 rounded-md hover:bg-orange-600 transition-colors font-semibold ml-2"
         >
           Shop Now
           <ArrowRight className="ml-2 h-4 w-4" />
@@ -51,7 +51,7 @@ export const CategoryNavigation = () => {
       <div className="md:hidden flex items-center justify-center py-2">
         <Button 
           onClick={handleShopNowClick}
-          className="bg-primary text-white px-6 py-2.5 rounded-md hover:bg-primary/90 transition-colors font-semibold w-full max-w-xs"
+          className="bg-orange-500 text-white px-6 py-2.5 rounded-md hover:bg-orange-600 transition-colors font-semibold w-full max-w-xs"
         >
           Shop Now
           <ArrowRight className="ml-2 h-4 w-4" />

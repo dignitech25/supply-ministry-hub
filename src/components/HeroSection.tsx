@@ -38,7 +38,7 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
                 size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8"
+                className="bg-orange-500 text-white hover:bg-orange-600 transition-colors text-lg px-8"
                 onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Request a Quote
