@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
-import ProductCategoryCards from "@/components/ProductCategoryCards";
+import BrandTrustStrip from "@/components/BrandTrustStrip";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import ProductCategoryCards from "@/components/ProductCategoryCards";
 import AboutSection from "@/components/AboutSection";
 import FloatingQuoteButton from "@/components/FloatingQuoteButton";
 import { Button } from "@/components/ui/button";
@@ -13,8 +14,9 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <HeroSection />
-      <ProductCategoryCards />
+      <BrandTrustStrip />
       <FeaturedProducts />
+      <ProductCategoryCards />
       <AboutSection />
       <FloatingQuoteButton />
       
@@ -65,54 +67,6 @@ const Index = () => {
                   Learn More
                 </a>
               </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Suppliers Section - Updated with Partner Logos */}
-      <section id="suppliers" className="py-20 bg-soft-gray">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Trusted Supplier Partners</h2>
-          <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
-            We've built strong relationships with Australia's leading assistive technology manufacturers 
-            to bring you competitive pricing and reliable supply chains.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center max-w-5xl mx-auto">
-            <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow flex items-center justify-center h-24">
-              <img 
-                src="/lovable-uploads/cc605216-27d1-40e0-a4c3-bed5d920fd14.png" 
-                alt="Novis Healthcare" 
-                className="max-h-12 max-w-full object-contain"
-              />
-            </div>
-            <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow flex items-center justify-center h-24">
-              <img 
-                src="/lovable-uploads/67943b8c-a970-4bf5-8df6-0e555261eb62.png" 
-                alt="Aidacare Healthcare Equipment" 
-                className="max-h-12 max-w-full object-contain"
-              />
-            </div>
-            <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow flex items-center justify-center h-24">
-              <img 
-                src="/lovable-uploads/496b4f80-f607-49dd-9fac-beeabae55741.png" 
-                alt="Forté Healthcare" 
-                className="max-h-12 max-w-full object-contain"
-              />
-            </div>
-            <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow flex items-center justify-center h-24">
-              <img 
-                src="/lovable-uploads/46b949d7-43d7-423f-9add-ed3ac3bb0669.png" 
-                alt="icare Medical Group" 
-                className="max-h-12 max-w-full object-contain"
-              />
-            </div>
-            <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow flex items-center justify-center h-24">
-              <img 
-                src="/lovable-uploads/3203fff7-35d5-4c26-814d-17666d297a02.png" 
-                alt="Sleep Choice" 
-                className="max-h-12 max-w-full object-contain"
-              />
             </div>
           </div>
         </div>
