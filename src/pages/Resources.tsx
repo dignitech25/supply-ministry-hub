@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { BookOpen, FileText, HelpCircle, Info, ExternalLink, Download } from "lucide-react";
@@ -333,11 +335,11 @@ const Resources = () => {
               </div>
               <div className="mt-8 text-center">
                 <Button 
-                  size="lg" 
+                  size="lg"
                   className="bg-orange-500 text-white hover:bg-orange-600 transition-colors"
                   asChild
                 >
-                  <a href="/quote">Request an NDIS Quote</a>
+                  <Link to="/quote">Request an NDIS Quote</Link>
                 </Button>
               </div>
             </div>
@@ -358,53 +360,13 @@ const Resources = () => {
               className="bg-orange-500 text-white hover:bg-orange-600 transition-colors"
               asChild
             >
-              <a href="/#contact">Contact Us</a>
+              <Link to="/#contact">Contact Us</Link>
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-foreground text-background py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="font-semibold mb-4">Supply Ministry</h3>
-              <p className="text-sm opacity-80 mb-4">Connecting care with solutions across Australia</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm opacity-80">
-                <li><a href="/#about" className="hover:opacity-100">About Us</a></li>
-                <li><a href="/products" className="hover:opacity-100">Products</a></li>
-                <li><a href="/sleep-choice" className="hover:opacity-100">Sleep Choice</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Resources</h4>
-              <ul className="space-y-2 text-sm opacity-80">
-                <li><a href="/resources#resource-library" className="hover:opacity-100">Resource Library</a></li>
-                <li><a href="/resources#blog" className="hover:opacity-100">Supply Line Blog</a></li>
-                <li><a href="/resources#faq" className="hover:opacity-100">FAQ</a></li>
-                <li><a href="/resources#ndis" className="hover:opacity-100">NDIS Information</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2 text-sm opacity-80">
-                <li><strong>Alex:</strong> alex@supplyministry.com.au</li>
-                <li>Mobile: 0452 002 450</li>
-                <li><strong>David:</strong> david@supplyministry.com.au</li>
-                <li>Mobile: 0404 593 090</li>
-                <li>Mon-Fri: 8:30 AM - 5:00 PM AEST</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-background/20 mt-8 pt-8 text-center text-sm opacity-60">
-            <p>&copy; 2024 Supply Ministry. All rights reserved. | <a href="/terms" className="hover:opacity-100">Terms & Conditions</a></p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
