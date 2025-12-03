@@ -1,7 +1,7 @@
 const brands = [
-  { src: "/lovable-uploads/cc605216-27d1-40e0-a4c3-bed5d920fd14.png", alt: "Novis Healthcare", url: "https://novishealthcare.com.au" },
+  { src: "/lovable-uploads/cc605216-27d1-40e0-a4c3-bed5d920fd14.png", alt: "Novis Healthcare", url: "https://novis.com.au" },
   { src: "/lovable-uploads/67943b8c-a970-4bf5-8df6-0e555261eb62.png", alt: "Aidacare Healthcare Equipment", url: "https://aidacare.com.au" },
-  { src: "/lovable-uploads/496b4f80-f607-49dd-9fac-beeabae55741.png", alt: "Forté Healthcare", url: "https://fortehealthcare.com.au" },
+  { src: "/lovable-uploads/496b4f80-f607-49dd-9fac-beeabae55741.png", alt: "Forté Healthcare", url: "https://www.fortehealthcare.com.au" },
   { src: "/lovable-uploads/46b949d7-43d7-423f-9add-ed3ac3bb0669.png", alt: "icare Medical Group", url: "https://icaremedicalgroup.com.au" },
   { src: "/lovable-uploads/3203fff7-35d5-4c26-814d-17666d297a02.png", alt: "Sleep Choice", url: "https://sleepchoice.com.au" },
 ];
