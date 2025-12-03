@@ -4,10 +4,12 @@ import heroImage from "@/assets/hero-senior-assistive.jpg";
 import { useCountUp } from "@/hooks/useCountUp";
 import { useInView } from "@/hooks/useInView";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const statsRef = useRef<HTMLDivElement>(null);
   const isStatsVisible = useInView(statsRef);
+  const navigate = useNavigate();
   
   const productsCount = useCountUp(2000, 2000, isStatsVisible);
   const hoursCount = useCountUp(48, 1500, isStatsVisible);
@@ -57,7 +59,7 @@ const HeroSection = () => {
               <Button 
                 size="lg" 
                 className="bg-orange-500 text-white hover:bg-orange-600 transition-all hover:scale-105 text-lg px-8"
-                onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => navigate('/quote')}
               >
                 Request a Quote
                 <ArrowRight className="ml-2 h-5 w-5" />

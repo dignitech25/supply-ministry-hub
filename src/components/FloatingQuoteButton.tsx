@@ -1,35 +1,27 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageSquare } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const FloatingQuoteButton = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
       // Show button after scrolling past hero (approximately 600px)
       const heroHeight = 600;
-      const scrolled = window.scrollY > heroHeight;
-      
-      // Hide button when near the quote form section
-      const quoteForm = document.getElementById('quote-form');
-      if (quoteForm) {
-        const quoteRect = quoteForm.getBoundingClientRect();
-        const nearQuoteForm = quoteRect.top < window.innerHeight && quoteRect.bottom > 0;
-        setIsVisible(scrolled && !nearQuoteForm);
-      } else {
-        setIsVisible(scrolled);
-      }
+      setIsVisible(window.scrollY > heroHeight);
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initial state
+    handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleClick = () => {
-    document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' });
+    navigate('/quote');
   };
 
   return (
