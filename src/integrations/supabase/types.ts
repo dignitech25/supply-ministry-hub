@@ -869,7 +869,7 @@ export type Database = {
           brand?: string | null
           category?: string | null
           created_at?: string | null
-          description?: never
+          description?: string | null
           featured?: boolean | null
           gst_rate?: never
           id?: string | null
@@ -888,7 +888,7 @@ export type Database = {
           brand?: string | null
           category?: string | null
           created_at?: string | null
-          description?: never
+          description?: string | null
           featured?: boolean | null
           gst_rate?: never
           id?: string | null
