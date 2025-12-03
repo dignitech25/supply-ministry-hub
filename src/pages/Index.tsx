@@ -1,8 +1,8 @@
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import ProductCategoryCards from "@/components/ProductCategoryCards";
 import AboutSection from "@/components/AboutSection";
-import QuoteForm from "@/components/QuoteForm";
 import FloatingQuoteButton from "@/components/FloatingQuoteButton";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
@@ -15,13 +15,6 @@ const Index = () => {
       <ProductCategoryCards />
       <AboutSection />
       <FloatingQuoteButton />
-      
-      {/* Quote Form Section */}
-      <section id="quote-form" className="py-20 bg-soft-gray">
-        <div className="container mx-auto px-4">
-          <QuoteForm />
-        </div>
-      </section>
       
       {/* Sleep Choice Program - with CTA to external site */}
       <section id="sleep-choice" className="py-20">
@@ -188,12 +181,12 @@ const Index = () => {
             We're here to help you find the perfect solutions for your clients.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <button 
+            <Link 
+              to="/quote"
               className="bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
-              onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Request a Quote
-            </button>
+            </Link>
           </div>
           <div className="text-sm opacity-75 space-y-2">
             <p><strong>Alex:</strong> alex@supplyministry.com.au | 0452 002 450</p>
