@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
   Move, 
@@ -49,6 +49,8 @@ const categories = [
 ];
 
 const ProductCategoryCards = () => {
+  const navigate = useNavigate();
+  
   return (
     <section className="py-20 bg-soft-gray">
       <div className="container mx-auto px-4">
@@ -100,7 +102,7 @@ const ProductCategoryCards = () => {
             </p>
             <button 
               className="bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
-              onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => navigate('/quote')}
             >
               Speak with an Expert
             </button>
