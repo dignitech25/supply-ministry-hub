@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, ShoppingCart } from "lucide-react";
 import { CategoryNavigation } from "./CategoryNavigation";
 import { SearchDialog } from "./SearchDialog";
 import { Button } from "./ui/button";
+import { useQuote } from "@/contexts/QuoteContext";
+import { Badge } from "./ui/badge";
 
 const Navigation = () => {
   const [searchOpen, setSearchOpen] = useState(false);
+  const { totalItems, setDrawerOpen } = useQuote();
 
   return (
     <div className="sticky top-0 z-50 bg-background">
@@ -38,16 +41,35 @@ const Navigation = () => {
               />
             </Link>
             
-            {/* Search Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setSearchOpen(true)}
-              className="text-muted-foreground hover:text-foreground"
-              aria-label="Search products"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
+            {/* Search & Cart Buttons */}
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setSearchOpen(true)}
+                className="text-muted-foreground hover:text-foreground"
+                aria-label="Search products"
+              >
+                <Search className="h-5 w-5" />
+              </Button>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setDrawerOpen(true)}
+                className="text-muted-foreground hover:text-foreground relative"
+                aria-label="View quote cart"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {totalItems > 0 && (
+                  <Badge 
+                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                  >
+                    {totalItems > 99 ? "99+" : totalItems}
+                  </Badge>
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </header>
