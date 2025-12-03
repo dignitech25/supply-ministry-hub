@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Search, Loader2 } from "lucide-react";
@@ -24,11 +24,14 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const resultsRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const searchProducts = useCallback(async (query: string) => {
     if (query.trim().length < 2) {
       setResults([]);
+      setSelectedIndex(-1);
       return;
     }
 
@@ -42,6 +45,7 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
 
       if (error) throw error;
       setResults(data || []);
+      setSelectedIndex(-1);
     } catch (err) {
       console.error("Search error:", err);
       setResults([]);
@@ -63,7 +67,34 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
     onOpenChange(false);
     setSearchQuery("");
     setResults([]);
+    setSelectedIndex(-1);
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const totalItems = results.length + (searchQuery.trim().length >= 2 ? 1 : 0);
+    
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev < totalItems - 1 ? prev + 1 : prev));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
+    } else if (e.key === "Enter" && selectedIndex >= 0) {
+      e.preventDefault();
+      if (selectedIndex < results.length) {
+        handleResultClick(results[selectedIndex].sku);
+      } else if (selectedIndex === results.length) {
+        handleSearch(e as unknown as React.FormEvent);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (selectedIndex >= 0 && resultsRef.current) {
+      const selectedElement = resultsRef.current.children[selectedIndex] as HTMLElement;
+      selectedElement?.scrollIntoView({ block: "nearest" });
+    }
+  }, [selectedIndex]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,6 +103,7 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
       onOpenChange(false);
       setSearchQuery("");
       setResults([]);
+      setSelectedIndex(-1);
     }
   };
 
@@ -80,6 +112,7 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
     if (!isOpen) {
       setSearchQuery("");
       setResults([]);
+      setSelectedIndex(-1);
     }
   };
 
@@ -98,6 +131,7 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
               placeholder="Search by product name, SKU, or brand..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="pl-10 pr-10"
               autoFocus
             />
@@ -109,12 +143,14 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
 
         {/* Results List */}
         {results.length > 0 && (
-          <div className="border-t border-border max-h-[400px] overflow-y-auto">
-            {results.map((product) => (
+          <div ref={resultsRef} className="border-t border-border max-h-[400px] overflow-y-auto">
+            {results.map((product, index) => (
               <button
                 key={product.sku}
                 onClick={() => handleResultClick(product.sku)}
-                className="w-full flex items-center gap-3 p-3 hover:bg-accent/50 transition-colors text-left border-b border-border last:border-b-0"
+                className={`w-full flex items-center gap-3 p-3 transition-colors text-left border-b border-border last:border-b-0 ${
+                  selectedIndex === index ? "bg-accent" : "hover:bg-accent/50"
+                }`}
               >
                 <img
                   src={product.image_url || getImagePlaceholder()}
@@ -141,7 +177,9 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
             {searchQuery.trim().length >= 2 && (
               <button
                 onClick={handleSearch}
-                className="w-full p-3 text-sm text-primary hover:bg-accent/50 transition-colors text-center font-medium"
+                className={`w-full p-3 text-sm text-primary transition-colors text-center font-medium ${
+                  selectedIndex === results.length ? "bg-accent" : "hover:bg-accent/50"
+                }`}
               >
                 View all results for "{searchQuery}"
               </button>
