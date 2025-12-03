@@ -14,54 +14,39 @@ const categories = [
     name: "Mobility",
     slug: "Mobility",
     icon: Move,
-    color: "blue",
     count: "500+",
   },
   {
     name: "Bedroom & Comfort",
     slug: "Bedroom & Comfort",
     icon: Bed,
-    color: "purple",
     count: "300+",
   },
   {
     name: "Seating & Chairs",
     slug: "Seating & Chairs",
     icon: Armchair,
-    color: "green",
     count: "250+",
   },
   {
     name: "Bathroom & Toileting",
     slug: "Bathroom & Toileting",
     icon: Bath,
-    color: "teal",
     count: "400+",
   },
   {
     name: "Accessible & Consumables",
     slug: "Accessible & Consumables",
     icon: Package,
-    color: "orange",
     count: "350+",
   },
   {
     name: "Home & Safety",
     slug: "Home & Safety",
     icon: Home,
-    color: "red",
     count: "200+",
   },
 ];
-
-const colorClasses: Record<string, { bg: string; text: string; hover: string }> = {
-  blue: { bg: "bg-blue-500/10", text: "text-blue-600", hover: "group-hover:bg-blue-500/20" },
-  purple: { bg: "bg-purple-500/10", text: "text-purple-600", hover: "group-hover:bg-purple-500/20" },
-  green: { bg: "bg-green-500/10", text: "text-green-600", hover: "group-hover:bg-green-500/20" },
-  teal: { bg: "bg-teal-500/10", text: "text-teal-600", hover: "group-hover:bg-teal-500/20" },
-  orange: { bg: "bg-orange-500/10", text: "text-orange-600", hover: "group-hover:bg-orange-500/20" },
-  red: { bg: "bg-red-500/10", text: "text-red-600", hover: "group-hover:bg-red-500/20" },
-};
 
 const ProductCategoryCards = () => {
   return (
@@ -77,9 +62,8 @@ const ProductCategoryCards = () => {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {categories.map((category, index) => {
+        {categories.map((category, index) => {
             const Icon = category.icon;
-            const colors = colorClasses[category.color];
             
             return (
               <Link
@@ -90,8 +74,8 @@ const ProductCategoryCards = () => {
               >
                 <Card className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 animate-fade-in">
                   <CardContent className="p-6 flex flex-col items-center text-center">
-                    <div className={`${colors.bg} ${colors.hover} rounded-full p-4 mb-4 transition-colors duration-300`}>
-                      <Icon className={`w-8 h-8 ${colors.text}`} />
+                    <div className="bg-orange-500/10 group-hover:bg-orange-500/20 rounded-full p-4 mb-4 transition-colors duration-300">
+                      <Icon className="w-8 h-8 text-orange-600" />
                     </div>
                     <h3 className="text-xl font-semibold text-foreground mb-2">
                       {category.name}
