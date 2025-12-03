@@ -335,10 +335,9 @@ const Resources = () => {
                 <Button 
                   size="lg" 
                   className="bg-orange-500 text-white hover:bg-orange-600 transition-colors"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   asChild
                 >
-                  <a href="/#quote-form">Request an NDIS Quote</a>
+                  <a href="/quote">Request an NDIS Quote</a>
                 </Button>
               </div>
             </div>
