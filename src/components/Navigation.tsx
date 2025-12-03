@@ -1,7 +1,13 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Search } from "lucide-react";
 import { CategoryNavigation } from "./CategoryNavigation";
+import { SearchDialog } from "./SearchDialog";
+import { Button } from "./ui/button";
 
 const Navigation = () => {
+  const [searchOpen, setSearchOpen] = useState(false);
+
   return (
     <div className="sticky top-0 z-50 bg-background">
       {/* Promotional Ribbon */}
@@ -12,7 +18,10 @@ const Navigation = () => {
       {/* Header */}
       <header className="w-full border-b border-border bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-center py-4 lg:py-5">
+          <div className="flex items-center justify-between py-4 lg:py-5">
+            {/* Spacer for balance */}
+            <div className="w-10" />
+            
             {/* Logo - Centered */}
             <Link 
               to="/" 
@@ -28,6 +37,17 @@ const Navigation = () => {
                 }}
               />
             </Link>
+            
+            {/* Search Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSearchOpen(true)}
+              className="text-muted-foreground hover:text-foreground"
+              aria-label="Search products"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
           </div>
         </div>
       </header>
@@ -40,6 +60,9 @@ const Navigation = () => {
           </div>
         </div>
       </nav>
+
+      {/* Search Dialog */}
+      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
     </div>
   );
 };
