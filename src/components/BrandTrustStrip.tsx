@@ -8,19 +8,38 @@ const brands = [
 
 const BrandTrustStrip = () => {
   return (
-    <section className="py-6 bg-muted/30 border-y border-border/50">
+    <section className="py-6 bg-muted/30 border-y border-border/50 overflow-hidden">
       <div className="container mx-auto px-4">
         <p className="text-xs text-muted-foreground text-center mb-4 uppercase tracking-wider">
           Trusted Partners
         </p>
-        <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10">
-          {brands.map((brand) => (
-            <img
-              key={brand.alt}
-              src={brand.src}
-              alt={brand.alt}
-              className="h-8 md:h-10 max-w-[100px] md:max-w-[120px] object-contain opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0"
-            />
+      </div>
+      <div className="relative">
+        {/* Gradient overlays for smooth fade effect */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-muted/30 to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-muted/30 to-transparent z-10" />
+        
+        {/* Marquee container */}
+        <div className="flex animate-marquee">
+          {/* First set of logos */}
+          {brands.map((brand, index) => (
+            <div key={`first-${index}`} className="flex-shrink-0 mx-8 md:mx-12">
+              <img
+                src={brand.src}
+                alt={brand.alt}
+                className="h-8 md:h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity"
+              />
+            </div>
+          ))}
+          {/* Duplicate set for seamless loop */}
+          {brands.map((brand, index) => (
+            <div key={`second-${index}`} className="flex-shrink-0 mx-8 md:mx-12">
+              <img
+                src={brand.src}
+                alt={brand.alt}
+                className="h-8 md:h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity"
+              />
+            </div>
           ))}
         </div>
       </div>
