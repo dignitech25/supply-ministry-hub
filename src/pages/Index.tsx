@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import ProductCategoryCards from "@/components/ProductCategoryCards";
+import FeaturedProducts from "@/components/FeaturedProducts";
 import AboutSection from "@/components/AboutSection";
 import FloatingQuoteButton from "@/components/FloatingQuoteButton";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ const Index = () => {
       <Navigation />
       <HeroSection />
       <ProductCategoryCards />
+      <FeaturedProducts />
       <AboutSection />
       <FloatingQuoteButton />
       
