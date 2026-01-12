@@ -4,7 +4,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-foreground text-background py-12">
+    <footer className="bg-primary text-primary-foreground py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
@@ -39,7 +39,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="border-t border-background/20 mt-8 pt-8 text-center text-sm opacity-60">
+        <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-sm opacity-60">
           <p>&copy; {currentYear} Supply Ministry. All rights reserved. | <Link to="/terms" className="hover:opacity-100">Terms & Conditions</Link></p>
         </div>
       </div>
