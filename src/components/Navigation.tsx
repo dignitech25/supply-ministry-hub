@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, ShoppingCart } from "lucide-react";
+import { Search, ShoppingCart, Sparkles } from "lucide-react";
 import { CategoryNavigation } from "./CategoryNavigation";
 import { SearchDialog } from "./SearchDialog";
 import { Button } from "./ui/button";
@@ -14,8 +14,12 @@ const Navigation = () => {
   return (
     <div className="sticky top-0 z-50 bg-background">
       {/* Promotional Ribbon */}
-      <div className="bg-primary text-primary-foreground py-0 text-center font-semibold text-[11px] shadow-md">
-        We will beat any quote by 5%
+      <div className="bg-primary text-primary-foreground py-2.5 text-center font-bold text-sm tracking-wide shadow-lg">
+        <span className="inline-flex items-center gap-2">
+          <Sparkles className="h-4 w-4" />
+          We will beat any quote by 5%
+          <Sparkles className="h-4 w-4" />
+        </span>
       </div>
       
       {/* Header */}
