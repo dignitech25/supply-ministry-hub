@@ -9,13 +9,25 @@ import { useQuote } from "@/contexts/QuoteContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatPrice, getImagePlaceholder, isOnSale } from "@/utils/productHelpers";
 
-// Curated SKUs - easy to update
-const FEATURED_SKUS = [
-  'PR10DX-4B',   // Pride Pathrider 10 Deluxe Scooter (Mobility)
+// Curated product prefixes - matches product families to show lowest price
+const FEATURED_PREFIXES = [
+  'PR10DX',      // Pride Pathrider 10 Deluxe Scooter (Mobility)
   'CR5435',      // Configura Advance Manual Chair (Seating)
   'WAF705350',   // ASPIRE Vogue Carbon Fibre Walker (Walker)
-  'IC333SQSA',   // Icare IC333 Homecare HiLo Bed (Bedroom)
+  'IC333',       // Icare IC333 Homecare HiLo Bed - all variants (Bedroom)
 ];
+
+interface FeaturedProduct {
+  id: string;
+  sku: string;
+  title: string | null;
+  brand: string | null;
+  image_url: string | null;
+  price_rrp: number | null;
+  price_discounted: number | null;
+  lowestPrice: number | null;
+  hasMultipleVariants: boolean;
+}
 
 const FeaturedProducts = () => {
   const { addItem } = useQuote();
@@ -24,17 +36,45 @@ const FeaturedProducts = () => {
   const { data: products, isLoading } = useQuery({
     queryKey: ['featured-products'],
     queryFn: async () => {
+      // Build OR query to fetch all variants for each prefix
+      const orConditions = FEATURED_PREFIXES.map(p => `sku.ilike.${p}%`).join(',');
+      
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .in('sku', FEATURED_SKUS);
+        .or(orConditions);
       
       if (error) throw error;
       
-      // Maintain curated order
-      return FEATURED_SKUS
-        .map(sku => data?.find(p => p.sku === sku))
-        .filter(Boolean);
+      // Group products by prefix and find cheapest variant for each
+      const grouped: FeaturedProduct[] = FEATURED_PREFIXES.map(prefix => {
+        const variants = data?.filter(p => p.sku?.toUpperCase().startsWith(prefix.toUpperCase())) || [];
+        if (variants.length === 0) return null;
+        
+        // Find the cheapest variant (by discounted price, then RRP)
+        const sorted = [...variants].sort((a, b) => {
+          const priceA = a.price_discounted ?? a.price_rrp ?? Infinity;
+          const priceB = b.price_discounted ?? b.price_rrp ?? Infinity;
+          return priceA - priceB;
+        });
+        
+        const cheapest = sorted[0];
+        const lowestPrice = cheapest.price_discounted ?? cheapest.price_rrp;
+        
+        return {
+          id: cheapest.id,
+          sku: cheapest.sku,
+          title: cheapest.title,
+          brand: cheapest.brand,
+          image_url: cheapest.image_url,
+          price_rrp: cheapest.price_rrp,
+          price_discounted: cheapest.price_discounted,
+          lowestPrice,
+          hasMultipleVariants: variants.length > 1,
+        };
+      }).filter(Boolean) as FeaturedProduct[];
+      
+      return grouped;
     },
   });
 
@@ -131,9 +171,13 @@ const FeaturedProducts = () => {
                   {product.title || 'Product'}
                 </h3>
 
-                {/* Price */}
+                {/* Price - show "From" for multi-variant products */}
                 <div className="mb-4">
-                  {isOnSale(product.price_rrp, product.price_discounted) ? (
+                  {product.hasMultipleVariants ? (
+                    <span className="text-lg font-bold text-primary">
+                      From {formatPrice(product.lowestPrice)}
+                    </span>
+                  ) : isOnSale(product.price_rrp, product.price_discounted) ? (
                     <div className="flex items-baseline gap-2">
                       <span className="text-lg font-bold text-primary">
                         {formatPrice(product.price_discounted)}
