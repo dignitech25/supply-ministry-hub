@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import { QuoteProvider } from "@/contexts/QuoteContext";
 import { QuoteDrawer } from "@/components/QuoteDrawer";
 import Index from "./pages/Index";
@@ -21,13 +22,14 @@ import Quote from "./pages/Quote";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <QuoteProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <QuoteProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/terms" element={<TermsConditions />} />
             <Route path="/sleep-choice" element={<SleepChoice />} />
@@ -47,12 +49,13 @@ const App = () => (
             {/* <Route path="/category/:slug" element={<Category />} /> */}
             {/* <Route path="/brand/:slug" element={<Brand />} /> */}
             <Route path="*" element={<NotFound />} />
-          </Routes>
-          <QuoteDrawer />
-        </BrowserRouter>
-      </TooltipProvider>
-    </QuoteProvider>
-  </QueryClientProvider>
+            </Routes>
+            <QuoteDrawer />
+          </BrowserRouter>
+        </TooltipProvider>
+      </QuoteProvider>
+    </QueryClientProvider>
+  </HelmetProvider>
 );
 
 export default App;

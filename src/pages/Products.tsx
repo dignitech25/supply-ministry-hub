@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import Navigation from '@/components/Navigation';
+import SEO from '@/components/SEO';
 import { ProductFilterSidebar } from '@/components/ProductFilterSidebar';
 import { ActiveFilterTags, ActiveFilter } from '@/components/ActiveFilterTags';
 import { supabase } from '@/integrations/supabase/client';
@@ -331,6 +332,10 @@ export default function Products() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Products | Assistive Technology & Mobility Equipment"
+        description="Browse our range of assistive technology, mobility aids, pressure care, and therapeutic equipment. Filter by category, brand, and more. NDIS registered provider."
+      />
       <Navigation />
       
       <main className="container mx-auto px-4 py-8 max-w-7xl">

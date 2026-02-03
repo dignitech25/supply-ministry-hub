@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { BookOpen, FileText, HelpCircle, Info, ExternalLink, Download } from "lucide-react";
@@ -151,6 +152,10 @@ const Resources = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Resources & Support"
+        description="Access clinical guides, NDIS funding information, FAQs, and educational resources for assistive technology. Support for healthcare professionals and clients."
+      />
       <Navigation />
       
       {/* Hero Section */}
