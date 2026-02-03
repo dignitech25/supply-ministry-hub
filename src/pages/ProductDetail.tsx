@@ -15,6 +15,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import Navigation from '@/components/Navigation';
+import SEO from '@/components/SEO';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuote } from '@/contexts/QuoteContext';
 import { useToast } from '@/hooks/use-toast';
@@ -173,6 +174,10 @@ export default function ProductDetail() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title={`${parent.baseName}${parent.brand ? ` by ${parent.brand}` : ''}`}
+        description={parent.description?.slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast dispatch and expert support.`}
+      />
       <Navigation />
       
       <main className="container mx-auto px-4 py-8 max-w-7xl">

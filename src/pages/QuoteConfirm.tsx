@@ -4,6 +4,7 @@ import { CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Navigation from '@/components/Navigation';
+import SEO from '@/components/SEO';
 
 const QuoteConfirm: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -11,6 +12,10 @@ const QuoteConfirm: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Quote Submitted"
+        description="Your quote request has been submitted successfully. Our team will respond within 24 hours with a tailored assistive technology quote."
+      />
       <Navigation />
       
       <main className="container mx-auto px-6 py-16">

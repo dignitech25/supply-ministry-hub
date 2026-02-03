@@ -2,10 +2,15 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, ExternalLink } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const SleepChoice = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Sleep Choice Program | 7-Day Risk-Free Bed Trial"
+        description="Try before you buy with Sleep Choice's 7-day risk-free trial program. Therapeutic beds and pressure-relieving mattresses for aged care and NDIS clients."
+      />
       <Navigation />
       
       {/* Hero Section */}

@@ -1,8 +1,13 @@
 import Navigation from "@/components/Navigation";
+import SEO from "@/components/SEO";
 
 const TermsConditions = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Terms & Conditions"
+        description="Review Supply Ministry's terms and conditions including pricing, delivery, returns policy, and privacy information for assistive technology purchases."
+      />
       <Navigation />
       
       <main className="container mx-auto px-4 py-20">

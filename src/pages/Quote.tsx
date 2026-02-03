@@ -1,10 +1,15 @@
 import Navigation from "@/components/Navigation";
 import QuoteForm from "@/components/QuoteForm";
+import SEO from "@/components/SEO";
 import { Clock, Shield, Phone } from "lucide-react";
 
 const Quote = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Request a Quote"
+        description="Get a no-obligation quote for assistive technology and mobility equipment. NDIS registered provider with 24-hour response time and expert support."
+      />
       <Navigation />
       
       {/* Header Section */}

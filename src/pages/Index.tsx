@@ -7,12 +7,17 @@ import ProductCategoryCards from "@/components/ProductCategoryCards";
 import AboutSection from "@/components/AboutSection";
 import FloatingQuoteButton from "@/components/FloatingQuoteButton";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Supply Ministry | Assistive Technology & Mobility Solutions Australia"
+        description="Australia's trusted provider of assistive technology, mobility aids, and therapeutic equipment. NDIS registered, 48-hour dispatch, expert support for aged care and disability services."
+      />
       <Navigation />
       <HeroSection />
       <BrandTrustStrip />
