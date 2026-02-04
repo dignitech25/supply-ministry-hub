@@ -1,40 +1,31 @@
 
-# Create Proper Branded OG Image
+
+# Replace OG Image with Your Branded Version
 
 ## Overview
-Replace the incorrect OG image with one that uses your actual Supply Ministry logo on a clean background.
+Copy your uploaded branded OG image to replace the current placeholder at `public/og-image.jpg`.
 
-## Design Specifications
-- **Dimensions**: 1200x630 pixels (optimal for social sharing)
-- **Background**: Clean white (`#FFFFFF`) or very light purple tint (`#F8F7FF`)
-- **Content**: Your actual logo from `Supply_Ministry_horizontal_no_phrase_updatedA-4.svg` centered
-- **Logo sizing**: Scaled to be prominent but with breathing room (approximately 60-70% of width)
-- **No additional text or taglines** - just your logo
+## What Will Change
 
-## Technical Approach
-
-### Option A: Use AI Image Generation
-Generate a new OG image with the exact specifications:
-- White/light background at 1200x630
-- Your logo centered and prominent
-- Brand purple (#5E45FF) preserved
-
-### Option B: Create via HTML/Canvas (More Precise)
-Create a simple HTML page that renders the logo on the correct background, then screenshot at the right dimensions. This ensures pixel-perfect logo rendering.
-
-## Files to Update
-
-| File | Change |
+| File | Action |
 |------|--------|
-| `public/og-image.jpg` | Replace with properly branded image |
+| `public/og-image.jpg` | Replace with your uploaded branded image |
 
-## Result
-When shared on social media (Facebook, LinkedIn, Twitter/X), links to supplyministry.com.au will display:
-- Your actual purple logo with rotating arrows icon
-- "Supply Ministry" text exactly as designed
-- Clean professional appearance matching your brand
+## Technical Notes
+- The image will be placed in `public/` folder since it's referenced directly in meta tags
+- File format: Will save as PNG (your upload format) but may need to rename to match existing `.jpg` reference in `index.html`
+- All existing meta tag references in `index.html` and `SEO.tsx` already point to `/og-image.jpg`
 
-## Next Steps After Implementation
-1. Test by sharing the published URL on social media or using Facebook Debugger
-2. Clear any cached social previews if needed
+## After Implementation
+Once published, when anyone shares a link to supplyministry.com.au on Facebook, LinkedIn, Twitter/X, or messaging apps, they'll see:
+- Your rotating arrows icon
+- "Supply Ministry" brand name
+- "CONNECTS CARE WITH SOLUTIONS" tagline
+- "Assistive Technology, Simplified" messaging
+- Your website URL
+
+## Verification Steps
+1. Publish the changes
+2. Use [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) to verify
+3. Share a link on any platform to confirm the preview
 
