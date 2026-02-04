@@ -15,6 +15,7 @@ const QuoteConfirm: React.FC = () => {
       <SEO 
         title="Quote Submitted"
         description="Your quote request has been submitted successfully. Our team will respond within 24 hours with a tailored assistive technology quote."
+        noindex={true}
       />
       <Navigation />
       
