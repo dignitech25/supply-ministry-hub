@@ -334,7 +334,7 @@ export default function Products() {
     <div className="min-h-screen bg-background">
       <SEO 
         title="Products | Assistive Technology & Mobility Equipment"
-        description="Browse our range of assistive technology, mobility aids, pressure care, and therapeutic equipment. Filter by category, brand, and more. NDIS registered provider."
+        description="Browse assistive technology, mobility aids, pressure care and therapeutic equipment. Filter by category and brand. Fast Australian dispatch."
       />
       <Navigation />
       

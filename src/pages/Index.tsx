@@ -15,8 +15,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Supply Ministry | Assistive Technology & Mobility Solutions Australia"
-        description="Australia's trusted provider of assistive technology, mobility aids, and therapeutic equipment. NDIS registered, 48-hour dispatch, expert support for aged care and disability services."
+        title="Assistive Technology & Mobility Aids | Supply Ministry"
+        description="Australia's trusted assistive technology provider. Mobility aids, therapeutic equipment & pressure care. 48-hour dispatch, NDIS registered."
       />
       <Navigation />
       <HeroSection />
