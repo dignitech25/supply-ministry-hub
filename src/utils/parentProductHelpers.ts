@@ -82,16 +82,32 @@ export async function fetchParentProduct(slug: string): Promise<ParentProduct | 
  * Finds the product with this SKU and returns its parent
  */
 export async function fetchParentProductBySku(sku: string): Promise<ParentProduct | null> {
+  return fetchParentProductByField('sku', sku);
+}
+
+/**
+ * Fetch a parent product by handle (database handle field)
+ * Finds the product with this handle and returns its parent
+ */
+export async function fetchParentProductByHandle(handle: string): Promise<ParentProduct | null> {
+  return fetchParentProductByField('handle', handle);
+}
+
+/**
+ * Internal helper to fetch parent product by any unique field
+ */
+async function fetchParentProductByField(field: 'sku' | 'handle', value: string): Promise<ParentProduct | null> {
   try {
     // Fetch the specific product
     const { data: product, error } = await supabase
       .from('products_categorized')
       .select('*')
-      .eq('sku', sku)
-      .single();
+      .eq(field, value)
+      .limit(1)
+      .maybeSingle();
     
     if (error || !product) {
-      console.error('Error fetching product by SKU:', error);
+      console.error(`Error fetching product by ${field}:`, error);
       return null;
     }
     
@@ -111,14 +127,16 @@ export async function fetchParentProductBySku(sku: string): Promise<ParentProduc
     
     // Find which parent contains this SKU
     for (const parent of parentMap.values()) {
-      if (parent.variants.some(v => v.sku === sku)) {
+      if (parent.variants.some(v => 
+        field === 'sku' ? v.sku === value : v.handle === value
+      )) {
         return parent;
       }
     }
     
     return null;
   } catch (error) {
-    console.error('Error in fetchParentProductBySku:', error);
+    console.error(`Error in fetchParentProductByField (${field}):`, error);
     return null;
   }
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Download, ExternalLink, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -20,12 +20,18 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuote } from '@/contexts/QuoteContext';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
-import { fetchParentProduct, fetchParentProductBySku } from '@/utils/parentProductHelpers';
+import { fetchParentProduct, fetchParentProductBySku, fetchParentProductByHandle } from '@/utils/parentProductHelpers';
 import { ParentProduct, ProductVariant } from '@/utils/variantHelpers';
 import { formatPrice } from '@/utils/productHelpers';
+import ProductSEOContent, { hasProductSEOContent, getProductFAQs } from '@/components/ProductSEOContent';
+import Footer from '@/components/Footer';
+import { createBreadcrumbSchema } from '@/components/SEO';
+
+const SITE_URL = 'https://supplyministry.com.au';
 
 export default function ProductDetail() {
   const { handle, sku } = useParams<{ handle?: string; sku?: string }>();
+  const location = useLocation();
   const [parent, setParent] = useState<ParentProduct | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [loading, setLoading] = useState(true);
@@ -48,8 +54,13 @@ export default function ProductDetail() {
         if (identifier.includes('_')) {
           // It's a parent slug
           parentData = await fetchParentProduct(identifier);
-        } else {
-          // It's likely a SKU, fetch by SKU
+        } else if (identifier.includes('-')) {
+          // It's likely a hyphenated handle from the database
+          parentData = await fetchParentProductByHandle(identifier);
+        }
+        
+        // If not found by handle, try by SKU
+        if (!parentData) {
           parentData = await fetchParentProductBySku(identifier);
         }
 
@@ -124,6 +135,97 @@ export default function ProductDetail() {
     setLineNotes('');
   };
 
+  // Build JSON-LD schemas
+  const buildProductSchema = () => {
+    if (!parent || !selectedVariant) return null;
+    
+    return {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": parent.baseName,
+      "description": parent.description || parent.descriptionLong,
+      "sku": selectedVariant.sku,
+      "brand": parent.brand ? {
+        "@type": "Brand",
+        "name": parent.brand
+      } : undefined,
+      "image": selectedVariant.imageUrl,
+      "category": parent.subcategory || parent.category,
+      "offers": {
+        "@type": "AggregateOffer",
+        "lowPrice": parent.fromPrice || undefined,
+        "highPrice": parent.variants.reduce((max, v) => {
+          const price = v.priceDiscounted || v.priceRrp || 0;
+          return price > max ? price : max;
+        }, 0) || undefined,
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "offerCount": parent.variants.length
+      }
+    };
+  };
+
+  const buildBreadcrumbSchema = () => {
+    if (!parent) return null;
+    
+    const items = [
+      { name: "Home", url: SITE_URL },
+      { name: "Products", url: `${SITE_URL}/products` }
+    ];
+    
+    if (parent.category) {
+      items.push({ 
+        name: parent.category, 
+        url: `${SITE_URL}/products?category=${encodeURIComponent(parent.category)}` 
+      });
+    }
+    
+    if (parent.subcategory) {
+      items.push({ 
+        name: parent.subcategory, 
+        url: `${SITE_URL}/products?category=${encodeURIComponent(parent.category || '')}&subcategory=${encodeURIComponent(parent.subcategory)}` 
+      });
+    }
+    
+    items.push({ name: parent.baseName, url: `${SITE_URL}${location.pathname}` });
+    
+    return createBreadcrumbSchema(items);
+  };
+
+  const buildFAQSchema = () => {
+    if (!parent) return null;
+    
+    const faqs = getProductFAQs(parent.slug);
+    if (faqs.length === 0) return null;
+    
+    return {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    };
+  };
+
+  // Combine all schemas
+  const getJsonLdSchemas = () => {
+    const schemas = [];
+    const productSchema = buildProductSchema();
+    const breadcrumbSchema = buildBreadcrumbSchema();
+    const faqSchema = buildFAQSchema();
+    
+    if (productSchema) schemas.push(productSchema);
+    if (breadcrumbSchema) schemas.push(breadcrumbSchema);
+    if (faqSchema) schemas.push(faqSchema);
+    
+    return schemas.length > 0 ? schemas : undefined;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -178,6 +280,14 @@ export default function ProductDetail() {
         title={`${parent.baseName}${parent.brand ? ` by ${parent.brand}` : ''}`}
         description={parent.description?.slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast dispatch and expert support.`}
       />
+      {/* JSON-LD rendered separately due to react-helmet-async limitations */}
+      {getJsonLdSchemas()?.map((schema, index) => (
+        <script 
+          key={`jsonld-${index}`} 
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
       <Navigation />
       
       <main className="container mx-auto px-4 py-8 max-w-7xl">
@@ -404,7 +514,13 @@ export default function ProductDetail() {
             </div>
           </Card>
         )}
+
+        {/* SEO Content Sections (for products with enhanced content) */}
+        <ProductSEOContent productSlug={parent.slug} />
       </main>
+
+      {/* Footer (shown when SEO content is present) */}
+      {hasProductSEOContent(parent.slug) && <Footer />}
     </div>
   );
 }
