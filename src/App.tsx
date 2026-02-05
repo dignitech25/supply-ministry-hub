@@ -16,6 +16,7 @@ import AdminCategoryQA from "./pages/AdminCategoryQA";
 import QuoteConfirm from "./pages/QuoteConfirm";
 import Resources from "./pages/Resources";
 import Quote from "./pages/Quote";
+ import AspireActivCareBed from "./pages/AspireActivCareBed";
 // import Category from "./pages/Category";
 // import Brand from "./pages/Brand";
 
@@ -39,6 +40,7 @@ const App = () => (
             
             {/* Product routes using product_catagorized table */}
             <Route path="/products" element={<Products />} />
+             <Route path="/products/aspire-comfimotion-activ-care-bed" element={<AspireActivCareBed />} />
             <Route path="/products/:sku" element={<ProductDetail />} />
             <Route path="/product/:handle" element={<ProductDetail />} />
             
