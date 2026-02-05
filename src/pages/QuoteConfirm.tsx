@@ -14,7 +14,7 @@ const QuoteConfirm: React.FC = () => {
     <div className="min-h-screen bg-background">
       <SEO 
         title="Quote Submitted"
-        description="Your quote request has been submitted successfully. Our team will respond within 24 hours with a tailored assistive technology quote."
+        description="Your quote request has been submitted successfully. Our team will respond within 24 hours with a tailored assistive technology solution."
         noindex={true}
       />
       <Navigation />
@@ -26,7 +26,7 @@ const QuoteConfirm: React.FC = () => {
               <div className="flex justify-center mb-4">
                 <CheckCircle className="w-20 h-20 text-green-500" />
               </div>
-              <CardTitle className="text-3xl text-primary">Quote Submitted Successfully!</CardTitle>
+              <h1 className="text-3xl font-bold text-primary">Quote Submitted Successfully!</h1>
             </CardHeader>
             
             <CardContent className="space-y-6 text-center">
