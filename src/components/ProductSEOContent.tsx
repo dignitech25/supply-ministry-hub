@@ -40,7 +40,7 @@
        title: "Melbourne Delivery & Setup",
        paragraphs: [
          "We offer professional delivery and white-glove setup service across Melbourne and surrounding areas. Our experienced team handles everything from careful transport to complete assembly in your client's home or facility.",
-         "We proudly service South East Melbourne including Bayside, Kingston, Casey, Monash, Glen Eira, and Frankston, as well as the broader Melbourne metropolitan area. Same-week delivery is often available for urgent requirements.",
+          "We proudly service South East Melbourne and the broader Melbourne metropolitan area. Same-week delivery is often available for urgent requirements.",
          "All deliveries include professional installation by trained technicians who will demonstrate all bed functions and ensure everything is working correctly before they leave.",
        ],
      },
