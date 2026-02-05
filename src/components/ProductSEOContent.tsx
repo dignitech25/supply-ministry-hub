@@ -166,7 +166,7 @@
            <div className="p-6 bg-background rounded-lg border">
              <p className="text-muted-foreground mb-4">{data.otSupport.description}</p>
              <div className="flex flex-col sm:flex-row gap-3">
-               <Button className="bg-orange-500 text-white hover:bg-orange-600" asChild>
+              <Button variant="cta" asChild>
                  <Link to="/quote">Request a Quote</Link>
                </Button>
                <Button variant="outline" asChild>
