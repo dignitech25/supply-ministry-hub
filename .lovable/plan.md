@@ -1,139 +1,31 @@
 
+## Fix the Favicon SVG
 
-# Create Dedicated Product Page: Aspire ComfiMotion Activ Care Bed
+The root problem is the `viewBox` in `public/favicon.svg` is wrong. It reads `104 314 512 512` which means:
+- Start at x=104, y=314
+- Show a 512x512 window from there (so up to x=616, y=826)
 
-## Overview
-Create a standalone, SEO-optimized landing page for the Aspire ComfiMotion Activ Care Bed at `/products/aspire-comfimotion-activ-care-bed`. This page will be a static content page (not database-driven) designed to target specific search intent and provide comprehensive product information.
+But the actual paths in the SVG span from roughly x=148 to x=586 and y=343 to y=826 — meaning the current viewBox clips the right side of the icon.
 
-## URL and Routing
+The correct viewBox needs to fully contain all 5 paths. Looking at the path data:
+- Leftmost point: ~x=148 (bottom-left arrow)
+- Rightmost point: ~x=586 (right arrow)  
+- Topmost point: ~y=343 (top arrow)
+- Bottommost point: ~y=826 (bottom-right arrow)
 
-| Item | Value |
-|------|-------|
-| Route | `/products/aspire-comfimotion-activ-care-bed` |
-| Component | `src/pages/AspireActivCareBed.tsx` |
-| Type | Static landing page (not database-driven) |
+The correct viewBox should be `"140 330 460 510"` (with some padding), which properly frames the full circular arrow logo.
 
-## Page Structure
+Additionally, I'll bump the cache-buster version to `?v=4` in `index.html` to force browsers to reload the updated favicon.
 
-### Header and Navigation
-- Standard Navigation component (consistent with rest of site)
-- SEO component with optimized title and meta description
+### Files to change
 
-### Section 1: Hero/Introduction
-**H1:** Aspire ComfiMotion Activ Care Bed
+1. **`public/favicon.svg`** — Fix `viewBox` to correctly frame all path content: `viewBox="140 330 460 510"`
+2. **`index.html`** — Bump version to `?v=4` to force cache refresh
 
-Content focus:
-- Who this bed is for (clients with complex mobility needs, those requiring frequent repositioning)
-- Why Occupational Therapists choose it (reliable positioning, pressure care compatibility, ease of use)
-- Brand badge for "Aspire"
+### Why this will work on supplyministry.com.au
 
-### Section 2: Key Features
-Bullet list format covering:
-- Hi-lo height adjustment range
-- 4-section profiling (backrest, thigh, knee break, Trendelenburg/reverse)
-- Central locking castors
-- Split side rail options
-- Weight capacity
-- Handset controls
-- Battery backup
+- The SVG was technically present and linked correctly, but the broken viewBox likely caused browsers to render it as blank/empty
+- When a favicon renders as blank, browsers fall back to a cached version (which in this case was the Lovable heart from before)
+- Fixing the viewBox + cache-busting version will force a proper re-render of the Supply Ministry logo
 
-### Section 3: Common Clinical Use Cases
-Bullet list format:
-- Post-surgical recovery requiring frequent position changes
-- Clients with respiratory conditions benefiting from head elevation
-- Pressure injury prevention and management
-- End-of-life care requiring comfortable repositioning
-- Neurological conditions requiring postural support
-
-### Section 4: Specifications Table
-Two-column table with placeholder values:
-
-| Specification | Value |
-|---------------|-------|
-| Overall Length | TBC |
-| Overall Width | TBC |
-| Minimum Height | TBC |
-| Maximum Height | TBC |
-| Safe Working Load | TBC |
-| Mattress Platform | TBC |
-| Power Supply | TBC |
-| Warranty | TBC |
-
-### Section 5: Melbourne Delivery & Setup
-Content mentioning:
-- Delivery and white-glove setup service available across Melbourne
-- South East Melbourne coverage including Bayside, Kingston, Casey, Monash, Glen Eira, and Frankston areas
-- Same-week delivery often available
-- Professional installation by trained technicians
-
-### Section 6: Support for Occupational Therapists
-Content covering:
-- Detailed product documentation available on request
-- Product trials can be arranged
-- Assistance with quote preparation
-- Direct phone support from team
-
-### Section 7: FAQs
-Accordion-style FAQ section:
-- **Delivery:** What's included in delivery and setup?
-- **Accessories:** What accessories are compatible?
-- **Lead times:** How quickly can this bed be delivered?
-- **Mattress compatibility:** What mattresses work with this bed?
-
-### CTAs
-- **Primary CTA:** "Get a Quote" button (orange, links to /quote)
-- **Secondary CTA:** "Call Us" button (outline style, links to tel:)
-
-### Footer
-- Standard Footer component
-
----
-
-## Technical Implementation
-
-### Files to Create/Modify
-
-| File | Action |
-|------|--------|
-| `src/pages/AspireActivCareBed.tsx` | **Create** - New dedicated product page component |
-| `src/App.tsx` | **Modify** - Add route for the new page |
-
-### Styling Approach
-- Use existing UI components: Card, Button, Badge, Accordion
-- Follow established patterns from Resources.tsx and SleepChoice.tsx
-- Primary CTA: `bg-orange-500 hover:bg-orange-600` (per project memory)
-- Section backgrounds alternating: white and `bg-soft-gray`
-- Card styling for specifications and FAQ sections
-
-### SEO Configuration
-```
-Title: Aspire ComfiMotion Activ Care Bed | Supply Ministry
-Description: ~155 chars about the bed for OTs/healthcare professionals in Melbourne
-Canonical: Auto-generated via SEO component
-```
-
-### Component Structure
-```text
-AspireActivCareBed.tsx
-+-- SEO (title, description)
-+-- Navigation
-+-- Hero Section (intro + brand badge)
-+-- Key Features Section (bullet list)
-+-- Clinical Use Cases Section (bullet list)
-+-- Specifications Section (Card + table)
-+-- Delivery Section (prose content)
-+-- OT Support Section (prose content)
-+-- FAQ Section (Accordion)
-+-- CTA Section (purple background, two buttons)
-+-- Footer
-```
-
----
-
-## Constraints Followed
-- No compliance/funding promises (NDIS claims avoided)
-- No database queries (static content page)
-- Uses existing site styling and components
-- All buttons functional with proper links
-- React Router Link components for internal navigation
-
+No other files need changing. This is a pure SVG viewport fix.
