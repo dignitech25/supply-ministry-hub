@@ -1,0 +1,2 @@
+# Redirect all non-www traffic to www permanently
+https://supplyministry.com.au/* https://www.supplyministry.com.au/:splat 301!
