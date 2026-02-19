@@ -125,6 +125,30 @@ export const createProductSchema = (product: {
   } : undefined
 });
 
+// LocalBusiness schema for homepage
+export const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "name": "Supply Ministry",
+  "url": "https://www.supplyministry.com.au",
+  "logo": "https://www.supplyministry.com.au/Supply_Ministry.svg",
+  "email": "david@supplyministry.com.au",
+  "telephone": ["+61452002450", "+61404593090"],
+  "openingHours": "Mo-Fr 08:30-17:00",
+  "areaServed": {
+    "@type": "Country",
+    "name": "Australia"
+  },
+  "priceRange": "$$",
+  "currenciesAccepted": "AUD",
+  "knowsAbout": [
+    "Assistive Technology",
+    "Mobility Equipment",
+    "NDIS Equipment",
+    "Aged Care Equipment"
+  ]
+};
+
 // Helper to create breadcrumb schema
 export const createBreadcrumbSchema = (items: { name: string; url: string }[]) => ({
   "@context": "https://schema.org",
