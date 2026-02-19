@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://supplyministry.com.au/sitemap.xml
+Sitemap: https://www.supplyministry.com.au/sitemap.xml
