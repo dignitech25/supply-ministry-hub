@@ -7,7 +7,7 @@ import ProductCategoryCards from "@/components/ProductCategoryCards";
 import AboutSection from "@/components/AboutSection";
 import FloatingQuoteButton from "@/components/FloatingQuoteButton";
 import Footer from "@/components/Footer";
-import SEO from "@/components/SEO";
+import SEO, { organizationSchema, localBusinessSchema } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 
@@ -17,6 +17,7 @@ const Index = () => {
       <SEO 
         title="Assistive Technology & Mobility Aids | Supply Ministry"
         description="Australia's trusted assistive technology provider. Mobility aids, therapeutic equipment & pressure care. 48-hour dispatch, NDIS registered."
+        jsonLd={[organizationSchema, localBusinessSchema]}
       />
       <Navigation />
       <HeroSection />
