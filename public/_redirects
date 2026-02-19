@@ -1,2 +1,5 @@
 # Redirect all non-www traffic to www permanently
 https://supplyministry.com.au/* https://www.supplyministry.com.au/:splat 301!
+
+# Dynamic sitemap served from Supabase edge function
+/sitemap.xml https://yngbsrovafbnczjaybkc.supabase.co/functions/v1/sitemap 200
