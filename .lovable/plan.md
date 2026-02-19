@@ -1,31 +1,48 @@
 
-## Fix the Favicon SVG
+## Update All URLs to www.supplyministry.com.au as Primary Domain
 
-The root problem is the `viewBox` in `public/favicon.svg` is wrong. It reads `104 314 512 512` which means:
-- Start at x=104, y=314
-- Show a 512x512 window from there (so up to x=616, y=826)
+### What this does (non-technical summary)
+Right now, all the SEO metadata, social sharing tags, and the sitemap reference `https://supplyministry.com.au` (no `www`). Google treats `supplyministry.com.au` and `www.supplyministry.com.au` as two different websites — so we need to pick one and use it everywhere consistently. We're choosing `https://www.supplyministry.com.au` as the canonical (authoritative) version.
 
-But the actual paths in the SVG span from roughly x=148 to x=586 and y=343 to y=826 — meaning the current viewBox clips the right side of the icon.
+The non-www version will still work — visitors going to `supplyministry.com.au` will be automatically redirected by Lovable to the www version. No broken links, no lost traffic.
 
-The correct viewBox needs to fully contain all 5 paths. Looking at the path data:
-- Leftmost point: ~x=148 (bottom-left arrow)
-- Rightmost point: ~x=586 (right arrow)  
-- Topmost point: ~y=343 (top arrow)
-- Bottommost point: ~y=826 (bottom-right arrow)
+### What will NOT be changed
+- Email addresses like `alex@supplyministry.com.au` — these are contact details, not website URLs, and should stay as-is
+- Links to external services (sleepchoice.com.au, etc.)
 
-The correct viewBox should be `"140 330 460 510"` (with some padding), which properly frames the full circular arrow logo.
+---
 
-Additionally, I'll bump the cache-buster version to `?v=4` in `index.html` to force browsers to reload the updated favicon.
+### Files to Change
 
-### Files to change
+**1. `src/components/SEO.tsx`** — The central SEO component used by every page
+- Change `SITE_URL` constant from `https://supplyministry.com.au` to `https://www.supplyministry.com.au`
+- Change `DEFAULT_OG_IMAGE` from `https://supplyministry.com.au/og-image.jpg` to `https://www.supplyministry.com.au/og-image.jpg`
+- Update `organizationSchema` — `url` and `logo` fields
 
-1. **`public/favicon.svg`** — Fix `viewBox` to correctly frame all path content: `viewBox="140 330 460 510"`
-2. **`index.html`** — Bump version to `?v=4` to force cache refresh
+**2. `src/pages/ProductDetail.tsx`** — Has its own local `SITE_URL` constant
+- Change `SITE_URL` from `https://supplyministry.com.au` to `https://www.supplyministry.com.au`
 
-### Why this will work on supplyministry.com.au
+**3. `public/sitemap.xml`** — All 6 `<loc>` entries need `www.` prefix added
+- Update lastmod dates to today (2026-02-19) while we're here
 
-- The SVG was technically present and linked correctly, but the broken viewBox likely caused browsers to render it as blank/empty
-- When a favicon renders as blank, browsers fall back to a cached version (which in this case was the Lovable heart from before)
-- Fixing the viewBox + cache-busting version will force a proper re-render of the Supply Ministry logo
+**4. `index.html`** — Static OG/Twitter meta tags at the top of the HTML file
+- `og:url` → `https://www.supplyministry.com.au/`
+- `og:image` → `https://www.supplyministry.com.au/og-image.jpg`
+- `twitter:image` → `https://www.supplyministry.com.au/og-image.jpg`
 
-No other files need changing. This is a pure SVG viewport fix.
+**5. `public/robots.txt`** — Sitemap reference URL
+- Change `Sitemap: https://supplyministry.com.au/sitemap.xml` → `https://www.supplyministry.com.au/sitemap.xml`
+
+---
+
+### Summary of Impact
+
+| File | Change |
+|---|---|
+| `src/components/SEO.tsx` | SITE_URL + OG image + organization schema (affects all pages) |
+| `src/pages/ProductDetail.tsx` | Local SITE_URL constant |
+| `public/sitemap.xml` | All 6 `<loc>` entries + updated lastmod |
+| `index.html` | og:url + og:image + twitter:image |
+| `public/robots.txt` | Sitemap pointer |
+
+After this, every canonical tag, OG tag, JSON-LD schema, and sitemap entry will consistently signal `www.supplyministry.com.au` as the one true home of the site — which is what Google needs to correctly index and rank it.
