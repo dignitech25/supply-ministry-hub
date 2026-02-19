@@ -1,56 +1,40 @@
 
-## Fix: www vs non-www Canonical Conflict Causing Google De-indexing
+## Add LocalBusiness JSON-LD Schema to Homepage
 
-### The Problem
+### What This Does
 
-Google Search Console shows:
-- User-declared canonical: `https://www.supplyministry.com.au/`
-- Google-selected canonical: `https://supplyministry.com.au/`
+A `LocalBusiness` JSON-LD schema tells Google structured facts about Supply Ministry — name, phone numbers, email, business hours, and service area — in a machine-readable format. This is what powers Google's Knowledge Panel, local search results, and the "Business details" cards that appear when users search for a business by name. Without it, Google has to infer these details from page text, which is unreliable.
 
-When Google sees the same content accessible at two different URLs (with and without `www`) and there is no permanent redirect between them, it treats them as duplicate pages. If its chosen canonical differs from yours, it ignores your declaration and the page is effectively not indexed under either URL.
+### What Will Be Added
 
-The code already does everything right — `SEO.tsx` outputs `www` canonical tags, the sitemap uses `www` URLs, and `robots.txt` references the `www` sitemap. The **only missing piece** is a server-level redirect to enforce the `www` preference.
+A new exported constant `localBusinessSchema` in `src/components/SEO.tsx`, then passed into the homepage `<SEO>` component alongside the existing `organizationSchema` using the `jsonLd` array prop (which already supports multiple schemas).
 
-### The Fix
+The schema will include:
 
-Add a `_redirects` file to the `public/` folder. Lovable's hosting (and most static hosts including Netlify/Cloudflare Pages) honour this file to perform permanent HTTP 301 redirects at the edge — before content is served.
+| Field | Value |
+|---|---|
+| `@type` | `MedicalBusiness` (a subtype of `LocalBusiness`, appropriate for assistive technology / healthcare equipment) |
+| `name` | Supply Ministry |
+| `url` | https://www.supplyministry.com.au |
+| `logo` | /Supply_Ministry.svg |
+| `telephone` (Alex) | +61452002450 |
+| `telephone` (David) | +61404593090 |
+| `email` | david@supplyministry.com.au |
+| `openingHours` | Mo-Fr 08:30-17:00 |
+| `areaServed` | Australia (Country type) |
+| `priceRange` | $$ |
+| `currenciesAccepted` | AUD |
+| `knowsAbout` | Assistive Technology, Mobility Equipment, NDIS Equipment, Aged Care Equipment |
 
-**`public/_redirects`** (new file):
-```
-# Redirect all non-www traffic to www permanently
-https://supplyministry.com.au/* https://www.supplyministry.com.au/:splat 301!
-```
-
-The `301` status tells Google this is permanent. The `!` forces the redirect even if a matching file exists. The `:splat` preserves the full URL path (e.g. `/products`, `/resources`) so every page redirects correctly, not just the homepage.
-
-### Also: Add a static canonical to `index.html`
-
-React Helmet writes canonical tags into the DOM via JavaScript, which means Google may parse the page before React runs and see no canonical at all. Adding a static fallback canonical directly to `index.html` ensures the correct www canonical is present even before JavaScript executes:
-
-**`index.html`** — add inside `<head>`:
-```html
-<link rel="canonical" href="https://www.supplyministry.com.au/" />
-```
-
-This acts as a belt-and-braces fallback on the homepage specifically (React Helmet will override it for inner pages when JS loads).
+Note: Supply Ministry has no single physical shopfront address visible anywhere in the codebase or contact details — it appears to operate as a service/distribution business across Australia. The schema will therefore omit `address` (which would require a street address) but include all other fields. If a physical address exists, it can be added later.
 
 ### Files to Change
 
-| File | Action | Why |
-|---|---|---|
-| `public/_redirects` | Create (new) | Forces 301 redirect from non-www to www at server level |
-| `index.html` | Add one line | Static canonical fallback before JS loads |
+| File | Change |
+|---|---|
+| `src/components/SEO.tsx` | Add `export const localBusinessSchema` constant |
+| `src/pages/Index.tsx` | Import `localBusinessSchema` and pass `[organizationSchema, localBusinessSchema]` to the `<SEO jsonLd={...}>` prop |
 
-### What Happens After Publishing
+### Technical Detail
 
-1. Anyone (or any bot) visiting `supplyministry.com.au/*` is immediately 301-redirected to `https://www.supplyministry.com.au/*`
-2. Google sees only one URL per page, matching the declared canonical
-3. The canonical conflict is resolved
-4. Request re-indexing in Google Search Console using the "Request Indexing" button on the affected URL
-
-### Technical Notes
-
-- The `_redirects` file is processed by Lovable's static hosting layer. No backend code is needed.
-- DNS-level www redirect (at your domain registrar) is an alternative, but the `_redirects` file approach works regardless of DNS configuration and is faster to deploy.
-- After publishing, use Google Search Console's URL Inspection tool to verify: the "Google-selected canonical" and "User-declared canonical" should both show `https://www.supplyministry.com.au/`
-- Re-indexing typically takes 1–7 days after Google re-crawls the corrected URLs.
+The homepage `<SEO>` component currently renders no `jsonLd` prop. Adding `jsonLd={[organizationSchema, localBusinessSchema]}` will output two separate `<script type="application/ld+json">` blocks in the `<head>` — both are valid and recommended by Google (one per schema type). The `SEO` component already handles arrays via the `jsonLdScripts` mapping on line 36–38, so no changes to the component rendering logic are needed.
