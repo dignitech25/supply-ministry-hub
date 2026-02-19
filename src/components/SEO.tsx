@@ -11,8 +11,8 @@ interface SEOProps {
   jsonLd?: object | object[];
 }
 
-const SITE_URL = 'https://supplyministry.com.au';
-const DEFAULT_OG_IMAGE = 'https://supplyministry.com.au/og-image.jpg';
+const SITE_URL = 'https://www.supplyministry.com.au';
+const DEFAULT_OG_IMAGE = 'https://www.supplyministry.com.au/og-image.jpg';
 
 const SEO = ({
   title = "Supply Ministry | Assistive Technology & Mobility Solutions",
@@ -81,8 +81,8 @@ export const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Supply Ministry",
-  "url": "https://supplyministry.com.au",
-  "logo": "https://supplyministry.com.au/Supply_Ministry.svg",
+  "url": "https://www.supplyministry.com.au",
+  "logo": "https://www.supplyministry.com.au/Supply_Ministry.svg",
   "description": "Australia's trusted provider of assistive technology, mobility aids, and therapeutic equipment for healthcare professionals and NDIS providers.",
   "email": "david@supplyministry.com.au",
   "areaServed": {

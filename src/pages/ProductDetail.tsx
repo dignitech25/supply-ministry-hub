@@ -27,7 +27,7 @@ import ProductSEOContent, { hasProductSEOContent, getProductFAQs } from '@/compo
 import Footer from '@/components/Footer';
 import { createBreadcrumbSchema } from '@/components/SEO';
 
-const SITE_URL = 'https://supplyministry.com.au';
+const SITE_URL = 'https://www.supplyministry.com.au';
 
 export default function ProductDetail() {
   const { handle, sku } = useParams<{ handle?: string; sku?: string }>();
