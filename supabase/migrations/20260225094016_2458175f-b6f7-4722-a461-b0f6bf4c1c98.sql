@@ -1,0 +1,1 @@
+UPDATE products SET price_discounted = 1449 WHERE sku = 'ICONKSL20M';
