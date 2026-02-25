@@ -17,6 +17,7 @@ const Footer = () => {
               <li><Link to="/#about" className="hover:opacity-100">About Us</Link></li>
               <li><Link to="/products" className="hover:opacity-100">Products</Link></li>
               <li><Link to="/sleep-choice" className="hover:opacity-100">Sleep Choice</Link></li>
+              <li><Link to="/support-at-home" className="hover:opacity-100">Support at Home</Link></li>
             </ul>
           </div>
           <div>
