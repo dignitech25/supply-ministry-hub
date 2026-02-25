@@ -1,0 +1,1 @@
+UPDATE products_categorized SET price_discounted = '1035' WHERE sku = 'IC30KS';
