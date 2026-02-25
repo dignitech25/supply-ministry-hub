@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
@@ -37,6 +37,12 @@ export const CategoryNavigation = () => {
             {category}
           </Button>
         ))}
+        <Link
+          to="/support-at-home"
+          className="text-sm font-medium text-foreground hover:text-primary transition"
+        >
+          Support at Home
+        </Link>
         <Button 
           size="sm" 
           onClick={handleShopNowClick}
@@ -47,8 +53,8 @@ export const CategoryNavigation = () => {
         </Button>
       </div>
 
-      {/* Mobile - Just Shop Now */}
-      <div className="md:hidden flex items-center justify-center py-2">
+      {/* Mobile */}
+      <div className="md:hidden flex flex-col items-center gap-2 py-2">
         <Button 
           onClick={handleShopNowClick}
           className="bg-orange-500 text-white px-6 py-2.5 rounded-md hover:bg-orange-600 transition-colors font-semibold w-full max-w-xs"
@@ -56,6 +62,12 @@ export const CategoryNavigation = () => {
           Shop Now
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
+        <Link
+          to="/support-at-home"
+          className="text-sm font-medium text-muted-foreground hover:text-primary transition"
+        >
+          Support at Home
+        </Link>
       </div>
     </div>
   );
