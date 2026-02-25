@@ -1,40 +1,44 @@
 
-## Add LocalBusiness JSON-LD Schema to Homepage
 
-### What This Does
+## Support at Home Page
 
-A `LocalBusiness` JSON-LD schema tells Google structured facts about Supply Ministry — name, phone numbers, email, business hours, and service area — in a machine-readable format. This is what powers Google's Knowledge Panel, local search results, and the "Business details" cards that appear when users search for a business by name. Without it, Google has to infer these details from page text, which is unreliable.
+### What this adds
+A new informational page at `/support-at-home` for OTs, case managers, and community care coordinators. It explains that Supply Ministry works with whoever is managing a case to identify available funding, optimise how it applies to equipment, and get things moving without waiting on slow SAH approval processes. The page is clean, professional, prose-only -- no bullet lists, banners, forms, or widgets.
 
-### What Will Be Added
+### Content structure
 
-A new exported constant `localBusinessSchema` in `src/components/SEO.tsx`, then passed into the homepage `<SEO>` component alongside the existing `organizationSchema` using the `jsonLd` array prop (which already supports multiple schemas).
+1. **Headline** -- Names the SAH approval delay problem directly
+2. **Two to three paragraphs** -- Acknowledges SAH has slowed the path from clinical need to equipment arrival; cases sitting in queues while clients wait
+3. **What Supply Ministry does** -- Works with whoever manages the case to look at what funding is already available, map how it applies to equipment now, and move things forward
+4. **Sleep Choice connection** -- Where the clinical decision is still open, a 7-night in-home trial through Sleep Choice (sleepchoice.com.au) confirms the right setup before any supply commitment, keeping the recommendation clean and the funding conversation straightforward
+5. **Contact prompt** -- Simple text inviting people to get in touch, with david@supplyministry.com.au. No form, no button, no widget
 
-The schema will include:
+### Files to create or modify
 
-| Field | Value |
-|---|---|
-| `@type` | `MedicalBusiness` (a subtype of `LocalBusiness`, appropriate for assistive technology / healthcare equipment) |
-| `name` | Supply Ministry |
-| `url` | https://www.supplyministry.com.au |
-| `logo` | /Supply_Ministry.svg |
-| `telephone` (Alex) | +61452002450 |
-| `telephone` (David) | +61404593090 |
-| `email` | david@supplyministry.com.au |
-| `openingHours` | Mo-Fr 08:30-17:00 |
-| `areaServed` | Australia (Country type) |
-| `priceRange` | $$ |
-| `currenciesAccepted` | AUD |
-| `knowsAbout` | Assistive Technology, Mobility Equipment, NDIS Equipment, Aged Care Equipment |
+**1. New file: `src/pages/SupportAtHome.tsx`**
+- Uses `Navigation`, `Footer`, and `SEO` components (same pattern as `SleepChoice.tsx`)
+- Subtle heading area with `bg-gradient-card`, matching other informational pages
+- Body in a `max-w-3xl` container with short `<p>` blocks
+- Sleep Choice mention links to `https://sleepchoice.com.au` (external) and `/sleep-choice` (internal)
+- Contact section: quiet `bg-muted/30` block with a `mailto:` link, no CTA button
+- No `<ul>` or `<li>` elements anywhere on the page
+- SEO title under 60 characters, meta description 145-160 characters
+- Compliance note respected: no promises about funding coverage or guarantees
 
-Note: Supply Ministry has no single physical shopfront address visible anywhere in the codebase or contact details — it appears to operate as a service/distribution business across Australia. The schema will therefore omit `address` (which would require a street address) but include all other fields. If a physical address exists, it can be added later.
+**2. `src/App.tsx`** -- Add route
+- Import `SupportAtHome`
+- Add `<Route path="/support-at-home" element={<SupportAtHome />} />`
 
-### Files to Change
+**3. `src/components/Footer.tsx`** -- Add nav link
+- Add "Support at Home" to the Quick Links list alongside About Us, Products, and Sleep Choice
 
-| File | Change |
-|---|---|
-| `src/components/SEO.tsx` | Add `export const localBusinessSchema` constant |
-| `src/pages/Index.tsx` | Import `localBusinessSchema` and pass `[organizationSchema, localBusinessSchema]` to the `<SEO jsonLd={...}>` prop |
+**4. `src/components/CategoryNavigation.tsx`** -- Add to main nav
+- Desktop: add a "Support at Home" text link in the navigation bar
+- Mobile: add it as a secondary link below the Shop Now button
 
-### Technical Detail
+### Design approach
+- No hero banner or image -- heading area only with soft gradient background
+- All body text in short paragraphs, no lists
+- Mobile responsive via existing Tailwind container and max-width utilities
+- No new dependencies required
 
-The homepage `<SEO>` component currently renders no `jsonLd` prop. Adding `jsonLd={[organizationSchema, localBusinessSchema]}` will output two separate `<script type="application/ld+json">` blocks in the `<head>` — both are valid and recommended by Google (one per schema type). The `SEO` component already handles arrays via the `jsonLdScripts` mapping on line 36–38, so no changes to the component rendering logic are needed.
