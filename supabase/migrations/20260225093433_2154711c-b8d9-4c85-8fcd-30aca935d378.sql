@@ -1,0 +1,1 @@
+UPDATE products SET price_discounted = 3974 WHERE sku = 'BEB046750';
