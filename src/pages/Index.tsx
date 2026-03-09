@@ -19,7 +19,7 @@ const Index = () => {
       <SEO 
         title="Assistive Technology & Mobility Aids | Supply Ministry"
         description="Australia's trusted assistive technology provider. Mobility aids, therapeutic equipment & pressure care. 48-hour dispatch."
-        jsonLd={[organizationSchema, localBusinessSchema]}
+        jsonLd={[organizationSchema, localBusinessSchema, faqPageSchema]}
       />
       <Navigation />
       <main id="main-content">
