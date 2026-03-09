@@ -279,15 +279,9 @@ export default function ProductDetail() {
       <SEO 
         title={`${parent.baseName}${parent.brand ? ` by ${parent.brand}` : ''}`}
         description={parent.description?.slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast dispatch and expert support.`}
+        image={selectedVariant.imageUrl || undefined}
+        jsonLd={getJsonLdSchemas()}
       />
-      {/* JSON-LD rendered separately due to react-helmet-async limitations */}
-      {getJsonLdSchemas()?.map((schema, index) => (
-        <script 
-          key={`jsonld-${index}`} 
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
       <Navigation />
       
       <main className="container mx-auto px-4 py-8 max-w-7xl">
@@ -342,7 +336,7 @@ export default function ProductDetail() {
             <div className="aspect-square rounded-xl overflow-hidden bg-gray-100 relative">
               <img
                 src={displayImage}
-                alt={`${parent.brand} ${parent.baseName}`}
+                alt={`${parent.brand || ''} ${parent.baseName} – ${parent.category || 'assistive technology'} from Supply Ministry`.trim()}
                 className="w-full h-full object-cover"
               />
             </div>

@@ -13,6 +13,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from '@/components/ui/pagination';
 import { useIsMobile } from '@/hooks/use-mobile';
 import Footer from '@/components/Footer';
+import { createBreadcrumbSchema } from '@/components/SEO';
 
 import { formatPrice } from '@/utils/productHelpers';
 import { groupIntoParents } from '@/utils/variantHelpers';
@@ -336,6 +337,10 @@ export default function Products() {
       <SEO 
         title="Products | Assistive Technology & Mobility Equipment"
         description="Browse assistive technology, mobility aids, pressure care and therapeutic equipment. Filter by category and brand. Fast Australian dispatch."
+        jsonLd={createBreadcrumbSchema([
+          { name: "Home", url: "https://www.supplyministry.com.au" },
+          { name: "Products", url: "https://www.supplyministry.com.au/products" }
+        ])}
       />
       <Navigation />
       

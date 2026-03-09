@@ -64,6 +64,10 @@ const SEO = ({
       {/* Canonical */}
       <link rel="canonical" href={canonicalUrl} />
       
+      {/* Hreflang */}
+      <link rel="alternate" hrefLang="en-AU" href={canonicalUrl} />
+      <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
+      
       {/* JSON-LD Structured Data */}
       {jsonLdScripts.map((script, index) => (
         <script 
