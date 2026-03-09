@@ -170,31 +170,19 @@ const Index = () => {
             >
               Request a Quote
             </Link>
-            <div className="grid sm:grid-cols-2 gap-6 max-w-xl mx-auto">
-              <a href="tel:+61452002450" className="group relative bg-gradient-to-br from-primary-foreground/[0.12] to-primary-foreground/[0.04] hover:from-primary-foreground/[0.20] hover:to-primary-foreground/[0.08] backdrop-blur-md border border-primary-foreground/15 rounded-3xl p-7 text-center transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/20 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative z-10">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center mx-auto mb-4 text-lg font-bold text-white shadow-lg shadow-orange-500/30 group-hover:scale-110 transition-transform duration-300">A</div>
-                  <p className="font-bold text-lg mb-1">Alex</p>
-                  <p className="text-xs opacity-60 mb-3 font-medium">alex@supplyministry.com.au</p>
-                  <div className="bg-primary-foreground/10 rounded-full px-4 py-2 inline-block group-hover:bg-primary-foreground/20 transition-colors">
-                    <p className="text-base font-bold tracking-wide">0452 002 450</p>
-                  </div>
-                </div>
-              </a>
-              <a href="tel:+61404593090" className="group relative bg-gradient-to-br from-primary-foreground/[0.12] to-primary-foreground/[0.04] hover:from-primary-foreground/[0.20] hover:to-primary-foreground/[0.08] backdrop-blur-md border border-primary-foreground/15 rounded-3xl p-7 text-center transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/20 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative z-10">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center mx-auto mb-4 text-lg font-bold text-white shadow-lg shadow-orange-500/30 group-hover:scale-110 transition-transform duration-300">D</div>
-                  <p className="font-bold text-lg mb-1">David</p>
-                  <p className="text-xs opacity-60 mb-3 font-medium">david@supplyministry.com.au</p>
-                  <div className="bg-primary-foreground/10 rounded-full px-4 py-2 inline-block group-hover:bg-primary-foreground/20 transition-colors">
-                    <p className="text-base font-bold tracking-wide">0404 593 090</p>
-                  </div>
-                </div>
-              </a>
+            <div className="grid sm:grid-cols-2 gap-8 max-w-md mx-auto text-center">
+              <div>
+                <p className="font-bold text-xl mb-2">Alex</p>
+                <a href="mailto:alex@supplyministry.com.au" className="block text-sm opacity-80 hover:opacity-100 transition-opacity mb-1">alex@supplyministry.com.au</a>
+                <a href="tel:+61452002450" className="block text-2xl font-bold tracking-tight hover:opacity-80 transition-opacity">0452 002 450</a>
+              </div>
+              <div>
+                <p className="font-bold text-xl mb-2">David</p>
+                <a href="mailto:david@supplyministry.com.au" className="block text-sm opacity-80 hover:opacity-100 transition-opacity mb-1">david@supplyministry.com.au</a>
+                <a href="tel:+61404593090" className="block text-2xl font-bold tracking-tight hover:opacity-80 transition-opacity">0404 593 090</a>
+              </div>
             </div>
-            <p className="text-xs opacity-50 mt-8 tracking-wide">Monday – Friday · 8:30 AM – 5:00 PM AEST</p>
+            <p className="text-xs opacity-40 mt-10 tracking-wide">Monday – Friday · 8:30 AM – 5:00 PM AEST</p>
           </div>
         </section>
       </main>
