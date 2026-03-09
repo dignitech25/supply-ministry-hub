@@ -38,7 +38,7 @@ const Navigation = () => {
               <img 
                 src="/Supply_Ministry_horizontal_no_phrase_updatedA-4.svg" 
                 alt="Supply Ministry" 
-                className="h-10 w-auto"
+                className="h-20 w-auto"
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder.svg';
                 }}
