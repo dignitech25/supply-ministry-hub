@@ -41,7 +41,7 @@ const Index = () => {
           <AboutSection />
         </AnimatedSection>
         
-        <FloatingQuoteButton />
+        <FloatingSmartCTA />
         
         {/* Sleep Choice Program */}
         <AnimatedSection>

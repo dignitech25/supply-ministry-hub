@@ -46,14 +46,7 @@ export const CategoryNavigation = () => {
       </div>
 
       {/* Mobile */}
-      <div className="md:hidden flex flex-col items-center gap-2 py-2">
-        <Button 
-          onClick={handleShopNowClick}
-          className="bg-orange-500 text-white px-6 py-2.5 rounded-md hover:bg-orange-600 transition-colors font-semibold w-full max-w-xs"
-        >
-          Shop Now
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
+      <div className="md:hidden flex items-center justify-center py-2">
         <Link
           to="/support-at-home"
           className="text-sm font-medium text-muted-foreground hover:text-primary transition"
