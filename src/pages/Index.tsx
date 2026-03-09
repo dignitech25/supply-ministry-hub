@@ -156,34 +156,35 @@ const Index = () => {
         </AnimatedSection>
 
 
-        <section id="contact" className="py-20 bg-primary text-primary-foreground">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
-            <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-              Contact our experienced team today to discuss your assistive technology needs. 
-              We're here to help you find the perfect solutions for your clients.
+        <section id="contact" className="py-24 bg-gradient-to-br from-primary to-primary/85 text-primary-foreground relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+          <div className="container mx-auto px-4 text-center relative z-10">
+            <p className="text-sm font-medium tracking-widest uppercase opacity-70 mb-4">Let's Talk</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-5">Ready to Get Started?</h2>
+            <p className="text-lg mb-10 opacity-80 max-w-xl mx-auto leading-relaxed">
+              Reach out to our team to discuss your assistive technology needs. We'll help find the perfect solutions for your clients.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Link 
-                to="/quote"
-                className="bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
-              >
-                Request a Quote
-              </Link>
+            <Link 
+              to="/quote"
+              className="inline-block bg-orange-500 text-white px-10 py-4 rounded-full font-semibold text-lg hover:bg-orange-600 hover:scale-105 transition-all duration-200 shadow-lg shadow-orange-500/25 mb-14"
+            >
+              Request a Quote
+            </Link>
+            <div className="grid sm:grid-cols-2 gap-5 max-w-lg mx-auto">
+              <a href="tel:+61452002450" className="group bg-primary-foreground/[0.08] hover:bg-primary-foreground/[0.15] backdrop-blur-sm border border-primary-foreground/10 rounded-2xl p-6 text-center transition-all duration-200 hover:-translate-y-0.5">
+                <div className="w-10 h-10 rounded-full bg-primary-foreground/15 flex items-center justify-center mx-auto mb-3 text-sm font-bold">A</div>
+                <p className="font-semibold text-base mb-0.5">Alex</p>
+                <p className="text-sm opacity-70 mb-2">alex@supplyministry.com.au</p>
+                <p className="text-lg font-semibold group-hover:opacity-100 opacity-90 transition-opacity">0452 002 450</p>
+              </a>
+              <a href="tel:+61404593090" className="group bg-primary-foreground/[0.08] hover:bg-primary-foreground/[0.15] backdrop-blur-sm border border-primary-foreground/10 rounded-2xl p-6 text-center transition-all duration-200 hover:-translate-y-0.5">
+                <div className="w-10 h-10 rounded-full bg-primary-foreground/15 flex items-center justify-center mx-auto mb-3 text-sm font-bold">D</div>
+                <p className="font-semibold text-base mb-0.5">David</p>
+                <p className="text-sm opacity-70 mb-2">david@supplyministry.com.au</p>
+                <p className="text-lg font-semibold group-hover:opacity-100 opacity-90 transition-opacity">0404 593 090</p>
+              </a>
             </div>
-            <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto mt-2">
-              <div className="bg-primary-foreground/10 rounded-lg p-5 text-left">
-                <p className="font-semibold text-lg mb-1">Alex</p>
-                <a href="mailto:alex@supplyministry.com.au" className="block text-sm opacity-90 hover:opacity-100 underline underline-offset-2 mb-1">alex@supplyministry.com.au</a>
-                <a href="tel:+61452002450" className="block text-sm opacity-90 hover:opacity-100">0452 002 450</a>
-              </div>
-              <div className="bg-primary-foreground/10 rounded-lg p-5 text-left">
-                <p className="font-semibold text-lg mb-1">David</p>
-                <a href="mailto:david@supplyministry.com.au" className="block text-sm opacity-90 hover:opacity-100 underline underline-offset-2 mb-1">david@supplyministry.com.au</a>
-                <a href="tel:+61404593090" className="block text-sm opacity-90 hover:opacity-100">0404 593 090</a>
-              </div>
-            </div>
-            <p className="text-sm opacity-60 mt-6">Monday – Friday, 8:30 AM – 5:00 PM AEST</p>
+            <p className="text-xs opacity-50 mt-8 tracking-wide">Monday – Friday · 8:30 AM – 5:00 PM AEST</p>
           </div>
         </section>
       </main>
