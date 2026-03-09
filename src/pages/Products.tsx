@@ -12,6 +12,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from '@/components/ui/pagination';
 import { useIsMobile } from '@/hooks/use-mobile';
+import Footer from '@/components/Footer';
 
 import { formatPrice } from '@/utils/productHelpers';
 import { groupIntoParents } from '@/utils/variantHelpers';
