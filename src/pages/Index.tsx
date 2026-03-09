@@ -151,7 +151,11 @@ const Index = () => {
           </section>
         </AnimatedSection>
 
-        {/* Contact Section */}
+        <AnimatedSection>
+          <FAQSection />
+        </AnimatedSection>
+
+
         <section id="contact" className="py-20 bg-primary text-primary-foreground">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
