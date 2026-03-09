@@ -337,6 +337,10 @@ export default function Products() {
       <SEO 
         title="Products | Assistive Technology & Mobility Equipment"
         description="Browse assistive technology, mobility aids, pressure care and therapeutic equipment. Filter by category and brand. Fast Australian dispatch."
+        jsonLd={createBreadcrumbSchema([
+          { name: "Home", url: "https://www.supplyministry.com.au" },
+          { name: "Products", url: "https://www.supplyministry.com.au/products" }
+        ])}
       />
       <Navigation />
       

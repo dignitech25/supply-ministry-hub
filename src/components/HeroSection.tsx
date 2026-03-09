@@ -31,8 +31,8 @@ const HeroSection = () => {
           </h1>
             
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-              We bring you a wide range of mobility and home modification solutions 
-              for your clients across Greater Metropolitan Melbourne.
+              Australia's trusted provider of mobility aids, therapeutic beds, and home modification solutions 
+              for healthcare professionals and NDIS providers.
             </p>
 
             {/* Key Benefits */}

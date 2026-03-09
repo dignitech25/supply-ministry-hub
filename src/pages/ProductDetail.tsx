@@ -336,7 +336,7 @@ export default function ProductDetail() {
             <div className="aspect-square rounded-xl overflow-hidden bg-gray-100 relative">
               <img
                 src={displayImage}
-                alt={`${parent.brand} ${parent.baseName}`}
+                alt={`${parent.brand || ''} ${parent.baseName} – ${parent.category || 'assistive technology'} from Supply Ministry`.trim()}
                 className="w-full h-full object-cover"
               />
             </div>

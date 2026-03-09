@@ -14,6 +14,7 @@ const STATIC_PAGES = [
   { loc: `${SITE_URL}/quote`, changefreq: "monthly", priority: "0.8", lastmod: TODAY },
   { loc: `${SITE_URL}/resources`, changefreq: "weekly", priority: "0.7", lastmod: TODAY },
   { loc: `${SITE_URL}/sleep-choice`, changefreq: "monthly", priority: "0.7", lastmod: TODAY },
+  { loc: `${SITE_URL}/support-at-home`, changefreq: "monthly", priority: "0.7", lastmod: TODAY },
   { loc: `${SITE_URL}/terms`, changefreq: "yearly", priority: "0.3", lastmod: TODAY },
 ];
 
