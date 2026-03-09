@@ -526,6 +526,7 @@ export default function Products() {
             )}
           </div>
       </main>
+      <Footer />
     </div>
   );
 }
