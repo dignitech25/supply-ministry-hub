@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { BookOpen, FileText, HelpCircle, Info, ExternalLink, Download } from "lucide-react";
+import { BookOpen, FileText, HelpCircle, Info, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Resources = () => {
