@@ -6,28 +6,28 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground py-12">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-8">
-          <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm opacity-80">
-              <li><Link to="/#about" className="hover:opacity-100">About Us</Link></li>
-              <li><Link to="/products" className="hover:opacity-100">Products</Link></li>
-              <li><Link to="/sleep-choice" className="hover:opacity-100">Sleep Choice</Link></li>
-              <li><Link to="/support-at-home" className="hover:opacity-100">Support at Home</Link></li>
+        <div className="flex flex-col sm:flex-row justify-center gap-16 sm:gap-24 max-w-lg mx-auto">
+          <div className="text-center sm:text-left">
+            <h4 className="font-semibold mb-4 text-base">Quick Links</h4>
+            <ul className="space-y-2.5 text-sm opacity-80">
+              <li><Link to="/#about" className="hover:opacity-100 transition-opacity">About Us</Link></li>
+              <li><Link to="/products" className="hover:opacity-100 transition-opacity">Products</Link></li>
+              <li><Link to="/sleep-choice" className="hover:opacity-100 transition-opacity">Sleep Choice</Link></li>
+              <li><Link to="/support-at-home" className="hover:opacity-100 transition-opacity">Support at Home</Link></li>
             </ul>
           </div>
-          <div>
-            <h4 className="font-semibold mb-4">Resources</h4>
-            <ul className="space-y-2 text-sm opacity-80">
-              <li><Link to="/resources#resource-library" className="hover:opacity-100">Resource Library</Link></li>
-              <li><Link to="/resources#blog" className="hover:opacity-100">Supply Line Blog</Link></li>
-              <li><Link to="/resources#faq" className="hover:opacity-100">FAQ</Link></li>
-              <li><Link to="/resources#ndis" className="hover:opacity-100">NDIS Information</Link></li>
+          <div className="text-center sm:text-left">
+            <h4 className="font-semibold mb-4 text-base">Resources</h4>
+            <ul className="space-y-2.5 text-sm opacity-80">
+              <li><Link to="/resources#resource-library" className="hover:opacity-100 transition-opacity">Resource Library</Link></li>
+              <li><Link to="/resources#blog" className="hover:opacity-100 transition-opacity">Supply Line Blog</Link></li>
+              <li><Link to="/resources#faq" className="hover:opacity-100 transition-opacity">FAQ</Link></li>
+              <li><Link to="/resources#ndis" className="hover:opacity-100 transition-opacity">NDIS Information</Link></li>
             </ul>
           </div>
         </div>
-        <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-sm opacity-60">
-          <p>&copy; {currentYear} Supply Ministry. All rights reserved. | <Link to="/terms" className="hover:opacity-100">Terms & Conditions</Link></p>
+        <div className="border-t border-primary-foreground/20 mt-10 pt-6 text-center text-sm opacity-60">
+          <p>&copy; {currentYear} Supply Ministry. All rights reserved. | <Link to="/terms" className="hover:opacity-100 transition-opacity">Terms &amp; Conditions</Link></p>
         </div>
       </div>
     </footer>
