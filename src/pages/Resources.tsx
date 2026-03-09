@@ -41,32 +41,6 @@ const Resources = () => {
     }
   ];
 
-  const blogPosts = [
-    {
-      title: "5 Essential Mobility Aids for Aging in Place",
-      date: "December 2024",
-      excerpt: "Discover the top mobility solutions that help seniors maintain independence and safety in their own homes.",
-      category: "Mobility"
-    },
-    {
-      title: "Understanding NDIS Funding for Assistive Technology",
-      date: "November 2024",
-      excerpt: "A comprehensive guide to navigating NDIS funding categories and maximizing support for your clients.",
-      category: "NDIS"
-    },
-    {
-      title: "The Importance of Proper Seating Assessments",
-      date: "November 2024",
-      excerpt: "Why professional seating assessments are crucial for comfort, health, and long-term wellbeing.",
-      category: "Clinical"
-    },
-    {
-      title: "Pressure Care: Prevention is Better Than Cure",
-      date: "October 2024",
-      excerpt: "Expert insights on preventing pressure injuries through proper equipment selection and care protocols.",
-      category: "Healthcare"
-    }
-  ];
 
   const faqs = [
     {
