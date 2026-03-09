@@ -9,6 +9,7 @@ import FloatingQuoteButton from "@/components/FloatingQuoteButton";
 import Footer from "@/components/Footer";
 import SEO, { organizationSchema, localBusinessSchema } from "@/components/SEO";
 import AnimatedSection from "@/components/AnimatedSection";
+import FAQSection from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 
