@@ -9,7 +9,7 @@ import FloatingSmartCTA from "@/components/FloatingSmartCTA";
 import Footer from "@/components/Footer";
 import SEO, { organizationSchema, localBusinessSchema } from "@/components/SEO";
 import AnimatedSection from "@/components/AnimatedSection";
-import FAQSection from "@/components/FAQSection";
+import FAQSection, { faqPageSchema } from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 
