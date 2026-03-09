@@ -5,7 +5,7 @@ import BrandTrustStrip from "@/components/BrandTrustStrip";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ProductCategoryCards from "@/components/ProductCategoryCards";
 import AboutSection from "@/components/AboutSection";
-import FloatingQuoteButton from "@/components/FloatingQuoteButton";
+import FloatingSmartCTA from "@/components/FloatingSmartCTA";
 import Footer from "@/components/Footer";
 import SEO, { organizationSchema, localBusinessSchema } from "@/components/SEO";
 import AnimatedSection from "@/components/AnimatedSection";
