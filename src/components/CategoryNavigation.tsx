@@ -43,14 +43,6 @@ export const CategoryNavigation = () => {
         >
           Support at Home
         </Link>
-        <Button 
-          size="sm" 
-          onClick={handleShopNowClick}
-          className="bg-orange-500 text-white px-6 py-2.5 rounded-md hover:bg-orange-600 transition-colors font-semibold ml-2"
-        >
-          Shop Now
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
       </div>
 
       {/* Mobile */}
