@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground py-12">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           <div>
             <h3 className="font-semibold mb-4">Supply Ministry</h3>
             <p className="text-sm opacity-80 mb-4">Connecting care with solutions across Australia</p>
@@ -28,13 +28,6 @@ const Footer = () => {
               <li><Link to="/resources#faq" className="hover:opacity-100">FAQ</Link></li>
               <li><Link to="/resources#ndis" className="hover:opacity-100">NDIS Information</Link></li>
             </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
-            <p className="text-sm opacity-80 mb-3">Mon-Fri: 8:30 AM - 5:00 PM AEST</p>
-            <Link to="/quote" className="text-sm opacity-80 hover:opacity-100 underline underline-offset-2">
-              Get in Touch →
-            </Link>
           </div>
         </div>
         <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-sm opacity-60">

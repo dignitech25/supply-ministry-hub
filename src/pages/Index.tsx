@@ -171,11 +171,19 @@ const Index = () => {
                 Request a Quote
               </Link>
             </div>
-            <div className="text-sm opacity-75 space-y-2">
-              <p><strong>Alex:</strong> alex@supplyministry.com.au | 0452 002 450</p>
-              <p><strong>David:</strong> david@supplyministry.com.au | 0404 593 090</p>
-              <p>Business Hours: Monday - Friday, 8:30 AM - 5:00 PM AEST</p>
+            <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto mt-2">
+              <div className="bg-primary-foreground/10 rounded-lg p-5 text-left">
+                <p className="font-semibold text-lg mb-1">Alex</p>
+                <a href="mailto:alex@supplyministry.com.au" className="block text-sm opacity-90 hover:opacity-100 underline underline-offset-2 mb-1">alex@supplyministry.com.au</a>
+                <a href="tel:+61452002450" className="block text-sm opacity-90 hover:opacity-100">0452 002 450</a>
+              </div>
+              <div className="bg-primary-foreground/10 rounded-lg p-5 text-left">
+                <p className="font-semibold text-lg mb-1">David</p>
+                <a href="mailto:david@supplyministry.com.au" className="block text-sm opacity-90 hover:opacity-100 underline underline-offset-2 mb-1">david@supplyministry.com.au</a>
+                <a href="tel:+61404593090" className="block text-sm opacity-90 hover:opacity-100">0404 593 090</a>
+              </div>
             </div>
+            <p className="text-sm opacity-60 mt-6">Monday – Friday, 8:30 AM – 5:00 PM AEST</p>
           </div>
         </section>
       </main>
