@@ -6,11 +6,7 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground py-12">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="font-semibold mb-4">Supply Ministry</h3>
-            <p className="text-sm opacity-80 mb-4">Connecting care with solutions across Australia</p>
-          </div>
+        <div className="grid md:grid-cols-2 gap-8">
           <div>
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm opacity-80">
