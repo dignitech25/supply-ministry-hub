@@ -1,6 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 
 export const CategoryNavigation = () => {
   const navigate = useNavigate();
