@@ -31,13 +31,10 @@ const Footer = () => {
           </div>
           <div>
             <h4 className="font-semibold mb-4">Contact</h4>
-            <ul className="space-y-2 text-sm opacity-80">
-              <li><strong>Alex:</strong> alex@supplyministry.com.au</li>
-              <li>Mobile: 0452 002 450</li>
-              <li><strong>David:</strong> david@supplyministry.com.au</li>
-              <li>Mobile: 0404 593 090</li>
-              <li>Mon-Fri: 8:30 AM - 5:00 PM AEST</li>
-            </ul>
+            <p className="text-sm opacity-80 mb-3">Mon-Fri: 8:30 AM - 5:00 PM AEST</p>
+            <Link to="/quote" className="text-sm opacity-80 hover:opacity-100 underline underline-offset-2">
+              Get in Touch →
+            </Link>
           </div>
         </div>
         <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-sm opacity-60">
