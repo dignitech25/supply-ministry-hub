@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { BookOpen, FileText, HelpCircle, Info, ExternalLink, Download } from "lucide-react";
+import { BookOpen, FileText, HelpCircle, Info, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Resources = () => {
@@ -41,32 +41,6 @@ const Resources = () => {
     }
   ];
 
-  const blogPosts = [
-    {
-      title: "5 Essential Mobility Aids for Aging in Place",
-      date: "December 2024",
-      excerpt: "Discover the top mobility solutions that help seniors maintain independence and safety in their own homes.",
-      category: "Mobility"
-    },
-    {
-      title: "Understanding NDIS Funding for Assistive Technology",
-      date: "November 2024",
-      excerpt: "A comprehensive guide to navigating NDIS funding categories and maximizing support for your clients.",
-      category: "NDIS"
-    },
-    {
-      title: "The Importance of Proper Seating Assessments",
-      date: "November 2024",
-      excerpt: "Why professional seating assessments are crucial for comfort, health, and long-term wellbeing.",
-      category: "Clinical"
-    },
-    {
-      title: "Pressure Care: Prevention is Better Than Cure",
-      date: "October 2024",
-      excerpt: "Expert insights on preventing pressure injuries through proper equipment selection and care protocols.",
-      category: "Healthcare"
-    }
-  ];
 
   const faqs = [
     {
@@ -219,35 +193,14 @@ const Resources = () => {
       {/* Blog Section */}
       <section id="blog" className="py-20 bg-soft-gray">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-foreground mb-4">Supply Line Blog</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground mb-6">
               Expert insights, industry news, and practical guidance for healthcare professionals
             </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {blogPosts.map((post, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded">
-                      {post.category}
-                    </span>
-                    <span className="text-xs text-muted-foreground">{post.date}</span>
-                  </div>
-                  <CardTitle className="text-xl hover:text-primary transition-colors">
-                    {post.title}
-                  </CardTitle>
-                  <CardDescription>{post.excerpt}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="link" className="px-0 text-primary">
-                    Read more <ExternalLink className="ml-2 h-4 w-4" />
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+            <p className="text-muted-foreground">
+              We're preparing in-depth articles on assistive technology, NDIS funding, and clinical best practices. Check back soon for our first publications.
+            </p>
           </div>
         </div>
       </section>
