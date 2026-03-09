@@ -9,6 +9,7 @@ import FloatingQuoteButton from "@/components/FloatingQuoteButton";
 import Footer from "@/components/Footer";
 import SEO, { organizationSchema, localBusinessSchema } from "@/components/SEO";
 import AnimatedSection from "@/components/AnimatedSection";
+import FAQSection from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 
@@ -150,7 +151,11 @@ const Index = () => {
           </section>
         </AnimatedSection>
 
-        {/* Contact Section */}
+        <AnimatedSection>
+          <FAQSection />
+        </AnimatedSection>
+
+
         <section id="contact" className="py-20 bg-primary text-primary-foreground">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
