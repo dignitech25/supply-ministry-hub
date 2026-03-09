@@ -26,19 +26,16 @@ const Navigation = () => {
       <header className="w-full border-b border-border bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between py-3 lg:py-5">
-            {/* Spacer for balance */}
-            <div className="w-10 shrink-0" />
-            
-            {/* Logo - Centered */}
+            {/* Logo - Left aligned on mobile, centered on desktop */}
             <Link 
               to="/" 
-              className="flex items-center justify-center hover:opacity-80 transition-opacity min-w-0"
+              className="flex items-center hover:opacity-80 transition-opacity flex-1 min-w-0 lg:justify-center"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               <img 
                 src="/Supply_Ministry_logo.png" 
                 alt="Supply Ministry" 
-                className="h-12 sm:h-16 md:h-20 w-auto max-w-[70vw] sm:max-w-none object-contain"
+                className="h-10 sm:h-14 md:h-20 w-auto max-w-[65vw] sm:max-w-[50vw] md:max-w-none object-contain"
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder.svg';
                 }}
@@ -46,7 +43,7 @@ const Navigation = () => {
             </Link>
             
             {/* Search & Cart Buttons */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 shrink-0">
               <Button
                 variant="ghost"
                 size="icon"
