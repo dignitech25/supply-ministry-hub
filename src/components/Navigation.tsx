@@ -25,20 +25,20 @@ const Navigation = () => {
       {/* Header */}
       <header className="w-full border-b border-border bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4 lg:py-5">
+          <div className="flex items-center justify-between py-3 lg:py-5">
             {/* Spacer for balance */}
-            <div className="w-10" />
+            <div className="w-10 shrink-0" />
             
             {/* Logo - Centered */}
             <Link 
               to="/" 
-              className="flex items-center hover:opacity-80 transition-opacity"
+              className="flex items-center justify-center hover:opacity-80 transition-opacity min-w-0"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               <img 
                 src="/Supply_Ministry_logo.png" 
                 alt="Supply Ministry" 
-                className="h-20 w-auto"
+                className="h-12 sm:h-16 md:h-20 w-auto max-w-[70vw] sm:max-w-none object-contain"
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder.svg';
                 }}
