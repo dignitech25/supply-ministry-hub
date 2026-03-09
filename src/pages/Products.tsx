@@ -13,6 +13,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from '@/components/ui/pagination';
 import { useIsMobile } from '@/hooks/use-mobile';
 import Footer from '@/components/Footer';
+import { createBreadcrumbSchema } from '@/components/SEO';
 
 import { formatPrice } from '@/utils/productHelpers';
 import { groupIntoParents } from '@/utils/variantHelpers';
