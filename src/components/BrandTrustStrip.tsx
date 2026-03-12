@@ -33,6 +33,7 @@ const BrandTrustStrip = () => {
               <img
                 src={brand.src}
                 alt={brand.alt}
+                loading="lazy"
                 className="h-8 md:h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
               />
             </a>
@@ -49,6 +50,7 @@ const BrandTrustStrip = () => {
               <img
                 src={brand.src}
                 alt={brand.alt}
+                loading="lazy"
                 className="h-8 md:h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
               />
             </a>
