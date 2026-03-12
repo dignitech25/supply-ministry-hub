@@ -33,23 +33,29 @@ const Index = () => {
       <main id="main-content">
         <HeroSection />
         
-        <AnimatedSection>
-          <BrandTrustStrip />
-        </AnimatedSection>
+        <BrandTrustStrip />
         
-        <AnimatedSection delay={0.1}>
-          <FeaturedProducts />
-        </AnimatedSection>
+        <Suspense fallback={<SectionFallback />}>
+          <AnimatedSection delay={0.1}>
+            <FeaturedProducts />
+          </AnimatedSection>
+        </Suspense>
         
-        <AnimatedSection delay={0.1}>
-          <ProductCategoryCards />
-        </AnimatedSection>
+        <Suspense fallback={<SectionFallback />}>
+          <AnimatedSection delay={0.1}>
+            <ProductCategoryCards />
+          </AnimatedSection>
+        </Suspense>
         
-        <AnimatedSection delay={0.1}>
-          <AboutSection />
-        </AnimatedSection>
+        <Suspense fallback={<SectionFallback />}>
+          <AnimatedSection delay={0.1}>
+            <AboutSection />
+          </AnimatedSection>
+        </Suspense>
         
-        <FloatingSmartCTA />
+        <Suspense fallback={null}>
+          <FloatingSmartCTA />
+        </Suspense>
         
         {/* Sleep Choice Program */}
         <AnimatedSection>
