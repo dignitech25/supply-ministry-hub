@@ -14,51 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      _stg_products_website: {
-        Row: {
-          brand: string | null
-          category: string | null
-          description: string | null
-          featured: boolean | null
-          name: string | null
-          primary_image_url: string | null
-          rrp_cents: number | null
-          sales_price_cents: number | null
-          show_on_site: boolean | null
-          sku: string | null
-          tax_class: string | null
-          trial_available: boolean | null
-        }
-        Insert: {
-          brand?: string | null
-          category?: string | null
-          description?: string | null
-          featured?: boolean | null
-          name?: string | null
-          primary_image_url?: string | null
-          rrp_cents?: number | null
-          sales_price_cents?: number | null
-          show_on_site?: boolean | null
-          sku?: string | null
-          tax_class?: string | null
-          trial_available?: boolean | null
-        }
-        Update: {
-          brand?: string | null
-          category?: string | null
-          description?: string | null
-          featured?: boolean | null
-          name?: string | null
-          primary_image_url?: string | null
-          rrp_cents?: number | null
-          sales_price_cents?: number | null
-          show_on_site?: boolean | null
-          sku?: string | null
-          tax_class?: string | null
-          trial_available?: boolean | null
-        }
-        Relationships: []
-      }
       brands: {
         Row: {
           created_at: string
@@ -355,69 +310,6 @@ export type Database = {
         }
         Relationships: []
       }
-      products_backup_20251022: {
-        Row: {
-          brand: string | null
-          brochure_url: string | null
-          clinical_use_case: string | null
-          color: string | null
-          created_at: string | null
-          description: string | null
-          funding_context: string | null
-          id: string | null
-          image_url: string | null
-          price_discounted: number | null
-          price_rrp: number | null
-          product_type: string | null
-          size: string | null
-          sku: string | null
-          specifications: Json | null
-          subtype: string | null
-          title: string | null
-          url: string | null
-        }
-        Insert: {
-          brand?: string | null
-          brochure_url?: string | null
-          clinical_use_case?: string | null
-          color?: string | null
-          created_at?: string | null
-          description?: string | null
-          funding_context?: string | null
-          id?: string | null
-          image_url?: string | null
-          price_discounted?: number | null
-          price_rrp?: number | null
-          product_type?: string | null
-          size?: string | null
-          sku?: string | null
-          specifications?: Json | null
-          subtype?: string | null
-          title?: string | null
-          url?: string | null
-        }
-        Update: {
-          brand?: string | null
-          brochure_url?: string | null
-          clinical_use_case?: string | null
-          color?: string | null
-          created_at?: string | null
-          description?: string | null
-          funding_context?: string | null
-          id?: string | null
-          image_url?: string | null
-          price_discounted?: number | null
-          price_rrp?: number | null
-          product_type?: string | null
-          size?: string | null
-          sku?: string | null
-          specifications?: Json | null
-          subtype?: string | null
-          title?: string | null
-          url?: string | null
-        }
-        Relationships: []
-      }
       products_categorized: {
         Row: {
           barcode: string | null
@@ -556,60 +448,6 @@ export type Database = {
           title?: string | null
           top_level_category?: string | null
           vendor?: string | null
-        }
-        Relationships: []
-      }
-      products_legacy: {
-        Row: {
-          brand: string | null
-          category: string | null
-          created_at: string
-          description: string | null
-          featured: boolean
-          id: string
-          name: string
-          primary_image_url: string | null
-          rrp_cents: number | null
-          sales_price_cents: number
-          show_on_site: boolean
-          sku: string
-          tax_class: string | null
-          trial_available: boolean
-          updated_at: string
-        }
-        Insert: {
-          brand?: string | null
-          category?: string | null
-          created_at?: string
-          description?: string | null
-          featured?: boolean
-          id?: string
-          name: string
-          primary_image_url?: string | null
-          rrp_cents?: number | null
-          sales_price_cents: number
-          show_on_site?: boolean
-          sku: string
-          tax_class?: string | null
-          trial_available?: boolean
-          updated_at?: string
-        }
-        Update: {
-          brand?: string | null
-          category?: string | null
-          created_at?: string
-          description?: string | null
-          featured?: boolean
-          id?: string
-          name?: string
-          primary_image_url?: string | null
-          rrp_cents?: number | null
-          sales_price_cents?: number
-          show_on_site?: boolean
-          sku?: string
-          tax_class?: string | null
-          trial_available?: boolean
-          updated_at?: string
         }
         Relationships: []
       }
@@ -845,66 +683,7 @@ export type Database = {
       }
     }
     Views: {
-      products_public: {
-        Row: {
-          brand: string | null
-          category: string | null
-          created_at: string | null
-          description: string | null
-          featured: boolean | null
-          gst_rate: number | null
-          id: string | null
-          name: string | null
-          primary_image_url: string | null
-          rrp_cents: number | null
-          sales_price_cents: number | null
-          sales_price_inc_gst_cents: number | null
-          show_on_site: boolean | null
-          sku: string | null
-          tax_class: string | null
-          trial_available: boolean | null
-          updated_at: string | null
-        }
-        Insert: {
-          brand?: string | null
-          category?: string | null
-          created_at?: string | null
-          description?: string | null
-          featured?: boolean | null
-          gst_rate?: never
-          id?: string | null
-          name?: string | null
-          primary_image_url?: string | null
-          rrp_cents?: number | null
-          sales_price_cents?: number | null
-          sales_price_inc_gst_cents?: never
-          show_on_site?: boolean | null
-          sku?: string | null
-          tax_class?: string | null
-          trial_available?: boolean | null
-          updated_at?: string | null
-        }
-        Update: {
-          brand?: string | null
-          category?: string | null
-          created_at?: string | null
-          description?: string | null
-          featured?: boolean | null
-          gst_rate?: never
-          id?: string | null
-          name?: string | null
-          primary_image_url?: string | null
-          rrp_cents?: number | null
-          sales_price_cents?: number | null
-          sales_price_inc_gst_cents?: never
-          show_on_site?: boolean | null
-          sku?: string | null
-          tax_class?: string | null
-          trial_available?: boolean | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       create_quote_with_items: {
