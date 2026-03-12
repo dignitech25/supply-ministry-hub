@@ -58,6 +58,7 @@ const Index = () => {
         </Suspense>
         
         {/* Sleep Choice Program */}
+        <Suspense fallback={<SectionFallback />}>
         <AnimatedSection>
           <section id="sleep-choice" className="py-20">
             <div className="container mx-auto px-4">
