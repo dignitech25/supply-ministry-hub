@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, ShoppingCart, Sparkles } from "lucide-react";
+import { lazy, Suspense } from "react";
 import { CategoryNavigation } from "./CategoryNavigation";
-import { SearchDialog } from "./SearchDialog";
+
+const SearchDialog = lazy(() => import("./SearchDialog").then(m => ({ default: m.SearchDialog })));
 import { Button } from "./ui/button";
 import { useQuote } from "@/contexts/QuoteContext";
 import { Badge } from "./ui/badge";
