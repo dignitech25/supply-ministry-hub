@@ -111,8 +111,10 @@ const Index = () => {
             </div>
           </section>
         </AnimatedSection>
+        </Suspense>
 
         {/* Testimonials */}
+        <Suspense fallback={<SectionFallback />}>
         <AnimatedSection>
           <section id="testimonials" className="py-20">
             <div className="container mx-auto px-4">
