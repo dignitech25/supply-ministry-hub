@@ -146,6 +146,7 @@ const FeaturedProducts = () => {
                 <img
                   src={product.image_url || getImagePlaceholder()}
                   alt={product.title || 'Product'}
+                  loading="lazy"
                   className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = getImagePlaceholder();
