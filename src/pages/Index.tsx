@@ -167,10 +167,13 @@ const Index = () => {
             </div>
           </section>
         </AnimatedSection>
+        </Suspense>
 
+        <Suspense fallback={<SectionFallback />}>
         <AnimatedSection>
           <FAQSection />
         </AnimatedSection>
+        </Suspense>
 
 
         <section id="contact" className="py-24 bg-gradient-to-br from-primary to-primary/85 text-primary-foreground relative overflow-hidden">

@@ -86,8 +86,12 @@ const Navigation = () => {
         </div>
       </nav>
 
-      {/* Search Dialog */}
-      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
+      {/* Search Dialog - lazy loaded */}
+      {searchOpen && (
+        <Suspense fallback={null}>
+          <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
+        </Suspense>
+      )}
     </div>
   );
 };

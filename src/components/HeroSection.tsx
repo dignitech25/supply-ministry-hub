@@ -106,9 +106,13 @@ const HeroSection = () => {
           <div className="lg:pl-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <div className="relative group">
               <img
-                src={heroImage}
+                src="/hero-senior-assistive.jpg"
                 alt="Smiling senior woman using assistive technology with confidence"
                 className="rounded-2xl shadow-xl w-full h-[400px] lg:h-[600px] object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                fetchPriority="high"
+                decoding="async"
+                width={800}
+                height={600}
               />
               {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent rounded-2xl"></div>
