@@ -1,17 +1,25 @@
+import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import BrandTrustStrip from "@/components/BrandTrustStrip";
-import FeaturedProducts from "@/components/FeaturedProducts";
-import ProductCategoryCards from "@/components/ProductCategoryCards";
-import AboutSection from "@/components/AboutSection";
-import FloatingSmartCTA from "@/components/FloatingSmartCTA";
 import Footer from "@/components/Footer";
 import SEO, { organizationSchema, localBusinessSchema } from "@/components/SEO";
-import AnimatedSection from "@/components/AnimatedSection";
-import FAQSection, { faqPageSchema } from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
+
+// Lazy-load below-fold heavy components
+const FeaturedProducts = lazy(() => import("@/components/FeaturedProducts"));
+const ProductCategoryCards = lazy(() => import("@/components/ProductCategoryCards"));
+const AboutSection = lazy(() => import("@/components/AboutSection"));
+const AnimatedSection = lazy(() => import("@/components/AnimatedSection"));
+const FloatingSmartCTA = lazy(() => import("@/components/FloatingSmartCTA"));
+const FAQSection = lazy(() => import("@/components/FAQSection").then(m => ({ default: m.default })));
+
+// Need faqPageSchema eagerly for SEO
+import { faqPageSchema } from "@/components/FAQSection";
+
+const SectionFallback = () => <div className="py-20" />;
 
 const Index = () => {
   return (
