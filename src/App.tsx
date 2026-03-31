@@ -21,6 +21,7 @@ const QuoteConfirm = lazy(() => import("./pages/QuoteConfirm"));
 const Resources = lazy(() => import("./pages/Resources"));
 const Quote = lazy(() => import("./pages/Quote"));
 const SupportAtHome = lazy(() => import("./pages/SupportAtHome"));
+const RentToBuy = lazy(() => import("./pages/RentToBuy"));
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
                   <Route path="/quote" element={<Quote />} />
                   <Route path="/resources" element={<Resources />} />
                   <Route path="/support-at-home" element={<SupportAtHome />} />
+                  <Route path="/rent-to-buy" element={<RentToBuy />} />
                   
                   <Route path="/products" element={<Products />} />
                   <Route path="/products/:sku" element={<ProductDetail />} />
