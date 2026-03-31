@@ -21,6 +21,7 @@ const QuoteConfirm = lazy(() => import("./pages/QuoteConfirm"));
 const Resources = lazy(() => import("./pages/Resources"));
 const Quote = lazy(() => import("./pages/Quote"));
 const SupportAtHome = lazy(() => import("./pages/SupportAtHome"));
+const RentToBuy = lazy(() => import("./pages/RentToBuy"));
 
 const queryClient = new QueryClient();
 
