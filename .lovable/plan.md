@@ -1,47 +1,69 @@
 
 
-# Switch product titles from Fraunces to Geist
+# Replace Fraunces for section headlines
 
-Use Geist for product titles so technical names like "Pride Pathrider 10 Deluxe Scooter" read cleanly. Reserve Fraunces for hero/section headlines and the gold-italic accent word.
+Fraunces at light weight reads as dated/wedding-invitation rather than editorial-modern. Swap it for one of three sharper display options. The accent word stays italic + gold; only the typeface changes.
 
-## Changes
+## Options
 
-### `src/components/FeaturedProducts.tsx`
-- Product card title `<h3>`: `font-fraunces` → `font-geist font-medium tracking-tight text-ink`
-- Price line: `font-fraunces` → `font-geist font-medium` (keeps numerals tidy; "From" stays in same family)
-- Section heading ("Featured *products*") stays Fraunces — unchanged.
+**1. Instrument Serif** — contemporary editorial serif (think Vercel, Linear marketing). High contrast, sharp terminals, beautiful italic. Currently the strongest "2025 editorial" choice. Pairs cleanly with Geist.
 
-### `src/components/ProductCard.tsx`
-- Product title `<h3>`: keep current size, swap to `font-geist font-medium tracking-tight text-ink`
-- Price block: switch the bold price line to `font-geist font-semibold text-ink` (drop the `text-supply-lavender` purple — replace with `text-ink`).
+**2. Newsreader** — Google Fonts, modern transitional serif. Less ornamental than Fraunces, more grounded. Italic is restrained rather than swooshy.
 
-### `src/pages/Products.tsx`
-- Any product card title rendered inline on the catalogue grid: same swap to `font-geist font-medium tracking-tight`.
-- Filter labels and facet headings stay as they are.
+**3. Geist + size/weight contrast (no serif at all)** — drop the serif entirely. "Featured **products**" rendered in Geist at a large size with the accent word in `font-medium italic text-gold`. Cleanest, most current, matches the product-title decision we just made.
 
-### `src/pages/ProductDetail.tsx`
-- Product `<h1>` title: `font-fraunces` → `font-geist font-medium tracking-tight text-ink` (size unchanged).
-- Price display: `font-geist font-semibold text-ink`.
-- Section sub-headings on the PDP ("Specifications", "Description", etc.) stay Fraunces light — they're editorial section headers, not product names.
+## Recommendation
+
+**Instrument Serif.** It keeps the editorial feel (which is the whole point of the redesign) but reads modern instead of nostalgic. The italic on the accent word is where Instrument Serif really earns its place — it's distinctive without being precious.
+
+If you want to go fully Swiss/minimal, pick option 3 (Geist only) and we retire serifs from the site entirely.
+
+## Changes if Instrument Serif is chosen
+
+### `index.html`
+Add to the existing Google Fonts `<link>`:
+```
+family=Instrument+Serif:ital@0;1
+```
+
+### `tailwind.config.ts`
+Add to `fontFamily`:
+```
+'instrument': ['"Instrument Serif"', 'serif'],
+```
+
+### Global find/replace
+Across all section headlines currently using `font-fraunces font-light`:
+- `font-fraunces font-light` → `font-instrument font-normal`
+- The italic accent span stays `italic text-gold` (Instrument Serif has a gorgeous italic by default)
+
+Files affected (headline class swap only):
+- `src/components/editorial/EditorialHero.tsx`
+- `src/components/FeaturedProducts.tsx`
+- `src/components/ProductCategoryCards.tsx`
+- `src/components/AboutSection.tsx`
+- `src/components/FAQSection.tsx`
+- `src/pages/Index.tsx` (Sleep Choice, Testimonials, Contact section headlines)
+- `src/pages/Products.tsx`
+- `src/pages/ProductDetail.tsx` (PDP section sub-headings)
+- `src/pages/Quote.tsx`, `QuoteConfirm.tsx`, `RentToBuy.tsx`, `Resources.tsx`, `SleepChoice.tsx`, `SupportAtHome.tsx`, `TermsConditions.tsx`, `NotFound.tsx`
+
+### Keep Fraunces loaded?
+No — remove it from the Google Fonts URL once the swap is verified, to keep page weight down.
 
 ## Out of scope
 
-- `EditorialHero.tsx`, `EditorialNavigation.tsx`, `SupplierStrip.tsx`, `TrustBar.tsx`
-- All section-level h2 headings (stay Fraunces light with the gold-italic accent)
-- Footer, FAQ, About, Sleep Choice, Testimonials headings
-- Buttons, eyebrows, body copy (already Geist/Inter)
-- Routing, Supabase, quote system
-
-## Files touched
-
-- `src/components/FeaturedProducts.tsx`
-- `src/components/ProductCard.tsx`
-- `src/pages/Products.tsx`
-- `src/pages/ProductDetail.tsx`
+- Geist usage (product titles, body, buttons) — unchanged.
+- Gold accent colour and italic treatment — unchanged.
+- Layout, spacing, copy — unchanged.
 
 ## Verification
 
-- "Pride Pathrider 10 Deluxe Scooter" and other product names render in Geist (clean sans), not Fraunces.
-- Section headlines ("Featured *products*", "Equipment that *delivers*") still in Fraunces with gold italic accent.
-- No purple lavender price text remains on product cards.
+- "Featured *products*", "Equipment that *delivers*", "Sleep that *restores*" all render in Instrument Serif with the gold italic accent intact.
+- No Fraunces remaining anywhere in the DOM.
+- Page weight drops slightly after Fraunces is removed from the font URL.
+
+## Decision needed
+
+Confirm: **Instrument Serif** (recommended), **Newsreader**, or **Geist-only (drop serifs)**.
 
