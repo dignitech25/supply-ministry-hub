@@ -9,13 +9,13 @@ const navLinks = [
 
 const EditorialNavigation = () => {
   return (
-    <nav className="bg-cream border-b border-violet/10 h-[62px] sticky top-0 z-50">
+    <nav className="bg-cream border-b border-violet/10 h-[88px] sticky top-0 z-50">
       <div className="h-full px-6 md:px-12 flex items-center justify-between">
         <Link to="/" className="flex items-center">
           <img
-            src="/brand/supply-ministry-logo.jpg"
+            src="/brand/supply-ministry-logo.png"
             alt="Supply Ministry — Connects Care With Solutions"
-            className="h-9 md:h-10 w-auto object-contain"
+            className="h-14 md:h-16 w-auto object-contain"
           />
         </Link>
 
