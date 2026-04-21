@@ -46,6 +46,17 @@
     --border: 0 0% 90%;
     --input: 0 0% 90%;
     --ring: 248 100% 62%;
+
+    /* Editorial palette (homepage redesign) */
+    --violet: 249 56% 40%;          /* #3D2D9E */
+    --cream: 36 32% 93%;             /* #F4EFE6 */
+    --cream-alt: 36 28% 90%;         /* #EDE8DF */
+    --cream-image: 36 22% 85%;       /* #E2DBD0 */
+    --ink: 30 33% 8%;                /* #1A1209 */
+    --cream-border: 36 18% 83%;      /* #DDD7CC */
+    --muted-body: 35 12% 43%;        /* #7A7060 */
+    --muted-label: 36 11% 73%;       /* #C4BFB5 */
+    --pill-highlight: 248 100% 87%;  /* #C4BAFF */
     
     /* Design System Tokens */
     --radius: 0.75rem;
