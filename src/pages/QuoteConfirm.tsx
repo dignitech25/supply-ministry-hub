@@ -3,85 +3,87 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Navigation from '@/components/Navigation';
 import SEO from '@/components/SEO';
+import EditorialNavigation from '@/components/editorial/EditorialNavigation';
 
 const QuoteConfirm: React.FC = () => {
   const [searchParams] = useSearchParams();
   const quoteRef = searchParams.get('ref');
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-cream text-ink">
       <SEO 
         title="Quote Submitted"
         description="Your quote request has been submitted successfully. Our team will respond within 24 hours with a tailored assistive technology solution."
         noindex={true}
       />
-      <Navigation />
+      <EditorialNavigation />
       
       <main className="container mx-auto px-6 py-16">
         <div className="max-w-2xl mx-auto">
-          <Card className="bg-white shadow-lg">
+          <Card className="bg-cream-alt border-cream-border shadow-sm">
             <CardHeader className="text-center pb-4">
               <div className="flex justify-center mb-4">
-                <CheckCircle className="w-20 h-20 text-green-500" />
+                <CheckCircle className="w-20 h-20 text-gold" />
               </div>
-              <h1 className="text-3xl font-bold text-primary">Quote Submitted Successfully!</h1>
+              <h1 className="text-3xl md:text-4xl font-fraunces font-light text-ink">
+                Quote <span className="italic text-gold">submitted</span>.
+              </h1>
             </CardHeader>
             
             <CardContent className="space-y-6 text-center">
               {quoteRef && (
-                <div className="bg-muted/50 p-6 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-2">Your Reference Number</p>
-                  <p className="text-3xl font-bold text-[#7E5CF1]">{quoteRef}</p>
+                <div className="bg-cream border border-cream-border p-6 rounded-lg">
+                  <p className="text-sm text-muted-body mb-2">Your Reference Number</p>
+                  <p className="text-3xl font-fraunces font-light text-ink">{quoteRef}</p>
                 </div>
               )}
               
               <div className="space-y-3 text-left">
-                <h3 className="font-semibold text-lg text-primary">What happens next?</h3>
-                <ul className="space-y-2 text-muted-foreground">
+                <h3 className="font-fraunces font-light text-xl text-ink">What happens next?</h3>
+                <ul className="space-y-2 text-muted-body">
                   <li className="flex items-start">
-                    <span className="mr-2">✓</span>
+                    <span className="mr-2 text-gold">✓</span>
                     <span>You'll receive a confirmation email shortly</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="mr-2">✓</span>
+                    <span className="mr-2 text-gold">✓</span>
                     <span>Our team will review your request and confirm pricing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="mr-2">✓</span>
+                    <span className="mr-2 text-gold">✓</span>
                     <span>We'll be in touch within 1-2 business days</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="mr-2">✓</span>
+                    <span className="mr-2 text-gold">✓</span>
                     <span>For urgent requests, we'll prioritize your quote</span>
                   </li>
                 </ul>
               </div>
               
-              <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg text-left">
-                <p className="text-sm text-blue-800">
-                  <strong>Note:</strong> Prices shown are indicative only. Final pricing may be affected by freight, installation requirements, and site-specific considerations.
+              <div className="bg-cream border border-cream-border p-4 rounded-lg text-left">
+                <p className="text-sm text-ink">
+                  <strong className="text-ink">Note:</strong> Prices shown are indicative only. Final pricing may be affected by freight, installation requirements, and site-specific considerations.
                 </p>
               </div>
               
               <div className="pt-6 space-y-3">
                 <Link to="/products" className="block">
-                  <Button className="w-full bg-[#7E5CF1] hover:bg-[#6B4CD8]" size="lg">
+                  <Button className="w-full bg-ink text-cream hover:opacity-90 rounded-full" size="lg">
                     Browse More Products
                   </Button>
                 </Link>
                 <Link to="/" className="block">
-                  <Button variant="outline" className="w-full" size="lg">
+                  <Button variant="outline" className="w-full rounded-full border-ink/20 text-ink hover:bg-ink hover:text-cream" size="lg">
                     Return to Home
                   </Button>
                 </Link>
               </div>
               
-              <div className="pt-6 border-t">
-                <p className="text-sm text-muted-foreground">
+              <div className="pt-6 border-t border-cream-border">
+                <p className="text-sm text-muted-body">
                   Questions? Contact us at{' '}
-                  <a href="mailto:david@supplyministry.com.au" className="text-[#7E5CF1] hover:underline">
+                  <a href="mailto:david@supplyministry.com.au" className="text-ink underline decoration-gold underline-offset-4 hover:decoration-ink">
                     david@supplyministry.com.au
                   </a>
                 </p>

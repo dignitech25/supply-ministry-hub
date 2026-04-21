@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { BookOpen, FileText, HelpCircle, Info, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 
 const Resources = () => {
   const resourceLibrary = [
@@ -125,21 +125,22 @@ const Resources = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-cream text-ink">
       <SEO 
         title="Resources & Support"
         description="Access clinical guides, NDIS funding information, FAQs, and educational resources for assistive technology. Support for healthcare professionals and clients."
       />
-      <Navigation />
+      <EditorialNavigation />
       
       {/* Hero Section */}
-      <section className="bg-gradient-card py-16">
+      <section className="bg-cream py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              Resources & Support
+            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Resources</p>
+            <h1 className="text-4xl lg:text-5xl font-fraunces font-light text-ink mb-6 leading-[1.1]">
+              Practical <span className="italic text-gold">guidance</span>.
             </h1>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-muted-body">
               Everything you need to make informed decisions about assistive technology solutions
             </p>
           </div>
@@ -150,8 +151,8 @@ const Resources = () => {
       <section id="resource-library" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Resource Library</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">Resource library</h2>
+            <p className="text-lg text-muted-body max-w-2xl mx-auto">
               Access our collection of product catalogs, clinical guides, and training materials
             </p>
           </div>
@@ -160,25 +161,25 @@ const Resources = () => {
             {resourceLibrary.map((resource, index) => {
               const IconComponent = resource.icon;
               return (
-                <Card key={index}>
+                <Card key={index} className="bg-cream-alt border-cream-border">
                   <CardHeader>
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="bg-primary/10 rounded-lg p-2">
-                        <IconComponent className="h-6 w-6 text-primary" />
+                      <div className="bg-ink/10 rounded-lg p-2">
+                        <IconComponent className="h-6 w-6 text-ink" />
                       </div>
-                      <CardTitle className="text-xl">{resource.title}</CardTitle>
+                      <CardTitle className="text-xl font-fraunces font-light text-ink">{resource.title}</CardTitle>
                     </div>
-                    <CardDescription>{resource.description}</CardDescription>
+                    <CardDescription className="text-muted-body">{resource.description}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
                       {resource.items.map((item, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-3 bg-soft-gray rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+                        <div key={idx} className="flex items-center justify-between p-3 bg-cream rounded-lg hover:bg-cream/70 transition-colors cursor-pointer border border-cream-border">
                           <div className="flex-1">
-                            <p className="text-sm font-medium text-foreground">{item.name}</p>
-                            <p className="text-xs text-muted-foreground">{item.type} • {item.size}</p>
+                            <p className="text-sm font-medium text-ink">{item.name}</p>
+                            <p className="text-xs text-muted-body">{item.type} • {item.size}</p>
                           </div>
-                          <Download className="h-4 w-4 text-muted-foreground" />
+                          <Download className="h-4 w-4 text-muted-body" />
                         </div>
                       ))}
                     </div>
@@ -191,14 +192,14 @@ const Resources = () => {
       </section>
 
       {/* Blog Section */}
-      <section id="blog" className="py-20 bg-soft-gray">
+      <section id="blog" className="py-20 bg-cream-alt">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Supply Line Blog</h2>
-            <p className="text-lg text-muted-foreground mb-6">
+            <h2 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">Supply Line blog</h2>
+            <p className="text-lg text-muted-body mb-6">
               Expert insights, industry news, and practical guidance for healthcare professionals
             </p>
-            <p className="text-muted-foreground">
+            <p className="text-muted-body">
               We're preparing in-depth articles on assistive technology, NDIS funding, and clinical best practices. Check back soon for our first publications.
             </p>
           </div>
@@ -209,8 +210,8 @@ const Resources = () => {
       <section id="faq" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Frequently Asked Questions</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">Frequently asked questions</h2>
+            <p className="text-lg text-muted-body max-w-2xl mx-auto">
               Quick answers to common questions about our products and services
             </p>
           </div>
@@ -218,11 +219,11 @@ const Resources = () => {
           <div className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="space-y-4">
               {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="bg-card border border-border rounded-lg px-6">
-                  <AccordionTrigger className="text-left font-semibold hover:text-primary">
+                <AccordionItem key={index} value={`item-${index}`} className="bg-cream-alt border border-cream-border rounded-lg px-6">
+                  <AccordionTrigger className="text-left font-medium text-ink hover:text-ink/80">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
+                  <AccordionContent className="text-muted-body">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -233,11 +234,11 @@ const Resources = () => {
       </section>
 
       {/* NDIS Information Section */}
-      <section id="ndis" className="py-20 bg-soft-gray">
+      <section id="ndis" className="py-20 bg-cream-alt">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">NDIS Funding Information</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">NDIS funding information</h2>
+            <p className="text-lg text-muted-body max-w-2xl mx-auto">
               Understanding how NDIS funding works for assistive technology
             </p>
           </div>
@@ -245,21 +246,21 @@ const Resources = () => {
           <div className="max-w-5xl mx-auto">
             {/* Funding Categories */}
             <div className="mb-12">
-              <h3 className="text-2xl font-semibold text-foreground mb-6">NDIS Funding Categories</h3>
+              <h3 className="text-2xl font-fraunces font-light text-ink mb-6">NDIS funding categories</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 {ndisInfo.fundingCategories.map((category, index) => (
-                  <Card key={index}>
+                  <Card key={index} className="bg-cream border-cream-border">
                     <CardHeader>
-                      <CardTitle className="text-lg">{category.title}</CardTitle>
-                      <CardDescription>{category.description}</CardDescription>
+                      <CardTitle className="text-lg font-fraunces font-light text-ink">{category.title}</CardTitle>
+                      <CardDescription className="text-muted-body">{category.description}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        <p className="text-sm font-medium text-foreground">Examples:</p>
+                        <p className="text-sm font-medium text-ink">Examples:</p>
                         <ul className="space-y-1">
                           {category.examples.map((example, idx) => (
-                            <li key={idx} className="text-sm text-muted-foreground flex items-center">
-                              <span className="w-1.5 h-1.5 bg-primary rounded-full mr-2"></span>
+                            <li key={idx} className="text-sm text-muted-body flex items-center">
+                              <span className="w-1.5 h-1.5 bg-gold rounded-full mr-2"></span>
                               {example}
                             </li>
                           ))}
@@ -272,21 +273,21 @@ const Resources = () => {
             </div>
 
             {/* NDIS Process */}
-            <div className="bg-card rounded-xl p-8 border border-border">
-              <h3 className="text-2xl font-semibold text-foreground mb-6 text-center">
+            <div className="bg-cream rounded-xl p-8 border border-cream-border">
+              <h3 className="text-2xl font-fraunces font-light text-ink mb-6 text-center">
                 How to Access NDIS Funding with Supply Ministry
               </h3>
               <div className="space-y-6">
                 {ndisInfo.process.map((item, index) => (
                   <div key={index} className="flex gap-4">
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold">
+                      <div className="w-10 h-10 bg-ink text-cream rounded-full flex items-center justify-center font-medium">
                         {item.step}
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-lg font-semibold text-foreground mb-1">{item.title}</h4>
-                      <p className="text-muted-foreground">{item.description}</p>
+                      <h4 className="text-lg font-medium text-ink mb-1">{item.title}</h4>
+                      <p className="text-muted-body">{item.description}</p>
                     </div>
                   </div>
                 ))}
@@ -294,7 +295,7 @@ const Resources = () => {
               <div className="mt-8 text-center">
                 <Button 
                   size="lg"
-                  className="bg-orange-500 text-white hover:bg-orange-600 transition-colors"
+                  className="bg-ink text-cream hover:opacity-90 transition-opacity rounded-full px-8"
                   asChild
                 >
                   <Link to="/quote">Request an NDIS Quote</Link>
@@ -306,16 +307,16 @@ const Resources = () => {
       </section>
 
       {/* Contact CTA */}
-      <section className="py-20 bg-primary text-primary-foreground">
+      <section className="py-20 bg-ink text-cream">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Still Have Questions?</h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-fraunces font-light mb-4">Still have questions?</h2>
+          <p className="text-lg mb-8 text-cream/80 max-w-2xl mx-auto">
             Our experienced team is here to help. Get in touch for personalized guidance.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg"
-              className="bg-orange-500 text-white hover:bg-orange-600 transition-colors"
+              className="bg-cream text-ink hover:opacity-90 transition-opacity rounded-full px-8"
               asChild
             >
               <Link to="/#contact">Contact Us</Link>
