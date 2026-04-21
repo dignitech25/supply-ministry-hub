@@ -128,7 +128,7 @@ const RentToBuy = () => {
         </section>
 
         {/* What Qualifies */}
-        <section className="py-14 md:py-20">
+        <section className="py-14 md:py-20 bg-cream text-ink">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
             <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-6">
               What equipment qualifies
@@ -177,7 +177,7 @@ const RentToBuy = () => {
         </section>
 
         {/* FAQ */}
-        <section className="py-14 md:py-20">
+        <section className="py-14 md:py-20 bg-cream text-ink">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
             <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-8">
               Common questions
@@ -198,7 +198,7 @@ const RentToBuy = () => {
         </section>
 
         {/* Contact CTA */}
-        <section className="py-16 md:py-24 bg-ink text-cream">
+        <section className="py-16 md:py-24 bg-violet text-cream border-t border-white/10">
           <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-geist font-light tracking-tight leading-[1.05] mb-4">
               Got a client who needs equipment now?
@@ -209,7 +209,7 @@ const RentToBuy = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
               <Button
                 size="lg"
-                className="bg-cream text-ink hover:opacity-90 transition-opacity rounded-full text-base px-8 py-6"
+                className="bg-cream text-violet hover:opacity-90 transition-opacity rounded-full text-base px-8 py-6"
                 asChild
               >
                 <a href="mailto:david@supplyministry.com.au?subject=Rent-to-buy enquiry">

@@ -6,7 +6,7 @@ import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 
 const Quote = () => {
   return (
-    <div className="min-h-screen bg-cream text-ink">
+    <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title="Request a Quote"
         description="Get a no-obligation quote for assistive technology and mobility equipment. NDIS registered provider with 24-hour response time and expert support."
@@ -14,28 +14,28 @@ const Quote = () => {
       <EditorialNavigation />
       
       {/* Header Section */}
-      <section className="pt-12 pb-12 bg-cream">
+      <section className="pt-12 pb-12 bg-violet text-cream">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">
+            <h1 className="text-4xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] text-cream mb-4">
               Request a <span className="italic text-gold">quote</span>
             </h1>
-            <p className="text-lg text-muted-body">
+            <p className="text-lg text-cream/75">
               Tell us about your requirements and we'll get back to you with a tailored quote.
             </p>
           </div>
           
           {/* Trust Signals */}
           <div className="flex flex-wrap justify-center gap-6 mb-8">
-            <div className="flex items-center gap-2 text-sm text-muted-body">
+            <div className="flex items-center gap-2 text-sm text-cream/75">
               <Clock className="h-4 w-4 text-gold" />
               <span>Response within 24 hours</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-body">
+            <div className="flex items-center gap-2 text-sm text-cream/75">
               <Shield className="h-4 w-4 text-gold" />
               <span>No obligation quote</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-body">
+            <div className="flex items-center gap-2 text-sm text-cream/75">
               <Phone className="h-4 w-4 text-gold" />
               <span>Expert support available</span>
             </div>
@@ -44,14 +44,14 @@ const Quote = () => {
       </section>
 
       {/* Quote Form Section */}
-      <section className="py-12">
+      <section className="py-12 bg-cream text-ink">
         <div className="container mx-auto px-4">
           <QuoteForm />
         </div>
       </section>
 
       {/* Contact Info */}
-      <section className="py-12 bg-cream-alt">
+      <section className="py-12 bg-cream-alt text-ink">
         <div className="container mx-auto px-4 text-center">
           <p className="text-muted-body mb-4">
             Prefer to speak with someone directly?
