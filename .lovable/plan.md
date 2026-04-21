@@ -1,74 +1,95 @@
 
 
-# Fix "Featured products" headline spacing
+# Shift accent to lavender + extend violet across the site
 
-Instrument Serif at the current size renders too tight — letters and the italic accent crowd each other. Two fixes available; pick one.
+Two related changes: (1) replace the gold accent with the light lavender `#C4BAFF`, and (2) make the deep violet (the colour behind "Equipment that changes lives") the dominant brand surface across the rest of the site, especially on product pages and the footer, so the design feels less cream-heavy.
 
-## Options
+## 1. Accent colour swap — lavender `#C4BAFF`
 
-**A. Stay on Instrument Serif, fix the spacing** (smallest change)
-- Add `tracking-tight` on roman text, `leading-[1.05]` so descenders on the italic don't collide.
-- Bump size up to `text-5xl md:text-6xl` so the serif has room to breathe.
-- Add a hair of left padding on the italic accent (`ml-1`) so "products" isn't kissing "Featured".
+- `--gold` token in `src/index.css` becomes `#C4BAFF` (HSL ~`249 100% 87%`).
+- Same token drives every italic accent already (`text-gold`), so "*changes*", "*products*", "*delivers*", "*started*", testimonial stars, hover states, etc. all switch automatically.
+- Stars in testimonials currently `fill-gold` — they'll become lavender. Acceptable because they sit on the new dark violet background (next section).
+- Remove `AccentSwitcher` from the homepage — it was a temporary tool and the gold options are no longer relevant.
+- Drop the unused `--accent-a/b/c` legacy tokens from `index.css`.
 
-**B. Switch headlines to Geist (sans), keep gold italic accent** (cleaner, more current)
-- Drop serifs from section headlines entirely.
-- Headline becomes: `font-geist font-light text-5xl md:text-6xl tracking-tight text-ink` with the accent word as `font-geist italic font-normal text-gold`.
-- Matches the product-title decision and gives a single typographic voice across the site.
-- Keeps Instrument Serif loaded only if you still want it on the hero — otherwise remove it too.
+## 2. Violet as the dominant surface
 
-## Recommendation
+The hero violet (`#3D2D9E`) becomes the main brand surface. Cream stays only as a supporting panel colour for content cards/cards-on-violet, not as the page background.
 
-**Option B (Geist).** You've already moved product titles to Geist and disliked Fraunces and now Instrument Serif at section sizes. The pattern is clear: you want Swiss/minimal, not editorial-serif. Commit to Geist and the design becomes coherent.
+### Global page background
+- `Index.tsx`, `Products.tsx`, `ProductDetail.tsx`, `Resources.tsx`, `SleepChoice.tsx`, `SupportAtHome.tsx`, `RentToBuy.tsx`, `Quote.tsx`, `QuoteConfirm.tsx`, `TermsConditions.tsx`, `NotFound.tsx`: outermost wrapper switches `bg-cream text-ink` → `bg-violet text-cream`.
+- Section-level `bg-cream` / `bg-cream-alt` blocks within these pages stay as designed only where the section is intentionally a "content card" sitting on violet (e.g. testimonials, FAQ). Otherwise they're removed so the violet shows through.
 
-## Changes for Option B
+### Footer
+- `Footer.tsx`: `bg-ink` → `bg-violet`. Border above the legal line: `border-cream/20` → `border-cream/15`. Text colours unchanged (cream/cream-60).
 
-### Global headline class swap
-Across all section headlines currently using `font-instrument font-normal`:
-- `font-instrument font-normal` → `font-geist font-light tracking-tight leading-[1.05]`
-- Italic accent span: `italic text-gold` → `font-geist italic font-normal text-gold` (no class change needed if `font-geist` is inherited; explicit is safer)
+### Navigation
+- `EditorialNavigation.tsx`: `bg-cream border-b border-cream-border` → `bg-violet border-b border-white/10`.
+- "Supply Ministry" wordmark: `text-ink` → `text-cream`.
+- Nav links: `text-gold` → `text-cream/70 hover:text-cream` (the lavender accent is reserved for italic display words, not nav links).
+- "Start your quote" pill: `bg-ink text-cream` → `bg-cream text-violet` (inverted so the CTA pops on violet).
 
-### Size bump on the main section h2s
-For `FeaturedProducts.tsx`, `ProductCategoryCards.tsx`, `AboutSection.tsx`, `FAQSection.tsx`, and the Index.tsx mid-page sections:
-- `text-4xl md:text-5xl` → `text-5xl md:text-6xl`
+### Product pages — the big shift
+- `Products.tsx` page wrapper: `bg-violet text-cream`.
+- Product grid sits inside `bg-cream rounded-3xl` "content sheet" panels with generous padding so cards still read on cream — the violet frames them like a magazine spread.
+- `ProductCard.tsx`: card surface stays cream/white; outer page is violet. Title and price remain `text-ink` (cream card). No change to the card itself.
+- Filter sidebar background: `bg-cream-alt` → keep (it's inside the cream sheet).
+- `ProductDetail.tsx`: top hero strip (image + title + price) gets a `bg-violet text-cream` band, then specs/description sit on a cream sheet below. Title moves to `text-cream`; price `text-cream`; "Add to quote" CTA becomes `bg-cream text-violet`.
 
-### Hero headline in `EditorialHero.tsx`
-- Same swap, keep its existing larger size (already big — just change the family).
+### Homepage sections — tighten cream usage
+- Hero (`EditorialHero`): unchanged (already violet).
+- `SupplierStrip`, `TrustBar`: backgrounds switch from cream to violet, logos and text in cream/70.
+- `FeaturedProducts`, `ProductCategoryCards`: stay on cream — these are the "content sheets" framed by violet above and below.
+- `AboutSection`: switch to `bg-violet text-cream`, italic accent in lavender.
+- Sleep Choice section: keep `bg-cream` (content card).
+- Testimonials: `bg-cream-alt` → `bg-violet text-cream`. Testimonial cards inside switch from `bg-cream` to `bg-cream` still (cards on violet) — gives the magazine "polaroid on a poster" feel.
+- FAQ: keep on cream.
+- Contact `#contact` block: currently `bg-ink` → `bg-violet`. CTA pill stays `bg-cream text-violet`.
 
-### `index.html`
-- Remove `Instrument+Serif:ital@0;1` from the Google Fonts URL.
-- Keep Geist (already loaded with weights 300/400/500). Add `600` if any headline needs more weight, but `font-light` (300) is the target.
+### Promotional ribbon
+- `Navigation.tsx` ribbon: `bg-primary` → `bg-violet` (consistent — `--primary` purple is a different hue from the editorial violet, so we standardise on violet).
 
-### `tailwind.config.ts`
-- Remove `instrument` and `fraunces` and `serif-italic` entries from `fontFamily` once verified.
+## 3. Token cleanup
 
-## Files affected (class swap only)
+In `src/index.css`:
+- `--gold: 249 100% 87%;` (lavender — this is the only accent token now).
+- Remove: `--accent-a`, `--accent-b`, `--accent-c`, `--pill-highlight` (unused after switcher removal — or repoint `--pill-highlight` to `--gold`).
+- `--violet` unchanged (`249 56% 40%` / `#3D2D9E`).
 
-- `src/components/editorial/EditorialHero.tsx`
-- `src/components/FeaturedProducts.tsx`
-- `src/components/ProductCategoryCards.tsx`
-- `src/components/AboutSection.tsx`
-- `src/components/FAQSection.tsx`
-- `src/pages/Index.tsx`
-- `src/pages/Products.tsx`
-- `src/pages/ProductDetail.tsx`
-- `src/pages/Quote.tsx`, `QuoteConfirm.tsx`, `RentToBuy.tsx`, `Resources.tsx`, `SleepChoice.tsx`, `SupportAtHome.tsx`, `TermsConditions.tsx`, `NotFound.tsx`
-- `index.html`
-- `tailwind.config.ts`
+In `tailwind.config.ts`:
+- Remove unused `'supply-lavender'` and `'supply-lavender-dark'` legacy palette entries (they were the old purple system).
+
+In `src/components/editorial/AccentSwitcher.tsx`:
+- Delete the file. Remove its import + usage from `Index.tsx`.
+
+## 4. Files touched
+
+- `src/index.css` — token swap + cleanup
+- `tailwind.config.ts` — palette cleanup
+- `src/components/editorial/EditorialNavigation.tsx` — violet bar, inverted CTA
+- `src/components/Footer.tsx` — violet footer
+- `src/components/Navigation.tsx` — ribbon to violet
+- `src/components/editorial/SupplierStrip.tsx` — violet band
+- `src/components/editorial/TrustBar.tsx` — violet band
+- `src/components/AboutSection.tsx` — violet section
+- `src/pages/Index.tsx` — wrapper background, testimonials + contact bands, remove AccentSwitcher
+- `src/pages/Products.tsx` — violet frame, cream content sheet
+- `src/pages/ProductDetail.tsx` — violet hero band, cream specs sheet, inverted CTA
+- `src/pages/Resources.tsx`, `SleepChoice.tsx`, `SupportAtHome.tsx`, `RentToBuy.tsx`, `Quote.tsx`, `QuoteConfirm.tsx`, `TermsConditions.tsx`, `NotFound.tsx` — violet page wrapper, cream content sheets
+- `src/components/editorial/AccentSwitcher.tsx` — delete
 
 ## Out of scope
 
-- Gold accent colour and italic treatment — unchanged.
-- Layout, spacing of sections, copy — unchanged.
-- Product cards, buttons, body — already Geist.
+- Layout, copy, components, routing — unchanged.
+- Product card internals — unchanged.
+- Quote system, Supabase, SEO — unchanged.
 
 ## Verification
 
-- "Featured *products*", "Equipment that *delivers*", "Sleep that *restores*" render in Geist light at a larger, airier size with the gold italic accent intact.
-- Letters no longer feel bunched; tracking and line-height give the headline breathing room.
-- No Instrument Serif or Fraunces remaining in the DOM or font URL.
-
-## Decision needed
-
-Confirm: **Option A (stay on Instrument Serif, just fix spacing)** or **Option B (Geist-only headlines, recommended)**.
+- Italic accent words across the site render in lavender `#C4BAFF`, not gold.
+- Page backgrounds for Products, ProductDetail, Resources, etc. are violet with cream content panels — cream is the panel, not the page.
+- Footer is violet, not near-black.
+- Nav bar is violet with a cream "Start your quote" pill.
+- AccentSwitcher widget is gone.
+- Hero is unchanged (already violet) and now reads as the establishing shot for a violet-led identity.
 
