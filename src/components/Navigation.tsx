@@ -16,7 +16,7 @@ const Navigation = () => {
   return (
     <div className="sticky top-0 z-50 bg-background">
       {/* Promotional Ribbon */}
-      <div className="bg-primary text-primary-foreground py-2.5 text-center font-bold text-sm tracking-wide shadow-lg">
+      <div className="bg-violet text-cream py-2.5 text-center font-bold text-sm tracking-wide shadow-lg">
         <span className="inline-flex items-center gap-2">
           <Sparkles className="h-4 w-4 animate-sparkle" />
           We will beat any quote by 5%
