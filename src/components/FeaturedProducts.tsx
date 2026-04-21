@@ -169,19 +169,19 @@ const FeaturedProducts = () => {
                 )}
 
                 {/* Title */}
-                <h3 className="font-fraunces text-ink line-clamp-2 min-h-[2.5rem] mb-2">
+                <h3 className="font-geist font-medium tracking-tight text-ink line-clamp-2 min-h-[2.5rem] mb-2">
                   {product.title || 'Product'}
                 </h3>
 
                 {/* Price - show "From" for multi-variant products */}
                 <div className="mb-4">
                   {product.hasMultipleVariants ? (
-                    <span className="text-lg font-fraunces text-ink">
+                    <span className="text-lg font-geist font-medium text-ink">
                       From {formatPrice(product.lowestPrice)}
                     </span>
                   ) : isOnSale(product.price_rrp, product.price_discounted) ? (
                     <div className="flex items-baseline gap-2">
-                      <span className="text-lg font-fraunces text-ink">
+                      <span className="text-lg font-geist font-medium text-ink">
                         {formatPrice(product.price_discounted)}
                       </span>
                       <span className="text-sm text-muted-body line-through">
@@ -189,7 +189,7 @@ const FeaturedProducts = () => {
                       </span>
                     </div>
                   ) : (
-                    <span className="text-lg font-fraunces text-ink">
+                    <span className="text-lg font-geist font-medium text-ink">
                       {formatPrice(product.price_rrp)}
                     </span>
                   )}
