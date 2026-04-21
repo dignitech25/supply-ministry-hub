@@ -124,7 +124,7 @@ const AboutSection = () => {
             </p>
             <Button 
               size="lg" 
-              className="bg-orange-500 text-white hover:bg-orange-600 transition-colors"
+              className="bg-ink text-cream hover:opacity-90 transition-colors"
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Get in Touch

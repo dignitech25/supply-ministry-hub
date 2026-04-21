@@ -101,7 +101,7 @@ const ProductCategoryCards = () => {
               Our experienced team can help you find the perfect assistive technology solution for your client's specific needs.
             </p>
             <button 
-              className="bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
+              className="bg-ink text-cream px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-colors"
               onClick={() => navigate('/quote')}
             >
               Speak with an Expert

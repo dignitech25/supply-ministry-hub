@@ -296,7 +296,7 @@ const QuoteForm = () => {
               )}
             />
 
-            <Button type="submit" className="w-full bg-orange-500 text-white hover:bg-orange-600 transition-colors" disabled={form.formState.isSubmitting}>
+            <Button type="submit" className="w-full bg-ink text-cream hover:opacity-90 transition-colors" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

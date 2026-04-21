@@ -58,7 +58,7 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: '0.7s' }}>
               <Button 
                 size="lg" 
-                className="bg-orange-500 text-white hover:bg-orange-600 transition-all hover:scale-105 text-lg px-8"
+                className="bg-ink text-cream hover:opacity-90 transition-all hover:scale-105 text-lg px-8"
                 onClick={() => navigate('/quote')}
               >
                 Request a Quote

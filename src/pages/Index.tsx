@@ -4,6 +4,7 @@ import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 import EditorialHero from "@/components/editorial/EditorialHero";
 import SupplierStrip from "@/components/editorial/SupplierStrip";
 import TrustBar from "@/components/editorial/TrustBar";
+import AccentSwitcher from "@/components/editorial/AccentSwitcher";
 import Footer from "@/components/Footer";
 import SEO, { organizationSchema, localBusinessSchema } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -206,6 +207,7 @@ const Index = () => {
             <p className="text-xs opacity-40 mt-10 tracking-wide">Monday – Friday · 8:30 AM – 5:00 PM AEST</p>
           </div>
         </section>
+        <AccentSwitcher />
       </main>
 
       <Footer />
