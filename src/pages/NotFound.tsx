@@ -1,6 +1,7 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import SEO from "@/components/SEO";
+import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 
 const NotFound = () => {
   const location = useLocation();
@@ -13,17 +14,28 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen bg-cream text-ink flex flex-col">
       <SEO 
         title="Page Not Found"
         description="The page you're looking for doesn't exist. Return to Supply Ministry's homepage to browse our assistive technology and mobility solutions."
       />
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <Link to="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </Link>
+      <EditorialNavigation />
+      <div className="flex-1 flex items-center justify-center px-6">
+        <div className="text-center max-w-lg">
+          <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">404</p>
+          <h1 className="text-4xl md:text-5xl font-fraunces font-light text-ink mb-4">
+            Page not <span className="italic text-gold">found</span>
+          </h1>
+          <p className="text-lg text-muted-body mb-8">
+            The page you're looking for has moved, been renamed, or never existed.
+          </p>
+          <Link
+            to="/"
+            className="inline-block bg-ink text-cream hover:opacity-90 transition-opacity rounded-full px-8 py-3 font-geist text-sm"
+          >
+            Return home
+          </Link>
+        </div>
       </div>
     </div>
   );
