@@ -6,7 +6,7 @@ import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 
 const SleepChoice = () => {
   return (
-    <div className="min-h-screen bg-cream text-ink">
+    <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title="Sleep Choice Program | 7-Day Risk-Free Bed Trial"
         description="Try before you buy with Sleep Choice's 7-day risk-free trial program. Therapeutic beds and pressure-relieving mattresses for aged care and NDIS clients."
@@ -14,7 +14,7 @@ const SleepChoice = () => {
       <EditorialNavigation />
       
       {/* Hero Section */}
-      <section className="relative bg-cream py-20 lg:py-32">
+      <section className="relative bg-violet text-cream py-20 lg:py-32">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="mb-8">
@@ -25,12 +25,12 @@ const SleepChoice = () => {
               />
             </div>
             
-            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Sleep Choice Program</p>
-            <h1 className="text-4xl lg:text-6xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-6 leading-[1.1]">
+            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Sleep Choice Program</p>
+            <h1 className="text-4xl lg:text-6xl font-geist font-light tracking-tight leading-[1.05] text-cream mb-6 leading-[1.1]">
               Sleep that <span className="italic text-gold">restores</span>.
             </h1>
             
-            <p className="text-xl text-muted-body mb-8 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl text-cream/75 mb-8 leading-relaxed max-w-3xl mx-auto">
               Take the guesswork out of bed and mattress selection with our risk-free 7-day trial program. 
               Find the perfect sleep solution for your clients with confidence.
             </p>
@@ -39,7 +39,7 @@ const SleepChoice = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Button 
                 size="lg" 
-                className="bg-ink text-cream hover:opacity-90 transition-opacity text-base px-8 rounded-full"
+                className="bg-cream text-violet hover:opacity-90 transition-opacity text-base px-8 rounded-full"
                 asChild
               >
                 <a href="https://sleepchoice.com.au" target="_blank" rel="noopener noreferrer">
@@ -50,7 +50,7 @@ const SleepChoice = () => {
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="text-base px-8 rounded-full border-ink/20 text-ink hover:bg-ink hover:text-cream"
+                className="text-base px-8 rounded-full border-cream/30 text-cream hover:bg-cream/10"
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Contact Us
@@ -61,7 +61,7 @@ const SleepChoice = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-20">
+      <section className="py-20 bg-cream text-ink">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-geist font-light tracking-tight leading-[1.05] text-ink text-center mb-12">Risk-free 7-day trial</h2>
@@ -125,7 +125,7 @@ const SleepChoice = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-ink text-cream">
+      <section className="py-20 bg-violet text-cream border-t border-white/10">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-geist font-light tracking-tight leading-[1.05] mb-6">Ready to try Sleep Choice?</h2>
           <p className="text-lg mb-8 text-cream/80 max-w-2xl mx-auto">
@@ -135,7 +135,7 @@ const SleepChoice = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg"
-              className="bg-cream text-ink hover:opacity-90 transition-opacity rounded-full px-8"
+              className="bg-cream text-violet hover:opacity-90 transition-opacity rounded-full px-8"
               asChild
             >
               <a href="https://sleepchoice.com.au" target="_blank" rel="noopener noreferrer">
