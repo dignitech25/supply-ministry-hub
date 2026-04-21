@@ -32,6 +32,7 @@ export default {
 				'muted-body': 'hsl(var(--muted-body))',
 				'muted-label': 'hsl(var(--muted-label))',
 				'pill-highlight': 'hsl(var(--pill-highlight))',
+				gold: 'hsl(var(--gold))',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',

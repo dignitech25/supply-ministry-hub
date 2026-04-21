@@ -121,7 +121,7 @@ const EditorialHero = () => {
               that{" "}
               <span
                 className="italic"
-                style={{ color: "rgba(244,239,230,0.38)" }}
+                style={{ color: "hsl(var(--gold))" }}
               >
                 changes
               </span>
@@ -153,7 +153,7 @@ const EditorialHero = () => {
                   style={{ fontWeight: 200, fontSize: "36px", lineHeight: 1 }}
                 >
                   {s.number}
-                  <span className="italic" style={{ color: "rgba(244,239,230,0.28)" }}>
+                  <span className="italic" style={{ color: "hsl(var(--gold))" }}>
                     {s.suffix}
                   </span>
                 </div>
@@ -293,7 +293,7 @@ const EditorialHero = () => {
             style={{ fontWeight: 200, fontSize: "44px", lineHeight: 0.95, letterSpacing: "-0.025em" }}
           >
             Equipment that{" "}
-            <span className="italic" style={{ color: "rgba(244,239,230,0.38)" }}>
+            <span className="italic" style={{ color: "hsl(var(--gold))" }}>
               changes
             </span>{" "}
             lives
@@ -312,7 +312,7 @@ const EditorialHero = () => {
               <div key={s.label}>
                 <div className="font-editorial text-cream" style={{ fontWeight: 200, fontSize: "28px", lineHeight: 1 }}>
                   {s.number}
-                  <span className="italic" style={{ color: "rgba(244,239,230,0.28)" }}>
+                  <span className="italic" style={{ color: "hsl(var(--gold))" }}>
                     {s.suffix}
                   </span>
                 </div>
