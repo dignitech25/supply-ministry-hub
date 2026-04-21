@@ -348,7 +348,7 @@ export default function Products() {
         {/* Header */}
         <div className="mb-8">
           <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-3">Catalogue</p>
-          <h1 className="text-4xl md:text-5xl font-fraunces font-light text-ink mb-3 leading-[1.1]">
+          <h1 className="text-4xl md:text-5xl font-instrument font-normal text-ink mb-3 leading-[1.1]">
             Equipment that <span className="italic text-gold">delivers</span>.
           </h1>
           <p className="text-muted-body">
@@ -423,7 +423,7 @@ export default function Products() {
             ) : products.length === 0 ? (
               <div className="text-center py-16 bg-cream-alt rounded-xl border border-cream-border">
                 <Filter className="h-16 w-16 text-muted-body mx-auto mb-4" />
-                <h3 className="text-xl font-fraunces font-light text-ink mb-2">No products found</h3>
+                <h3 className="text-xl font-instrument font-normal text-ink mb-2">No products found</h3>
                 <p className="text-muted-body mb-4">
                   Try adjusting your filters or search terms
                 </p>

@@ -19,7 +19,7 @@ const SupportAtHome = () => {
             <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">
               Support at home
             </p>
-            <h1 className="text-3xl md:text-5xl font-fraunces font-light text-ink leading-[1.1]">
+            <h1 className="text-3xl md:text-5xl font-instrument font-normal text-ink leading-[1.1]">
               Support at <span className="italic text-gold">home</span> — equipment can't wait for approvals to catch up.
             </h1>
           </div>

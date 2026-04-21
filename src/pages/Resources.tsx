@@ -137,7 +137,7 @@ const Resources = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Resources</p>
-            <h1 className="text-4xl lg:text-5xl font-fraunces font-light text-ink mb-6 leading-[1.1]">
+            <h1 className="text-4xl lg:text-5xl font-instrument font-normal text-ink mb-6 leading-[1.1]">
               Practical <span className="italic text-gold">guidance</span>.
             </h1>
             <p className="text-xl text-muted-body">
@@ -151,7 +151,7 @@ const Resources = () => {
       <section id="resource-library" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">Resource library</h2>
+            <h2 className="text-3xl md:text-4xl font-instrument font-normal text-ink mb-4">Resource library</h2>
             <p className="text-lg text-muted-body max-w-2xl mx-auto">
               Access our collection of product catalogs, clinical guides, and training materials
             </p>
@@ -167,7 +167,7 @@ const Resources = () => {
                       <div className="bg-ink/10 rounded-lg p-2">
                         <IconComponent className="h-6 w-6 text-ink" />
                       </div>
-                      <CardTitle className="text-xl font-fraunces font-light text-ink">{resource.title}</CardTitle>
+                      <CardTitle className="text-xl font-instrument font-normal text-ink">{resource.title}</CardTitle>
                     </div>
                     <CardDescription className="text-muted-body">{resource.description}</CardDescription>
                   </CardHeader>
@@ -195,7 +195,7 @@ const Resources = () => {
       <section id="blog" className="py-20 bg-cream-alt">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">Supply Line blog</h2>
+            <h2 className="text-3xl md:text-4xl font-instrument font-normal text-ink mb-4">Supply Line blog</h2>
             <p className="text-lg text-muted-body mb-6">
               Expert insights, industry news, and practical guidance for healthcare professionals
             </p>
@@ -210,7 +210,7 @@ const Resources = () => {
       <section id="faq" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">Frequently asked questions</h2>
+            <h2 className="text-3xl md:text-4xl font-instrument font-normal text-ink mb-4">Frequently asked questions</h2>
             <p className="text-lg text-muted-body max-w-2xl mx-auto">
               Quick answers to common questions about our products and services
             </p>
@@ -237,7 +237,7 @@ const Resources = () => {
       <section id="ndis" className="py-20 bg-cream-alt">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">NDIS funding information</h2>
+            <h2 className="text-3xl md:text-4xl font-instrument font-normal text-ink mb-4">NDIS funding information</h2>
             <p className="text-lg text-muted-body max-w-2xl mx-auto">
               Understanding how NDIS funding works for assistive technology
             </p>
@@ -246,12 +246,12 @@ const Resources = () => {
           <div className="max-w-5xl mx-auto">
             {/* Funding Categories */}
             <div className="mb-12">
-              <h3 className="text-2xl font-fraunces font-light text-ink mb-6">NDIS funding categories</h3>
+              <h3 className="text-2xl font-instrument font-normal text-ink mb-6">NDIS funding categories</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 {ndisInfo.fundingCategories.map((category, index) => (
                   <Card key={index} className="bg-cream border-cream-border">
                     <CardHeader>
-                      <CardTitle className="text-lg font-fraunces font-light text-ink">{category.title}</CardTitle>
+                      <CardTitle className="text-lg font-instrument font-normal text-ink">{category.title}</CardTitle>
                       <CardDescription className="text-muted-body">{category.description}</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -274,7 +274,7 @@ const Resources = () => {
 
             {/* NDIS Process */}
             <div className="bg-cream rounded-xl p-8 border border-cream-border">
-              <h3 className="text-2xl font-fraunces font-light text-ink mb-6 text-center">
+              <h3 className="text-2xl font-instrument font-normal text-ink mb-6 text-center">
                 How to Access NDIS Funding with Supply Ministry
               </h3>
               <div className="space-y-6">
@@ -309,7 +309,7 @@ const Resources = () => {
       {/* Contact CTA */}
       <section className="py-20 bg-ink text-cream">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-fraunces font-light mb-4">Still have questions?</h2>
+          <h2 className="text-3xl md:text-4xl font-instrument font-normal mb-4">Still have questions?</h2>
           <p className="text-lg mb-8 text-cream/80 max-w-2xl mx-auto">
             Our experienced team is here to help. Get in touch for personalized guidance.
           </p>

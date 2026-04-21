@@ -253,7 +253,7 @@ export default function ProductDetail() {
         <EditorialNavigation />
         <main className="container mx-auto px-4 py-8 max-w-7xl">
           <Card className="p-16 text-center bg-cream-alt border-cream-border">
-            <h1 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">
+            <h1 className="text-3xl md:text-4xl font-instrument font-normal text-ink mb-4">
               Product not <span className="italic text-gold">found</span>
             </h1>
             <p className="text-muted-body mb-6">
@@ -473,7 +473,7 @@ export default function ProductDetail() {
         {/* Description */}
         {(parent.descriptionLong || parent.description) && (
           <Card className="p-8 mb-8 bg-cream-alt border-cream-border">
-            <h2 className="text-2xl md:text-3xl font-fraunces font-light text-ink mb-4">Description</h2>
+            <h2 className="text-2xl md:text-3xl font-instrument font-normal text-ink mb-4">Description</h2>
             <p className="text-muted-body leading-relaxed whitespace-pre-line">
               {parent.descriptionLong || parent.description}
             </p>
@@ -483,7 +483,7 @@ export default function ProductDetail() {
         {/* Clinical Use Cases */}
         {clinicalUseCases.length > 0 && (
           <Card className="p-8 mb-8 bg-cream-alt border-cream-border">
-            <h2 className="text-2xl md:text-3xl font-fraunces font-light text-ink mb-4">Clinical Use Cases</h2>
+            <h2 className="text-2xl md:text-3xl font-instrument font-normal text-ink mb-4">Clinical Use Cases</h2>
             <ul className="space-y-3">
               {clinicalUseCases.map((useCase, index) => (
                 <li key={index} className="flex items-start gap-3">
@@ -498,7 +498,7 @@ export default function ProductDetail() {
         {/* Specifications */}
         {selectedVariant.specifications && (
           <Card className="p-8 mb-8 bg-cream-alt border-cream-border">
-            <h2 className="text-2xl md:text-3xl font-fraunces font-light text-ink mb-4">Specifications</h2>
+            <h2 className="text-2xl md:text-3xl font-instrument font-normal text-ink mb-4">Specifications</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <tbody>
