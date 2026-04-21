@@ -14,8 +14,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import Navigation from '@/components/Navigation';
 import SEO from '@/components/SEO';
+import EditorialNavigation from '@/components/editorial/EditorialNavigation';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuote } from '@/contexts/QuoteContext';
 import { useToast } from '@/hooks/use-toast';
@@ -228,17 +228,17 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
+      <div className="min-h-screen bg-cream text-ink">
+        <EditorialNavigation />
         <main className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-muted rounded w-1/3"></div>
+            <div className="h-8 bg-cream-image rounded w-1/3"></div>
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="aspect-square bg-muted rounded-xl"></div>
+              <div className="aspect-square bg-cream-image rounded-xl"></div>
               <div className="space-y-4">
-                <div className="h-12 bg-muted rounded w-3/4"></div>
-                <div className="h-6 bg-muted rounded w-1/2"></div>
-                <div className="h-20 bg-muted rounded"></div>
+                <div className="h-12 bg-cream-image rounded w-3/4"></div>
+                <div className="h-6 bg-cream-image rounded w-1/2"></div>
+                <div className="h-20 bg-cream-image rounded"></div>
               </div>
             </div>
           </div>
@@ -249,15 +249,17 @@ export default function ProductDetail() {
 
   if (!parent || !selectedVariant) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
+      <div className="min-h-screen bg-cream text-ink">
+        <EditorialNavigation />
         <main className="container mx-auto px-4 py-8 max-w-7xl">
-          <Card className="p-16 text-center">
-            <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
-            <p className="text-muted-foreground mb-6">
+          <Card className="p-16 text-center bg-cream-alt border-cream-border">
+            <h1 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">
+              Product not <span className="italic text-gold">found</span>
+            </h1>
+            <p className="text-muted-body mb-6">
               The product you're looking for doesn't exist or has been removed.
             </p>
-            <Button asChild>
+            <Button asChild className="bg-ink text-cream hover:opacity-90 rounded-full">
               <Link to="/products">Back to Products</Link>
             </Button>
           </Card>
@@ -275,14 +277,14 @@ export default function ProductDetail() {
   const displayImage = selectedVariant.imageUrl || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23C4B5FD" width="400" height="400"/%3E%3Ctext fill="%23ffffff" font-family="sans-serif" font-size="24" text-anchor="middle" x="200" y="200"%3ENo Image%3C/text%3E%3C/svg%3E';
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-cream text-ink">
       <SEO 
         title={`${parent.baseName}${parent.brand ? ` by ${parent.brand}` : ''}`}
         description={parent.description?.slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast dispatch and expert support.`}
         image={selectedVariant.imageUrl || undefined}
         jsonLd={getJsonLdSchemas()}
       />
-      <Navigation />
+      <EditorialNavigation />
       
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Breadcrumbs */}
