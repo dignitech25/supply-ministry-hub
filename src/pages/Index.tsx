@@ -4,7 +4,6 @@ import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 import EditorialHero from "@/components/editorial/EditorialHero";
 import SupplierStrip from "@/components/editorial/SupplierStrip";
 import TrustBar from "@/components/editorial/TrustBar";
-import AccentSwitcher from "@/components/editorial/AccentSwitcher";
 import Footer from "@/components/Footer";
 import SEO, { organizationSchema, localBusinessSchema } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -25,7 +24,7 @@ const SectionFallback = () => <div className="py-20" />;
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-cream text-ink">
+    <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title="Assistive Technology & Mobility Aids | Supply Ministry"
         description="Australia's trusted assistive technology provider. Mobility aids, therapeutic equipment & pressure care. 48-hour dispatch."
@@ -62,7 +61,7 @@ const Index = () => {
         {/* Sleep Choice Program */}
         <Suspense fallback={<SectionFallback />}>
         <AnimatedSection>
-          <section id="sleep-choice" className="py-20 bg-cream">
+          <section id="sleep-choice" className="py-20 bg-cream text-ink">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto text-center">
                 <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Trial Program</p>
@@ -120,12 +119,12 @@ const Index = () => {
         {/* Testimonials */}
         <Suspense fallback={<SectionFallback />}>
         <AnimatedSection>
-          <section id="testimonials" className="py-20 bg-cream-alt">
+          <section id="testimonials" className="py-20 bg-violet text-cream">
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
-                <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Testimonials</p>
-                <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-ink mb-4">What our clients <span className="italic text-gold">say</span></h2>
-                <p className="text-lg text-muted-body">Trusted by leading healthcare providers across Australia</p>
+                <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Testimonials</p>
+                <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-cream mb-4">What our clients <span className="italic text-gold">say</span></h2>
+                <p className="text-lg text-cream/75">Trusted by leading healthcare providers across Australia</p>
               </div>
               <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 {[
@@ -181,7 +180,7 @@ const Index = () => {
         </Suspense>
 
 
-        <section id="contact" className="py-24 bg-ink text-cream relative overflow-hidden">
+        <section id="contact" className="py-24 bg-violet text-cream relative overflow-hidden border-t border-white/10">
           <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)', backgroundSize: '32px 32px' }} />
           <div className="container mx-auto px-4 text-center relative z-10">
             <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Let's Talk</p>
@@ -191,7 +190,7 @@ const Index = () => {
             </p>
             <Link 
               to="/quote"
-              className="inline-block bg-cream text-ink px-10 py-4 rounded-full font-medium text-lg hover:opacity-90 transition-all duration-200 mb-14"
+              className="inline-block bg-cream text-violet px-10 py-4 rounded-full font-medium text-lg hover:opacity-90 transition-all duration-200 mb-14"
             >
               Request a Quote
             </Link>
@@ -210,7 +209,6 @@ const Index = () => {
             <p className="text-xs text-cream/50 mt-10 tracking-wide">Monday – Friday · 8:30 AM – 5:00 PM AEST</p>
           </div>
         </section>
-        <AccentSwitcher />
       </main>
 
       <Footer />

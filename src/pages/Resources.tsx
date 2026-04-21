@@ -125,7 +125,7 @@ const Resources = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cream text-ink">
+    <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title="Resources & Support"
         description="Access clinical guides, NDIS funding information, FAQs, and educational resources for assistive technology. Support for healthcare professionals and clients."
@@ -133,14 +133,14 @@ const Resources = () => {
       <EditorialNavigation />
       
       {/* Hero Section */}
-      <section className="bg-cream py-16">
+      <section className="bg-violet text-cream py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Resources</p>
-            <h1 className="text-4xl lg:text-5xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-6 leading-[1.1]">
+            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Resources</p>
+            <h1 className="text-4xl lg:text-5xl font-geist font-light tracking-tight leading-[1.05] text-cream mb-6 leading-[1.1]">
               Practical <span className="italic text-gold">guidance</span>.
             </h1>
-            <p className="text-xl text-muted-body">
+            <p className="text-xl text-cream/75">
               Everything you need to make informed decisions about assistive technology solutions
             </p>
           </div>
@@ -148,7 +148,7 @@ const Resources = () => {
       </section>
 
       {/* Resource Library Section */}
-      <section id="resource-library" className="py-20">
+      <section id="resource-library" className="py-20 bg-cream text-ink">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Resource library</h2>
@@ -207,7 +207,7 @@ const Resources = () => {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20">
+      <section id="faq" className="py-20 bg-cream text-ink">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Frequently asked questions</h2>
@@ -307,7 +307,7 @@ const Resources = () => {
       </section>
 
       {/* Contact CTA */}
-      <section className="py-20 bg-ink text-cream">
+      <section className="py-20 bg-violet text-cream border-t border-white/10">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-geist font-light tracking-tight leading-[1.05] mb-4">Still have questions?</h2>
           <p className="text-lg mb-8 text-cream/80 max-w-2xl mx-auto">
@@ -316,7 +316,7 @@ const Resources = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg"
-              className="bg-cream text-ink hover:opacity-90 transition-opacity rounded-full px-8"
+              className="bg-cream text-violet hover:opacity-90 transition-opacity rounded-full px-8"
               asChild
             >
               <Link to="/#contact">Contact Us</Link>

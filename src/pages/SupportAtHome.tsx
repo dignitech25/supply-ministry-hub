@@ -5,7 +5,7 @@ import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 
 const SupportAtHome = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-cream text-ink">
+    <div className="min-h-screen flex flex-col bg-violet text-cream">
       <SEO
         title="Support at Home Equipment Solutions"
         description="Supply Ministry works with OTs, case managers and coordinators to identify available funding, optimise equipment decisions and move cases forward while SAH approvals are in progress."
@@ -14,19 +14,19 @@ const SupportAtHome = () => {
 
       <main className="flex-1">
         {/* Heading area */}
-        <section className="bg-cream py-16 md:py-20">
+        <section className="bg-violet text-cream py-16 md:py-20">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
-            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">
+            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">
               Support at home
             </p>
-            <h1 className="text-3xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] text-ink leading-[1.1]">
+            <h1 className="text-3xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] text-cream leading-[1.1]">
               Support at <span className="italic text-gold">home</span> — equipment can't wait for approvals to catch up.
             </h1>
           </div>
         </section>
 
         {/* Body content */}
-        <section className="py-12 md:py-16">
+        <section className="py-12 md:py-16 bg-cream text-ink">
           <div className="max-w-3xl mx-auto px-6 lg:px-8 space-y-6">
             <p className="text-muted-body leading-relaxed">
               The Support at Home program was meant to simplify how older Australians access the equipment they need. In practice, it has stretched the gap between a clinical recommendation and anything actually arriving. Cases sit in assessment queues, approvals move through layers of review, and the person waiting for a pressure care mattress or a mobility aid is still waiting.

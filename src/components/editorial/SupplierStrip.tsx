@@ -11,7 +11,7 @@ const SupplierStrip = () => {
   return (
     <section
       id="suppliers"
-      className="bg-cream border-t border-cream-border"
+      className="bg-violet border-t border-white/10"
       style={{ padding: "13px 16px" }}
     >
       <div className="md:px-12 lg:pl-24 flex items-center flex-wrap gap-y-2">
@@ -21,14 +21,14 @@ const SupplierStrip = () => {
             fontSize: "9px",
             fontWeight: 400,
             letterSpacing: "0.16em",
-            color: "hsl(var(--muted-label))",
+            color: "hsl(var(--cream) / 0.55)",
           }}
         >
           Our suppliers
         </span>
         <span
           className="hidden md:inline-block mr-[18px]"
-          style={{ width: "1px", height: "14px", background: "hsl(var(--cream-border))" }}
+          style={{ width: "1px", height: "14px", background: "hsl(var(--cream) / 0.2)" }}
         />
         <div className="flex items-center flex-wrap gap-1.5">
           {suppliers.map((s) => (
@@ -40,11 +40,11 @@ const SupplierStrip = () => {
                 fontWeight: s.highlighted ? 400 : 300,
                 padding: "3px 10px",
                 borderRadius: "2px",
-                color: s.highlighted ? "hsl(var(--violet))" : "hsl(var(--muted-label))",
+                color: s.highlighted ? "hsl(var(--cream))" : "hsl(var(--cream) / 0.55)",
                 border: s.highlighted
-                  ? "1px solid hsl(var(--pill-highlight))"
-                  : "1px solid hsl(var(--cream-border))",
-                background: s.highlighted ? "hsla(249, 56%, 40%, 0.04)" : "transparent",
+                  ? "1px solid hsl(var(--gold) / 0.6)"
+                  : "1px solid hsl(var(--cream) / 0.18)",
+                background: s.highlighted ? "hsl(var(--gold) / 0.08)" : "transparent",
               }}
             >
               {s.name}

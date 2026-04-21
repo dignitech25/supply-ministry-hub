@@ -228,9 +228,10 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream text-ink">
+      <div className="min-h-screen bg-violet text-cream">
         <EditorialNavigation />
         <main className="container mx-auto px-4 py-8 max-w-7xl">
+          <div className="bg-cream text-ink rounded-3xl p-6 md:p-10">
           <div className="animate-pulse space-y-8">
             <div className="h-8 bg-cream-image rounded w-1/3"></div>
             <div className="grid md:grid-cols-2 gap-8">
@@ -242,6 +243,7 @@ export default function ProductDetail() {
               </div>
             </div>
           </div>
+          </div>
         </main>
       </div>
     );
@@ -249,7 +251,7 @@ export default function ProductDetail() {
 
   if (!parent || !selectedVariant) {
     return (
-      <div className="min-h-screen bg-cream text-ink">
+      <div className="min-h-screen bg-violet text-cream">
         <EditorialNavigation />
         <main className="container mx-auto px-4 py-8 max-w-7xl">
           <Card className="p-16 text-center bg-cream-alt border-cream-border">
@@ -259,7 +261,7 @@ export default function ProductDetail() {
             <p className="text-muted-body mb-6">
               The product you're looking for doesn't exist or has been removed.
             </p>
-            <Button asChild className="bg-ink text-cream hover:opacity-90 rounded-full">
+            <Button asChild className="bg-violet text-cream hover:opacity-90 rounded-full">
               <Link to="/products">Back to Products</Link>
             </Button>
           </Card>
@@ -277,7 +279,7 @@ export default function ProductDetail() {
   const displayImage = selectedVariant.imageUrl || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23C4B5FD" width="400" height="400"/%3E%3Ctext fill="%23ffffff" font-family="sans-serif" font-size="24" text-anchor="middle" x="200" y="200"%3ENo Image%3C/text%3E%3C/svg%3E';
 
   return (
-    <div className="min-h-screen bg-cream text-ink">
+    <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title={`${parent.baseName}${parent.brand ? ` by ${parent.brand}` : ''}`}
         description={parent.description?.slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast dispatch and expert support.`}
@@ -287,6 +289,7 @@ export default function ProductDetail() {
       <EditorialNavigation />
       
       <main className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="bg-cream text-ink rounded-3xl p-6 md:p-10">
         {/* Breadcrumbs */}
         <Breadcrumb className="mb-6">
           <BreadcrumbList>
@@ -516,6 +519,7 @@ export default function ProductDetail() {
 
         {/* SEO Content Sections (for products with enhanced content) */}
         <ProductSEOContent productSlug={parent.slug} />
+        </div>
       </main>
 
       {/* Footer (shown when SEO content is present) */}

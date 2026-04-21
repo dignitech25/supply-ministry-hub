@@ -333,7 +333,7 @@ export default function Products() {
   ];
 
   return (
-    <div className="min-h-screen bg-cream text-ink">
+    <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title="Products | Assistive Technology & Mobility Equipment"
         description="Browse assistive technology, mobility aids, pressure care and therapeutic equipment. Filter by category and brand. Fast Australian dispatch."
@@ -345,6 +345,7 @@ export default function Products() {
       <EditorialNavigation />
       
       <main className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="bg-cream text-ink rounded-3xl p-6 md:p-10">
         {/* Header */}
         <div className="mb-8">
           <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-3">Catalogue</p>
@@ -534,6 +535,7 @@ export default function Products() {
               </Pagination>
             )}
           </div>
+        </div>
       </main>
       <Footer />
     </div>

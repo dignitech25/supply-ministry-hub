@@ -58,7 +58,7 @@ const faqs = [
 
 const RentToBuy = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-cream text-ink">
+    <div className="min-h-screen flex flex-col bg-violet text-cream">
       <SEO
         title="Rent-to-Buy Equipment | Supply Ministry"
         description="Get assistive technology to clients now using remaining HCP funds. Rental payments convert to purchase credit when Support at Home funding approves."
@@ -67,18 +67,18 @@ const RentToBuy = () => {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="bg-cream py-16 md:py-24">
+        <section className="bg-violet text-cream py-16 md:py-24">
           <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
-            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Rent to buy</p>
-            <h1 className="text-3xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] leading-[1.1] mb-5 text-ink">
+            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Rent to buy</p>
+            <h1 className="text-3xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] leading-[1.1] mb-5 text-cream">
               Try before you <span className="italic text-gold">commit</span>.
             </h1>
-            <p className="text-lg md:text-xl text-muted-body mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-cream/75 mb-8 max-w-2xl mx-auto leading-relaxed">
               Use remaining HCP funds to rent. Every dollar converts to purchase credit when funding comes through.
             </p>
             <Button
               size="lg"
-              className="bg-ink text-cream hover:opacity-90 transition-opacity rounded-full text-base px-8 py-6"
+              className="bg-cream text-violet hover:opacity-90 transition-opacity rounded-full text-base px-8 py-6"
               asChild
             >
               <a href="mailto:david@supplyministry.com.au?subject=Rent-to-buy enquiry">
@@ -89,7 +89,7 @@ const RentToBuy = () => {
         </section>
 
         {/* The Problem */}
-        <section className="py-14 md:py-20">
+        <section className="py-14 md:py-20 bg-cream text-ink">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
             <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-6">
               The funding gap is real
@@ -128,7 +128,7 @@ const RentToBuy = () => {
         </section>
 
         {/* What Qualifies */}
-        <section className="py-14 md:py-20">
+        <section className="py-14 md:py-20 bg-cream text-ink">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
             <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-6">
               What equipment qualifies
@@ -177,7 +177,7 @@ const RentToBuy = () => {
         </section>
 
         {/* FAQ */}
-        <section className="py-14 md:py-20">
+        <section className="py-14 md:py-20 bg-cream text-ink">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
             <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-8">
               Common questions
@@ -198,7 +198,7 @@ const RentToBuy = () => {
         </section>
 
         {/* Contact CTA */}
-        <section className="py-16 md:py-24 bg-ink text-cream">
+        <section className="py-16 md:py-24 bg-violet text-cream border-t border-white/10">
           <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-geist font-light tracking-tight leading-[1.05] mb-4">
               Got a client who needs equipment now?
@@ -209,7 +209,7 @@ const RentToBuy = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
               <Button
                 size="lg"
-                className="bg-cream text-ink hover:opacity-90 transition-opacity rounded-full text-base px-8 py-6"
+                className="bg-cream text-violet hover:opacity-90 transition-opacity rounded-full text-base px-8 py-6"
                 asChild
               >
                 <a href="mailto:david@supplyministry.com.au?subject=Rent-to-buy enquiry">

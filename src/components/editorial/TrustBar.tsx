@@ -7,7 +7,7 @@ const statements = [
 
 const TrustBar = () => {
   return (
-    <section className="bg-ink" style={{ padding: "12px 16px" }}>
+    <section className="bg-violet border-t border-white/10" style={{ padding: "12px 16px" }}>
       <div className="md:px-12 lg:pl-24 flex flex-wrap items-center gap-y-2">
         {statements.map((s, i) => (
           <div key={s} className="flex items-center">

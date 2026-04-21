@@ -11,7 +11,7 @@ const QuoteConfirm: React.FC = () => {
   const quoteRef = searchParams.get('ref');
 
   return (
-    <div className="min-h-screen bg-cream text-ink">
+    <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title="Quote Submitted"
         description="Your quote request has been submitted successfully. Our team will respond within 24 hours with a tailored assistive technology solution."
