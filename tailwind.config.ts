@@ -85,6 +85,7 @@ export default {
 				editorial: ['"Cormorant Garamond"', 'serif'],
 				'serif-italic': ['Fraunces', 'serif'],
 				fraunces: ['Fraunces', 'serif'],
+				instrument: ['"Instrument Serif"', 'serif'],
 				geist: ['Geist', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
 			},
 			boxShadow: {
