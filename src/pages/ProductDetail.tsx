@@ -228,9 +228,10 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream text-ink">
+      <div className="min-h-screen bg-violet text-cream">
         <EditorialNavigation />
         <main className="container mx-auto px-4 py-8 max-w-7xl">
+          <div className="bg-cream text-ink rounded-3xl p-6 md:p-10">
           <div className="animate-pulse space-y-8">
             <div className="h-8 bg-cream-image rounded w-1/3"></div>
             <div className="grid md:grid-cols-2 gap-8">
@@ -242,6 +243,7 @@ export default function ProductDetail() {
               </div>
             </div>
           </div>
+          </div>
         </main>
       </div>
     );
@@ -249,7 +251,7 @@ export default function ProductDetail() {
 
   if (!parent || !selectedVariant) {
     return (
-      <div className="min-h-screen bg-cream text-ink">
+      <div className="min-h-screen bg-violet text-cream">
         <EditorialNavigation />
         <main className="container mx-auto px-4 py-8 max-w-7xl">
           <Card className="p-16 text-center bg-cream-alt border-cream-border">
@@ -259,7 +261,7 @@ export default function ProductDetail() {
             <p className="text-muted-body mb-6">
               The product you're looking for doesn't exist or has been removed.
             </p>
-            <Button asChild className="bg-ink text-cream hover:opacity-90 rounded-full">
+            <Button asChild className="bg-violet text-cream hover:opacity-90 rounded-full">
               <Link to="/products">Back to Products</Link>
             </Button>
           </Card>

@@ -535,6 +535,7 @@ export default function Products() {
               </Pagination>
             )}
           </div>
+        </div>
       </main>
       <Footer />
     </div>
