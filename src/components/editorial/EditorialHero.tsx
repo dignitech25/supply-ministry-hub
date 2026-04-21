@@ -63,7 +63,7 @@ const EditorialHero = () => {
   return (
     <section className="bg-violet">
       {/* Desktop layout */}
-      <div className="hidden lg:grid lg:grid-cols-[52px_1fr_42%] min-h-[520px]">
+      <div className="hidden min-[960px]:grid min-[960px]:grid-cols-[52px_1fr_42%] min-h-[520px]">
         {/* Column 0 — Vertical audience tabs */}
         <div className="flex flex-col border-r border-white/[0.06]">
           {audiences.map((aud, idx) => {
@@ -260,7 +260,7 @@ const EditorialHero = () => {
       </div>
 
       {/* Mobile layout */}
-      <div className="lg:hidden">
+      <div className="min-[960px]:hidden">
         {/* Horizontal tabs */}
         <div className="bg-violet flex overflow-x-auto px-4 py-3 gap-2 border-b border-white/[0.06]">
           {audiences.map((aud) => {
