@@ -14,8 +14,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import Navigation from '@/components/Navigation';
 import SEO from '@/components/SEO';
+import EditorialNavigation from '@/components/editorial/EditorialNavigation';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuote } from '@/contexts/QuoteContext';
 import { useToast } from '@/hooks/use-toast';
@@ -228,17 +228,17 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
+      <div className="min-h-screen bg-cream text-ink">
+        <EditorialNavigation />
         <main className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-muted rounded w-1/3"></div>
+            <div className="h-8 bg-cream-image rounded w-1/3"></div>
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="aspect-square bg-muted rounded-xl"></div>
+              <div className="aspect-square bg-cream-image rounded-xl"></div>
               <div className="space-y-4">
-                <div className="h-12 bg-muted rounded w-3/4"></div>
-                <div className="h-6 bg-muted rounded w-1/2"></div>
-                <div className="h-20 bg-muted rounded"></div>
+                <div className="h-12 bg-cream-image rounded w-3/4"></div>
+                <div className="h-6 bg-cream-image rounded w-1/2"></div>
+                <div className="h-20 bg-cream-image rounded"></div>
               </div>
             </div>
           </div>
@@ -249,15 +249,17 @@ export default function ProductDetail() {
 
   if (!parent || !selectedVariant) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
+      <div className="min-h-screen bg-cream text-ink">
+        <EditorialNavigation />
         <main className="container mx-auto px-4 py-8 max-w-7xl">
-          <Card className="p-16 text-center">
-            <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
-            <p className="text-muted-foreground mb-6">
+          <Card className="p-16 text-center bg-cream-alt border-cream-border">
+            <h1 className="text-3xl md:text-4xl font-fraunces font-light text-ink mb-4">
+              Product not <span className="italic text-gold">found</span>
+            </h1>
+            <p className="text-muted-body mb-6">
               The product you're looking for doesn't exist or has been removed.
             </p>
-            <Button asChild>
+            <Button asChild className="bg-ink text-cream hover:opacity-90 rounded-full">
               <Link to="/products">Back to Products</Link>
             </Button>
           </Card>
@@ -275,14 +277,14 @@ export default function ProductDetail() {
   const displayImage = selectedVariant.imageUrl || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23C4B5FD" width="400" height="400"/%3E%3Ctext fill="%23ffffff" font-family="sans-serif" font-size="24" text-anchor="middle" x="200" y="200"%3ENo Image%3C/text%3E%3C/svg%3E';
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-cream text-ink">
       <SEO 
         title={`${parent.baseName}${parent.brand ? ` by ${parent.brand}` : ''}`}
         description={parent.description?.slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast dispatch and expert support.`}
         image={selectedVariant.imageUrl || undefined}
         jsonLd={getJsonLdSchemas()}
       />
-      <Navigation />
+      <EditorialNavigation />
       
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Breadcrumbs */}
@@ -333,7 +335,7 @@ export default function ProductDetail() {
         <div className="grid md:grid-cols-2 gap-12 mb-12">
           {/* Image */}
           <div className="space-y-4">
-            <div className="aspect-square rounded-xl overflow-hidden bg-gray-100 relative">
+            <div className="aspect-square rounded-xl overflow-hidden bg-cream-image relative">
               <img
                 src={displayImage}
                 alt={`${parent.brand || ''} ${parent.baseName} – ${parent.category || 'assistive technology'} from Supply Ministry`.trim()}
@@ -345,33 +347,33 @@ export default function ProductDetail() {
           {/* Product Info */}
           <div className="space-y-6">
             {parent.brand && (
-              <Badge variant="secondary" className="text-base px-4 py-1">
+              <Badge variant="secondary" className="text-base px-4 py-1 bg-cream-alt text-ink border border-cream-border hover:bg-cream-alt">
                 {parent.brand}
               </Badge>
             )}
             
             <div>
-              <h1 className="text-4xl font-bold mb-2">{parent.baseName}</h1>
-              <p className="text-muted-foreground">SKU: {selectedVariant.sku}</p>
-              <p className="text-sm text-muted-foreground">{parent.subcategory}</p>
+              <h1 className="text-4xl md:text-5xl font-fraunces font-light text-ink mb-2 leading-[1.1]">{parent.baseName}</h1>
+              <p className="text-muted-body">SKU: {selectedVariant.sku}</p>
+              <p className="text-sm text-muted-body">{parent.subcategory}</p>
             </div>
 
             <div className="space-y-2">
               {selectedVariant.priceDiscounted && selectedVariant.priceRrp ? (
                 <>
-                  <p className="text-4xl font-bold text-primary">
+                  <p className="text-4xl font-fraunces font-light text-ink">
                     {formatPrice(selectedVariant.priceDiscounted)}
                   </p>
-                  <p className="text-lg text-muted-foreground line-through">
+                  <p className="text-lg text-muted-body line-through">
                     RRP {formatPrice(selectedVariant.priceRrp)}
                   </p>
                 </>
               ) : selectedVariant.priceRrp ? (
-                <p className="text-4xl font-bold text-primary">
+                <p className="text-4xl font-fraunces font-light text-ink">
                   {formatPrice(selectedVariant.priceRrp)}
                 </p>
               ) : (
-                <p className="text-2xl text-muted-foreground">
+                <p className="text-2xl text-muted-body">
                   Price on request
                 </p>
               )}
@@ -380,15 +382,15 @@ export default function ProductDetail() {
             {/* Variant Selectors */}
             {parent.uniqueSizes.length > 1 && (
               <div className="space-y-2">
-                <label className="text-sm font-medium">Size</label>
+                <label className="text-sm font-medium text-ink">Size</label>
                 <Select
                   value={selectedVariant.size || ''}
                   onValueChange={(value) => selectVariant(value, undefined)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-cream-alt border-cream-border">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-background z-50">
+                  <SelectContent className="bg-cream border-cream-border z-50">
                     {parent.uniqueSizes.map((size) => (
                       <SelectItem key={size} value={size}>
                         {size}
@@ -401,15 +403,15 @@ export default function ProductDetail() {
 
             {parent.uniqueColors.length > 1 && (
               <div className="space-y-2">
-                <label className="text-sm font-medium">Color</label>
+                <label className="text-sm font-medium text-ink">Color</label>
                 <Select
                   value={selectedVariant.color || ''}
                   onValueChange={(value) => selectVariant(undefined, value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-cream-alt border-cream-border">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-background z-50">
+                  <SelectContent className="bg-cream border-cream-border z-50">
                     {parent.uniqueColors.map((color) => (
                       <SelectItem key={color} value={color}>
                         {color}
@@ -421,23 +423,25 @@ export default function ProductDetail() {
             )}
 
             {/* Add to Quote Form */}
-            <Card className="p-6 space-y-4 bg-gray-50">
+            <Card className="p-6 space-y-4 bg-cream-alt border-cream-border">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Quantity</label>
+                <label className="text-sm font-medium text-ink">Quantity</label>
                 <div className="flex items-center gap-3">
                   <Button
                     variant="outline"
                     size="icon"
+                    className="border-ink/20 text-ink hover:bg-ink hover:text-cream"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
-                  <span className="text-2xl font-semibold w-16 text-center">
+                  <span className="text-2xl font-medium text-ink w-16 text-center">
                     {quantity}
                   </span>
                   <Button
                     variant="outline"
                     size="icon"
+                    className="border-ink/20 text-ink hover:bg-ink hover:text-cream"
                     onClick={() => setQuantity(quantity + 1)}
                   >
                     <Plus className="h-4 w-4" />
@@ -446,18 +450,19 @@ export default function ProductDetail() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Notes (Optional)</label>
+                <label className="text-sm font-medium text-ink">Notes (Optional)</label>
                 <Textarea
                   placeholder="Add any special requirements or notes..."
                   value={lineNotes}
                   onChange={(e) => setLineNotes(e.target.value)}
                   rows={3}
+                  className="bg-cream border-cream-border"
                 />
               </div>
 
               <Button
                 onClick={handleAddToQuote}
-                className="w-full text-lg py-6"
+                className="w-full text-base py-6 bg-ink text-cream hover:opacity-90 rounded-full"
               >
                 Add to Quote
               </Button>
@@ -467,9 +472,9 @@ export default function ProductDetail() {
 
         {/* Description */}
         {(parent.descriptionLong || parent.description) && (
-          <Card className="p-8 mb-8">
-            <h2 className="text-2xl font-bold mb-4">Description</h2>
-            <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+          <Card className="p-8 mb-8 bg-cream-alt border-cream-border">
+            <h2 className="text-2xl md:text-3xl font-fraunces font-light text-ink mb-4">Description</h2>
+            <p className="text-muted-body leading-relaxed whitespace-pre-line">
               {parent.descriptionLong || parent.description}
             </p>
           </Card>
@@ -477,13 +482,13 @@ export default function ProductDetail() {
 
         {/* Clinical Use Cases */}
         {clinicalUseCases.length > 0 && (
-          <Card className="p-8 mb-8">
-            <h2 className="text-2xl font-bold mb-4">Clinical Use Cases</h2>
+          <Card className="p-8 mb-8 bg-cream-alt border-cream-border">
+            <h2 className="text-2xl md:text-3xl font-fraunces font-light text-ink mb-4">Clinical Use Cases</h2>
             <ul className="space-y-3">
               {clinicalUseCases.map((useCase, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <span className="h-2 w-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                  <span className="text-muted-foreground leading-relaxed">{useCase}</span>
+                  <span className="h-2 w-2 rounded-full bg-gold mt-2 flex-shrink-0" />
+                  <span className="text-muted-body leading-relaxed">{useCase}</span>
                 </li>
               ))}
             </ul>
@@ -492,15 +497,15 @@ export default function ProductDetail() {
 
         {/* Specifications */}
         {selectedVariant.specifications && (
-          <Card className="p-8 mb-8">
-            <h2 className="text-2xl font-bold mb-4">Specifications</h2>
+          <Card className="p-8 mb-8 bg-cream-alt border-cream-border">
+            <h2 className="text-2xl md:text-3xl font-fraunces font-light text-ink mb-4">Specifications</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <tbody>
                   {Object.entries(JSON.parse(selectedVariant.specifications || '{}')).map(([key, value], index) => (
-                    <tr key={key} className={index % 2 === 0 ? 'border-b' : 'border-b bg-gray-50'}>
-                      <td className="py-3 px-4 font-medium capitalize">{key.replace(/_/g, ' ')}</td>
-                      <td className="py-3 px-4 text-muted-foreground">{String(value)}</td>
+                    <tr key={key} className={index % 2 === 0 ? 'border-b border-cream-border' : 'border-b border-cream-border bg-cream'}>
+                      <td className="py-3 px-4 font-medium capitalize text-ink">{key.replace(/_/g, ' ')}</td>
+                      <td className="py-3 px-4 text-muted-body">{String(value)}</td>
                     </tr>
                   ))}
                 </tbody>

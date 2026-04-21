@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import Navigation from '@/components/Navigation';
 import SEO from '@/components/SEO';
+import EditorialNavigation from '@/components/editorial/EditorialNavigation';
 import { ProductFilterSidebar } from '@/components/ProductFilterSidebar';
 import { ActiveFilterTags, ActiveFilter } from '@/components/ActiveFilterTags';
 import { supabase } from '@/integrations/supabase/client';
@@ -333,7 +333,7 @@ export default function Products() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-cream text-ink">
       <SEO 
         title="Products | Assistive Technology & Mobility Equipment"
         description="Browse assistive technology, mobility aids, pressure care and therapeutic equipment. Filter by category and brand. Fast Australian dispatch."
@@ -342,13 +342,16 @@ export default function Products() {
           { name: "Products", url: "https://www.supplyministry.com.au/products" }
         ])}
       />
-      <Navigation />
+      <EditorialNavigation />
       
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold mb-2">Product Catalogue</h1>
-          <p className="text-muted-foreground">
+          <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-3">Catalogue</p>
+          <h1 className="text-4xl md:text-5xl font-fraunces font-light text-ink mb-3 leading-[1.1]">
+            Equipment that <span className="italic text-gold">delivers</span>.
+          </h1>
+          <p className="text-muted-body">
             Browse our complete range of assistive technology solutions
           </p>
         </div>
@@ -357,7 +360,7 @@ export default function Products() {
         <div className="mb-6">
           <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="rounded-full border-ink/20 text-ink hover:bg-ink hover:text-cream">
                 <Filter className="h-4 w-4 mr-2" />
                 Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
               </Button>
@@ -395,11 +398,11 @@ export default function Products() {
 
             {/* Results Count */}
             <div className="mb-6">
-              <p className="text-muted-foreground">
-                Showing <span className="font-semibold text-foreground">
+              <p className="text-muted-body">
+                Showing <span className="font-semibold text-ink">
                   {loading ? '...' : `${products.length === 0 ? 0 : (currentPage - 1) * productsPerPage + 1}-${Math.min(currentPage * productsPerPage, totalCount)}`}
                 </span> of{' '}
-                <span className="font-semibold text-foreground">{loading ? '...' : totalCount}</span> products
+                <span className="font-semibold text-ink">{loading ? '...' : totalCount}</span> products
               </p>
             </div>
 
@@ -407,25 +410,25 @@ export default function Products() {
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Array.from({ length: 9 }).map((_, i) => (
-                  <div key={i} className="bg-card rounded-xl border p-4 animate-pulse">
-                    <div className="aspect-square bg-muted rounded-lg mb-4"></div>
+                  <div key={i} className="bg-cream-alt rounded-xl border border-cream-border p-4 animate-pulse">
+                    <div className="aspect-square bg-cream-image rounded-lg mb-4"></div>
                     <div className="space-y-2">
-                      <div className="h-4 bg-muted rounded w-3/4"></div>
-                      <div className="h-3 bg-muted rounded w-1/2"></div>
-                      <div className="h-3 bg-muted rounded w-1/3"></div>
+                      <div className="h-4 bg-cream-image rounded w-3/4"></div>
+                      <div className="h-3 bg-cream-image rounded w-1/2"></div>
+                      <div className="h-3 bg-cream-image rounded w-1/3"></div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : products.length === 0 ? (
-              <div className="text-center py-16 bg-card rounded-xl border">
-                <Filter className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">No products found</h3>
-                <p className="text-muted-foreground mb-4">
+              <div className="text-center py-16 bg-cream-alt rounded-xl border border-cream-border">
+                <Filter className="h-16 w-16 text-muted-body mx-auto mb-4" />
+                <h3 className="text-xl font-fraunces font-light text-ink mb-2">No products found</h3>
+                <p className="text-muted-body mb-4">
                   Try adjusting your filters or search terms
                 </p>
                 {activeFilterCount > 0 && (
-                  <Button onClick={handleClearFilters} variant="outline">
+                  <Button onClick={handleClearFilters} variant="outline" className="rounded-full border-ink/20 text-ink hover:bg-ink hover:text-cream">
                     Clear Filters
                   </Button>
                 )}
@@ -435,8 +438,8 @@ export default function Products() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                   {products.map((product) => (
                     <Link key={product.slug} to={`/product/${product.slug}`}>
-                      <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full">
-                        <div className="aspect-square bg-muted relative">
+                      <Card className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer h-full bg-cream-alt border-cream-border">
+                        <div className="aspect-square bg-cream-image relative">
                           {product.imageUrl ? (
                             <img
                               src={product.imageUrl}
@@ -444,29 +447,29 @@ export default function Products() {
                               className="object-cover w-full h-full"
                             />
                           ) : (
-                            <div className="flex items-center justify-center h-full text-muted-foreground">
+                            <div className="flex items-center justify-center h-full text-muted-body">
                               No Image
                             </div>
                           )}
                           {product.variantCount > 1 && (
-                            <Badge className="absolute top-2 right-2">
+                            <Badge className="absolute top-2 right-2 bg-ink text-cream hover:bg-ink">
                               {product.variantCount} variants
                             </Badge>
                           )}
                         </div>
                         <div className="p-4">
-                          <p className="text-xs text-muted-foreground mb-1">{product.brand}</p>
-                          <h3 className="font-semibold mb-1 line-clamp-2">{product.baseName}</h3>
-                          <p className="text-xs text-muted-foreground mb-2">{product.subcategory}</p>
+                          <p className="text-xs text-muted-body mb-1 font-geist tracking-[0.08em] uppercase">{product.brand}</p>
+                          <h3 className="font-fraunces font-light text-lg text-ink mb-1 line-clamp-2 leading-tight">{product.baseName}</h3>
+                          <p className="text-xs text-muted-body mb-2">{product.subcategory}</p>
                           <div className="space-y-1">
                             {product.fromPrice !== null ? (
                               <>
-                                <p className="text-lg font-bold text-primary">
+                                <p className="text-lg font-medium text-ink">
                                   {product.variantCount > 1 ? 'From ' : ''}{formatPrice(product.fromPrice)}
                                 </p>
                               </>
                             ) : (
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-muted-body">
                                 Price on request
                               </p>
                             )}
