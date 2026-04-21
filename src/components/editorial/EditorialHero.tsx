@@ -63,36 +63,42 @@ const EditorialHero = () => {
   return (
     <section className="bg-violet">
       {/* Desktop layout */}
-      <div className="hidden lg:flex lg:flex-col min-h-[520px]">
-        {/* Horizontal audience tabs */}
-        <div className="flex border-b border-white/[0.06]">
+      <div className="hidden lg:grid lg:grid-cols-[52px_1fr_42%] min-h-[520px]">
+        {/* Column 0 — Vertical audience tabs */}
+        <div className="flex flex-col border-r border-white/[0.06]">
           {audiences.map((aud, idx) => {
             const isActive = aud.id === activeId;
             return (
               <button
                 key={aud.id}
                 onClick={() => setActiveId(aud.id)}
-                className={`flex-1 px-6 py-4 transition-colors ${
-                  idx !== 0 ? "border-l border-white/[0.06]" : ""
-                } ${isActive ? "bg-white/[0.07] border-b-2 border-b-cream" : "hover:bg-white/[0.03]"}`}
+                className={`relative flex-1 flex items-center justify-center transition-colors ${
+                  idx !== 0 ? "border-t border-white/[0.06]" : ""
+                } ${isActive ? "bg-white/[0.07]" : "hover:bg-white/[0.03]"}`}
                 aria-pressed={isActive}
               >
                 <span
                   className="font-geist uppercase text-[10px] font-light"
                   style={{
+                    writingMode: "vertical-rl",
+                    transform: "rotate(180deg)",
                     letterSpacing: "0.16em",
                     color: isActive ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.3)",
                   }}
                 >
                   {aud.tabLabel}
                 </span>
+                {isActive && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute right-0 top-0 bottom-0 w-px bg-cream"
+                  />
+                )}
               </button>
             );
           })}
         </div>
 
-        {/* Content grid below tabs */}
-        <div className="grid lg:grid-cols-[1fr_42%] flex-1">
         {/* Column 1 — Left content panel */}
         <div className="flex flex-col justify-between" style={{ padding: "56px 52px 48px 44px" }}>
           <div>
@@ -250,7 +256,6 @@ const EditorialHero = () => {
               </span>
             </Link>
           </div>
-        </div>
         </div>
       </div>
 
