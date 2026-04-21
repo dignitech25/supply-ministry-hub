@@ -1,44 +1,127 @@
 
 
-## Support at Home Page
+# Supply Ministry Homepage Redesign
 
-### What this adds
-A new informational page at `/support-at-home` for OTs, case managers, and community care coordinators. It explains that Supply Ministry works with whoever is managing a case to identify available funding, optimise how it applies to equipment, and get things moving without waiting on slow SAH approval processes. The page is clean, professional, prose-only -- no bullet lists, banners, forms, or widgets.
+A complete visual and structural redesign of the homepage hero, supplier strip, and trust bar following the new design system. This replaces the current purple/orange CTA-driven hero with an editorial, audience-segmented experience built around a vertical tab system.
 
-### Content structure
+## Scope
 
-1. **Headline** -- Names the SAH approval delay problem directly
-2. **Two to three paragraphs** -- Acknowledges SAH has slowed the path from clinical need to equipment arrival; cases sitting in queues while clients wait
-3. **What Supply Ministry does** -- Works with whoever manages the case to look at what funding is already available, map how it applies to equipment now, and move things forward
-4. **Sleep Choice connection** -- Where the clinical decision is still open, a 7-night in-home trial through Sleep Choice (sleepchoice.com.au) confirms the right setup before any supply commitment, keeping the recommendation clean and the funding conversation straightforward
-5. **Contact prompt** -- Simple text inviting people to get in touch, with david@supplyministry.com.au. No form, no button, no widget
+This plan covers **only the homepage above-the-fold redesign**: navigation bar, hero (3-column layout with vertical audience tabs), supplier strip, and trust footer bar. Subsequent sections (How it works, category grid, testimonial, segment cards, footer) are noted as follow-ups but not built in this pass.
 
-### Files to create or modify
+## What changes
 
-**1. New file: `src/pages/SupportAtHome.tsx`**
-- Uses `Navigation`, `Footer`, and `SEO` components (same pattern as `SleepChoice.tsx`)
-- Subtle heading area with `bg-gradient-card`, matching other informational pages
-- Body in a `max-w-3xl` container with short `<p>` blocks
-- Sleep Choice mention links to `https://sleepchoice.com.au` (external) and `/sleep-choice` (internal)
-- Contact section: quiet `bg-muted/30` block with a `mailto:` link, no CTA button
-- No `<ul>` or `<li>` elements anywhere on the page
-- SEO title under 60 characters, meta description 145-160 characters
-- Compliance note respected: no promises about funding coverage or guarantees
+**Replaced:**
+- `HeroSection.tsx` — entirely rebuilt with the 3-column editorial layout
+- `Navigation.tsx` — homepage variant with cream background, simplified links, single dark CTA
+- `BrandTrustStrip.tsx` — replaced with text-only supplier pills (no marquee logos)
 
-**2. `src/App.tsx`** -- Add route
-- Import `SupportAtHome`
-- Add `<Route path="/support-at-home" element={<SupportAtHome />} />`
+**Added:**
+- New trust footer bar component (4 statements on near-black background)
+- New design tokens for the editorial palette (deep violet, warm cream, near-black, etc.)
+- Google Fonts import for Cormorant Garamond, Fraunces, and Geist
 
-**3. `src/components/Footer.tsx`** -- Add nav link
-- Add "Support at Home" to the Quick Links list alongside About Us, Products, and Sleep Choice
+**Preserved (unchanged this pass):**
+- All sections below the hero on `Index.tsx` (Featured Products, Categories, About, Sleep Choice, Testimonials, FAQ, Contact)
+- All other routes and pages
+- Logo asset (used in nav as text per spec, but file kept available)
 
-**4. `src/components/CategoryNavigation.tsx`** -- Add to main nav
-- Desktop: add a "Support at Home" text link in the navigation bar
-- Mobile: add it as a secondary link below the Shop Now button
+## Design tokens (added to `index.css` + `tailwind.config.ts`)
 
-### Design approach
-- No hero banner or image -- heading area only with soft gradient background
-- All body text in short paragraphs, no lists
-- Mobile responsive via existing Tailwind container and max-width utilities
-- No new dependencies required
+```text
+--violet:        #3D2D9E    (primary)
+--cream:         #F4EFE6    (contrast surface)
+--ink:           #1A1209    (footer / nav CTA)
+--cream-border:  #DDD7CC
+--muted-body:    #7A7060    (body on cream)
+--muted-label:   #C4BFB5    (subtle labels)
+--pill-highlight:#C4BAFF    (supplier pill border)
+```
+
+Mapped to Tailwind as `bg-cream`, `bg-violet`, `bg-ink`, `text-muted-body`, `border-cream-border`, etc. The existing global `--primary` (purple) and other shadcn tokens stay intact so the rest of the site is unaffected.
+
+## Typography setup
+
+Add to `index.html` `<head>`:
+- Google Fonts: Cormorant Garamond (200, 200 italic), Fraunces (200, 200 italic), Geist (300, 400, 500)
+
+Tailwind font families:
+- `font-display` → Cormorant Garamond
+- `font-serif-italic` → Fraunces
+- `font-sans` → Geist (overrides current Inter usage on the homepage hero only)
+
+## Component breakdown
+
+**1. `EditorialNavigation.tsx`** (new, used on homepage only)
+- 62px height, cream background, bottom border
+- Logo as Fraunces italic text "Supply Ministry"
+- 4 nav links + single dark pill CTA "Start your quote" → routes to `/quote`
+
+**2. `EditorialHero.tsx`** (new)
+- CSS Grid: `52px 1fr 42%`, min-height 520px
+- **Column 1**: Vertical tabs with `writing-mode: vertical-rl` + `rotate(180deg)`, controlled component using local `useState` for active audience
+- **Column 2**: Pull quote, headline (with italic accent on "changes"), body copy, stats row separated by top border
+- **Column 3**: Image placeholder zone (with inline SVG geometric decoration — diagonal lines + concentric circles at 0.05 opacity) + audience panel that swaps content based on active tab with 200ms opacity fade
+
+Audience content stored as a typed array of 4 objects (id, label, name, description, cta).
+
+**3. `SupplierStrip.tsx`** (new)
+- Cream background, "Our suppliers" label + vertical rule + 6 text pills
+- 4 highlighted pills (violet text, light violet border): Aspire, Forte Healthcare, Novis, iCare Medical
+- 2 standard pills (muted): Aidacare, Drive DeVilbiss
+
+**4. `TrustBar.tsx`** (new)
+- Near-black background, 4 uppercase trust statements separated by 2px dot dividers
+- Wraps to 2 lines on mobile
+
+## Interactions
+
+- Vertical tab click: updates `activeAudience` state → right panel content fades out (opacity 0, 100ms) → swaps → fades in (opacity 1, 100ms). Implemented with a `key` prop + Tailwind `animate-fade-in` (already exists in the project).
+- Nav link hover: color transitions to `#1A1209`
+- Supplier pill hover: border color darkens
+- Audience CTA arrow circle hover: fills with `#C4BAFF` at 20% opacity
+
+## Responsive behavior (<900px)
+
+- Hero grid collapses to single column
+- Vertical tabs become a horizontal scroll-row of pills above the left panel (text un-rotated)
+- Supplier strip pills wrap to multiple rows
+- Trust bar wraps to 2 lines, dots hidden between wrapped statements
+
+## Integration into `Index.tsx`
+
+```text
+<EditorialNavigation />          ← replaces <Navigation /> on homepage only
+<main>
+  <EditorialHero />              ← replaces <HeroSection />
+  <SupplierStrip />              ← replaces <BrandTrustStrip />
+  <TrustBar />                   ← new
+  <FeaturedProducts />           ← unchanged
+  ... rest of homepage unchanged
+</main>
+```
+
+Other pages continue to use the existing `Navigation` component.
+
+## Out of scope (follow-up sections noted in spec)
+
+These are listed in the brief as "build next" and will be tackled in a follow-up once the hero is approved:
+- Rolling supplier logo banner (animated)
+- "How it works" 3-step section
+- Product category grid (6 categories)
+- OT testimonial
+- "Who we work with" segment cards
+- New footer with Dignitech attribution
+
+## Constraints honored
+
+- No gradients, no shadows (except optional subtle hover)
+- No coral/orange/red/teal/green — orange CTAs removed from the new hero/nav (existing orange usage elsewhere on the homepage stays for now, to be addressed in the follow-up sections pass)
+- Vertical tabs kept as core UX (not simplified)
+- Supplier pills text-only, no logos
+- Photography zone is a placeholder — no stock imagery used
+- Only Cormorant Garamond, Fraunces, and Geist on the new components
+
+## Open question
+
+The brand memory currently mandates orange CTA buttons (`bg-orange-500`) site-wide and the existing logo PNG in the header. This redesign overrides both for the homepage hero/nav. After approval I'll update memory to scope the orange-CTA rule to non-homepage pages and record the new editorial design system as the homepage standard.
 
