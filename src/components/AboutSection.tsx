@@ -44,14 +44,15 @@ const values = [
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-20">
+    <section id="about" className="py-20 bg-cream">
       <div className="container mx-auto px-4">
         {/* Mission Statement */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-foreground mb-6">
-            Connecting Care With Solutions
+          <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">About</p>
+          <h2 className="font-fraunces font-light text-4xl md:text-5xl text-ink mb-6">
+            Connecting care with <span className="italic text-gold">solutions</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg text-muted-body max-w-4xl mx-auto leading-relaxed">
             Founded by Alex Hampel and David Hyman, Supply Ministry combines decades of experience 
             in mobility and assistive technology to simplify the process of choosing and supplying 
             the right equipment for your clients across Australia.
@@ -64,11 +65,11 @@ const AboutSection = () => {
             const IconComponent = value.icon;
             return (
               <div key={index} className="text-center">
-                <div className="mx-auto bg-primary/10 rounded-full p-4 w-16 h-16 flex items-center justify-center mb-4">
-                  <IconComponent className="h-8 w-8 text-primary" />
+                <div className="mx-auto bg-ink/5 rounded-full p-4 w-16 h-16 flex items-center justify-center mb-4">
+                  <IconComponent className="h-8 w-8 text-ink" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{value.title}</h3>
-                <p className="text-muted-foreground text-sm">{value.description}</p>
+                <h3 className="font-fraunces text-lg text-ink mb-2">{value.title}</h3>
+                <p className="text-muted-body text-sm">{value.description}</p>
               </div>
             );
           })}
@@ -76,28 +77,28 @@ const AboutSection = () => {
 
         {/* Meet the Founders */}
         <div className="mb-16">
-          <h3 className="text-3xl font-bold text-center text-foreground mb-12">Meet the Founders</h3>
+          <h3 className="font-fraunces font-light text-3xl md:text-4xl text-center text-ink mb-12">Meet the <span className="italic text-gold">founders</span></h3>
           <div className="grid lg:grid-cols-2 gap-8">
             {founders.map((founder, index) => (
-              <Card key={index} className="border-border">
+              <Card key={index} className="bg-cream-alt border-cream-border">
                 <CardContent className="p-8">
                   <div className="flex items-start space-x-4">
-                    <div className="bg-primary/10 rounded-full p-3 flex-shrink-0">
-                      <Users className="h-8 w-8 text-primary" />
+                    <div className="bg-ink/5 rounded-full p-3 flex-shrink-0">
+                      <Users className="h-8 w-8 text-ink" />
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-xl font-semibold text-foreground mb-1">{founder.name}</h4>
-                      <p className="text-primary font-medium mb-2">{founder.role}</p>
+                      <h4 className="font-fraunces text-xl text-ink mb-1">{founder.name}</h4>
+                      <p className="text-gold font-medium mb-2">{founder.role}</p>
                       <div className="space-y-3">
                         <div>
-                          <p className="text-sm font-medium text-foreground">Experience:</p>
-                          <p className="text-sm text-muted-foreground">{founder.experience}</p>
+                          <p className="text-sm font-medium text-ink">Experience:</p>
+                          <p className="text-sm text-muted-body">{founder.experience}</p>
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-foreground">Specialization:</p>
-                          <p className="text-sm text-muted-foreground">{founder.specialization}</p>
+                          <p className="text-sm font-medium text-ink">Specialization:</p>
+                          <p className="text-sm text-muted-body">{founder.specialization}</p>
                         </div>
-                        <p className="text-muted-foreground">{founder.description}</p>
+                        <p className="text-muted-body">{founder.description}</p>
                       </div>
                     </div>
                   </div>
@@ -108,15 +109,15 @@ const AboutSection = () => {
         </div>
 
         {/* Our Story */}
-        <div className="bg-soft-gray rounded-2xl p-8 lg:p-12">
+        <div className="bg-cream-alt border border-cream-border rounded-2xl p-8 lg:p-12">
           <div className="max-w-4xl mx-auto text-center">
-            <h3 className="text-2xl font-bold text-foreground mb-6">Our Story</h3>
-            <p className="text-muted-foreground mb-6 leading-relaxed">
+            <h3 className="font-fraunces font-light text-3xl text-ink mb-6">Our <span className="italic text-gold">story</span></h3>
+            <p className="text-muted-body mb-6 leading-relaxed">
               Supply Ministry was born from a simple observation: healthcare professionals and support 
               coordinators were spending too much time navigating complex supplier relationships and 
               not enough time focusing on what matters most - their clients' wellbeing and independence.
             </p>
-            <p className="text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-muted-body mb-8 leading-relaxed">
               By building strong relationships with Australia's most trusted assistive technology 
               manufacturers and maintaining our commitment to exceptional service, we've created 
               a streamlined experience that puts care providers back in control of their time 
@@ -124,7 +125,7 @@ const AboutSection = () => {
             </p>
             <Button 
               size="lg" 
-              className="bg-ink text-cream hover:opacity-90 transition-colors"
+              className="bg-ink text-cream hover:opacity-90 rounded-full"
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Get in Touch

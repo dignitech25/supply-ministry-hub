@@ -52,13 +52,14 @@ const ProductCategoryCards = () => {
   const navigate = useNavigate();
   
   return (
-    <section className="py-20 bg-soft-gray">
+    <section className="py-20 bg-cream">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-foreground mb-4">
-            Explore Our Complete Range
+          <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Categories</p>
+          <h2 className="font-fraunces font-light text-4xl md:text-5xl text-ink mb-4">
+            Explore our complete <span className="italic text-gold">range</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-body max-w-2xl mx-auto">
             Browse our extensive catalogue of mobility aids, home modifications, and assistive technology solutions
           </p>
         </div>
@@ -74,15 +75,15 @@ const ProductCategoryCards = () => {
                 className="group"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <Card className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 animate-fade-in">
+                <Card className="h-full bg-cream-alt border-cream-border transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:border-ink/20 animate-fade-in">
                   <CardContent className="p-6 flex flex-col items-center text-center">
-                    <div className="bg-orange-500/10 group-hover:bg-orange-500/20 rounded-full p-4 mb-4 transition-colors duration-300">
-                      <Icon className="w-8 h-8 text-orange-600" />
+                    <div className="bg-ink/5 group-hover:bg-gold/20 rounded-full p-4 mb-4 transition-colors duration-300">
+                      <Icon className="w-8 h-8 text-ink group-hover:text-ink" />
                     </div>
-                    <h3 className="text-xl font-semibold text-foreground mb-2">
+                    <h3 className="font-fraunces text-xl text-ink mb-2">
                       {category.name}
                     </h3>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-muted-body text-sm">
                       {category.count} products
                     </p>
                   </CardContent>
@@ -93,15 +94,15 @@ const ProductCategoryCards = () => {
         </div>
 
         <div className="text-center mt-12">
-          <div className="bg-card rounded-2xl p-8 border border-border max-w-3xl mx-auto shadow-sm">
-            <h3 className="text-2xl font-semibold text-foreground mb-4">
-              Need Expert Guidance?
+          <div className="bg-cream-alt rounded-2xl p-8 border border-cream-border max-w-3xl mx-auto">
+            <h3 className="font-fraunces font-light text-2xl md:text-3xl text-ink mb-4">
+              Need expert <span className="italic text-gold">guidance</span>?
             </h3>
-            <p className="text-lg text-muted-foreground mb-6">
+            <p className="text-lg text-muted-body mb-6">
               Our experienced team can help you find the perfect assistive technology solution for your client's specific needs.
             </p>
             <button 
-              className="bg-ink text-cream px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-colors"
+              className="bg-ink text-cream px-8 py-3 rounded-full font-medium hover:opacity-90 transition-opacity"
               onClick={() => navigate('/quote')}
             >
               Speak with an Expert

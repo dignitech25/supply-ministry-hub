@@ -54,22 +54,23 @@ export const faqPageSchema = {
 
 const FAQSection = () => {
   return (
-    <section id="faq" className="py-20">
+    <section id="faq" className="py-20 bg-cream">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">FAQ</p>
+            <h2 className="font-fraunces font-light text-4xl md:text-5xl text-ink mb-4">Frequently asked <span className="italic text-gold">questions</span></h2>
+            <p className="text-lg text-muted-body">
               Common questions about our assistive technology products and services
             </p>
           </div>
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left text-base font-medium">
+              <AccordionItem key={index} value={`item-${index}`} className="border-cream-border">
+                <AccordionTrigger className="text-left text-base font-fraunces text-ink hover:text-ink">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
+                <AccordionContent className="text-muted-body leading-relaxed">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
