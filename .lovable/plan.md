@@ -1,47 +1,69 @@
 
 
-# Restore supplier logos in the strip, remove Drive DeVilbiss
+# Replace static supplier strip with a rolling logo banner
 
-The current `SupplierStrip` shows supplier names as text pills. The original `BrandTrustStrip` component still holds the actual PNG logos uploaded earlier (Novis, Aidacare, Forté, icare, Sleep Choice). Reuse those assets in the editorial strip and drop Drive DeVilbiss.
+Six fresh supplier logos uploaded (Aspire, Enable Lifecare, Forté, icare, Novis, Sleep Choice). Swap the current static `SupplierStrip` for a continuous marquee using these new assets, and stop relying on the old `/lovable-uploads/...` paths.
 
-## Changes
+## 1. Add the logos to the project
 
-### `src/components/editorial/SupplierStrip.tsx`
+Copy the six uploads into `public/suppliers/` so they're served as static assets:
 
-Replace the text-pill layout with logo images. Keep the violet band, "Our suppliers" label, and divider.
+- `user-uploads://Aspire.webp` → `public/suppliers/aspire.webp`
+- `user-uploads://Enable.png` → `public/suppliers/enable-lifecare.png`
+- `user-uploads://Forte_Logo.png` → `public/suppliers/forte.png`
+- `user-uploads://Icare_Logo.jpg` → `public/suppliers/icare.jpg`
+- `user-uploads://Novis_Logo.jpg` → `public/suppliers/novis.jpg`
+- `user-uploads://Sleep_Choice-01.png` → `public/suppliers/sleep-choice.png`
 
-- Suppliers array becomes:
-  ```ts
-  const suppliers = [
-    { name: "Novis", src: "/lovable-uploads/cc605216-27d1-40e0-a4c3-bed5d920fd14.png", url: "https://novis.com.au" },
-    { name: "Aidacare", src: "/lovable-uploads/67943b8c-a970-4bf5-8df6-0e555261eb62.png", url: "https://aidacare.com.au" },
-    { name: "Forté Healthcare", src: "/lovable-uploads/496b4f80-f607-49dd-9fac-beeabae55741.png", url: "https://www.fortehealthcare.com.au" },
-    { name: "icare Medical", src: "/lovable-uploads/46b949d7-43d7-423f-9add-ed3ac3bb0669.png", url: "https://icaremedicalgroup.com.au" },
-    { name: "Sleep Choice", src: "/lovable-uploads/3203fff7-35d5-4c26-814d-17666d297a02.png", url: "https://sleepchoice.com.au" },
-  ];
-  ```
-- Aspire and Drive DeVilbiss removed (no logo asset on hand for Aspire; Drive DeVilbiss removed per request).
-- Each item renders as an `<a>` wrapping an `<img>`:
-  - Height `h-6 md:h-7` so the strip stays compact (~13px vertical padding preserved).
-  - Classes: `object-contain opacity-70 hover:opacity-100 transition-opacity`.
-  - On the violet background, add `brightness-0 invert` so the logos render as cream/white silhouettes and read consistently across brands. (If any logo looks wrong inverted, we'll switch that one to a white-version asset later.)
-  - `loading="lazy"`, `alt={name}`, `target="_blank" rel="noopener noreferrer"`.
-- Spacing between logos: `gap-6 md:gap-8` instead of the current pill gap.
-- "Our suppliers" eyebrow label and the thin divider stay exactly as they are.
+## 2. Rebuild `src/components/editorial/SupplierStrip.tsx` as a marquee
 
-## Files touched
+Replace the current flex-wrap layout with a continuous horizontal scroll using the existing `animate-marquee` keyframe already defined in `tailwind.config.ts` (used previously by `BrandTrustStrip`).
 
-- `src/components/editorial/SupplierStrip.tsx` — swap text pills for logo images, drop Drive DeVilbiss and Aspire.
+Structure:
+
+```text
+<section bg-violet>
+  <eyebrow "Our suppliers" + divider>   ← stays as-is
+  <marquee viewport: overflow-hidden, fade masks left/right>
+    <track: flex animate-marquee group-hover:paused>
+      [logo × 6] [logo × 6]   ← duplicated for seamless loop
+    </track>
+  </marquee>
+</section>
+```
+
+Key details:
+
+- **Logo rendering**: each logo is a white "chip" — `bg-white rounded-md px-4 py-2` with the image at `h-7 md:h-8 w-auto object-contain`. The chip approach is needed because the logos are full-colour on coloured backgrounds (Novis on blue, icare on purple, Sleep Choice on lavender) — `brightness-0 invert` won't work cleanly across all of them. White chips give every brand a consistent canvas on the violet band.
+- **Spacing**: `mx-6 md:mx-8` between chips.
+- **Links**: each chip wrapped in `<a target="_blank" rel="noopener noreferrer">` to the supplier site.
+  - Aspire → `https://aspirehealthcare.com.au`
+  - Enable Lifecare → `https://enablelifecare.com.au`
+  - Forté → `https://www.fortehealthcare.com.au`
+  - icare → `https://icaremedicalgroup.com.au`
+  - Novis → `https://novis.com.au`
+  - Sleep Choice → `https://sleepchoice.com.au`
+- **Marquee mechanics**: outer `div` is `overflow-hidden group`; inner track is `flex w-max animate-marquee group-hover:[animation-play-state:paused]`. Logos rendered twice back-to-back; the existing `marquee` keyframe translates `-50%`, giving a seamless loop.
+- **Edge fades**: absolute-positioned `bg-gradient-to-r from-violet to-transparent` (and mirrored on the right) so logos softly disappear at the edges instead of hard-cutting.
+- **Eyebrow + divider**: kept on a single non-scrolling row above the marquee on desktop; on mobile the eyebrow sits above and the marquee runs full width below.
+- **Padding**: increase the section padding slightly (`py-6 md:py-8`) so the white chips have breathing room against the violet.
+
+## 3. Files touched
+
+- `public/suppliers/*` — six new logo files (copied from uploads).
+- `src/components/editorial/SupplierStrip.tsx` — full rewrite: marquee track, white chips, six suppliers, fade masks, hover-to-pause.
 
 ## Out of scope
 
-- `BrandTrustStrip.tsx` (unused on the editorial homepage now, but left in place — can be deleted in a follow-up if confirmed orphaned).
-- Adding an Aspire logo — not on hand. If you have a PNG/SVG, upload it and I'll add it.
+- `BrandTrustStrip.tsx` — leaves it untouched (still orphaned, can be cleaned up later).
+- Marquee speed tuning — use the existing `animate-marquee` (20s linear infinite). If it feels too fast/slow we can tune the keyframe duration after seeing it live.
+- Light/dark logo variants — using white chips avoids needing per-brand colour treatments.
 
 ## Verification
 
-- The supplier strip on the homepage shows five real logos (Novis, Aidacare, Forté, icare, Sleep Choice) in cream/white on violet.
-- Drive DeVilbiss is gone.
-- Each logo links to the supplier's site in a new tab.
-- "Our suppliers" eyebrow and divider unchanged.
+- Six logos scroll continuously left across the violet band beneath the hero.
+- Each logo sits inside a small white rounded chip for legibility.
+- Hovering the strip pauses the scroll; clicking a chip opens the supplier's site in a new tab.
+- Edges fade softly into the violet rather than hard-cutting.
+- "Our suppliers" eyebrow + divider preserved.
 
