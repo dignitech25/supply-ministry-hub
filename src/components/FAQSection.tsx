@@ -59,7 +59,7 @@ const FAQSection = () => {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">FAQ</p>
-            <h2 className="font-geist font-light tracking-tight leading-[1.05] text-4xl md:text-5xl text-ink mb-4">Frequently asked <span className="italic text-gold">questions</span></h2>
+            <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-ink mb-4">Frequently asked <span className="italic text-gold">questions</span></h2>
             <p className="text-lg text-muted-body">
               Common questions about our assistive technology products and services
             </p>

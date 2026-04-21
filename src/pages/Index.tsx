@@ -66,7 +66,7 @@ const Index = () => {
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto text-center">
                 <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Trial Program</p>
-                <h2 className="font-geist font-light tracking-tight leading-[1.05] text-4xl md:text-5xl text-ink mb-6">Sleep <span className="italic text-gold">Choice</span></h2>
+                <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-ink mb-6">Sleep <span className="italic text-gold">Choice</span></h2>
                 <p className="text-lg text-muted-body mb-8 max-w-2xl mx-auto">
                   Take the guesswork out of bed and mattress selection with our risk-free 7-day trial program.
                 </p>
@@ -124,7 +124,7 @@ const Index = () => {
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
                 <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Testimonials</p>
-                <h2 className="font-geist font-light tracking-tight leading-[1.05] text-4xl md:text-5xl text-ink mb-4">What our clients <span className="italic text-gold">say</span></h2>
+                <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-ink mb-4">What our clients <span className="italic text-gold">say</span></h2>
                 <p className="text-lg text-muted-body">Trusted by leading healthcare providers across Australia</p>
               </div>
               <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -185,7 +185,7 @@ const Index = () => {
           <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)', backgroundSize: '32px 32px' }} />
           <div className="container mx-auto px-4 text-center relative z-10">
             <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Let's Talk</p>
-            <h2 className="font-geist font-light tracking-tight leading-[1.05] text-4xl md:text-5xl mb-5">Ready to get <span className="italic text-gold">started</span>?</h2>
+            <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl mb-5">Ready to get <span className="italic text-gold">started</span>?</h2>
             <p className="text-lg mb-10 text-cream/75 max-w-xl mx-auto leading-relaxed">
               Reach out to our team to discuss your assistive technology needs. We'll help find the perfect solutions for your clients.
             </p>
