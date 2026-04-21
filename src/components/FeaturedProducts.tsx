@@ -98,7 +98,7 @@ const FeaturedProducts = () => {
 
   if (isLoading) {
     return (
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-cream">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Skeleton className="h-10 w-64 mx-auto mb-4" />
@@ -106,7 +106,7 @@ const FeaturedProducts = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {[1, 2, 3, 4].map((i) => (
-              <Card key={i} className="overflow-hidden">
+              <Card key={i} className="overflow-hidden bg-cream-alt border-cream-border">
                 <Skeleton className="h-48 w-full" />
                 <CardContent className="p-4">
                   <Skeleton className="h-4 w-20 mb-2" />
@@ -123,12 +123,13 @@ const FeaturedProducts = () => {
   }
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 bg-cream">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Featured Products</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Selected Equipment</p>
+          <h2 className="font-fraunces font-light text-4xl md:text-5xl text-ink mb-4">Featured <span className="italic text-gold">products</span></h2>
+          <p className="text-lg text-muted-body max-w-2xl mx-auto">
             Hand-picked solutions from our extensive catalogue
           </p>
         </div>
@@ -138,11 +139,11 @@ const FeaturedProducts = () => {
           {products?.map((product: any, index: number) => (
             <Card 
               key={product.id} 
-              className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-fade-in-up group"
+              className="overflow-hidden bg-cream-alt border-cream-border hover:shadow-md transition-all duration-300 hover:-translate-y-1 animate-fade-in-up group"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Product Image */}
-              <div className="relative aspect-square bg-muted overflow-hidden">
+              <div className="relative aspect-square bg-cream-image overflow-hidden">
                 <img
                   src={product.image_url || getImagePlaceholder()}
                   alt={product.title || 'Product'}
@@ -153,7 +154,7 @@ const FeaturedProducts = () => {
                   }}
                 />
                 {isOnSale(product.price_rrp, product.price_discounted) && (
-                  <span className="absolute top-2 right-2 bg-supply-lavender text-foreground text-xs font-semibold px-2 py-1 rounded">
+                  <span className="absolute top-2 right-2 bg-gold text-ink text-xs font-medium px-2 py-1 rounded">
                     Sale
                   </span>
                 )}
@@ -162,33 +163,33 @@ const FeaturedProducts = () => {
               <CardContent className="p-4">
                 {/* Brand */}
                 {product.brand && (
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                  <p className="text-[11px] text-muted-body uppercase tracking-[0.15em] mb-1">
                     {product.brand}
                   </p>
                 )}
 
                 {/* Title */}
-                <h3 className="font-semibold text-foreground line-clamp-2 min-h-[2.5rem] mb-2">
+                <h3 className="font-fraunces text-ink line-clamp-2 min-h-[2.5rem] mb-2">
                   {product.title || 'Product'}
                 </h3>
 
                 {/* Price - show "From" for multi-variant products */}
                 <div className="mb-4">
                   {product.hasMultipleVariants ? (
-                    <span className="text-lg font-bold text-primary">
+                    <span className="text-lg font-fraunces text-ink">
                       From {formatPrice(product.lowestPrice)}
                     </span>
                   ) : isOnSale(product.price_rrp, product.price_discounted) ? (
                     <div className="flex items-baseline gap-2">
-                      <span className="text-lg font-bold text-primary">
+                      <span className="text-lg font-fraunces text-ink">
                         {formatPrice(product.price_discounted)}
                       </span>
-                      <span className="text-sm text-muted-foreground line-through">
+                      <span className="text-sm text-muted-body line-through">
                         {formatPrice(product.price_rrp)}
                       </span>
                     </div>
                   ) : (
-                    <span className="text-lg font-bold text-primary">
+                    <span className="text-lg font-fraunces text-ink">
                       {formatPrice(product.price_rrp)}
                     </span>
                   )}
@@ -199,7 +200,7 @@ const FeaturedProducts = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-full"
+                    className="w-full border border-ink/20 text-ink hover:bg-ink hover:text-cream rounded-full bg-transparent"
                     asChild
                   >
                     <Link to={`/products/${product.sku}`}>
@@ -208,7 +209,7 @@ const FeaturedProducts = () => {
                   </Button>
                   <Button
                     size="sm"
-                    className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+                    className="w-full bg-ink text-cream hover:opacity-90 rounded-full"
                     onClick={() => handleAddToQuote(product)}
                   >
                     <ShoppingCart className="h-4 w-4 mr-2" />
@@ -225,6 +226,7 @@ const FeaturedProducts = () => {
           <Button
             variant="outline"
             size="lg"
+            className="border border-ink/20 text-ink hover:bg-ink hover:text-cream rounded-full bg-transparent"
             asChild
           >
             <Link to="/products" className="inline-flex items-center gap-2">
