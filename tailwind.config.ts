@@ -21,6 +21,17 @@ export default {
 			colors: {
 				'supply-lavender': '#C4B5FD',
 				'supply-lavender-dark': '#A78BFA',
+				violet: 'hsl(var(--violet))',
+				cream: {
+					DEFAULT: 'hsl(var(--cream))',
+					alt: 'hsl(var(--cream-alt))',
+					image: 'hsl(var(--cream-image))',
+					border: 'hsl(var(--cream-border))',
+				},
+				ink: 'hsl(var(--ink))',
+				'muted-body': 'hsl(var(--muted-body))',
+				'muted-label': 'hsl(var(--muted-label))',
+				'pill-highlight': 'hsl(var(--pill-highlight))',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -69,7 +80,10 @@ export default {
 			},
 			fontFamily: {
 				display: ['var(--font-display)'],
-				body: ['var(--font-body)']
+				body: ['var(--font-body)'],
+				editorial: ['"Cormorant Garamond"', 'serif'],
+				'serif-italic': ['Fraunces', 'serif'],
+				geist: ['Geist', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
 			},
 			boxShadow: {
 				'sm': 'var(--shadow-sm)',
