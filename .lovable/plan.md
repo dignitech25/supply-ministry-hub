@@ -1,42 +1,65 @@
 
 
-# Make vertical left-side tabs appear at your preview width
+# Add accent switcher and replace orange CTAs with ink
 
-## Root cause
+Two scoped changes for the editorial review pass: a temporary accent-colour toggler so we can audition three palettes against the live page, and a global swap of the leftover orange CTAs to the ink/cream pairing that matches the new design system.
 
-The hero in `EditorialHero.tsx` gates the three-column layout (vertical tabs on the left) behind Tailwind's `lg:` prefix, which is `min-width: 1024px`. Your current preview viewport is **1000px wide**, so it falls into the `lg:hidden` mobile branch — the one that renders the horizontal pill tabs across the top. The vertical layout is in the code, it just isn't being shown at this width.
+## 1. Three accent variants in `src/index.css`
 
-## Fix
+Inside `:root`, add:
 
-Lower the breakpoint at which the vertical layout activates so it appears at ~960px and above (covers your 1000px preview and all real desktop sizes), while keeping a true mobile fallback below that.
+```css
+--accent-a: 38 52% 60%;   /* Warm gold #C8A96E */
+--accent-b: 142 25% 65%;  /* Soft sage #8FBF9F */
+--accent-c: 25 55% 75%;   /* Pale coral cream #E8C4A8 */
+```
 
-Concretely in `src/components/editorial/EditorialHero.tsx`:
+Change the existing `--gold` token to reference `--accent-a` by default:
 
-1. **Desktop block** — change the wrapper from
-   `hidden lg:grid lg:grid-cols-[52px_1fr_42%]`
-   to
-   `hidden min-[960px]:grid min-[960px]:grid-cols-[52px_1fr_42%]`.
-2. **Mobile block** — change the wrapper from
-   `lg:hidden`
-   to
-   `min-[960px]:hidden`.
-3. No layout, copy, colour, or tab-styling changes inside either block — the existing vertical tab strip (52px wide, rotated `writing-mode: vertical-rl` labels, cream active indicator) is already correct and will simply now be visible at 960px+.
+```css
+--gold: var(--accent-a);
+```
 
-## Verification after the change
+Everything that already consumes `hsl(var(--gold))` (hero italic "changes", `+`/`hr`/`yr` stat suffixes, nav links, etc.) will pick up the active accent automatically.
 
-At 1000px the page should immediately show:
+## 2. New `src/components/editorial/AccentSwitcher.tsx`
 
-- A 52px-wide violet column on the far left containing four rotated labels (Occupational therapist · Aged care provider · Support coordinator · NDIS participant) reading bottom-to-top.
-- The headline column in the middle.
-- The cream image + audience panel on the right.
+Create the component exactly as specified in the brief: a fixed-position pill in the bottom-right with an "ACCENT" label and three coloured circular buttons (A/B/C). Clicking a circle calls `document.documentElement.style.setProperty("--gold", accent.var)`, which live-updates every consumer of `--gold` across the page. Active state shown via a 2.5px solid ring + 2px outline in the accent's own colour.
 
-Below 960px (e.g. phones), the horizontal pill tabs continue to be used.
+## 3. Mount the switcher in `src/pages/Index.tsx`
+
+Import `AccentSwitcher` and render `<AccentSwitcher />` as the last child inside `<main>`, just before `</main>`. Review-only — flagged for removal before launch.
+
+## 4. Replace orange CTAs with ink/cream
+
+In each of the following files, swap any `bg-orange-500` → `bg-ink`, add `text-cream`, and replace `hover:bg-orange-600` → `hover:opacity-90`. Where the existing class string already includes a different text colour (e.g. `text-white`), drop it in favour of `text-cream`. Where `text-orange-500`/`text-orange-600` is used for icons or accents inline (not on a button), leave it alone — only the CTA button surfaces change.
+
+Files to touch:
+
+- `src/components/AboutSection.tsx`
+- `src/components/HeroSection.tsx` (legacy hero — confirm it's not imported by the live homepage; if unused, still update for consistency)
+- `src/components/FloatingSmartCTA.tsx`
+- `src/components/FloatingQuoteButton.tsx`
+- `src/components/ProductCategoryCards.tsx`
+- `src/components/ProductCategories.tsx`
+- `src/components/QuoteForm.tsx`
+
+Resulting button class pattern: `bg-ink text-cream hover:opacity-90` (keeping any existing `transition-*`, sizing, padding, and shape utilities intact).
+
+## 5. Explicitly out of scope
+
+No changes to: `EditorialHero.tsx`, `EditorialNavigation.tsx`, `SupplierStrip.tsx`, `TrustBar.tsx`, Supabase integrations, routing, the quote system, or any product pages.
 
 ## Files touched
 
-- `src/components/editorial/EditorialHero.tsx` — two className swaps on the two top-level layout wrappers (lines 66 and 263). Nothing else.
+- `src/index.css` — add three accent variables, repoint `--gold`.
+- `src/components/editorial/AccentSwitcher.tsx` — new file.
+- `src/pages/Index.tsx` — import + mount switcher inside `<main>`.
+- 7 component files listed above — orange → ink/cream class swap only.
 
-## Out of scope
+## Verification after change
 
-Tab visual design, navigation, hero copy, gold accents, mobile pill design, and all other components stay exactly as they are.
+- Three coloured dots appear bottom-right; clicking each instantly recolours the hero italic "changes", the stat suffixes (`+`, `hr`, `yr`), and the nav links.
+- No orange remains on any CTA button across homepage, floating CTAs, about section, category cards, or quote form. Buttons render as dark ink with cream text and a subtle opacity hover.
+- Editorial hero, nav, supplier strip, and trust bar are visually unchanged apart from the accent recolour.
 
