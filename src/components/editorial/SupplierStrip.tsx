@@ -1,10 +1,9 @@
 const suppliers = [
-  { name: "Aspire", highlighted: true },
-  { name: "Forte Healthcare", highlighted: true },
-  { name: "Novis", highlighted: true },
-  { name: "iCare Medical", highlighted: true },
-  { name: "Aidacare", highlighted: false },
-  { name: "Drive DeVilbiss", highlighted: false },
+  { name: "Novis", src: "/lovable-uploads/cc605216-27d1-40e0-a4c3-bed5d920fd14.png", url: "https://novis.com.au" },
+  { name: "Aidacare", src: "/lovable-uploads/67943b8c-a970-4bf5-8df6-0e555261eb62.png", url: "https://aidacare.com.au" },
+  { name: "Forté Healthcare", src: "/lovable-uploads/496b4f80-f607-49dd-9fac-beeabae55741.png", url: "https://www.fortehealthcare.com.au" },
+  { name: "icare Medical", src: "/lovable-uploads/46b949d7-43d7-423f-9add-ed3ac3bb0669.png", url: "https://icaremedicalgroup.com.au" },
+  { name: "Sleep Choice", src: "/lovable-uploads/3203fff7-35d5-4c26-814d-17666d297a02.png", url: "https://sleepchoice.com.au" },
 ];
 
 const SupplierStrip = () => {
@@ -30,25 +29,22 @@ const SupplierStrip = () => {
           className="hidden md:inline-block mr-[18px]"
           style={{ width: "1px", height: "14px", background: "hsl(var(--cream) / 0.2)" }}
         />
-        <div className="flex items-center flex-wrap gap-1.5">
+        <div className="flex items-center flex-wrap gap-6 md:gap-8">
           {suppliers.map((s) => (
-            <span
+            <a
               key={s.name}
-              className="font-geist transition-colors"
-              style={{
-                fontSize: "11px",
-                fontWeight: s.highlighted ? 400 : 300,
-                padding: "3px 10px",
-                borderRadius: "2px",
-                color: s.highlighted ? "hsl(var(--cream))" : "hsl(var(--cream) / 0.55)",
-                border: s.highlighted
-                  ? "1px solid hsl(var(--gold) / 0.6)"
-                  : "1px solid hsl(var(--cream) / 0.18)",
-                background: s.highlighted ? "hsl(var(--gold) / 0.08)" : "transparent",
-              }}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.name}
             >
-              {s.name}
-            </span>
+              <img
+                src={s.src}
+                alt={s.name}
+                loading="lazy"
+                className="h-6 md:h-7 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity brightness-0 invert"
+              />
+            </a>
           ))}
         </div>
       </div>
