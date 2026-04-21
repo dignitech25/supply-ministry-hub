@@ -333,7 +333,7 @@ export default function Products() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-cream text-ink">
       <SEO 
         title="Products | Assistive Technology & Mobility Equipment"
         description="Browse assistive technology, mobility aids, pressure care and therapeutic equipment. Filter by category and brand. Fast Australian dispatch."
@@ -342,13 +342,16 @@ export default function Products() {
           { name: "Products", url: "https://www.supplyministry.com.au/products" }
         ])}
       />
-      <Navigation />
+      <EditorialNavigation />
       
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold mb-2">Product Catalogue</h1>
-          <p className="text-muted-foreground">
+          <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-3">Catalogue</p>
+          <h1 className="text-4xl md:text-5xl font-fraunces font-light text-ink mb-3 leading-[1.1]">
+            Equipment that <span className="italic text-gold">delivers</span>.
+          </h1>
+          <p className="text-muted-body">
             Browse our complete range of assistive technology solutions
           </p>
         </div>
@@ -357,7 +360,7 @@ export default function Products() {
         <div className="mb-6">
           <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="rounded-full border-ink/20 text-ink hover:bg-ink hover:text-cream">
                 <Filter className="h-4 w-4 mr-2" />
                 Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
               </Button>
