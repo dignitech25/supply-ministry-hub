@@ -1,8 +1,9 @@
 import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
-import Navigation from "@/components/Navigation";
-import HeroSection from "@/components/HeroSection";
-import BrandTrustStrip from "@/components/BrandTrustStrip";
+import EditorialNavigation from "@/components/editorial/EditorialNavigation";
+import EditorialHero from "@/components/editorial/EditorialHero";
+import SupplierStrip from "@/components/editorial/SupplierStrip";
+import TrustBar from "@/components/editorial/TrustBar";
 import Footer from "@/components/Footer";
 import SEO, { organizationSchema, localBusinessSchema } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -29,11 +30,11 @@ const Index = () => {
         description="Australia's trusted assistive technology provider. Mobility aids, therapeutic equipment & pressure care. 48-hour dispatch."
         jsonLd={[organizationSchema, localBusinessSchema, faqPageSchema]}
       />
-      <Navigation />
+      <EditorialNavigation />
       <main id="main-content">
-        <HeroSection />
-        
-        <BrandTrustStrip />
+        <EditorialHero />
+        <SupplierStrip />
+        <TrustBar />
         
         <Suspense fallback={<SectionFallback />}>
           <AnimatedSection delay={0.1}>
