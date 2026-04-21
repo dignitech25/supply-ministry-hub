@@ -24,7 +24,7 @@ const EditorialNavigation = () => {
             <a
               key={link.label}
               href={link.href}
-              className="font-geist text-[12px] font-light text-muted-label hover:text-ink transition-colors"
+              className="font-geist text-[12px] font-light text-gold hover:text-ink transition-colors"
             >
               {link.label}
             </a>
