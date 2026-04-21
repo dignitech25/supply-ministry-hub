@@ -128,7 +128,7 @@ const FeaturedProducts = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Selected Equipment</p>
-          <h2 className="font-instrument font-normal text-4xl md:text-5xl text-ink mb-4">Featured <span className="italic text-gold">products</span></h2>
+          <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-ink mb-4">Featured <span className="italic text-gold">products</span></h2>
           <p className="text-lg text-muted-body max-w-2xl mx-auto">
             Hand-picked solutions from our extensive catalogue
           </p>

@@ -13,13 +13,13 @@ const TermsConditions = () => {
       
       <main className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-instrument font-normal text-ink mb-10">
+          <h1 className="text-4xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-10">
             Terms & <span className="italic text-gold">conditions</span>
           </h1>
           
           <div className="prose prose-lg max-w-none">
             <section className="mb-8">
-              <h2 className="text-2xl font-instrument font-normal text-ink mb-4">General Terms</h2>
+              <h2 className="text-2xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">General Terms</h2>
               <p className="text-muted-body mb-4">
                 By using Supply Ministry's services, you agree to be bound by these terms and conditions. 
                 These terms apply to all products and services provided by Supply Ministry.
@@ -27,7 +27,7 @@ const TermsConditions = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-instrument font-normal text-ink mb-4">Products & Services</h2>
+              <h2 className="text-2xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Products & Services</h2>
               <p className="text-muted-body mb-4">
                 Supply Ministry provides assistive technology solutions, mobility aids, and related services. 
                 All products are subject to availability and specifications may change without notice.
@@ -35,7 +35,7 @@ const TermsConditions = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-instrument font-normal text-ink mb-4">Pricing & Payment</h2>
+              <h2 className="text-2xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Pricing & Payment</h2>
               <p className="text-muted-body mb-4">
                 All prices are subject to change without notice. Payment terms will be specified on individual quotes. 
                 Supply Ministry reserves the right to modify pricing based on market conditions.
@@ -43,7 +43,7 @@ const TermsConditions = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-instrument font-normal text-ink mb-4">Delivery & Returns</h2>
+              <h2 className="text-2xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Delivery & Returns</h2>
               <p className="text-muted-body mb-4">
                 We aim for 48-hour dispatch on most items. Delivery times may vary based on location and product availability. 
                 Returns are accepted within 30 days of delivery for unused items in original condition.
@@ -51,7 +51,7 @@ const TermsConditions = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-instrument font-normal text-ink mb-4">Privacy Policy</h2>
+              <h2 className="text-2xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Privacy Policy</h2>
               <h3 className="text-xl font-medium text-ink mb-3">Information Collection</h3>
               <p className="text-muted-body mb-4">
                 We collect information you provide when requesting quotes, placing orders, or contacting us. 
@@ -78,7 +78,7 @@ const TermsConditions = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-instrument font-normal text-ink mb-4">Liability</h2>
+              <h2 className="text-2xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Liability</h2>
               <p className="text-muted-body mb-4">
                 Supply Ministry's liability is limited to the value of products or services provided. 
                 We are not liable for indirect, consequential, or special damages.
@@ -86,7 +86,7 @@ const TermsConditions = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-instrument font-normal text-ink mb-4">Contact Information</h2>
+              <h2 className="text-2xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Contact Information</h2>
               <p className="text-muted-body mb-2">
                 For questions about these terms and conditions, please contact:
               </p>

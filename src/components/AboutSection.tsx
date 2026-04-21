@@ -49,7 +49,7 @@ const AboutSection = () => {
         {/* Mission Statement */}
         <div className="text-center mb-16">
           <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">About</p>
-          <h2 className="font-instrument font-normal text-4xl md:text-5xl text-ink mb-6">
+          <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-ink mb-6">
             Connecting care with <span className="italic text-gold">solutions</span>
           </h2>
           <p className="text-lg text-muted-body max-w-4xl mx-auto leading-relaxed">
@@ -68,7 +68,7 @@ const AboutSection = () => {
                 <div className="mx-auto bg-ink/5 rounded-full p-4 w-16 h-16 flex items-center justify-center mb-4">
                   <IconComponent className="h-8 w-8 text-ink" />
                 </div>
-                <h3 className="font-instrument text-lg text-ink mb-2">{value.title}</h3>
+                <h3 className="font-geist text-lg text-ink mb-2">{value.title}</h3>
                 <p className="text-muted-body text-sm">{value.description}</p>
               </div>
             );
@@ -77,7 +77,7 @@ const AboutSection = () => {
 
         {/* Meet the Founders */}
         <div className="mb-16">
-          <h3 className="font-instrument font-normal text-3xl md:text-4xl text-center text-ink mb-12">Meet the <span className="italic text-gold">founders</span></h3>
+          <h3 className="font-geist font-light tracking-tight leading-[1.05] text-3xl md:text-4xl text-center text-ink mb-12">Meet the <span className="italic text-gold">founders</span></h3>
           <div className="grid lg:grid-cols-2 gap-8">
             {founders.map((founder, index) => (
               <Card key={index} className="bg-cream-alt border-cream-border">
@@ -87,7 +87,7 @@ const AboutSection = () => {
                       <Users className="h-8 w-8 text-ink" />
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-instrument text-xl text-ink mb-1">{founder.name}</h4>
+                      <h4 className="font-geist text-xl text-ink mb-1">{founder.name}</h4>
                       <p className="text-gold font-medium mb-2">{founder.role}</p>
                       <div className="space-y-3">
                         <div>
@@ -111,7 +111,7 @@ const AboutSection = () => {
         {/* Our Story */}
         <div className="bg-cream-alt border border-cream-border rounded-2xl p-8 lg:p-12">
           <div className="max-w-4xl mx-auto text-center">
-            <h3 className="font-instrument font-normal text-3xl text-ink mb-6">Our <span className="italic text-gold">story</span></h3>
+            <h3 className="font-geist font-light tracking-tight leading-[1.05] text-3xl text-ink mb-6">Our <span className="italic text-gold">story</span></h3>
             <p className="text-muted-body mb-6 leading-relaxed">
               Supply Ministry was born from a simple observation: healthcare professionals and support 
               coordinators were spending too much time navigating complex supplier relationships and 
