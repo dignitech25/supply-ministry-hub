@@ -1,69 +1,36 @@
 
 
-# Replace static supplier strip with a rolling logo banner
+# Drop the white chips behind supplier logos
 
-Six fresh supplier logos uploaded (Aspire, Enable Lifecare, Forté, icare, Novis, Sleep Choice). Swap the current static `SupplierStrip` for a continuous marquee using these new assets, and stop relying on the old `/lovable-uploads/...` paths.
+The white rounded backgrounds around each logo are too loud against the violet band. Remove the chip and let the logos sit directly on the violet, with subtle treatment so they stay legible without competing with the rest of the page.
 
-## 1. Add the logos to the project
+## Change
 
-Copy the six uploads into `public/suppliers/` so they're served as static assets:
+In `src/components/editorial/SupplierStrip.tsx`, on the `<a>` wrapping each logo:
 
-- `user-uploads://Aspire.webp` → `public/suppliers/aspire.webp`
-- `user-uploads://Enable.png` → `public/suppliers/enable-lifecare.png`
-- `user-uploads://Forte_Logo.png` → `public/suppliers/forte.png`
-- `user-uploads://Icare_Logo.jpg` → `public/suppliers/icare.jpg`
-- `user-uploads://Novis_Logo.jpg` → `public/suppliers/novis.jpg`
-- `user-uploads://Sleep_Choice-01.png` → `public/suppliers/sleep-choice.png`
+- Remove `bg-white rounded-md px-4 py-2`.
+- Keep `mx-3 md:mx-4 shrink-0 flex items-center justify-center hover:opacity-100 transition-opacity`.
+- Add `opacity-80` (so logos sit back slightly and don't overpower the violet); hover lifts to full opacity.
 
-## 2. Rebuild `src/components/editorial/SupplierStrip.tsx` as a marquee
+On the `<img>`:
 
-Replace the current flex-wrap layout with a continuous horizontal scroll using the existing `animate-marquee` keyframe already defined in `tailwind.config.ts` (used previously by `BrandTrustStrip`).
+- Keep `h-7 md:h-8 w-auto object-contain loading="lazy"`.
+- Bump height slightly to `h-8 md:h-10` to compensate for the lost chip padding so the strip doesn't feel thinner.
 
-Structure:
+Everything else stays: marquee animation, hover-to-pause, edge fade gradients, "Our suppliers" eyebrow + divider, supplier order, links.
 
-```text
-<section bg-violet>
-  <eyebrow "Our suppliers" + divider>   ← stays as-is
-  <marquee viewport: overflow-hidden, fade masks left/right>
-    <track: flex animate-marquee group-hover:paused>
-      [logo × 6] [logo × 6]   ← duplicated for seamless loop
-    </track>
-  </marquee>
-</section>
-```
+## Note on background bleed
 
-Key details:
+The Novis (blue), icare (purple), and Sleep Choice (lavender) logos were originally exported on coloured/white backgrounds. Without the white chip, any baked-in white background in those PNG/JPG files will show as a white rectangle on the violet. If that happens after the change we'll need transparent-background versions of those three logos — I'll flag it after the edit and you can drop in cleaner exports if needed.
 
-- **Logo rendering**: each logo is a white "chip" — `bg-white rounded-md px-4 py-2` with the image at `h-7 md:h-8 w-auto object-contain`. The chip approach is needed because the logos are full-colour on coloured backgrounds (Novis on blue, icare on purple, Sleep Choice on lavender) — `brightness-0 invert` won't work cleanly across all of them. White chips give every brand a consistent canvas on the violet band.
-- **Spacing**: `mx-6 md:mx-8` between chips.
-- **Links**: each chip wrapped in `<a target="_blank" rel="noopener noreferrer">` to the supplier site.
-  - Aspire → `https://aspirehealthcare.com.au`
-  - Enable Lifecare → `https://enablelifecare.com.au`
-  - Forté → `https://www.fortehealthcare.com.au`
-  - icare → `https://icaremedicalgroup.com.au`
-  - Novis → `https://novis.com.au`
-  - Sleep Choice → `https://sleepchoice.com.au`
-- **Marquee mechanics**: outer `div` is `overflow-hidden group`; inner track is `flex w-max animate-marquee group-hover:[animation-play-state:paused]`. Logos rendered twice back-to-back; the existing `marquee` keyframe translates `-50%`, giving a seamless loop.
-- **Edge fades**: absolute-positioned `bg-gradient-to-r from-violet to-transparent` (and mirrored on the right) so logos softly disappear at the edges instead of hard-cutting.
-- **Eyebrow + divider**: kept on a single non-scrolling row above the marquee on desktop; on mobile the eyebrow sits above and the marquee runs full width below.
-- **Padding**: increase the section padding slightly (`py-6 md:py-8`) so the white chips have breathing room against the violet.
+## Files touched
 
-## 3. Files touched
-
-- `public/suppliers/*` — six new logo files (copied from uploads).
-- `src/components/editorial/SupplierStrip.tsx` — full rewrite: marquee track, white chips, six suppliers, fade masks, hover-to-pause.
-
-## Out of scope
-
-- `BrandTrustStrip.tsx` — leaves it untouched (still orphaned, can be cleaned up later).
-- Marquee speed tuning — use the existing `animate-marquee` (20s linear infinite). If it feels too fast/slow we can tune the keyframe duration after seeing it live.
-- Light/dark logo variants — using white chips avoids needing per-brand colour treatments.
+- `src/components/editorial/SupplierStrip.tsx` — remove chip styling, adjust opacity and logo height.
 
 ## Verification
 
-- Six logos scroll continuously left across the violet band beneath the hero.
-- Each logo sits inside a small white rounded chip for legibility.
-- Hovering the strip pauses the scroll; clicking a chip opens the supplier's site in a new tab.
-- Edges fade softly into the violet rather than hard-cutting.
-- "Our suppliers" eyebrow + divider preserved.
+- Logos scroll directly on the violet band with no white pill behind them.
+- Strip reads as a quiet trust signal, not a row of stickers.
+- Hover still pauses the marquee; links still open in a new tab.
+- Edge fades and eyebrow unchanged.
 
