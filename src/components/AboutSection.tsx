@@ -44,15 +44,15 @@ const values = [
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-20 bg-cream">
+    <section id="about" className="py-20 bg-violet text-cream">
       <div className="container mx-auto px-4">
         {/* Mission Statement */}
         <div className="text-center mb-16">
-          <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">About</p>
-          <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-ink mb-6">
+          <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">About</p>
+          <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-cream mb-6">
             Connecting care with <span className="italic text-gold">solutions</span>
           </h2>
-          <p className="text-lg text-muted-body max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg text-cream/75 max-w-4xl mx-auto leading-relaxed">
             Founded by Alex Hampel and David Hyman, Supply Ministry combines decades of experience 
             in mobility and assistive technology to simplify the process of choosing and supplying 
             the right equipment for your clients across Australia.
@@ -65,11 +65,11 @@ const AboutSection = () => {
             const IconComponent = value.icon;
             return (
               <div key={index} className="text-center">
-                <div className="mx-auto bg-ink/5 rounded-full p-4 w-16 h-16 flex items-center justify-center mb-4">
-                  <IconComponent className="h-8 w-8 text-ink" />
+                <div className="mx-auto bg-cream/10 rounded-full p-4 w-16 h-16 flex items-center justify-center mb-4">
+                  <IconComponent className="h-8 w-8 text-cream" />
                 </div>
-                <h3 className="font-geist text-lg text-ink mb-2">{value.title}</h3>
-                <p className="text-muted-body text-sm">{value.description}</p>
+                <h3 className="font-geist text-lg text-cream mb-2">{value.title}</h3>
+                <p className="text-cream/70 text-sm">{value.description}</p>
               </div>
             );
           })}
@@ -77,10 +77,10 @@ const AboutSection = () => {
 
         {/* Meet the Founders */}
         <div className="mb-16">
-          <h3 className="font-geist font-light tracking-tight leading-[1.05] text-3xl md:text-4xl text-center text-ink mb-12">Meet the <span className="italic text-gold">founders</span></h3>
+          <h3 className="font-geist font-light tracking-tight leading-[1.05] text-3xl md:text-4xl text-center text-cream mb-12">Meet the <span className="italic text-gold">founders</span></h3>
           <div className="grid lg:grid-cols-2 gap-8">
             {founders.map((founder, index) => (
-              <Card key={index} className="bg-cream-alt border-cream-border">
+              <Card key={index} className="bg-cream border-cream-border">
                 <CardContent className="p-8">
                   <div className="flex items-start space-x-4">
                     <div className="bg-ink/5 rounded-full p-3 flex-shrink-0">
@@ -88,7 +88,7 @@ const AboutSection = () => {
                     </div>
                     <div className="flex-1">
                       <h4 className="font-geist text-xl text-ink mb-1">{founder.name}</h4>
-                      <p className="text-gold font-medium mb-2">{founder.role}</p>
+                      <p className="text-violet font-medium mb-2">{founder.role}</p>
                       <div className="space-y-3">
                         <div>
                           <p className="text-sm font-medium text-ink">Experience:</p>
@@ -109,7 +109,7 @@ const AboutSection = () => {
         </div>
 
         {/* Our Story */}
-        <div className="bg-cream-alt border border-cream-border rounded-2xl p-8 lg:p-12">
+        <div className="bg-cream border border-cream-border rounded-2xl p-8 lg:p-12">
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="font-geist font-light tracking-tight leading-[1.05] text-3xl text-ink mb-6">Our <span className="italic text-gold">story</span></h3>
             <p className="text-muted-body mb-6 leading-relaxed">
@@ -125,7 +125,7 @@ const AboutSection = () => {
             </p>
             <Button 
               size="lg" 
-              className="bg-ink text-cream hover:opacity-90 rounded-full"
+              className="bg-violet text-cream hover:opacity-90 rounded-full"
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Get in Touch
