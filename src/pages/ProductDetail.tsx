@@ -353,7 +353,7 @@ export default function ProductDetail() {
             )}
             
             <div>
-              <h1 className="text-4xl md:text-5xl font-fraunces font-light text-ink mb-2 leading-[1.1]">{parent.baseName}</h1>
+              <h1 className="text-4xl md:text-5xl font-geist font-medium tracking-tight text-ink mb-2 leading-[1.1]">{parent.baseName}</h1>
               <p className="text-muted-body">SKU: {selectedVariant.sku}</p>
               <p className="text-sm text-muted-body">{parent.subcategory}</p>
             </div>
@@ -361,7 +361,7 @@ export default function ProductDetail() {
             <div className="space-y-2">
               {selectedVariant.priceDiscounted && selectedVariant.priceRrp ? (
                 <>
-                  <p className="text-4xl font-fraunces font-light text-ink">
+                  <p className="text-4xl font-geist font-semibold text-ink">
                     {formatPrice(selectedVariant.priceDiscounted)}
                   </p>
                   <p className="text-lg text-muted-body line-through">
@@ -369,7 +369,7 @@ export default function ProductDetail() {
                   </p>
                 </>
               ) : selectedVariant.priceRrp ? (
-                <p className="text-4xl font-fraunces font-light text-ink">
+                <p className="text-4xl font-geist font-semibold text-ink">
                   {formatPrice(selectedVariant.priceRrp)}
                 </p>
               ) : (

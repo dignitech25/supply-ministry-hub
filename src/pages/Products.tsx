@@ -459,7 +459,7 @@ export default function Products() {
                         </div>
                         <div className="p-4">
                           <p className="text-xs text-muted-body mb-1 font-geist tracking-[0.08em] uppercase">{product.brand}</p>
-                          <h3 className="font-fraunces font-light text-lg text-ink mb-1 line-clamp-2 leading-tight">{product.baseName}</h3>
+                          <h3 className="font-geist font-medium tracking-tight text-lg text-ink mb-1 line-clamp-2 leading-tight">{product.baseName}</h3>
                           <p className="text-xs text-muted-body mb-2">{product.subcategory}</p>
                           <div className="space-y-1">
                             {product.fromPrice !== null ? (
