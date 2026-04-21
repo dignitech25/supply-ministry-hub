@@ -45,13 +45,13 @@ const SupplierStrip = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.name}
-                className="mx-3 md:mx-4 shrink-0 bg-white rounded-md px-4 py-2 flex items-center justify-center hover:opacity-90 transition-opacity"
+                className="mx-3 md:mx-4 shrink-0 flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity"
               >
                 <img
                   src={s.src}
                   alt={s.name}
                   loading="lazy"
-                  className="h-7 md:h-8 w-auto object-contain"
+                  className="h-8 md:h-10 w-auto object-contain"
                 />
               </a>
             ))}
