@@ -23,7 +23,7 @@ const NotFound = () => {
       <div className="flex-1 flex items-center justify-center px-6">
         <div className="text-center max-w-lg">
           <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">404</p>
-          <h1 className="text-4xl md:text-5xl font-fraunces font-light text-ink mb-4">
+          <h1 className="text-4xl md:text-5xl font-instrument font-normal text-ink mb-4">
             Page not <span className="italic text-gold">found</span>
           </h1>
           <p className="text-lg text-muted-body mb-8">

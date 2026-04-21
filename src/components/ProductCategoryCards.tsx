@@ -56,7 +56,7 @@ const ProductCategoryCards = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Categories</p>
-          <h2 className="font-fraunces font-light text-4xl md:text-5xl text-ink mb-4">
+          <h2 className="font-instrument font-normal text-4xl md:text-5xl text-ink mb-4">
             Explore our complete <span className="italic text-gold">range</span>
           </h2>
           <p className="text-lg text-muted-body max-w-2xl mx-auto">
@@ -80,7 +80,7 @@ const ProductCategoryCards = () => {
                     <div className="bg-ink/5 group-hover:bg-gold/20 rounded-full p-4 mb-4 transition-colors duration-300">
                       <Icon className="w-8 h-8 text-ink group-hover:text-ink" />
                     </div>
-                    <h3 className="font-fraunces text-xl text-ink mb-2">
+                    <h3 className="font-instrument text-xl text-ink mb-2">
                       {category.name}
                     </h3>
                     <p className="text-muted-body text-sm">
@@ -95,7 +95,7 @@ const ProductCategoryCards = () => {
 
         <div className="text-center mt-12">
           <div className="bg-cream-alt rounded-2xl p-8 border border-cream-border max-w-3xl mx-auto">
-            <h3 className="font-fraunces font-light text-2xl md:text-3xl text-ink mb-4">
+            <h3 className="font-instrument font-normal text-2xl md:text-3xl text-ink mb-4">
               Need expert <span className="italic text-gold">guidance</span>?
             </h3>
             <p className="text-lg text-muted-body mb-6">

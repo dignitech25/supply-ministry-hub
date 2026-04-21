@@ -17,7 +17,7 @@ const Quote = () => {
       <section className="pt-12 pb-12 bg-cream">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-fraunces font-light text-ink mb-4">
+            <h1 className="text-4xl md:text-5xl font-instrument font-normal text-ink mb-4">
               Request a <span className="italic text-gold">quote</span>
             </h1>
             <p className="text-lg text-muted-body">

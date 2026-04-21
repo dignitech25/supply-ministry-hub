@@ -26,7 +26,7 @@ const SleepChoice = () => {
             </div>
             
             <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Sleep Choice Program</p>
-            <h1 className="text-4xl lg:text-6xl font-fraunces font-light text-ink mb-6 leading-[1.1]">
+            <h1 className="text-4xl lg:text-6xl font-instrument font-normal text-ink mb-6 leading-[1.1]">
               Sleep that <span className="italic text-gold">restores</span>.
             </h1>
             
@@ -64,10 +64,10 @@ const SleepChoice = () => {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-fraunces font-light text-ink text-center mb-12">Risk-free 7-day trial</h2>
+            <h2 className="text-3xl md:text-4xl font-instrument font-normal text-ink text-center mb-12">Risk-free 7-day trial</h2>
             
             <div className="bg-cream-alt rounded-xl p-8 border border-cream-border mb-12">
-              <h3 className="text-2xl font-fraunces font-light text-ink mb-6 text-center">How it works</h3>
+              <h3 className="text-2xl font-instrument font-normal text-ink mb-6 text-center">How it works</h3>
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="text-center">
                   <div className="bg-ink text-cream rounded-full w-12 h-12 flex items-center justify-center mb-4 font-medium text-xl mx-auto">1</div>
@@ -90,7 +90,7 @@ const SleepChoice = () => {
             {/* Benefits */}
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-2xl font-fraunces font-light text-ink mb-6">Why choose Sleep Choice?</h3>
+                <h3 className="text-2xl font-instrument font-normal text-ink mb-6">Why choose Sleep Choice?</h3>
                 <div className="space-y-4">
                   {[
                     "Risk-free 7-day trial period",
@@ -109,7 +109,7 @@ const SleepChoice = () => {
               </div>
               
               <div className="bg-cream-alt border border-cream-border rounded-xl p-6">
-                <h3 className="text-xl font-fraunces font-light text-ink mb-4">Perfect for:</h3>
+                <h3 className="text-xl font-instrument font-normal text-ink mb-4">Perfect for:</h3>
                 <ul className="space-y-3 text-muted-body">
                   <li>• Aged care facilities</li>
                   <li>• Disability support providers</li>
@@ -127,7 +127,7 @@ const SleepChoice = () => {
       {/* CTA Section */}
       <section className="py-20 bg-ink text-cream">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-fraunces font-light mb-6">Ready to try Sleep Choice?</h2>
+          <h2 className="text-3xl md:text-4xl font-instrument font-normal mb-6">Ready to try Sleep Choice?</h2>
           <p className="text-lg mb-8 text-cream/80 max-w-2xl mx-auto">
             Visit our Sleep Choice website to explore our full range of therapeutic sleep solutions 
             and start your risk-free 7-day trial today.
