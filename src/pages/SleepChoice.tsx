@@ -1,20 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, ExternalLink } from "lucide-react";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 
 const SleepChoice = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-cream text-ink">
       <SEO 
         title="Sleep Choice Program | 7-Day Risk-Free Bed Trial"
         description="Try before you buy with Sleep Choice's 7-day risk-free trial program. Therapeutic beds and pressure-relieving mattresses for aged care and NDIS clients."
       />
-      <Navigation />
+      <EditorialNavigation />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-card py-20 lg:py-32">
+      <section className="relative bg-cream py-20 lg:py-32">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="mb-8">
@@ -25,11 +25,12 @@ const SleepChoice = () => {
               />
             </div>
             
-            <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Sleep Choice Program
+            <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Sleep Choice Program</p>
+            <h1 className="text-4xl lg:text-6xl font-fraunces font-light text-ink mb-6 leading-[1.1]">
+              Sleep that <span className="italic text-gold">restores</span>.
             </h1>
             
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl text-muted-body mb-8 leading-relaxed max-w-3xl mx-auto">
               Take the guesswork out of bed and mattress selection with our risk-free 7-day trial program. 
               Find the perfect sleep solution for your clients with confidence.
             </p>
@@ -38,7 +39,7 @@ const SleepChoice = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Button 
                 size="lg" 
-                className="bg-orange-500 text-white hover:bg-orange-600 transition-colors text-lg px-8"
+                className="bg-ink text-cream hover:opacity-90 transition-opacity text-base px-8 rounded-full"
                 asChild
               >
                 <a href="https://sleepchoice.com.au" target="_blank" rel="noopener noreferrer">
@@ -49,7 +50,7 @@ const SleepChoice = () => {
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="text-lg px-8"
+                className="text-base px-8 rounded-full border-ink/20 text-ink hover:bg-ink hover:text-cream"
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Contact Us
@@ -63,25 +64,25 @@ const SleepChoice = () => {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12">Risk-Free 7-Day Trial</h2>
+            <h2 className="text-3xl md:text-4xl font-fraunces font-light text-ink text-center mb-12">Risk-free 7-day trial</h2>
             
-            <div className="bg-card rounded-xl p-8 border border-border mb-12">
-              <h3 className="text-2xl font-semibold mb-6 text-center">How It Works</h3>
+            <div className="bg-cream-alt rounded-xl p-8 border border-cream-border mb-12">
+              <h3 className="text-2xl font-fraunces font-light text-ink mb-6 text-center">How it works</h3>
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="text-center">
-                  <div className="bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center mb-4 font-bold text-xl mx-auto">1</div>
-                  <h4 className="font-semibold mb-3">Choose Your Solution</h4>
-                  <p className="text-muted-foreground">Select from our range of therapeutic beds and pressure-relieving mattresses designed for comfort and support</p>
+                  <div className="bg-ink text-cream rounded-full w-12 h-12 flex items-center justify-center mb-4 font-medium text-xl mx-auto">1</div>
+                  <h4 className="font-medium text-ink mb-3">Choose your solution</h4>
+                  <p className="text-muted-body">Select from our range of therapeutic beds and pressure-relieving mattresses designed for comfort and support</p>
                 </div>
                 <div className="text-center">
-                  <div className="bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center mb-4 font-bold text-xl mx-auto">2</div>
-                  <h4 className="font-semibold mb-3">7-Day Trial</h4>
-                  <p className="text-muted-foreground">Your client tries the equipment in their own environment for a full week to ensure it meets their needs</p>
+                  <div className="bg-ink text-cream rounded-full w-12 h-12 flex items-center justify-center mb-4 font-medium text-xl mx-auto">2</div>
+                  <h4 className="font-medium text-ink mb-3">7-day trial</h4>
+                  <p className="text-muted-body">Your client tries the equipment in their own environment for a full week to ensure it meets their needs</p>
                 </div>
                 <div className="text-center">
-                  <div className="bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center mb-4 font-bold text-xl mx-auto">3</div>
-                  <h4 className="font-semibold mb-3">Keep or Return</h4>
-                  <p className="text-muted-foreground">If it's not the perfect fit, we'll arrange free collection and help you find an alternative solution</p>
+                  <div className="bg-ink text-cream rounded-full w-12 h-12 flex items-center justify-center mb-4 font-medium text-xl mx-auto">3</div>
+                  <h4 className="font-medium text-ink mb-3">Keep or return</h4>
+                  <p className="text-muted-body">If it's not the perfect fit, we'll arrange free collection and help you find an alternative solution</p>
                 </div>
               </div>
             </div>
@@ -89,7 +90,7 @@ const SleepChoice = () => {
             {/* Benefits */}
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-2xl font-semibold mb-6">Why Choose Sleep Choice?</h3>
+                <h3 className="text-2xl font-fraunces font-light text-ink mb-6">Why choose Sleep Choice?</h3>
                 <div className="space-y-4">
                   {[
                     "Risk-free 7-day trial period",
@@ -100,16 +101,16 @@ const SleepChoice = () => {
                     "Trusted by healthcare professionals"
                   ].map((benefit, index) => (
                     <div key={index} className="flex items-start space-x-3">
-                      <CheckCircle className="h-5 w-5 text-success flex-shrink-0 mt-1" />
-                      <span className="text-muted-foreground">{benefit}</span>
+                      <CheckCircle className="h-5 w-5 text-gold flex-shrink-0 mt-1" />
+                      <span className="text-muted-body">{benefit}</span>
                     </div>
                   ))}
                 </div>
               </div>
               
-              <div className="bg-soft-gray rounded-xl p-6">
-                <h3 className="text-xl font-semibold mb-4">Perfect For:</h3>
-                <ul className="space-y-3 text-muted-foreground">
+              <div className="bg-cream-alt border border-cream-border rounded-xl p-6">
+                <h3 className="text-xl font-fraunces font-light text-ink mb-4">Perfect for:</h3>
+                <ul className="space-y-3 text-muted-body">
                   <li>• Aged care facilities</li>
                   <li>• Disability support providers</li>
                   <li>• Healthcare professionals</li>
@@ -124,17 +125,17 @@ const SleepChoice = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
+      <section className="py-20 bg-ink text-cream">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Try Sleep Choice?</h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-fraunces font-light mb-6">Ready to try Sleep Choice?</h2>
+          <p className="text-lg mb-8 text-cream/80 max-w-2xl mx-auto">
             Visit our Sleep Choice website to explore our full range of therapeutic sleep solutions 
             and start your risk-free 7-day trial today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg"
-              className="bg-orange-500 text-white px-8 py-3 hover:bg-orange-600 transition-colors"
+              className="bg-cream text-ink hover:opacity-90 transition-opacity rounded-full px-8"
               asChild
             >
               <a href="https://sleepchoice.com.au" target="_blank" rel="noopener noreferrer">
