@@ -19,8 +19,6 @@ export default {
 		},
 		extend: {
 			colors: {
-				'supply-lavender': '#C4B5FD',
-				'supply-lavender-dark': '#A78BFA',
 				violet: 'hsl(var(--violet))',
 				cream: {
 					DEFAULT: 'hsl(var(--cream))',

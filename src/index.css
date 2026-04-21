@@ -56,11 +56,8 @@
     --cream-border: 36 18% 83%;      /* #DDD7CC */
     --muted-body: 35 12% 43%;        /* #7A7060 */
     --muted-label: 36 11% 73%;       /* #C4BFB5 */
-    --pill-highlight: 248 100% 87%;  /* #C4BAFF */
-    --accent-a: 38 52% 60%;          /* Warm gold #C8A96E */
-    --accent-b: 142 25% 65%;         /* Soft sage #8FBF9F */
-    --accent-c: 25 55% 75%;          /* Pale coral cream #E8C4A8 */
-    --gold: var(--accent-a);
+    --gold: 249 100% 87%;            /* Lavender accent #C4BAFF */
+    --pill-highlight: 249 100% 87%;  /* alias of --gold for legacy refs */
     
     /* Design System Tokens */
     --radius: 0.75rem;
