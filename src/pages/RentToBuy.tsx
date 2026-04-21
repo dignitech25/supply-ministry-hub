@@ -70,7 +70,7 @@ const RentToBuy = () => {
         <section className="bg-cream py-16 md:py-24">
           <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
             <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-muted-body mb-4">Rent to buy</p>
-            <h1 className="text-3xl md:text-5xl font-instrument font-normal leading-[1.1] mb-5 text-ink">
+            <h1 className="text-3xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] leading-[1.1] mb-5 text-ink">
               Try before you <span className="italic text-gold">commit</span>.
             </h1>
             <p className="text-lg md:text-xl text-muted-body mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -91,7 +91,7 @@ const RentToBuy = () => {
         {/* The Problem */}
         <section className="py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
-            <h2 className="text-2xl md:text-3xl font-instrument font-normal text-ink mb-6">
+            <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-6">
               The funding gap is real
             </h2>
             <div className="space-y-4">
@@ -108,7 +108,7 @@ const RentToBuy = () => {
         {/* How It Works */}
         <section className="py-14 md:py-20 bg-cream-alt">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
-            <h2 className="text-2xl md:text-3xl font-instrument font-normal text-ink mb-10 text-center">
+            <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-10 text-center">
               How it works
             </h2>
             <div className="space-y-8">
@@ -130,7 +130,7 @@ const RentToBuy = () => {
         {/* What Qualifies */}
         <section className="py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
-            <h2 className="text-2xl md:text-3xl font-instrument font-normal text-ink mb-6">
+            <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-6">
               What equipment qualifies
             </h2>
             <ul className="space-y-3 text-muted-body mb-6">
@@ -156,7 +156,7 @@ const RentToBuy = () => {
         {/* Example Scenario */}
         <section className="py-14 md:py-20 bg-cream-alt">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
-            <h2 className="text-2xl md:text-3xl font-instrument font-normal text-ink mb-6">
+            <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-6">
               Real-world example
             </h2>
             <div className="bg-cream rounded-xl border border-cream-border p-6 md:p-8 space-y-4">
@@ -179,7 +179,7 @@ const RentToBuy = () => {
         {/* FAQ */}
         <section className="py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
-            <h2 className="text-2xl md:text-3xl font-instrument font-normal text-ink mb-8">
+            <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-8">
               Common questions
             </h2>
             <Accordion type="single" collapsible className="w-full">
@@ -200,7 +200,7 @@ const RentToBuy = () => {
         {/* Contact CTA */}
         <section className="py-16 md:py-24 bg-ink text-cream">
           <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl md:text-4xl font-instrument font-normal mb-4">
+            <h2 className="text-3xl md:text-4xl font-geist font-light tracking-tight leading-[1.05] mb-4">
               Got a client who needs equipment now?
             </h2>
             <p className="text-lg text-cream/80 mb-8 max-w-xl mx-auto">

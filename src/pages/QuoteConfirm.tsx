@@ -26,7 +26,7 @@ const QuoteConfirm: React.FC = () => {
               <div className="flex justify-center mb-4">
                 <CheckCircle className="w-20 h-20 text-gold" />
               </div>
-              <h1 className="text-3xl md:text-4xl font-instrument font-normal text-ink">
+              <h1 className="text-3xl md:text-4xl font-geist font-light tracking-tight leading-[1.05] text-ink">
                 Quote <span className="italic text-gold">submitted</span>.
               </h1>
             </CardHeader>
@@ -35,12 +35,12 @@ const QuoteConfirm: React.FC = () => {
               {quoteRef && (
                 <div className="bg-cream border border-cream-border p-6 rounded-lg">
                   <p className="text-sm text-muted-body mb-2">Your Reference Number</p>
-                  <p className="text-3xl font-instrument font-normal text-ink">{quoteRef}</p>
+                  <p className="text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink">{quoteRef}</p>
                 </div>
               )}
               
               <div className="space-y-3 text-left">
-                <h3 className="font-instrument font-normal text-xl text-ink">What happens next?</h3>
+                <h3 className="font-geist font-light tracking-tight leading-[1.05] text-xl text-ink">What happens next?</h3>
                 <ul className="space-y-2 text-muted-body">
                   <li className="flex items-start">
                     <span className="mr-2 text-gold">✓</span>
