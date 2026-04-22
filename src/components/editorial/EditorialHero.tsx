@@ -321,11 +321,11 @@ const EditorialHero = () => {
           </div>
         </div>
 
-        <div className="relative h-[280px] overflow-hidden">
+        <div className="relative h-[340px] overflow-hidden">
           <img
             src={heroImage}
             alt="Occupational therapist supporting an older woman using a rollator at home"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover object-top"
             decoding="async"
             width={896}
             height={1184}
