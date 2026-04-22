@@ -29,7 +29,7 @@ const faqs = [
   {
     question: "What areas do you deliver to?",
     answer:
-      "We deliver across Greater Metropolitan Melbourne and regional Victoria. For interstate orders, we can arrange shipping Australia-wide. Delivery fees vary by location and product size — contact our team for a specific quote.",
+      "We deliver across Greater Metropolitan Melbourne and regional Victoria. For interstate orders, we can arrange shipping Australia-wide. Delivery fees vary by location and product size. Contact our team for a specific quote.",
   },
   {
     question: "Can occupational therapists request quotes on behalf of clients?",
