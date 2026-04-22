@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ArrowRight, Camera } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import heroImage from "@/assets/hero-rollator-home.png";
 
 type Audience = {
   id: string;
