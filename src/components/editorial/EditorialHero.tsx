@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ArrowRight, Camera } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import heroImage from "@/assets/hero-rollator-home.png";
 
 type Audience = {
   id: string;
@@ -183,30 +184,17 @@ const EditorialHero = () => {
         {/* Column 2 — Right panel */}
         <div className="bg-cream-alt border-l border-cream-border flex flex-col">
           <div
-            className="flex-1 bg-cream-image relative flex items-center justify-center min-h-[268px] overflow-hidden"
+            className="flex-1 relative min-h-[268px] overflow-hidden"
           >
-            {/* Geometric SVG decoration */}
-            <svg
-              className="absolute inset-0 w-full h-full"
-              viewBox="0 0 400 400"
-              preserveAspectRatio="none"
-              style={{ opacity: 0.05 }}
-              aria-hidden="true"
-            >
-              <line x1="0" y1="0" x2="400" y2="400" stroke="hsl(var(--violet))" strokeWidth="1" />
-              <line x1="100" y1="0" x2="500" y2="400" stroke="hsl(var(--violet))" strokeWidth="1" />
-              <circle cx="200" cy="200" r="80" stroke="hsl(var(--violet))" strokeWidth="1" fill="none" />
-              <circle cx="200" cy="200" r="120" stroke="hsl(var(--violet))" strokeWidth="1" fill="none" />
-            </svg>
-            <div className="relative flex flex-col items-center gap-3 text-center px-6">
-              <Camera className="w-7 h-7 text-muted-label" strokeWidth={1} />
-              <span
-                className="font-geist italic"
-                style={{ fontSize: "10px", color: "#B8B2A6" }}
-              >
-                Authentic photography — OT with client at home
-              </span>
-            </div>
+            <img
+              src={heroImage}
+              alt="Occupational therapist supporting an older woman using a rollator at home"
+              className="absolute inset-0 w-full h-full object-cover"
+              fetchPriority="high"
+              decoding="async"
+              width={896}
+              height={1184}
+            />
           </div>
 
           {/* Audience panel */}
@@ -333,19 +321,15 @@ const EditorialHero = () => {
           </div>
         </div>
 
-        <div className="bg-cream-image relative flex items-center justify-center h-[220px] overflow-hidden">
-          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400" preserveAspectRatio="none" style={{ opacity: 0.05 }} aria-hidden="true">
-            <line x1="0" y1="0" x2="400" y2="400" stroke="hsl(var(--violet))" strokeWidth="1" />
-            <line x1="100" y1="0" x2="500" y2="400" stroke="hsl(var(--violet))" strokeWidth="1" />
-            <circle cx="200" cy="200" r="80" stroke="hsl(var(--violet))" strokeWidth="1" fill="none" />
-            <circle cx="200" cy="200" r="120" stroke="hsl(var(--violet))" strokeWidth="1" fill="none" />
-          </svg>
-          <div className="relative flex flex-col items-center gap-3 text-center px-6">
-            <Camera className="w-7 h-7 text-muted-label" strokeWidth={1} />
-            <span className="font-geist italic" style={{ fontSize: "10px", color: "#B8B2A6" }}>
-              Authentic photography — OT with client at home
-            </span>
-          </div>
+        <div className="relative h-[280px] overflow-hidden">
+          <img
+            src={heroImage}
+            alt="Occupational therapist supporting an older woman using a rollator at home"
+            className="absolute inset-0 w-full h-full object-cover"
+            decoding="async"
+            width={896}
+            height={1184}
+          />
         </div>
 
         <div key={active.id} className="bg-cream-alt animate-fade-in" style={{ padding: "26px 24px 28px" }}>
