@@ -18,7 +18,7 @@ const audiences: Audience[] = [
     tabLabel: "Occupational therapist",
     name: "An occupational therapist",
     description:
-      "You know what your client needs. We source it, quote it, and document it — so you can focus on the clinical decision, not the procurement paperwork.",
+      "You know what your client needs. We source it, quote it, and document it, so you can focus on the clinical decision, not the procurement paperwork.",
     ctaLabel: "Find products for your clients",
     ctaHref: "/products",
   },
@@ -27,7 +27,7 @@ const audiences: Audience[] = [
     tabLabel: "Aged care provider",
     name: "An aged care provider",
     description:
-      "Whether it's a single item or a full facility order, we handle sourcing, documentation, and delivery — so your team can focus on care.",
+      "Whether it's a single item or a full facility order, we handle sourcing, documentation, and delivery, so your team can focus on care.",
     ctaLabel: "Browse aged care equipment",
     ctaHref: "/products",
   },
@@ -65,7 +65,7 @@ const EditorialHero = () => {
     <section className="bg-violet">
       {/* Desktop layout */}
       <div className="hidden min-[960px]:grid min-[960px]:grid-cols-[52px_1fr_42%] min-h-[520px]">
-        {/* Column 0 — Vertical audience tabs */}
+        {/* Column 0: Vertical audience tabs */}
         <div className="flex flex-col border-r border-white/[0.06]">
           {audiences.map((aud, idx) => {
             const isActive = aud.id === activeId;
@@ -100,7 +100,7 @@ const EditorialHero = () => {
           })}
         </div>
 
-        {/* Column 1 — Left content panel */}
+        {/* Column 1: Left content panel */}
         <div className="flex flex-col justify-between" style={{ padding: "56px 52px 48px 44px" }}>
           <div>
             <p
@@ -144,7 +144,7 @@ const EditorialHero = () => {
                 lineHeight: 1.85,
               }}
             >
-              We connect the people who care for others with the right assistive technology — sourced ethically, documented carefully, delivered with genuine respect.
+              We connect the people who care for others with the right assistive technology, sourced ethically, documented carefully, delivered with genuine respect.
             </p>
           </div>
 
@@ -181,7 +181,7 @@ const EditorialHero = () => {
           </div>
         </div>
 
-        {/* Column 2 — Right panel */}
+        {/* Column 2: Right panel */}
         <div className="bg-cream-alt border-l border-cream-border flex flex-col">
           <div
             className="flex-1 relative min-h-[268px] overflow-hidden"
@@ -296,7 +296,7 @@ const EditorialHero = () => {
             className="font-geist mb-8"
             style={{ fontSize: "13px", fontWeight: 300, color: "rgba(255,255,255,0.36)", lineHeight: 1.85 }}
           >
-            We connect the people who care for others with the right assistive technology — sourced ethically, documented carefully, delivered with genuine respect.
+            We connect the people who care for others with the right assistive technology, sourced ethically, documented carefully, delivered with genuine respect.
           </p>
           <div
             className="pt-6 grid grid-cols-3 gap-4"

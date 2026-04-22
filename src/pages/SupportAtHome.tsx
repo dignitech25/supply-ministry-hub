@@ -20,7 +20,7 @@ const SupportAtHome = () => {
               Support at home
             </p>
             <h1 className="text-3xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] text-cream leading-[1.1]">
-              Support at <span className="italic text-gold">home</span> — equipment can't wait for approvals to catch up.
+              Support at <span className="italic text-gold">home</span>. Equipment can't wait for approvals to catch up.
             </h1>
           </div>
         </section>
@@ -37,7 +37,7 @@ const SupportAtHome = () => {
             </p>
 
             <p className="text-muted-body leading-relaxed">
-              That gap is where Supply Ministry works. We sit down with whoever is managing the case — whether that's an OT, a coordinator, or a provider — and look at what funding the client already has access to right now. From there we help map how that funding applies to the equipment that's needed, and we move things forward rather than waiting for the SAH process to run its course.
+              That gap is where Supply Ministry works. We sit down with whoever is managing the case, whether that's an OT, a coordinator, or a provider, and look at what funding the client already has access to right now. From there we help map how that funding applies to the equipment that's needed, and we move things forward rather than waiting for the SAH process to run its course.
             </p>
 
             <p className="text-muted-body leading-relaxed">
@@ -46,7 +46,7 @@ const SupportAtHome = () => {
 
             {/* Sleep Choice connection */}
             <p className="text-muted-body leading-relaxed">
-              Where the clinical decision is still open — particularly around sleep systems and pressure care — a 7‑night in‑home trial through{" "}
+              Where the clinical decision is still open, particularly around sleep systems and pressure care, a 7‑night in‑home trial through{" "}
               <a
                 href="https://sleepchoice.com.au"
                 target="_blank"

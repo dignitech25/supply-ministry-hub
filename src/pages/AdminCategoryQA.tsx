@@ -172,9 +172,9 @@ const AdminCategoryQA = () => {
                     <TableCell className="font-mono text-xs">{product.sku}</TableCell>
                     <TableCell>{product.brand}</TableCell>
                     <TableCell className="max-w-xs truncate">{product.title}</TableCell>
-                    <TableCell className="text-sm">{product.category_path || "—"}</TableCell>
-                    <TableCell className="text-sm">{product.category_rule || "—"}</TableCell>
-                    <TableCell className="text-sm">{product.category_alternatives || "—"}</TableCell>
+                    <TableCell className="text-sm">{product.category_path || "-"}</TableCell>
+                    <TableCell className="text-sm">{product.category_rule || "-"}</TableCell>
+                    <TableCell className="text-sm">{product.category_alternatives || "-"}</TableCell>
                     <TableCell>
                       <span
                         className={`inline-block px-2 py-1 rounded text-xs font-medium ${
