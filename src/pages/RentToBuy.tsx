@@ -15,7 +15,7 @@ const steps = [
     icon: Package,
     title: "Rent with remaining HCP funds",
     description:
-      "Your client uses whatever Home Care Package funding they have left to rent the equipment they need — mattress, pressure relief, mobility aids, whatever the clinical picture requires.",
+      "Your client uses whatever Home Care Package funding they have left to rent the equipment they need: mattress, pressure relief, mobility aids, whatever the clinical picture requires.",
   },
   {
     icon: Truck,
@@ -44,7 +44,7 @@ const faqs = [
   },
   {
     q: "Can I use NDIS funding for rent-to-buy?",
-    a: "Yes. The same structure applies — rental payments convert to purchase credit when the plan is confirmed.",
+    a: "Yes. The same structure applies. Rental payments convert to purchase credit when the plan is confirmed.",
   },
   {
     q: "Is there a minimum rental period?",
@@ -96,10 +96,10 @@ const RentToBuy = () => {
             </h2>
             <div className="space-y-4">
               <p className="text-muted-body leading-relaxed">
-                Support at Home applications are taking months. Clients need equipment now — not when the approval finally lands. Meanwhile, grandfathered Home Care Package funds are running out, with a hard cutoff on <strong className="text-ink">July&nbsp;1,&nbsp;2026</strong>.
+                Support at Home applications are taking months. Clients need equipment now, not when the approval finally lands. Meanwhile, grandfathered Home Care Package funds are running out, with a hard cutoff on <strong className="text-ink">July&nbsp;1,&nbsp;2026</strong>.
               </p>
               <p className="text-muted-body leading-relaxed">
-                There's often not enough funding left in a package to justify a full purchase before SaH approval comes through. But there is enough to start a rental — and that's where rent-to-buy closes the gap.
+                There's often not enough funding left in a package to justify a full purchase before SaH approval comes through. But there is enough to start a rental, and that's where rent-to-buy closes the gap.
               </p>
             </div>
           </div>
@@ -137,7 +137,7 @@ const RentToBuy = () => {
               {[
                 "Pressure relief mattresses and overlays",
                 "Adjustable beds",
-                "Mobility equipment — walkers, wheelchairs, commodes",
+                "Mobility equipment: walkers, wheelchairs, commodes",
                 "Pressure relief cushions",
                 "Daily living aids",
               ].map((item) => (
@@ -164,7 +164,7 @@ const RentToBuy = () => {
                 A client needs a pressure relief mattress. Purchase price: <strong className="text-ink">$4,190</strong>.
               </p>
               <p className="text-muted-body leading-relaxed">
-                They have <strong className="text-ink">$800</strong> remaining in HCP funds before the July&nbsp;1 cutoff. Not enough to buy outright, but enough to start a rental at $200/month — four months of use, fully funded.
+                They have <strong className="text-ink">$800</strong> remaining in HCP funds before the July&nbsp;1 cutoff. Not enough to buy outright, but enough to start a rental at $200/month, four months of use, fully funded.
               </p>
               <p className="text-muted-body leading-relaxed">
                 Support at Home is approved in October. Final purchase price: <strong className="text-ink">$4,190 − $800 rental = $3,390</strong>, paid via SaH funding. The client had the mattress in their home for four months while waiting. No gap in care.
