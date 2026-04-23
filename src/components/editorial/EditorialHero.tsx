@@ -189,7 +189,7 @@ const EditorialHero = () => {
             <img
               src={heroImage}
               alt="Occupational therapist supporting an older woman using a rollator at home"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover object-top"
               fetchPriority="high"
               decoding="async"
               width={896}
