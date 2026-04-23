@@ -22,7 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchParentProduct, fetchParentProductBySku, fetchParentProductByHandle } from '@/utils/parentProductHelpers';
 import { ParentProduct, ProductVariant } from '@/utils/variantHelpers';
-import { formatPrice } from '@/utils/productHelpers';
+import { formatPrice, getDescriptionParagraphs, cleanDescription } from '@/utils/productHelpers';
 import ProductSEOContent, { hasProductSEOContent, getProductFAQs } from '@/components/ProductSEOContent';
 import Footer from '@/components/Footer';
 import { createBreadcrumbSchema } from '@/components/SEO';
@@ -277,12 +277,14 @@ export default function ProductDetail() {
     .filter(Boolean) || [];
 
   const displayImage = selectedVariant.imageUrl || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23C4B5FD" width="400" height="400"/%3E%3Ctext fill="%23ffffff" font-family="sans-serif" font-size="24" text-anchor="middle" x="200" y="200"%3ENo Image%3C/text%3E%3C/svg%3E';
+  const cleanedDescription = cleanDescription(parent.descriptionLong || parent.description);
+  const descriptionParagraphs = getDescriptionParagraphs(parent.descriptionLong || parent.description);
 
   return (
     <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title={`${parent.baseName}${parent.brand ? ` by ${parent.brand}` : ''}`}
-        description={parent.description?.slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast dispatch and expert support.`}
+        description={cleanDescription(parent.description).slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast dispatch and expert support.`}
         image={selectedVariant.imageUrl || undefined}
         jsonLd={getJsonLdSchemas()}
       />
@@ -474,12 +476,16 @@ export default function ProductDetail() {
         </div>
 
         {/* Description */}
-        {(parent.descriptionLong || parent.description) && (
+        {cleanedDescription && (
           <Card className="p-8 mb-8 bg-cream-alt border-cream-border">
             <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Description</h2>
-            <p className="text-muted-body leading-relaxed whitespace-pre-line">
-              {parent.descriptionLong || parent.description}
-            </p>
+            <div className="space-y-4 text-muted-body leading-relaxed">
+              {descriptionParagraphs.map((paragraph, index) => (
+                <p key={`${parent.slug}-description-${index}`} className="whitespace-pre-line">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           </Card>
         )}
 
