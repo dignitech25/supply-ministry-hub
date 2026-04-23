@@ -58,11 +58,38 @@ function formatSpecKey(key: string): string {
  */
 export function cleanDescription(text: string | null | undefined): string {
   if (!text) return '';
-  
+
   return text
-    .replace(/\s+/g, ' ') // normalize whitespace
-    .replace(/\s+([.,!?])/g, '$1') // fix punctuation spacing
+    .replace(/\r\n?/g, '\n')
+    .replace(/[\t ]+\n/g, '\n')
+    .replace(/\n[\t ]+/g, '\n')
+    .replace(/([^\s([])\(/g, '$1 (')
+    .replace(/\(\s+/g, '(')
+    .replace(/\s+\)/g, ')')
+    .replace(/\)([A-Za-z0-9])/g, ') $1')
+    .replace(/([a-z]{2,})(\d{2,})/g, '$1 $2')
+    .replace(/(\d)([a-z]{2,})/g, '$1 $2')
+    .replace(/\s+([,.;:!?])/g, '$1')
+    .replace(/([,;:!?])([^\s\n])/g, '$1 $2')
+    .replace(/([.!?])([A-Z])/g, '$1 $2')
+    .replace(/[ \t]{2,}/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
     .trim();
+}
+
+/**
+ * Split cleaned description text into paragraph blocks while preserving
+ * single-line breaks inside each block.
+ */
+export function getDescriptionParagraphs(text: string | null | undefined): string[] {
+  const cleaned = cleanDescription(text);
+
+  if (!cleaned) return [];
+
+  return cleaned
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
 }
 
 /**
