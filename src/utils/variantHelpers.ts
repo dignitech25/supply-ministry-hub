@@ -3,6 +3,8 @@
  * Groups products into parent-variant relationships without database changes
  */
 
+import { cleanDescription } from './productHelpers';
+
 export interface ProductVariant {
   sku: string;
   handle: string;
@@ -221,8 +223,8 @@ export function groupIntoParents(products: any[]): Map<string, ParentProduct> {
           brand,
           category: product.top_level_category,
           subcategory: product.subcategory,
-          description: product.description_short,
-          descriptionLong: product.description_long,
+          description: cleanDescription(product.description_short),
+          descriptionLong: cleanDescription(product.description_long),
           clinicalUseCase: product.clinical_use_case,
           variants: [variant],
           uniqueSizes: variant.size ? [variant.size] : [],
@@ -265,8 +267,8 @@ function normalizeVariant(product: any): ProductVariant {
     priceRrp: product.price_rrp,
     priceDiscounted: product.price_discounted,
     imageUrl: product.image_url,
-    description: product.description_short,
-    descriptionLong: product.description_long,
+    description: cleanDescription(product.description_short),
+    descriptionLong: cleanDescription(product.description_long),
     clinicalUseCase: product.clinical_use_case,
     specifications: product.specifications,
     category: product.top_level_category,
