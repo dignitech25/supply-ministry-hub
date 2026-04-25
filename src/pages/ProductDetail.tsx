@@ -230,7 +230,7 @@ export default function ProductDetail() {
     return (
       <div className="min-h-screen bg-violet text-cream">
         <EditorialNavigation />
-        <main className="container mx-auto px-4 py-8 max-w-7xl">
+        <main id="main-content" className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="bg-cream text-ink rounded-3xl p-6 md:p-10">
           <div className="animate-pulse space-y-8">
             <div className="h-8 bg-cream-image rounded w-1/3"></div>
@@ -253,7 +253,7 @@ export default function ProductDetail() {
     return (
       <div className="min-h-screen bg-violet text-cream">
         <EditorialNavigation />
-        <main className="container mx-auto px-4 py-8 max-w-7xl">
+        <main id="main-content" className="container mx-auto px-4 py-8 max-w-7xl">
           <Card className="p-16 text-center bg-cream-alt border-cream-border">
             <h1 className="text-3xl md:text-4xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">
               Product not <span className="italic text-gold">found</span>
@@ -290,7 +290,7 @@ export default function ProductDetail() {
       />
       <EditorialNavigation />
       
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+      <main id="main-content" className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="bg-cream text-ink rounded-3xl p-6 md:p-10">
         {/* Breadcrumbs */}
         <Breadcrumb className="mb-6">
