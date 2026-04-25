@@ -1,41 +1,77 @@
-const statements = [
-  "OT-referred and clinician-trusted",
-  "Aged care and NDIS procurement",
-  "48hr quotes, documentation included",
-  "Ethical and dedicated AT sourcing",
+type Proof = {
+  eyebrow: string;
+  headlineLead: string;
+  headlineAccent: string;
+  headlineTrail?: string;
+  sub: string;
+};
+
+const proofs: Proof[] = [
+  {
+    eyebrow: "Clinician trusted",
+    headlineLead: "OT",
+    headlineAccent: "referred",
+    sub: "Specs and trial documentation included with every quote.",
+  },
+  {
+    eyebrow: "Procurement",
+    headlineLead: "Aged care and",
+    headlineAccent: "NDIS-ready",
+    sub: "Compliant quotes formatted for plan managers and funding bodies.",
+  },
+  {
+    eyebrow: "Turnaround",
+    headlineAccent: "48-hour",
+    headlineLead: "",
+    headlineTrail: "quotes",
+    sub: "Most metro orders dispatched the same week.",
+  },
+  {
+    eyebrow: "Catalogue",
+    headlineAccent: "4,400+",
+    headlineLead: "",
+    headlineTrail: "products",
+    sub: "Sourced from Australia's leading assistive technology suppliers.",
+  },
 ];
 
 const TrustBar = () => {
   return (
-    <section className="bg-violet border-t border-white/10" style={{ padding: "12px 16px" }}>
-      <div className="md:px-12 lg:pl-24 flex flex-wrap items-center gap-y-2">
-        {statements.map((s, i) => (
-          <div key={s} className="flex items-center">
-            <span
-              className="font-geist uppercase"
-              style={{
-                fontSize: "9px",
-                fontWeight: 300,
-                letterSpacing: "0.12em",
-                color: "rgba(244,239,230,0.28)",
-              }}
+    <section
+      aria-label="Why providers choose Supply Ministry"
+      className="bg-cream text-ink border-y border-cream-border"
+    >
+      <div className="container mx-auto px-4 md:px-12 lg:px-24 py-10 md:py-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+          {proofs.map((p, i) => (
+            <div
+              key={p.eyebrow}
+              className={
+                "flex flex-col " +
+                (i > 0
+                  ? "lg:border-l lg:border-cream-border lg:pl-8"
+                  : "lg:pl-0")
+              }
             >
-              {s}
-            </span>
-            {i < statements.length - 1 && (
-              <span
-                className="mx-3 hidden sm:inline-block"
-                style={{
-                  width: "2px",
-                  height: "2px",
-                  borderRadius: "50%",
-                  background: "rgba(244,239,230,0.12)",
-                }}
-              />
-            )}
-            {i < statements.length - 1 && <span className="sm:hidden mx-3" />}
-          </div>
-        ))}
+              <span className="font-geist text-[10px] tracking-[0.18em] uppercase text-muted-body mb-3">
+                {p.eyebrow}
+              </span>
+              <h3 className="font-geist text-xl md:text-2xl font-light tracking-tight text-ink leading-tight mb-2">
+                {p.headlineLead && <span>{p.headlineLead} </span>}
+                <span
+                  className="italic"
+                  style={{ color: "hsl(var(--gold))" }}
+                >
+                  {p.headlineAccent}
+                </span>
+                {p.headlineTrail && <span> {p.headlineTrail}</span>}
+              </h3>
+              <p className="text-sm text-muted-body leading-relaxed">
+                {p.sub}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
