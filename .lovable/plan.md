@@ -1,33 +1,44 @@
-I checked the current file and the live preview. The last change did not properly solve the problem.
+## Goal
 
-The reason the logo still looks tiny is that `EditorialNavigation.tsx` is using `/Supply_Ministry_logo_new.png`, which is a large 1376 x 768 image with the real logo artwork sitting in a small strip inside a big cream canvas. Setting that image to `h-[72px]` makes the actual visible logo only around 15px tall. So yes, the result looks barely changed.
+Use your latest logo file (`/Supply_Ministry_logo_new.png`) in the header at a properly visible size, while keeping the cream bar clean (no hanging rectangle).
 
-Plan to fix it properly:
+## Why the previous attempts failed
 
-1. Replace the logo asset in `src/components/editorial/EditorialNavigation.tsx`
-   - Change from `/Supply_Ministry_logo_new.png`
-   - To `/Supply_Ministry_logo.png`
-   - This is the official transparent PNG noted in project memory and it does not have the huge cream canvas problem.
+The latest logo PNG is 1376 x 768 with the actual artwork sitting in a small region inside a large cream-colored canvas baked into the image. So:
+- Sizing by height made the visible logo tiny.
+- Sizing it big made the canvas overflow and create the hanging cream tab.
 
-2. Size the logo by width, not height
-   - Use a large fixed responsive width so the visible logo is actually prominent:
-   - Mobile: around `w-[180px]`
-   - Small screens: around `sm:w-[220px]`
-   - Desktop: around `md:w-[280px]` or `md:w-[300px]`
-   - Keep `h-auto object-contain`
-   - This avoids the previous problem where height was applied to an image canvas instead of the visible artwork.
+The fix is to use the latest file but constrain it inside the bar with clipping, and size it generously so the visible artwork actually fills the header.
 
-3. Keep the nav bar clean and contained
-   - Keep the nav at `h-20` with no `overflow-visible`
-   - Keep the inner wrapper at `h-full`
-   - This prevents the cream bar from hanging down or being stretched by the logo.
+## Changes (single file: `src/components/editorial/EditorialNavigation.tsx`)
 
-4. Make the menu and CTA visibly larger
-   - Nav links: change from `text-sm` to `text-base font-medium`
-   - CTA: change from `text-sm` to `text-base font-semibold`
-   - CTA padding: increase to `px-7 py-3`
+1. Switch the logo source back to your latest asset
+   - From: `/Supply_Ministry_logo.png`
+   - To: `/Supply_Ministry_logo_new.png`
 
-Expected result:
-- The logo will be noticeably larger because we will use the correct transparent logo file and size it by width.
-- The cream rectangle issue will stay fixed because the logo will no longer force the header background to stretch.
-- The menu text and “Start your quote” text will be clearly bigger and easier to read.
+2. Size the logo so the visible artwork is prominent, while clipping the canvas
+   - Apply `h-20` to the `<img>` so it matches the bar height exactly (80px).
+   - Apply a generous responsive width so the inner artwork is large:
+     - `w-[260px] sm:w-[320px] md:w-[400px]`
+   - Keep `object-contain` so nothing gets distorted.
+
+3. Prevent the cream canvas from creating the overhang
+   - Add `overflow-hidden` to the `<nav>` element.
+   - Keep `<nav>` at `h-20` (no `overflow-visible`).
+   - Inner wrapper stays `h-full`.
+   - This ensures the image canvas cannot push the bar background down past 80px.
+
+4. Keep the recently approved typography improvements
+   - Nav links: `text-base font-medium`
+   - CTA "Start your quote": `text-base font-semibold` with `px-7 py-3`
+
+## Expected result
+
+- Your latest logo is back in the header.
+- The visible logo artwork is clearly large and readable.
+- The cream header bar stays a clean 80px strip with no hanging rectangle, on all screen sizes.
+- Menu and CTA stay at the larger, more readable size you already approved.
+
+## Recommended follow-up (optional, not part of this change)
+
+For the cleanest long-term result, re-export the new logo as a tightly cropped transparent PNG (no cream background, minimal padding). Once you upload that, we can drop the width-compensation hack and just size by height.
