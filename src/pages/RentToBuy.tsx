@@ -65,7 +65,7 @@ const RentToBuy = () => {
       />
       <EditorialNavigation />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* Hero */}
         <section className="bg-violet text-cream py-16 md:py-24">
           <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">

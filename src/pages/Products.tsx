@@ -344,7 +344,7 @@ export default function Products() {
       />
       <EditorialNavigation />
       
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+      <main id="main-content" className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="bg-cream text-ink rounded-3xl p-6 md:p-10">
         {/* Header */}
         <div className="mb-8">
