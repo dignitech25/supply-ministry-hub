@@ -702,6 +702,10 @@ export type Database = {
         Returns: boolean
       }
       make_quote_number: { Args: never; Returns: string }
+      normalize_product_description_text: {
+        Args: { input_text: string }
+        Returns: string
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
     }
