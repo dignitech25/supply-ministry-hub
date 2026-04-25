@@ -35,7 +35,7 @@ const Navigation = () => {
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               <img 
-                src="/Supply_Ministry_logo.png" 
+                src="/Supply_Ministry_logo_new.png" 
                 alt="Supply Ministry" 
                 className="h-10 sm:h-14 md:h-20 w-auto max-w-[65vw] sm:max-w-[50vw] md:max-w-none object-contain"
                 onError={(e) => {
