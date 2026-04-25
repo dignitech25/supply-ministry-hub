@@ -105,12 +105,16 @@ const HeroSection = () => {
           {/* Hero Image - Expanded for Desktop */}
           <div className="lg:pl-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <div className="relative group">
-              <img
-                src="/hero-senior-assistive.jpg"
-                alt="Smiling senior woman using assistive technology with confidence"
+              <video
+                src="/hero-video.mp4"
+                poster="/hero-senior-assistive.jpg"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label="Supply Ministry assistive equipment in use"
                 className="rounded-2xl shadow-xl w-full h-[400px] lg:h-[600px] object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                fetchPriority="high"
-                decoding="async"
                 width={800}
                 height={600}
               />
