@@ -19,7 +19,7 @@ const QuoteConfirm: React.FC = () => {
       />
       <EditorialNavigation />
       
-      <main className="container mx-auto px-6 py-16">
+      <main id="main-content" className="container mx-auto px-6 py-16">
         <div className="max-w-2xl mx-auto">
           <Card className="bg-cream-alt border-cream-border shadow-sm">
             <CardHeader className="text-center pb-4">

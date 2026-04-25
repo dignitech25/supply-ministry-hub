@@ -11,7 +11,7 @@ const TermsConditions = () => {
       />
       <EditorialNavigation />
       
-      <main className="container mx-auto px-4 py-20">
+      <main id="main-content" className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto bg-cream text-ink rounded-3xl p-8 md:p-12">
           <h1 className="text-4xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-10">
             Terms & <span className="italic text-gold">conditions</span>
