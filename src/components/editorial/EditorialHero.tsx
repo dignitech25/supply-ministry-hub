@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-rollator-home.png";
+const heroVideo = "/hero-video.mp4";
 
 type Audience = {
   id: string;
@@ -186,12 +187,16 @@ const EditorialHero = () => {
           <div
             className="flex-1 relative min-h-[268px] overflow-hidden"
           >
-            <img
-              src={heroImage}
-              alt="Occupational therapist supporting an older woman using a rollator at home"
+            <video
+              src={heroVideo}
+              poster={heroImage}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="Supply Ministry assistive equipment in use"
               className="absolute inset-0 w-full h-full object-cover object-top"
-              fetchPriority="high"
-              decoding="async"
               width={896}
               height={1184}
             />
@@ -322,11 +327,16 @@ const EditorialHero = () => {
         </div>
 
         <div className="relative h-[340px] overflow-hidden">
-          <img
-            src={heroImage}
-            alt="Occupational therapist supporting an older woman using a rollator at home"
+          <video
+            src={heroVideo}
+            poster={heroImage}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label="Supply Ministry assistive equipment in use"
             className="absolute inset-0 w-full h-full object-cover object-top"
-            decoding="async"
             width={896}
             height={1184}
           />

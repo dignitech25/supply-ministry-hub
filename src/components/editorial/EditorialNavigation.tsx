@@ -13,7 +13,7 @@ const EditorialNavigation = () => {
       <div className="h-full px-6 md:px-12 flex items-center justify-between">
         <Link to="/" className="flex items-center">
           <img
-            src="/brand/supply-ministry-logo.png"
+            src="/Supply_Ministry_logo_new.png"
             alt="Supply Ministry: Connects Care With Solutions"
             className="h-14 md:h-16 w-auto object-contain"
           />
