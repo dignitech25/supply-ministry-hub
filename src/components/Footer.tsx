@@ -4,9 +4,9 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-violet text-cream/80 py-12">
+    <footer className="bg-violet text-cream/80 pt-20 pb-12 md:pt-24 md:pb-16">
       <div className="container mx-auto px-4">
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-16 md:mb-20">
           <Link to="/" aria-label="Supply Ministry home">
             <img
               src="/Supply_Ministry_inverted.svg"
@@ -15,7 +15,7 @@ const Footer = () => {
             />
           </Link>
         </div>
-        <div className="flex flex-col sm:flex-row justify-center gap-12 sm:gap-24 max-w-lg mx-auto">
+        <div className="flex flex-col sm:flex-row justify-center gap-14 sm:gap-28 max-w-lg mx-auto">
           <div className="text-center">
             <h4 className="font-semibold mb-4 text-base text-cream">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
@@ -35,7 +35,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="border-t border-cream/15 mt-10 pt-6 text-center text-sm text-cream/60">
+        <div className="border-t border-cream/15 mt-16 pt-8 text-center text-sm text-cream/60">
           <p>&copy; {currentYear} Supply Ministry. All rights reserved. | <Link to="/terms" className="hover:opacity-100 transition-opacity">Terms &amp; Conditions</Link></p>
         </div>
       </div>
