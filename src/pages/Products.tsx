@@ -336,7 +336,7 @@ export default function Products() {
     <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title="Products | Assistive Technology & Mobility Equipment"
-        description="Browse assistive technology, mobility aids, pressure care and therapeutic equipment. Filter by category and brand. 48-hour quote turnaround."
+        description="Browse assistive technology, mobility aids, pressure care and therapeutic equipment. Filter by category and brand. 24-hour response on quotes."
         jsonLd={createBreadcrumbSchema([
           { name: "Home", url: "https://www.supplyministry.com.au" },
           { name: "Products", url: "https://www.supplyministry.com.au/products" }

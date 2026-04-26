@@ -14,37 +14,31 @@ const categories = [
     name: "Mobility",
     slug: "Mobility",
     icon: Move,
-    count: "500+",
   },
   {
     name: "Bedroom & Comfort",
     slug: "Bedroom & Comfort",
     icon: Bed,
-    count: "300+",
   },
   {
     name: "Seating & Chairs",
     slug: "Seating & Chairs",
     icon: Armchair,
-    count: "250+",
   },
   {
     name: "Bathroom & Toileting",
     slug: "Bathroom & Toileting",
     icon: Bath,
-    count: "400+",
   },
   {
     name: "Accessible & Consumables",
     slug: "Accessible & Consumables",
     icon: Package,
-    count: "350+",
   },
   {
     name: "Home & Safety",
     slug: "Home & Safety",
     icon: Home,
-    count: "200+",
   },
 ];
 
@@ -84,7 +78,7 @@ const ProductCategoryCards = () => {
                       {category.name}
                     </h3>
                     <p className="text-muted-body text-sm">
-                      {category.count} products
+                      Explore range
                     </p>
                   </CardContent>
                 </Card>

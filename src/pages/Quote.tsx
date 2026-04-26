@@ -1,15 +1,21 @@
 import Navigation from "@/components/Navigation";
-import QuoteForm from "@/components/QuoteForm";
+import EnhancedQuoteForm from "@/components/EnhancedQuoteForm";
+import { useQuote } from "@/contexts/QuoteContext";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
 import { Clock, Shield, Phone } from "lucide-react";
 import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 
 const Quote = () => {
+  const { state } = useQuote();
+  const hasItems = state.items.length > 0;
+
   return (
     <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title="Request a Quote"
-        description="Get a no-obligation quote for assistive technology and mobility equipment. NDIS registered provider with 24-hour response time and expert support."
+        description="Get a no-obligation quote for assistive technology and mobility equipment. 24-hour response time with expert support across Australia."
       />
       <EditorialNavigation />
       
@@ -46,7 +52,26 @@ const Quote = () => {
       {/* Quote Form Section */}
       <section className="py-12 bg-cream text-ink">
         <div className="container mx-auto px-4">
-          <QuoteForm />
+          {hasItems ? (
+            <div className="max-w-2xl mx-auto">
+              <EnhancedQuoteForm />
+            </div>
+          ) : (
+            <div className="max-w-2xl mx-auto text-center bg-cream-alt border border-cream-border rounded-2xl p-10">
+              <h2 className="font-geist text-2xl md:text-3xl text-ink mb-3">
+                Add products to your quote first
+              </h2>
+              <p className="text-muted-body mb-6">
+                Browse our catalogue and add the items you'd like quoted. Once you have at least one item, return here to send your request.
+              </p>
+              <Button asChild className="bg-ink text-cream hover:opacity-90">
+                <Link to="/products">Browse products</Link>
+              </Button>
+              <p className="text-sm text-muted-body mt-6">
+                Prefer to talk it through? Email or call us using the contacts below.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 

@@ -49,7 +49,7 @@ const Resources = () => {
     },
     {
       question: "How quickly will I get a quote?",
-      answer: "We aim to return quotes within 48 hours of your request. Delivery lead times vary by supplier, product and location, and are confirmed on every quote so you know exactly what to expect."
+      answer: "We aim to respond to quote requests within 24 hours. Delivery lead times vary by supplier, product and location, and are confirmed on every quote so you know exactly what to expect."
     },
     {
       question: "Do you offer product trials?",

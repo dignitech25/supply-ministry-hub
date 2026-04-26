@@ -21,10 +21,10 @@ const proofs: Proof[] = [
   },
   {
     eyebrow: "Turnaround",
-    headlineAccent: "48-hour",
+    headlineAccent: "24-hour",
     headlineLead: "",
-    headlineTrail: "quotes",
-    sub: "Quotes returned within two business days.",
+    headlineTrail: "response",
+    sub: "We reply to quote requests within one business day.",
   },
   {
     eyebrow: "Catalogue",

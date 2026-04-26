@@ -58,7 +58,7 @@
        },
        {
          question: "How quickly will I get a quote for this bed?",
-         answer: "We aim to return quotes within 48 hours of your request. Delivery timing is confirmed on every quote and depends on supplier stock, configuration and location.",
+         answer: "We aim to respond to quote requests within 24 hours. Delivery timing is confirmed on every quote and depends on supplier stock, configuration and location.",
        },
        {
          question: "What mattresses work with this bed?",
