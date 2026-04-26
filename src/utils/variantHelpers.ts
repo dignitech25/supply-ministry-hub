@@ -25,6 +25,19 @@ export interface ProductVariant {
   subcategory?: string;
 }
 
+function chooseBestDescription(shortText?: string | null, longText?: string | null, fallbackText?: string | null) {
+  const cleanedShort = cleanDescription(shortText);
+  const cleanedLong = cleanDescription(longText);
+  const cleanedFallback = cleanDescription(fallbackText);
+
+  const longLooksTruncated = cleanedLong.length >= 495 && cleanedLong.length <= 510 && cleanedFallback.length > cleanedLong.length + 80;
+
+  return {
+    shortDescription: cleanedShort,
+    longDescription: longLooksTruncated ? cleanedFallback : (cleanedLong || cleanedFallback),
+  };
+}
+
 export interface ParentProduct {
   slug: string;
   baseName: string;
@@ -217,14 +230,16 @@ export function groupIntoParents(products: any[]): Map<string, ParentProduct> {
           parent.defaultVariant = variant;
         }
       } else {
+        const descriptions = chooseBestDescription(product.description_short, product.description_long, product.description);
+
         parentMap.set(slug, {
           slug,
           baseName,
           brand,
           category: product.top_level_category,
           subcategory: product.subcategory,
-          description: cleanDescription(product.description_short),
-          descriptionLong: cleanDescription(product.description_long),
+          description: descriptions.shortDescription,
+          descriptionLong: descriptions.longDescription,
           clinicalUseCase: product.clinical_use_case,
           variants: [variant],
           uniqueSizes: variant.size ? [variant.size] : [],
@@ -255,6 +270,8 @@ export function groupIntoParents(products: any[]): Map<string, ParentProduct> {
  * Normalize a raw product row into a ProductVariant
  */
 function normalizeVariant(product: any): ProductVariant {
+  const descriptions = chooseBestDescription(product.description_short, product.description_long, product.description);
+
   return {
     sku: product.sku,
     handle: product.handle,
@@ -267,8 +284,8 @@ function normalizeVariant(product: any): ProductVariant {
     priceRrp: product.price_rrp,
     priceDiscounted: product.price_discounted,
     imageUrl: product.image_url,
-    description: cleanDescription(product.description_short),
-    descriptionLong: cleanDescription(product.description_long),
+    description: descriptions.shortDescription,
+    descriptionLong: descriptions.longDescription,
     clinicalUseCase: product.clinical_use_case,
     specifications: product.specifications,
     category: product.top_level_category,
