@@ -67,13 +67,23 @@ export function cleanDescription(text: string | null | undefined): string {
     .replace(/\\r/g, '\n')
     .replace(/\\t/g, ' ')
     .replace(/\r\n?/g, '\n')
+    .replace(/\bComfi\s*\n\s*Motion\b/g, 'ComfiMotion')
+    .replace(/\bComfi\s+Motion\b/g, 'ComfiMotion')
+    .replace(/\bProduct Code\s*[A-Z0-9.-]+\s*\.\s*(Product Description|Display Name|Description)\s*/gi, '\n')
+    .replace(/\bProduct Code\s*[A-Z0-9.-]+\s*\.?/gi, '')
+    .replace(/^\s*(Product Description|Display Name|Description)\s*$/gim, '')
     .replace(/[\t ]+\n/g, '\n')
     .replace(/\n[\t ]+/g, '\n')
+    .replace(/\bKey Features:\s*(?=[A-Z][A-Za-z /&-]{2,}:)/g, 'Key Features:\n')
     .replace(/([^\s([])\(/g, '$1 (')
     .replace(/\(\s+/g, '(')
     .replace(/\s+\)/g, ')')
     .replace(/\)([A-Za-z0-9])/g, ') $1')
+    .replace(/([a-z])([A-Z][a-z])/g, '$1 $2')
+    .replace(/([a-z])([A-Z]{2,}\b)/g, '$1 $2')
     .replace(/([a-z]{2,})(\d{2,})/g, '$1 $2')
+    .replace(/([a-zA-Z])(\d+\s*(?:mm|cm|kg|m)\b)/g, '$1 $2')
+    .replace(/(\b\d+\s*(?:mm|cm|kg|m))([A-Z]{2,}\b)/g, '$1 $2')
     .replace(/(\d)([a-z]{2,})/g, '$1 $2')
     .replace(/\s+([,.;:!?])/g, '$1')
     .replace(/([,;:!?])([^\s\n])/g, '$1 $2')
@@ -94,7 +104,13 @@ export function getDescriptionParagraphs(text: string | null | undefined): strin
 
   return cleaned
     .split(/\n{2,}/)
-    .map((paragraph) => paragraph.trim())
+    .map((paragraph) => paragraph
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 2 && !/:\s*[A-Za-z]{1,2}\.?$/.test(line))
+      .join('\n')
+      .trim()
+    )
     .filter(Boolean);
 }
 
