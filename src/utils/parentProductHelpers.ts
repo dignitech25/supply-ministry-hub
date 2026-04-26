@@ -14,7 +14,7 @@ interface CacheEntry {
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 const cache = new Map<string, CacheEntry>();
 
-async function hydrateWithFullDescriptions<T extends { sku?: string; description?: string | null }>(products: T[]): Promise<T[]> {
+export async function hydrateWithFullDescriptions<T extends { sku?: string; description?: string | null }>(products: T[]): Promise<T[]> {
   const skus = Array.from(new Set(products.map((product) => product.sku).filter(Boolean))) as string[];
   if (skus.length === 0) return products;
 
