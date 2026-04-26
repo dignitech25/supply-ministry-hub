@@ -277,14 +277,29 @@ export default function ProductDetail() {
     .filter(Boolean) || [];
 
   const displayImage = selectedVariant.imageUrl || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23C4B5FD" width="400" height="400"/%3E%3Ctext fill="%23ffffff" font-family="sans-serif" font-size="24" text-anchor="middle" x="200" y="200"%3ENo Image%3C/text%3E%3C/svg%3E';
-  const cleanedDescription = cleanDescription(parent.descriptionLong || parent.description);
-  const descriptionParagraphs = getDescriptionParagraphs(parent.descriptionLong || parent.description);
+  const productNameTokens = [parent.baseName, selectedVariant.title]
+    .filter(Boolean)
+    .map((name) => cleanDescription(name).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim());
+  const isProductNameLine = (line: string) => {
+    const normalizedLine = cleanDescription(line).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    return productNameTokens.some((name) => name && (normalizedLine === name || normalizedLine.endsWith(` ${name}`)));
+  };
+  const descriptionParagraphs = getDescriptionParagraphs(parent.descriptionLong || parent.description)
+    .map((paragraph) => paragraph
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line && !isProductNameLine(line))
+      .join('\n')
+      .trim()
+    )
+    .filter(Boolean);
+  const cleanedDescription = cleanDescription(descriptionParagraphs.join('\n\n'));
 
   return (
     <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title={`${parent.baseName}${parent.brand ? ` by ${parent.brand}` : ''}`}
-        description={cleanDescription(parent.description).slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast quote turnaround and expert support.`}
+        description={cleanedDescription.slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast quote turnaround and expert support.`}
         image={selectedVariant.imageUrl || undefined}
         jsonLd={getJsonLdSchemas()}
       />
