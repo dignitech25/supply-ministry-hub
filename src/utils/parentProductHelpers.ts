@@ -14,6 +14,35 @@ interface CacheEntry {
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 const cache = new Map<string, CacheEntry>();
 
+async function hydrateWithFullDescriptions<T extends { sku?: string; description?: string | null }>(products: T[]): Promise<T[]> {
+  const skus = Array.from(new Set(products.map((product) => product.sku).filter(Boolean))) as string[];
+  if (skus.length === 0) return products;
+
+  const descriptionBySku = new Map<string, string>();
+
+  for (let i = 0; i < skus.length; i += 200) {
+    const { data, error } = await supabase
+      .from('products')
+      .select('sku, description')
+      .in('sku', skus.slice(i, i + 200));
+
+    if (error) {
+      console.error('Error hydrating product descriptions:', error);
+      continue;
+    }
+
+    (data || []).forEach((row) => {
+      if (row.sku && row.description) descriptionBySku.set(row.sku, row.description);
+    });
+  }
+
+  return products.map((product) => {
+    const fullDescription = product.sku ? descriptionBySku.get(product.sku) : undefined;
+    if (!fullDescription || (product.description && product.description.length >= fullDescription.length)) return product;
+    return { ...product, description: fullDescription };
+  });
+}
+
 /**
  * Clear the cache (useful after data updates)
  */
@@ -54,8 +83,10 @@ export async function fetchParentProduct(slug: string): Promise<ParentProduct | 
       return null;
     }
     
+    const hydratedProducts = await hydrateWithFullDescriptions(products);
+
     // Group products into parents
-    const parentMap = groupIntoParents(products);
+    const parentMap = groupIntoParents(hydratedProducts);
     
     // Find the matching parent
     const parent = parentMap.get(slug);
@@ -122,8 +153,10 @@ async function fetchParentProductByField(field: 'sku' | 'handle', value: string)
       return null;
     }
     
+    const hydratedProducts = await hydrateWithFullDescriptions(relatedProducts || []);
+
     // Group and find parent
-    const parentMap = groupIntoParents(relatedProducts || []);
+    const parentMap = groupIntoParents(hydratedProducts);
     
     // Find which parent contains this SKU
     for (const parent of parentMap.values()) {
@@ -185,8 +218,10 @@ export async function fetchAllParentProducts(options?: {
       return { parents: [], total: 0 };
     }
     
+    const hydratedProducts = await hydrateWithFullDescriptions(products);
+
     // Group into parents
-    const parentMap = groupIntoParents(products);
+    const parentMap = groupIntoParents(hydratedProducts);
     let parents = Array.from(parentMap.values());
     
     // Apply sorting
