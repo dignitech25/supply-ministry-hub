@@ -17,6 +17,7 @@ import { createBreadcrumbSchema } from '@/components/SEO';
 
 import { formatPrice } from '@/utils/productHelpers';
 import { groupIntoParents } from '@/utils/variantHelpers';
+import { hydrateWithFullDescriptions } from '@/utils/parentProductHelpers';
 
 interface DisplayProduct {
   slug: string;
@@ -214,8 +215,10 @@ export default function Products() {
 
       console.log(`✅ Fetched ${allData.length} total variants`);
       
+      const hydratedData = await hydrateWithFullDescriptions(allData);
+
       // Group variants into parent products
-      const parentMap = groupIntoParents(allData);
+      const parentMap = groupIntoParents(hydratedData);
       let displayProducts: DisplayProduct[] = Array.from(parentMap.values()).map(parent => ({
         slug: parent.slug,
         baseName: parent.baseName,
