@@ -1,36 +1,29 @@
 ## Goal
-Make the homepage Supplier Strip look uniform, calm, and editorial — matching the violet/cream brand instead of a jumble of colored logos with white boxes.
+Tighten the supplier strip: make icare and Enable Lifecare as crisp/bright as the others, and lift Novis so it doesn't sit visually low.
 
-## Problems identified
-- **`icare.jpg` and `novis.jpg`** are JPEGs with baked-in **white backgrounds** → show as white rectangles on the violet strip.
-- **Aspect ratios vary 1.9:1 → 4.7:1** → at fixed `h-10`, Aspire and Sleep Choice dominate while Enable Lifecare looks tiny.
-- **Full-color logos on violet** read as cluttered (blue Novis, red icare, green Forté).
-- **Inconsistent internal padding** in source PNGs throws vertical alignment off.
+## Diagnosed issues
+1. **Enable Lifecare looks dull** — its normalized PNG tops out at alpha `230/255` (~10% see-through baked in), so against the strip's 70% base opacity it renders dimmer than peers. It's also the shortest mark (36px tall vs ~70px for others) so it reads smaller.
+2. **icare "eye" is too dull** — the monochrome flatten lost contrast on the small eye detail. Need to re-process so every original ink pixel becomes fully opaque cream.
+3. **Novis hangs low** — bbox-centered in 240×80, but the wordmark has visual weight near the bottom, so optical center sits below geometric center. Needs a small upward shift.
 
-## Fix — two parts
+## Fix
 
-### 1. Normalize the asset files (one-time image processing)
-Run a Python/PIL script to generate cleaned versions in `public/suppliers/normalized/`:
-- **Remove white backgrounds** from `icare.jpg` and `novis.jpg` → save as transparent PNG (threshold near-white pixels to alpha).
-- **Trim transparent padding** on every logo so the artwork bounding box is tight.
-- **Fit each logo into a uniform 240×80 transparent canvas**, scaled to fit (preserving aspect ratio), centered. This guarantees identical visual footprint regardless of source aspect ratio.
-- **Convert to monochrome cream tone** (`hsl(40 33% 94%)` at ~85% opacity): replace all non-transparent pixels with the cream color, preserving alpha. This gives the editorial "all logos look like they belong" treatment used by premium B2B sites.
+### 1. Re-normalize the three problem logos (Python/PIL)
+Re-run a tightened processing pass for `icare.png`, `enable-lifecare.png`, `novis.png`:
+- **Threshold alpha hard**: any pixel with alpha ≥ 40 becomes fully opaque (alpha = 255) cream `rgb(245, 240, 230)`. Anything below stays fully transparent. No mid-tones — eliminates the dull/washed look.
+- **Trim to tight bbox**, then for **Enable Lifecare**, scale to fill ~85% of the 80px box height (currently ~45%) so it matches the visual size of Aspire/Forté.
+- **Novis**: after centering, shift the artwork up by ~4px to optically center the wordmark (compensates for bottom-heavy letterforms).
+- Keep Aspire, Forté, Sleep Choice as-is (they look right per your feedback).
 
-Output: 6 PNGs at `public/suppliers/normalized/{name}.png`, each 240×80, transparent, monochrome cream.
-
-### 2. Update `src/components/editorial/SupplierStrip.tsx`
-- Point `src` paths to the new `/suppliers/normalized/*.png` files.
-- Replace the per-logo `h-8 md:h-10 w-auto` with a **fixed-box** treatment: `h-8 md:h-10 w-[120px] md:w-[140px] object-contain` so every slot is the same width and logos sit on an identical grid.
-- Tighten spacing: `mx-5 md:mx-7`.
-- Bump default opacity to `opacity-70` and hover to `opacity-100`.
-- Keep marquee, edge fades, and pause-on-hover unchanged.
+### 2. No component changes needed
+`SupplierStrip.tsx` stays as-is. The fix is purely in the asset processing.
 
 ## Result
-A clean, uniform row of cream-tinted supplier marks on violet — same height, same width slot, same color, same opacity. No white boxes, no visual hierarchy fights.
+- icare's eye reads cleanly at full cream brightness.
+- Enable Lifecare matches the visual weight and brightness of its neighbors.
+- Novis sits on the same optical baseline as the rest of the row.
+- Aspire / Forté / Sleep Choice unchanged.
 
 ## Files touched
-- **Created**: 6 normalized PNGs under `public/suppliers/normalized/`
-- **Edited**: `src/components/editorial/SupplierStrip.tsx`
-
-## Optional alternative
-If you'd rather keep the original brand colors (full-color logos), I can skip the monochrome step and only (a) strip the white backgrounds from icare/novis and (b) normalize to a uniform box size. Tell me after seeing the result.
+- **Overwritten**: `public/suppliers/normalized/icare.png`, `enable-lifecare.png`, `novis.png`
+- **Unchanged**: component, other 3 logos
