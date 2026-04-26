@@ -180,21 +180,21 @@ const Index = () => {
         </Suspense>
 
 
-        <section id="contact" className="py-24 bg-violet text-cream relative overflow-hidden border-t border-white/10">
+        <section id="contact" className="py-14 md:py-16 bg-violet text-cream relative overflow-hidden border-t border-white/10">
           <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)', backgroundSize: '32px 32px' }} />
           <div className="container mx-auto px-4 text-center relative z-10">
             <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Let's Talk</p>
             <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl mb-5">Ready to get <span className="italic text-gold pr-1.5">started</span>?</h2>
-            <p className="text-lg mb-10 text-cream/75 max-w-xl mx-auto leading-relaxed">
+            <p className="text-lg mb-7 text-cream/75 max-w-xl mx-auto leading-relaxed">
               Reach out to our team to discuss your assistive technology needs. We'll help find the perfect solutions for your clients.
             </p>
             <Link 
               to="/quote"
-              className="inline-block bg-cream text-violet px-10 py-4 rounded-full font-medium text-lg hover:opacity-90 transition-all duration-200 mb-14"
+              className="inline-block bg-cream text-violet px-10 py-4 rounded-full font-medium text-lg hover:opacity-90 transition-all duration-200 mb-9"
             >
               Request a Quote
             </Link>
-            <div className="grid sm:grid-cols-2 gap-8 max-w-md mx-auto text-center">
+            <div className="grid sm:grid-cols-2 gap-6 max-w-md mx-auto text-center">
               <div>
                 <p className="font-geist text-xl mb-2">Alex</p>
                 <a href="mailto:alex@supplyministry.com.au" className="block text-sm text-cream/70 hover:text-cream transition-colors mb-1">alex@supplyministry.com.au</a>
@@ -206,7 +206,7 @@ const Index = () => {
                 <a href="tel:+61404593090" className="block text-2xl font-geist tracking-tight hover:text-gold transition-colors">0404 593 090</a>
               </div>
             </div>
-            <p className="text-xs text-cream/50 mt-10 tracking-wide">Monday – Friday · 8:30 AM – 5:00 PM AEST</p>
+            <p className="text-xs text-cream/50 mt-5 tracking-wide">Monday – Friday · 8:30 AM – 5:00 PM AEST</p>
           </div>
         </section>
       </main>
