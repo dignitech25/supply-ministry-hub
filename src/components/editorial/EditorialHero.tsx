@@ -7,6 +7,7 @@ const heroVideo = "/hero-video.mp4";
 type Audience = {
   id: string;
   tabLabel: string;
+  tabLabelLines?: [string, string];
   name: string;
   description: string;
   ctaLabel: string;
@@ -17,6 +18,7 @@ const audiences: Audience[] = [
   {
     id: "ot",
     tabLabel: "Occupational therapist",
+    tabLabelLines: ["Occupational", "therapist"],
     name: "An occupational therapist",
     description:
       "You know what your client needs. We source it, quote it, and document it, so you can focus on the clinical decision, not the procurement paperwork.",
@@ -26,6 +28,7 @@ const audiences: Audience[] = [
   {
     id: "aged-care",
     tabLabel: "Aged care provider",
+    tabLabelLines: ["Aged care", "provider"],
     name: "An aged care provider",
     description:
       "Whether it's a single item or a full facility order, we handle sourcing, documentation, and delivery, so your team can focus on care.",
@@ -35,6 +38,7 @@ const audiences: Audience[] = [
   {
     id: "coordinator",
     tabLabel: "Support coordinator",
+    tabLabelLines: ["Support", "coordinator"],
     name: "A support coordinator",
     description:
       "We help you source the right AT for your participants, with NDIS-ready quotes and documentation that saves you hours.",
@@ -44,6 +48,7 @@ const audiences: Audience[] = [
   {
     id: "participant",
     tabLabel: "NDIS participant",
+    tabLabelLines: ["NDIS", "participant"],
     name: "An NDIS participant or family member",
     description:
       "Navigating AT funding is complex. We explain it plainly, source the right equipment, and handle the paperwork.",
@@ -65,30 +70,31 @@ const EditorialHero = () => {
   return (
     <section className="bg-violet">
       {/* Desktop layout */}
-      <div className="hidden min-[960px]:grid min-[960px]:grid-cols-[64px_1fr_42%] min-h-[640px]">
+      <div className="hidden min-[960px]:grid min-[960px]:grid-cols-[132px_1fr_42%] min-h-[640px]">
         {/* Column 0: Vertical audience tabs */}
-        <div className="flex flex-col border-r border-white/[0.10]">
+        <div className="flex flex-col border-r border-white/[0.12]">
           {audiences.map((aud, idx) => {
             const isActive = aud.id === activeId;
+            const lines = aud.tabLabelLines ?? [aud.tabLabel, ""];
             return (
               <button
                 key={aud.id}
                 onClick={() => setActiveId(aud.id)}
-                className={`relative flex-1 min-h-[160px] flex items-center justify-center transition-colors ${
-                  idx !== 0 ? "border-t border-white/[0.10]" : ""
-                } ${isActive ? "bg-white/[0.07]" : "hover:bg-white/[0.03]"}`}
+                aria-label={aud.tabLabel}
+                className={`relative flex-1 min-h-[140px] flex flex-col justify-center px-5 text-left transition-colors ${
+                  idx !== 0 ? "border-t border-white/[0.12]" : ""
+                } ${isActive ? "bg-white/[0.08]" : "hover:bg-white/[0.04]"}`}
                 aria-pressed={isActive}
               >
                 <span
-                  className="font-geist uppercase text-[9.5px] font-light leading-none whitespace-nowrap"
+                  className="font-geist uppercase text-[10px] font-medium leading-[1.35]"
                   style={{
-                    writingMode: "vertical-rl",
-                    transform: "rotate(180deg)",
-                    letterSpacing: "0.1em",
-                    color: isActive ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.4)",
+                    letterSpacing: "0.14em",
+                    color: isActive ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.5)",
                   }}
                 >
-                  {aud.tabLabel}
+                  <span className="block">{lines[0]}</span>
+                  {lines[1] && <span className="block">{lines[1]}</span>}
                 </span>
                 {isActive && (
                   <span
