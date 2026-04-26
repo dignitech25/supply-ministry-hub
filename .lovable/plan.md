@@ -1,41 +1,48 @@
-## Goal
-Replace the current favicon (full compass mark with 4 directional arrows) with a cleaner version showing **just the central "person under the arc" figure** extracted from your Supply Ministry logo, served as both SVG and PNG.
+# Harden `rate_limits` RLS Policy
 
-## Background
-- Current `public/favicon.svg` contains 5 paths: 4 directional arrow shapes forming a compass + 1 central figure (the stylized person/monogram inside the arc).
-- The horizontal logo SVGs already contain the same central figure path we need.
-- Current `index.html` references `/favicon.svg`, `/favicon.png`, and `/apple-touch-icon` (PNG) with `?v=7` cache-busting.
-- Brand purple `#5E45FF` is preserved.
+## Problem
+The `rate_limits` table currently has a single PERMISSIVE policy with `USING (false)`:
 
-## Implementation Steps
+```
+Policy Name: Deny all access to rate_limits
+Command: ALL
+Permissive: Yes
+Using Expression: false
+```
 
-### 1. Generate new `public/favicon.svg`
-Create a minimal SVG containing **only the central figure path** from the existing logo (the path with `d="m 303.2602,509.91752 ..."` that draws the stylized figure inside the arc).
-- Tight viewBox cropped around just the figure for maximum clarity at 16x16 / 32x32.
-- Single `fill="#5E45FF"` path, inline (no `<style>` tag) for reliable favicon rendering.
+A `PERMISSIVE` policy with `USING (false)` does not reliably deny access — permissive policies are OR-combined, so any future permissive policy added to this table could grant access. The correct pattern is a `RESTRICTIVE` deny policy (RESTRICTIVE policies are AND-combined and cannot be overridden).
 
-### 2. Generate new `public/favicon.png` (also serves as Apple touch icon)
-Render the new SVG to a 512x512 PNG using rsvg-convert / ImageMagick in the sandbox:
-- `public/favicon.png` — 512x512, overwriting the existing file.
+The table is only ever written to by edge functions (`submit-quote-request`, `submit-quote-with-email`) using the service role key, which bypasses RLS entirely. So no client (anon/authenticated) ever needs access.
 
-### 3. Bump cache-busting version in `index.html`
-Update all favicon `?v=7` references to `?v=8` so browsers pick up the new files immediately:
-- `<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=8">`
-- `<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=8">`
-- `<link rel="shortcut icon" href="/favicon.png?v=8">`
-- `<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png?v=8">`
+## Fix (single migration)
 
-### 4. QA
-- Render the new favicon.svg to a 32x32 preview and visually inspect that the figure reads clearly at small size (not muddy or cropped).
-- Verify the 512x512 PNG renders cleanly.
-- Confirm all 4 `index.html` link tags are updated.
+Drop the existing permissive deny policy and replace it with a RESTRICTIVE deny-all policy that applies to both `anon` and `authenticated` roles:
+
+```sql
+-- Remove the weak PERMISSIVE deny policy
+DROP POLICY IF EXISTS "Deny all access to rate_limits" ON public.rate_limits;
+
+-- Ensure RLS stays enabled
+ALTER TABLE public.rate_limits ENABLE ROW LEVEL SECURITY;
+
+-- RESTRICTIVE deny-all: cannot be overridden by any future PERMISSIVE policy
+CREATE POLICY "Restrict all client access to rate_limits"
+ON public.rate_limits
+AS RESTRICTIVE
+FOR ALL
+TO anon, authenticated
+USING (false)
+WITH CHECK (false);
+```
+
+## Why this is safe
+- Edge functions use `SUPABASE_SERVICE_ROLE_KEY`, which bypasses RLS — rate-limit reads/writes in `submit-quote-request/index.ts` and `submit-quote-with-email/index.ts` continue to work unchanged.
+- No frontend code reads or writes `rate_limits` (verified by the codebase structure — only the two edge functions reference the table).
+- RESTRICTIVE policies are AND-combined with all other policies, so even if a permissive policy is added later, this deny still applies.
 
 ## Files Changed
-- `public/favicon.svg` — replaced with figure-only mark
-- `public/favicon.png` — re-rendered from new SVG at 512x512
-- `index.html` — cache-bust `v=7` → `v=8` (4 link tags)
+- New migration under `supabase/migrations/` (created via the migration tool).
 
-## Out of Scope
-- Changing the in-app header logo (still uses `Supply_Ministry_logo_new_cropped.png`).
-- Adding extra favicon sizes (16x16, 192x192) — SVG + single PNG covers all modern browsers and iOS.
-- Updating OG / Twitter share images.
+## Verification After Apply
+- Re-run the Supabase linter / security scan — `rate_limits_permissive_deny` finding should clear.
+- Submit a test quote via the live form to confirm rate-limit logic in edge functions still functions (service role unaffected by RLS).
