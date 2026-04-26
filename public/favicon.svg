@@ -1,13 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- Person under arc, brand purple #5E45FF -->
-  <g fill="none" stroke="#5E45FF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Wide arc/dome -->
-    <path d="M 10 80 Q 50 8 90 80" />
+  <g fill="none" stroke="#5E45FF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 8 88 L 8 60 Q 8 18 50 18 Q 92 18 92 60 L 92 88" />
   </g>
   <g fill="#5E45FF">
-    <!-- Head -->
-    <circle cx="50" cy="32" r="7.5" />
-    <!-- Body: rounded dome shape -->
-    <path d="M 38 75 L 38 55 Q 38 42 50 42 Q 62 42 62 55 L 62 75 Z" />
+    <circle cx="50" cy="38" r="7" />
+    <path d="M 39 82 L 39 58 Q 39 47 50 47 Q 61 47 61 58 L 61 82 Z" />
   </g>
 </svg>
