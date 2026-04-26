@@ -54,7 +54,7 @@ const audiences: Audience[] = [
 
 const stats = [
   { number: "2,000", suffix: "+", label: "Products across all\nAT categories" },
-  { number: "48", suffix: "hr", label: "Quote\nturnaround" },
+  { number: "24", suffix: "hr", label: "Response on\nquote requests" },
   { number: "15", suffix: "+", label: "Years in assistive\ntechnology" },
 ];
 
