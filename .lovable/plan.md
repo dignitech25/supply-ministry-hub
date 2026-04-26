@@ -1,34 +1,41 @@
-I can see the problem now: the current approach is still using one long rotated string per tab. At this viewport, the longest label is too close to the next tab area, so tweaking padding and letter spacing was the wrong level of fix.
+## Goal
+Replace the current favicon (full compass mark with 4 directional arrows) with a cleaner version showing **just the central "person under the arc" figure** extracted from your Supply Ministry logo, served as both SVG and PNG.
 
-Plan:
+## Background
+- Current `public/favicon.svg` contains 5 paths: 4 directional arrow shapes forming a compass + 1 central figure (the stylized person/monogram inside the arc).
+- The horizontal logo SVGs already contain the same central figure path we need.
+- Current `index.html` references `/favicon.svg`, `/favicon.png`, and `/apple-touch-icon` (PNG) with `?v=7` cache-busting.
+- Brand purple `#5E45FF` is preserved.
 
-1. Replace the desktop left rail labels with a clearer, more robust tab design.
-   - Stop rendering each audience label as one long vertical sentence.
-   - Use two-line horizontal labels inside each tab instead, for example:
-     - Occupational / therapist
-     - Aged care / provider
-     - Support / coordinator
-     - NDIS / participant
-   - This removes the overlap risk completely and makes each tab readable at a glance.
+## Implementation Steps
 
-2. Give each tab a proper separated block.
-   - Keep the four equal-height tab areas.
-   - Add internal padding and a stronger divider between tabs.
-   - Keep the active cream indicator on the right edge.
-   - Use the existing purple, cream, Geist, and muted opacity styling so it still matches the hero.
+### 1. Generate new `public/favicon.svg`
+Create a minimal SVG containing **only the central figure path** from the existing logo (the path with `d="m 303.2602,509.91752 ..."` that draws the stylized figure inside the arc).
+- Tight viewBox cropped around just the figure for maximum clarity at 16x16 / 32x32.
+- Single `fill="#5E45FF"` path, inline (no `<style>` tag) for reliable favicon rendering.
 
-3. Add accessible labels so nothing is lost.
-   - The visible label can be split over two lines.
-   - The button will still expose the full audience label for screen readers through `aria-label`.
+### 2. Generate new `public/favicon.png` (also serves as Apple touch icon)
+Render the new SVG to a 512x512 PNG using rsvg-convert / ImageMagick in the sandbox:
+- `public/favicon.png` — 512x512, overwriting the existing file.
 
-4. Verify visually in the browser, not just by guessing.
-   - Open `/` at the same desktop viewport the user is seeing, around 1366 x 768 or 1336 x 902.
-   - Inspect the hero rail after the change.
-   - Confirm each audience label sits inside its own tab, with no letters crossing into the next tab and no unclear bunched grouping.
+### 3. Bump cache-busting version in `index.html`
+Update all favicon `?v=7` references to `?v=8` so browsers pick up the new files immediately:
+- `<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=8">`
+- `<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=8">`
+- `<link rel="shortcut icon" href="/favicon.png?v=8">`
+- `<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png?v=8">`
 
-Technical change:
+### 4. QA
+- Render the new favicon.svg to a 32x32 preview and visually inspect that the figure reads clearly at small size (not muddy or cropped).
+- Verify the 512x512 PNG renders cleanly.
+- Confirm all 4 `index.html` link tags are updated.
 
-- Update only `src/components/editorial/EditorialHero.tsx`.
-- Add an optional display label array to each audience item, or derive it locally.
-- Replace the `writingMode: "vertical-rl"` and `rotate(180deg)` span with a small stacked label block.
-- Leave mobile tabs unchanged.
+## Files Changed
+- `public/favicon.svg` — replaced with figure-only mark
+- `public/favicon.png` — re-rendered from new SVG at 512x512
+- `index.html` — cache-bust `v=7` → `v=8` (4 link tags)
+
+## Out of Scope
+- Changing the in-app header logo (still uses `Supply_Ministry_logo_new_cropped.png`).
+- Adding extra favicon sizes (16x16, 192x192) — SVG + single PNG covers all modern browsers and iOS.
+- Updating OG / Twitter share images.
