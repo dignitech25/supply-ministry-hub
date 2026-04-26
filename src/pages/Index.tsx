@@ -184,7 +184,7 @@ const Index = () => {
           <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)', backgroundSize: '32px 32px' }} />
           <div className="container mx-auto px-4 text-center relative z-10">
             <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Let's Talk</p>
-            <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl mb-5">Ready to get <span className="italic text-gold">started</span>?</h2>
+            <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl mb-5">Ready to get <span className="italic text-gold pr-1.5">started</span>?</h2>
             <p className="text-lg mb-10 text-cream/75 max-w-xl mx-auto leading-relaxed">
               Reach out to our team to discuss your assistive technology needs. We'll help find the perfect solutions for your clients.
             </p>
