@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.submit-quote-with-email]
 verify_jwt = false
+
+[functions.admin-category-qa]
+verify_jwt = true
