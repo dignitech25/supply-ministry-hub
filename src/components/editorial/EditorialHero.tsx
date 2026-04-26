@@ -65,7 +65,7 @@ const EditorialHero = () => {
   return (
     <section className="bg-violet">
       {/* Desktop layout */}
-      <div className="hidden min-[960px]:grid min-[960px]:grid-cols-[52px_1fr_42%] min-h-[520px]">
+      <div className="hidden min-[960px]:grid min-[960px]:grid-cols-[64px_1fr_42%] min-h-[640px]">
         {/* Column 0: Vertical audience tabs */}
         <div className="flex flex-col border-r border-white/[0.10]">
           {audiences.map((aud, idx) => {
@@ -74,17 +74,17 @@ const EditorialHero = () => {
               <button
                 key={aud.id}
                 onClick={() => setActiveId(aud.id)}
-                className={`relative flex-1 flex items-center justify-center transition-colors ${
+                className={`relative flex-1 min-h-[160px] flex items-center justify-center transition-colors ${
                   idx !== 0 ? "border-t border-white/[0.10]" : ""
                 } ${isActive ? "bg-white/[0.07]" : "hover:bg-white/[0.03]"}`}
                 aria-pressed={isActive}
               >
                 <span
-                  className="font-geist uppercase text-[10px] font-light py-6"
+                  className="font-geist uppercase text-[9.5px] font-light leading-none whitespace-nowrap"
                   style={{
                     writingMode: "vertical-rl",
                     transform: "rotate(180deg)",
-                    letterSpacing: "0.22em",
+                    letterSpacing: "0.1em",
                     color: isActive ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.4)",
                   }}
                 >
