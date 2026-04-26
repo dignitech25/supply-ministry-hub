@@ -1,48 +1,57 @@
-# Harden `rate_limits` RLS Policy
-
 ## Problem
-The `rate_limits` table currently has a single PERMISSIVE policy with `USING (false)`:
 
-```
-Policy Name: Deny all access to rate_limits
-Command: ALL
-Permissive: Yes
-Using Expression: false
-```
+Your screenshot shows the iMessage / social link preview for `supplyministry.com.au`. It's still rendering the **old branding**:
 
-A `PERMISSIVE` policy with `USING (false)` does not reliably deny access — permissive policies are OR-combined, so any future permissive policy added to this table could grant access. The correct pattern is a `RESTRICTIVE` deny policy (RESTRICTIVE policies are AND-combined and cannot be overridden).
+- Old logo mark (the purple cube-and-arrows icon)
+- Old tagline lockup ("Assistive Technology, Simplified / For OTs, Case Managers & Care Teams / supplyministry.com.au")
+- White background
 
-The table is only ever written to by edge functions (`submit-quote-request`, `submit-quote-with-email`) using the service role key, which bypasses RLS entirely. So no client (anon/authenticated) ever needs access.
+The site itself has since moved to the new identity: the **dome / figure mark** with the bold deep-purple "Supply Ministry" wordmark on a **cream background**.
 
-## Fix (single migration)
+The preview is driven by a single file: **`public/og-image.jpg`** (1536×1024 today, declared as 1200×630 in the meta tags). Every social platform (iMessage, Slack, WhatsApp, LinkedIn, Facebook, X) reads this file to build the link card. As long as it shows the old mark, every shared link will look out of date, regardless of how good the live site looks.
 
-Drop the existing permissive deny policy and replace it with a RESTRICTIVE deny-all policy that applies to both `anon` and `authenticated` roles:
+`index.html` and `src/components/SEO.tsx` already reference `https://www.supplyministry.com.au/og-image.jpg` correctly — no markup change is required. Only the image asset needs to be replaced.
 
-```sql
--- Remove the weak PERMISSIVE deny policy
-DROP POLICY IF EXISTS "Deny all access to rate_limits" ON public.rate_limits;
+## Plan
 
--- Ensure RLS stays enabled
-ALTER TABLE public.rate_limits ENABLE ROW LEVEL SECURITY;
+### 1. Generate a new `og-image.jpg` matching current branding
+- **Dimensions:** exactly **1200 × 630 px** (the standard OG/Twitter card size — fixes the current 1536×1024 mismatch with the declared meta dimensions).
+- **Background:** brand cream (`#F4EFE6`) to match the site shell and the new logo's native canvas.
+- **Logo:** the new Supply Ministry horizontal lockup (dome + figure mark + bold purple "Supply Ministry" wordmark). Source: `public/Supply_Ministry_logo_new.png` (or `Supply_Ministry_horizontal_new.svg` if it renders cleanly).
+- **Wordmark/tagline (below logo, brand purple `#5E45FF`):**
+  - Headline: **"Assistive Technology, Simplified"** (Geist, semibold)
+  - Subline: **"For OTs, Case Managers & Care Teams"** (Geist, regular, smaller, slightly muted purple)
+  - Footer line: **"supplyministry.com.au"** (Geist, smaller, muted)
+- **Composition:** logo top-third, taglines centered in lower two-thirds, generous padding so nothing gets clipped by Twitter's rounded corners or iMessage's edge crop.
+- **No em dashes** anywhere in the copy (per project policy).
 
--- RESTRICTIVE deny-all: cannot be overridden by any future PERMISSIVE policy
-CREATE POLICY "Restrict all client access to rate_limits"
-ON public.rate_limits
-AS RESTRICTIVE
-FOR ALL
-TO anon, authenticated
-USING (false)
-WITH CHECK (false);
-```
+The image will be generated via a Python/Pillow script in `/tmp`, written directly to `public/og-image.jpg` as a high-quality JPEG (~85% quality, sRGB).
 
-## Why this is safe
-- Edge functions use `SUPABASE_SERVICE_ROLE_KEY`, which bypasses RLS — rate-limit reads/writes in `submit-quote-request/index.ts` and `submit-quote-with-email/index.ts` continue to work unchanged.
-- No frontend code reads or writes `rate_limits` (verified by the codebase structure — only the two edge functions reference the table).
-- RESTRICTIVE policies are AND-combined with all other policies, so even if a permissive policy is added later, this deny still applies.
+### 2. QA the result
+- Convert the generated JPG to a preview image and inspect it before considering the task done.
+- Verify: dimensions = 1200×630, file size reasonable (<400 KB), text is legible, logo is sharp, brand colors correct, no clipping, no em dashes.
 
-## Files Changed
-- New migration under `supabase/migrations/` (created via the migration tool).
+### 3. Add a cache-busting query string to the meta tags
+Social platforms (especially iMessage, WhatsApp, Facebook) cache OG images aggressively — sometimes for weeks. To force a re-fetch on next share:
+- Update `index.html`: change `og:image` and `twitter:image` URLs to `…/og-image.jpg?v=2`
+- Update `src/components/SEO.tsx`: change `DEFAULT_OG_IMAGE` constant to the same `?v=2` URL
 
-## Verification After Apply
-- Re-run the Supabase linter / security scan — `rate_limits_permissive_deny` finding should clear.
-- Submit a test quote via the live form to confirm rate-limit logic in edge functions still functions (service role unaffected by RLS).
+This guarantees all newly-shared links pull the new image immediately.
+
+### 4. Note about already-shared links
+The preview in your screenshot is from a previously-shared message. Apple/iMessage caches that locally per-conversation and **will not** refresh it just because we updated the file. Once published with the new image + cache-buster, **a fresh share of the link in a new message** will show the updated card. We'll call this out explicitly so you know what to expect.
+
+### 5. Publish reminder
+The OG image is served from the live custom domain (`www.supplyministry.com.au`). After the change, you'll need to **Publish** the project so social scrapers can fetch the new file from production.
+
+## Files to change
+
+- `public/og-image.jpg` — replaced with new 1200×630 branded image
+- `index.html` — bump OG/Twitter image URL to `?v=2`
+- `src/components/SEO.tsx` — bump `DEFAULT_OG_IMAGE` to `?v=2`
+
+## Out of scope
+
+- Favicon (separate, already handled)
+- Any layout/copy changes to the live site
+- Per-page custom OG images (the global default covers your current need)
