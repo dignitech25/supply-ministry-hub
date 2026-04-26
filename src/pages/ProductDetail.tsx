@@ -479,12 +479,32 @@ export default function ProductDetail() {
         {cleanedDescription && (
           <Card className="p-8 mb-8 bg-cream-alt border-cream-border">
             <h2 className="text-2xl md:text-3xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Description</h2>
-            <div className="space-y-4 text-muted-body leading-relaxed">
-              {descriptionParagraphs.map((paragraph, index) => (
-                <p key={`${parent.slug}-description-${index}`} className="whitespace-pre-line">
-                  {paragraph}
-                </p>
-              ))}
+            <div className="space-y-5 text-muted-body leading-relaxed">
+              {descriptionParagraphs.map((paragraph, index) => {
+                const lines = paragraph
+                  .split('\n')
+                  .map((l) => l.trim())
+                  .filter(Boolean);
+
+                // Render multi-line blocks as a clean bulleted list so supplier
+                // feature lists no longer appear as one wrapped wall of text.
+                if (lines.length > 1) {
+                  return (
+                    <ul
+                      key={`${parent.slug}-description-${index}`}
+                      className="space-y-2 list-disc list-outside pl-5"
+                    >
+                      {lines.map((line, i) => (
+                        <li key={`${parent.slug}-desc-${index}-${i}`}>{line}</li>
+                      ))}
+                    </ul>
+                  );
+                }
+
+                return (
+                  <p key={`${parent.slug}-description-${index}`}>{lines[0]}</p>
+                );
+              })}
             </div>
           </Card>
         )}

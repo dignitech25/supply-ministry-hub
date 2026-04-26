@@ -60,6 +60,12 @@ export function cleanDescription(text: string | null | undefined): string {
   if (!text) return '';
 
   return text
+    // Defensive: convert any literal escape sequences (e.g. "\\n", "\\r\\n", "\\t")
+    // that survived data import into real whitespace before further processing.
+    .replace(/\\r\\n/g, '\n')
+    .replace(/\\n/g, '\n')
+    .replace(/\\r/g, '\n')
+    .replace(/\\t/g, ' ')
     .replace(/\r\n?/g, '\n')
     .replace(/[\t ]+\n/g, '\n')
     .replace(/\n[\t ]+/g, '\n')
