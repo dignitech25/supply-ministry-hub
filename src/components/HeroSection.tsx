@@ -12,7 +12,7 @@ const HeroSection = () => {
   const navigate = useNavigate();
   
   const productsCount = useCountUp(2000, 2000, isStatsVisible);
-  const hoursCount = useCountUp(48, 1500, isStatsVisible);
+  const hoursCount = useCountUp(24, 1500, isStatsVisible);
   const yearsCount = useCountUp(15, 1800, isStatsVisible);
 
   return (
