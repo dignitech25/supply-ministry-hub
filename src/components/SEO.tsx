@@ -12,7 +12,7 @@ interface SEOProps {
 }
 
 const SITE_URL = 'https://www.supplyministry.com.au';
-const DEFAULT_OG_IMAGE = 'https://www.supplyministry.com.au/og-image.jpg';
+const DEFAULT_OG_IMAGE = 'https://www.supplyministry.com.au/og-image.jpg?v=2';
 
 const SEO = ({
   title = "Supply Ministry | Assistive Technology & Mobility Solutions",
