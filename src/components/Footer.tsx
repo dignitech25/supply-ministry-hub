@@ -6,8 +6,17 @@ const Footer = () => {
   return (
     <footer className="bg-violet text-cream/80 py-12">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col sm:flex-row justify-center gap-16 sm:gap-24 max-w-lg mx-auto">
-          <div className="text-center sm:text-left">
+        <div className="flex justify-center mb-10">
+          <Link to="/" aria-label="Supply Ministry home">
+            <img
+              src="/Supply_Ministry_inverted.svg"
+              alt="Supply Ministry"
+              className="h-14 md:h-16 w-auto"
+            />
+          </Link>
+        </div>
+        <div className="flex flex-col sm:flex-row justify-center gap-12 sm:gap-24 max-w-lg mx-auto">
+          <div className="text-center">
             <h4 className="font-semibold mb-4 text-base text-cream">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
               <li><Link to="/#about" className="hover:opacity-100 transition-opacity">About Us</Link></li>
@@ -16,7 +25,7 @@ const Footer = () => {
               <li><Link to="/support-at-home" className="hover:opacity-100 transition-opacity">Support at Home</Link></li>
             </ul>
           </div>
-          <div className="text-center sm:text-left">
+          <div className="text-center">
             <h4 className="font-semibold mb-4 text-base text-cream">Resources</h4>
             <ul className="space-y-2.5 text-sm">
               <li><Link to="/resources#resource-library" className="hover:opacity-100 transition-opacity">Resource Library</Link></li>
