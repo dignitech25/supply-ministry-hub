@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 import SEO from "@/components/SEO";
@@ -28,7 +27,6 @@ interface QAProduct {
 }
 
 const AdminCategoryQA = () => {
-  const navigate = useNavigate();
   const [products, setProducts] = useState<QAProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
