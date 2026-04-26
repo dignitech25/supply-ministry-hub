@@ -1,98 +1,34 @@
-# End-to-End Functionality & Features Audit
+I’m sorry. You’re right to be angry about this. I checked the actual data and the root cause is clear: a large number of product rows still contain literal backslash-n text (`\n`) in the database, not real line breaks. The current cleanup handles real line breaks, but it does not convert or remove the two-character `\n` sequence before rendering, so React displays it exactly as text.
 
-## Goal
-Produce a single, prioritized audit report covering every interactive feature, page, and data flow on the site. **No code changes in this pass** — the output is a findings document. You then choose what to fix.
+Plan to fix it properly:
 
-## Scope (what gets tested)
+1. Fix the frontend safety layer immediately
+   - Update `cleanDescription()` so it normalizes literal `\n`, escaped newline variants, and repeated whitespace before any product description is rendered.
+   - This gives immediate protection even if dirty supplier data gets imported again later.
+   - Remove `whitespace-pre-line` from the product description paragraph rendering so stray line breaks do not create inconsistent formatting.
 
-### 1. Pages (12 routes)
-- `/` (Index), `/products`, `/products/:sku`, `/product/:handle`
-- `/quote`, `/quote-confirm`
-- `/resources`, `/support-at-home`, `/rent-to-buy`, `/sleep-choice`
-- `/terms`, `/admin/category-qa`, `*` (NotFound)
+2. Clean the existing database content
+   - Add a Supabase migration that updates all affected product text fields:
+     - `products.description`
+     - `products_categorized.description`
+     - `products_categorized.description_short`
+     - `products_categorized.description_long`
+   - Convert literal `\n` sequences into clean sentence/list spacing, then run the existing normalization function.
+   - This targets the source of the issue, not only the UI symptom.
 
-For each: page loads, SEO meta + title, canonical URL, structured data present, no console errors, mobile + desktop layout intact.
+3. Improve product description structure on the detail page
+   - Render descriptions as clean paragraphs with consistent spacing.
+   - For supplier text that is clearly a feature list, split it into readable items rather than one huge wrapped block with escape characters.
+   - Keep the layout minimal and consistent with the current product detail design.
 
-### 2. Global navigation & chrome
-- Promotional ribbon ("beat any quote by 5%") renders + sparkle animation
-- Header: logo links to `/`, search icon opens dialog, cart icon opens drawer, badge count accurate
-- Category navigation bar: every category link resolves to a valid filtered products view
-- Footer: every link target exists, contact details match canonical (`alex@`, `david@`, phone)
-- Floating Smart CTA: "Shop Now" on `/`, "Request Quote" elsewhere, both route correctly
+4. Add a guard so this does not regress
+   - Add a small product text formatting helper/test or validation check that fails if product descriptions contain visible `\n` escape sequences after cleanup.
+   - Run a targeted search after the migration/code change to confirm no visible `\n` remains in product description output.
 
-### 3. Quote flow (critical path)
-- Add to quote from ProductCard, ProductDetail, FeaturedProducts
-- Drawer: quantity +/-, line notes, remove item, persistence via localStorage
-- "Request Quote" button → EnhancedQuoteForm
-- Form validation (required fields, email format, phone)
-- Submit → `submit-quote-with-email` edge function → confirmation page
-- Email notification fires (`send-quote-notification`)
-- Empty-quote state renders correctly
+Technical details:
 
-### 4. Search
-- Header search icon opens SearchDialog
-- Query returns relevant products from DB
-- Result click navigates to `/products/:sku`
-- Empty state + no-results state
+- Confirmed examples in `products_categorized.description_long`, including the Aidacare FLX Floorline Bed shown in your screenshot, contain literal `\n` text.
+- Current `cleanDescription()` in `src/utils/productHelpers.ts` only handles actual newline characters (`\n` as a newline), not the literal backslash plus n sequence from the database.
+- The previous database normalization migration also normalized real newlines but did not replace literal `\n`, which is why this survived.
 
-### 5. Product catalogue
-- `/products`: filter sidebar (category, brand, price, etc.), active filter tags, clear filters
-- Mobile: filters behind dedicated button (per memory)
-- Pagination / infinite scroll behaviour
-- Product cards: image fallback, sale badge logic, price display ("From $X" for variants), Add-to-Quote works without navigating
-
-### 6. Product detail
-- Variant selector (size/color), price updates per variant
-- Add-to-quote with selected variant
-- SEO content block renders for high-value products
-- Breadcrumbs + related products
-
-### 7. Copy + canonical claims sweep
-Re-verify zero regressions on:
-- "2,000+ products" everywhere
-- No specific category counts
-- "15+ years"
-- "48-hour quote turnaround" only (no dispatch/delivery promises)
-- No em dashes (`—`) anywhere user-facing
-
-### 8. Backend / data integrity
-- Supabase tables: `products` vs `products_categorized` row counts + sync status
-- Edge functions deployed: `submit-quote-request`, `submit-quote-with-email`, `send-quote-notification`, `sitemap`
-- Recent edge function logs for errors
-- RLS policies present on user-facing tables
-
-### 9. SEO infrastructure
-- `/sitemap.xml` returns valid XML with current product URLs
-- `robots.txt` correct
-- Canonical domain enforcement (`www.supplyministry.com.au`)
-- Per-page `<title>` under 60 chars, meta description 145–160 chars
-
-### 10. Responsive + accessibility quick check
-- 430px viewport (current): no horizontal scroll, tap targets ≥40px, drawer usable
-- 768px and 1280px breakpoints
-- Hero video autoplays on mobile (Safari/Chrome) with poster fallback
-- Alt text on all images, ARIA labels on icon-only buttons
-
-## Method
-1. **Static audit** via `rg`, file reads, and DB queries (Supabase read tools, edge function logs)
-2. **Interactive audit** via the browser tool: navigate each route, click every interactive element, submit a test quote, screenshot anything broken
-3. **Console + network capture** during the interactive pass to surface silent errors
-4. **Compile findings** into a single report
-
-## Deliverable
-A markdown report saved to `/mnt/documents/site-audit-2026-04-26.md` and surfaced in chat with:
-- ✅ Working as expected
-- ⚠️ Minor issues (cosmetic, low-impact)
-- ❌ Broken or misleading (needs fix)
-- 🔒 Security / data integrity concerns
-- Each finding tagged with: page, component, severity, suggested fix, est. effort
-
-## What this plan does NOT do
-- No code changes. After you read the report, you pick what to fix and I'll do those in a follow-up.
-- No design overhaul. Strictly functional verification against the current intent.
-- No new features. Audit only.
-
-## Estimated cost
-- Mostly read tools + browser tool. Browser tool is the expensive part; I'll batch interactions efficiently and avoid speculative clicking.
-
-Approve and I'll run the full sweep and deliver the report.
+After approval I’ll implement both layers: fix the renderer and clean the data source so product pages stop showing those escape characters everywhere.
