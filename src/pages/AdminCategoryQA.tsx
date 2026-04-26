@@ -37,54 +37,40 @@ const AdminCategoryQA = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Check if user is authenticated
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        
-        if (authError || !user) {
+        // Check if user is authenticated (client-side gate for UX only).
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError || !session?.user) {
           setAuthError("You must be logged in to access this page");
           setIsAdmin(false);
           setLoading(false);
           return;
         }
 
-        // Check if user has admin role
-        const { data: hasAdminRole, error: roleError } = await supabase
-          .rpc('has_role', {
-            _user_id: user.id,
-            _role: 'admin'
-          });
+        // Server-side role enforcement: edge function verifies the JWT and admin role
+        // before returning any data. The client check above is only for UX.
+        const { data: fnData, error: fnError } = await supabase.functions.invoke(
+          "admin-category-qa",
+        );
 
-        if (roleError) {
-          console.error("Error checking admin role:", roleError);
-          setAuthError("Error verifying permissions");
-          setIsAdmin(false);
-          setLoading(false);
-          return;
-        }
-
-        if (!hasAdminRole) {
-          setAuthError("You do not have permission to access this page");
+        if (fnError) {
+          // 401/403 from the function are surfaced as FunctionsHttpError.
+          const status = (fnError as { context?: { status?: number } })?.context?.status;
+          if (status === 401) {
+            setAuthError("You must be logged in to access this page");
+          } else if (status === 403) {
+            setAuthError("You do not have permission to access this page");
+          } else {
+            console.error("Edge function error:", fnError);
+            setAuthError("Error loading products");
+          }
           setIsAdmin(false);
           setLoading(false);
           return;
         }
 
         setIsAdmin(true);
-
-        // User is authenticated and has admin role, fetch QA products
-        const { data, error } = await supabase
-          .from("products_categorized" as any)
-          .select("sku, handle, title, brand, category_path, category_rule, category_alternatives, category_confidence")
-          .in("category_confidence", ["low", "none"])
-          .order("brand")
-          .order("title") as { data: any[] | null; error: any };
-
-        if (error) {
-          console.error("Error fetching QA products:", error);
-          setAuthError("Error loading products");
-        } else {
-          setProducts((data || []) as QAProduct[]);
-        }
+        setProducts(((fnData as { products?: QAProduct[] })?.products ?? []) as QAProduct[]);
       } catch (error) {
         console.error("Unexpected error:", error);
         setAuthError("An unexpected error occurred");
