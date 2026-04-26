@@ -40,7 +40,7 @@ const HeroSection = () => {
               {[
                 "Trusted supplier relationships",
                 "Competitive pricing",
-                "48-hour quote turnaround",
+                "24-hour response on quotes",
                 "Expert personal service"
               ].map((benefit, index) => (
                 <div 

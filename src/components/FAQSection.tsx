@@ -19,7 +19,7 @@ const faqs = [
   {
     question: "How quickly will I get a quote?",
     answer:
-      "We aim to return quotes within 48 hours of your request. Delivery lead times vary by supplier and product, and we confirm exact timing on every quote so there are no surprises.",
+      "We aim to respond to quote requests within 24 hours. Delivery lead times vary by supplier and product, and we confirm exact timing on every quote so there are no surprises.",
   },
   {
     question: "Do you offer equipment trials before purchase?",
