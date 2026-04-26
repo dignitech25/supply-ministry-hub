@@ -276,7 +276,7 @@ const handler = async (req: Request): Promise<Response> => {
       JSON.stringify({ 
         success: true, 
         quoteNumber,
-        emailId: emailResponse.id 
+        emailId: (emailResponse as any)?.data?.id ?? (emailResponse as any)?.id 
       }),
       {
         status: 200,
