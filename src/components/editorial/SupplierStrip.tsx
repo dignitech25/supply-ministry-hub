@@ -1,10 +1,10 @@
 const suppliers = [
-  { name: "Aspire", src: "/suppliers/aspire.webp", url: "https://aspirehealthcare.com.au" },
-  { name: "Enable Lifecare", src: "/suppliers/enable-lifecare.png", url: "https://enablelifecare.com.au" },
-  { name: "Forté Healthcare", src: "/suppliers/forte.png", url: "https://www.fortehealthcare.com.au" },
-  { name: "icare Medical", src: "/suppliers/icare.jpg", url: "https://icaremedicalgroup.com.au" },
-  { name: "Novis", src: "/suppliers/novis.jpg", url: "https://novis.com.au" },
-  { name: "Sleep Choice", src: "/suppliers/sleep-choice.png", url: "https://sleepchoice.com.au" },
+  { name: "Aspire", src: "/suppliers/normalized/aspire.png", url: "https://aspirehealthcare.com.au" },
+  { name: "Enable Lifecare", src: "/suppliers/normalized/enable-lifecare.png", url: "https://enablelifecare.com.au" },
+  { name: "Forté Healthcare", src: "/suppliers/normalized/forte.png", url: "https://www.fortehealthcare.com.au" },
+  { name: "icare Medical", src: "/suppliers/normalized/icare.png", url: "https://icaremedicalgroup.com.au" },
+  { name: "Novis", src: "/suppliers/normalized/novis.png", url: "https://novis.com.au" },
+  { name: "Sleep Choice", src: "/suppliers/normalized/sleep-choice.png", url: "https://sleepchoice.com.au" },
 ];
 
 const SupplierStrip = () => {
@@ -45,13 +45,13 @@ const SupplierStrip = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.name}
-                className="mx-3 md:mx-4 shrink-0 flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity"
+                className="mx-5 md:mx-7 shrink-0 flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
               >
                 <img
                   src={s.src}
                   alt={s.name}
                   loading="lazy"
-                  className="h-8 md:h-10 w-auto object-contain"
+                  className="h-8 md:h-10 w-[120px] md:w-[140px] object-contain"
                 />
               </a>
             ))}
