@@ -57,8 +57,8 @@
          answer: "The Aspire ComfiMotion Activ Care Bed is compatible with a range of accessories including IV poles, trapeze bars, bed lever assists, over-bed tables, and various mattress options. Contact us for specific accessory recommendations.",
        },
        {
-         question: "How quickly can this bed be delivered?",
-         answer: "For Melbourne metropolitan areas, we typically offer same-week delivery for in-stock items. Urgent deliveries can often be arranged within 24-48 hours. Lead times may vary for custom configurations.",
+         question: "How quickly will I get a quote for this bed?",
+         answer: "We aim to return quotes within 48 hours of your request. Delivery timing is confirmed on every quote and depends on supplier stock, configuration and location.",
        },
        {
          question: "What mattresses work with this bed?",

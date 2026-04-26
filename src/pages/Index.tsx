@@ -27,7 +27,7 @@ const Index = () => {
     <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title="Assistive Technology & Mobility Aids | Supply Ministry"
-        description="Australia's trusted assistive technology provider. Mobility aids, therapeutic equipment & pressure care. 48-hour dispatch."
+        description="Australia's trusted assistive technology provider. Mobility aids, therapeutic equipment and pressure care. 48-hour quote turnaround."
         jsonLd={[organizationSchema, localBusinessSchema, faqPageSchema]}
       />
       <EditorialNavigation />
@@ -130,7 +130,7 @@ const Index = () => {
                 {[
                   {
                     company: "Disability Support Provider",
-                    quote: "Supply Ministry has transformed how we source assistive technology. Their quick dispatch program means our clients get what they need when they need it.",
+                    quote: "Supply Ministry has transformed how we source assistive technology. Their fast quote turnaround means our clients get sorted without the usual procurement delays.",
                     role: "Operations Manager",
                     rating: 5
                   },

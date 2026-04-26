@@ -24,11 +24,11 @@ const proofs: Proof[] = [
     headlineAccent: "48-hour",
     headlineLead: "",
     headlineTrail: "quotes",
-    sub: "Most metro orders dispatched the same week.",
+    sub: "Quotes returned within two business days.",
   },
   {
     eyebrow: "Catalogue",
-    headlineAccent: "4,400+",
+    headlineAccent: "2,000+",
     headlineLead: "",
     headlineTrail: "products",
     sub: "Sourced from Australia's leading assistive technology suppliers.",
