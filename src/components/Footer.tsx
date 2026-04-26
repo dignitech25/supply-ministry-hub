@@ -6,12 +6,12 @@ const Footer = () => {
   return (
     <footer className="bg-violet text-cream/80 py-12">
       <div className="container mx-auto px-4">
-        <div className="flex justify-center mb-10">
+        <div className="flex justify-center mb-12">
           <Link to="/" aria-label="Supply Ministry home">
             <img
               src="/Supply_Ministry_inverted.svg"
               alt="Supply Ministry"
-              className="h-14 md:h-16 w-auto"
+              className="h-32 md:h-44 lg:h-52 w-auto"
             />
           </Link>
         </div>
