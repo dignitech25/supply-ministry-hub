@@ -17,9 +17,9 @@ const faqs = [
       "Yes, we work extensively with NDIS participants and their support coordinators. We can provide formal quotes aligned with NDIS pricing guidelines, assist with equipment justification documentation, and coordinate directly with plan managers and support coordinators to streamline the procurement process.",
   },
   {
-    question: "How quickly can you dispatch equipment?",
+    question: "How quickly will I get a quote?",
     answer:
-      "Most in-stock items are dispatched within 48 hours of order confirmation. For urgent clinical needs, we offer priority dispatch options. Custom or made-to-order items may have longer lead times, which we communicate clearly at the quoting stage.",
+      "We aim to return quotes within 48 hours of your request. Delivery lead times vary by supplier and product, and we confirm exact timing on every quote so there are no surprises.",
   },
   {
     question: "Do you offer equipment trials before purchase?",

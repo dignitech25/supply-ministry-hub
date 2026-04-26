@@ -48,8 +48,8 @@ const Resources = () => {
       answer: "We service all of Greater Metropolitan Melbourne and can arrange delivery across Victoria. For regional deliveries, please contact us to discuss specific arrangements."
     },
     {
-      question: "How quickly can products be delivered?",
-      answer: "We pride ourselves on our 48-hour quick dispatch service for most in-stock items. Urgent deliveries may be available - please contact us to discuss your specific timeline requirements."
+      question: "How quickly will I get a quote?",
+      answer: "We aim to return quotes within 48 hours of your request. Delivery lead times vary by supplier, product and location, and are confirmed on every quote so you know exactly what to expect."
     },
     {
       question: "Do you offer product trials?",

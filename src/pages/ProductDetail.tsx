@@ -284,7 +284,7 @@ export default function ProductDetail() {
     <div className="min-h-screen bg-violet text-cream">
       <SEO 
         title={`${parent.baseName}${parent.brand ? ` by ${parent.brand}` : ''}`}
-        description={cleanDescription(parent.description).slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast dispatch and expert support.`}
+        description={cleanDescription(parent.description).slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast quote turnaround and expert support.`}
         image={selectedVariant.imageUrl || undefined}
         jsonLd={getJsonLdSchemas()}
       />

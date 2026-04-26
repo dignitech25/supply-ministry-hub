@@ -33,7 +33,7 @@ const values = [
   {
     icon: Clock,
     title: "Rapid Response", 
-    description: "When independence is at stake, timing matters. That's why we prioritize fast dispatch and delivery."
+    description: "When independence is at stake, timing matters. That's why we prioritise fast quote turnaround and clear lead times."
   },
   {
     icon: Users,

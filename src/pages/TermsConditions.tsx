@@ -45,7 +45,7 @@ const TermsConditions = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-geist font-light tracking-tight leading-[1.05] text-ink mb-4">Delivery & Returns</h2>
               <p className="text-muted-body mb-4">
-                We aim for 48-hour dispatch on most items. Delivery times may vary based on location and product availability. 
+                We aim to return quotes within 48 hours of your request. Delivery times vary based on supplier, location and product availability, and will be confirmed on quote.
                 Returns are accepted within 30 days of delivery for unused items in original condition.
               </p>
             </section>

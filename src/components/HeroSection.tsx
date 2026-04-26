@@ -40,7 +40,7 @@ const HeroSection = () => {
               {[
                 "Trusted supplier relationships",
                 "Competitive pricing",
-                "Fast 48-hour dispatch",
+                "48-hour quote turnaround",
                 "Expert personal service"
               ].map((benefit, index) => (
                 <div 
@@ -90,7 +90,7 @@ const HeroSection = () => {
                   <p className="text-2xl font-bold text-primary tabular-nums">
                     {hoursCount}hrs
                   </p>
-                  <p className="text-sm text-muted-foreground">Quick Dispatch</p>
+                  <p className="text-sm text-muted-foreground">Quote Turnaround</p>
                 </div>
                 <div className="text-center">
                   <p className="text-2xl font-bold text-primary tabular-nums">

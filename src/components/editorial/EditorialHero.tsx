@@ -53,9 +53,9 @@ const audiences: Audience[] = [
 ];
 
 const stats = [
-  { number: "468", suffix: "+", label: "Products across all\nAT categories" },
-  { number: "48", suffix: "hr", label: "Typical quote\nturnaround" },
-  { number: "3", suffix: "yr", label: "Serving providers\nnationally" },
+  { number: "2,000", suffix: "+", label: "Products across all\nAT categories" },
+  { number: "48", suffix: "hr", label: "Quote\nturnaround" },
+  { number: "15", suffix: "+", label: "Years in assistive\ntechnology" },
 ];
 
 const EditorialHero = () => {
