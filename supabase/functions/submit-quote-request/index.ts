@@ -264,7 +264,7 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Email notification sent:", emailResponse.id);
+    console.log("Email notification sent:", (emailResponse as any)?.data?.id ?? (emailResponse as any)?.id);
 
     return new Response(
       JSON.stringify({
