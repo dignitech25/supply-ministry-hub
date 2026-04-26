@@ -1,4 +1,3 @@
-import Navigation from "@/components/Navigation";
 import EnhancedQuoteForm from "@/components/EnhancedQuoteForm";
 import { useQuote } from "@/contexts/QuoteContext";
 import { Link } from "react-router-dom";

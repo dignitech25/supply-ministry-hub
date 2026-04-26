@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import Navigation from "@/components/Navigation";
+import EditorialNavigation from "@/components/editorial/EditorialNavigation";
 import SEO from "@/components/SEO";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -108,7 +108,7 @@ const AdminCategoryQA = () => {
         description="Admin panel for reviewing product category assignments."
         noindex={true}
       />
-      <Navigation />
+      <EditorialNavigation />
 
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Category QA Review</h1>
