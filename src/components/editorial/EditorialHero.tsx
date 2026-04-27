@@ -323,7 +323,7 @@ const EditorialHero = () => {
                 </div>
                 <div
                   className="font-geist uppercase mt-2 whitespace-pre-line"
-                  style={{ fontSize: "8px", letterSpacing: "0.13em", color: "rgba(255,255,255,0.18)", lineHeight: 1.5, fontWeight: 300 }}
+                  style={{ fontSize: "8px", letterSpacing: "0.13em", color: "rgba(255,255,255,0.55)", lineHeight: 1.5, fontWeight: 400 }}
                 >
                   {s.label}
                 </div>
