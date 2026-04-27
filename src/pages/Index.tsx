@@ -124,7 +124,7 @@ const Index = () => {
               <div className="text-center mb-12">
                 <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Testimonials</p>
                 <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-cream mb-4">What our clients <span className="italic text-gold">say</span></h2>
-                <p className="text-lg text-cream/85">Trusted by leading healthcare providers across Australia</p>
+                <p className="text-lg text-cream/75">Trusted by leading healthcare providers across Australia</p>
               </div>
               <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 {[
@@ -185,7 +185,7 @@ const Index = () => {
           <div className="container mx-auto px-4 text-center relative z-10">
             <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Let's Talk</p>
             <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl mb-5">Ready to get <span className="italic text-gold pr-1.5">started</span>?</h2>
-            <p className="text-lg mb-7 text-cream/85 max-w-xl mx-auto leading-relaxed">
+            <p className="text-lg mb-7 text-cream/75 max-w-xl mx-auto leading-relaxed">
               Reach out to our team to discuss your assistive technology needs. We'll help find the perfect solutions for your clients.
             </p>
             <Link 

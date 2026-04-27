@@ -73,7 +73,7 @@ const RentToBuy = () => {
             <h1 className="text-3xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] leading-[1.1] mb-5 text-cream">
               Try before you <span className="italic text-gold">commit</span>.
             </h1>
-            <p className="text-lg md:text-xl text-cream/85 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-cream/75 mb-8 max-w-2xl mx-auto leading-relaxed">
               Use remaining HCP funds to rent. Every dollar converts to purchase credit when funding comes through.
             </p>
             <Button

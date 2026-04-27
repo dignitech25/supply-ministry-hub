@@ -140,7 +140,7 @@ const Resources = () => {
             <h1 className="text-4xl lg:text-5xl font-geist font-light tracking-tight leading-[1.05] text-cream mb-6 leading-[1.1]">
               Practical <span className="italic text-gold">guidance</span>.
             </h1>
-            <p className="text-xl text-cream/85">
+            <p className="text-xl text-cream/75">
               Everything you need to make informed decisions about assistive technology solutions
             </p>
           </div>
