@@ -114,7 +114,7 @@ const EditorialHero = () => {
               className="font-serif-italic italic mb-10 pl-4 max-w-[280px]"
               style={{
                 fontWeight: 200,
-                fontSize: "13px",
+                fontSize: "15px",
                 color: "rgba(255,255,255,0.7)",
                 borderLeft: "1.5px solid rgba(255,255,255,0.25)",
               }}
