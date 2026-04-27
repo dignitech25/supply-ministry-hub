@@ -174,10 +174,10 @@ const EditorialHero = () => {
                 <div
                   className="font-geist uppercase mt-2 whitespace-pre-line"
                   style={{
-                    fontWeight: 300,
+                    fontWeight: 400,
                     fontSize: "9px",
                     letterSpacing: "0.13em",
-                    color: "rgba(255,255,255,0.18)",
+                    color: "rgba(255,255,255,0.55)",
                     lineHeight: 1.65,
                   }}
                 >
