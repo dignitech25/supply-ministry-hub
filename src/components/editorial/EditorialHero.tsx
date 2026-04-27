@@ -115,8 +115,8 @@ const EditorialHero = () => {
               style={{
                 fontWeight: 200,
                 fontSize: "13px",
-                color: "rgba(255,255,255,0.32)",
-                borderLeft: "1.5px solid rgba(255,255,255,0.12)",
+                color: "rgba(255,255,255,0.7)",
+                borderLeft: "1.5px solid rgba(255,255,255,0.25)",
               }}
             >
               They understood the clinical context, not just the catalogue.
@@ -174,10 +174,10 @@ const EditorialHero = () => {
                 <div
                   className="font-geist uppercase mt-2 whitespace-pre-line"
                   style={{
-                    fontWeight: 300,
+                    fontWeight: 400,
                     fontSize: "9px",
                     letterSpacing: "0.13em",
-                    color: "rgba(255,255,255,0.18)",
+                    color: "rgba(255,255,255,0.55)",
                     lineHeight: 1.65,
                   }}
                 >
@@ -287,8 +287,8 @@ const EditorialHero = () => {
             style={{
               fontWeight: 200,
               fontSize: "13px",
-              color: "rgba(255,255,255,0.32)",
-              borderLeft: "1.5px solid rgba(255,255,255,0.12)",
+              color: "rgba(255,255,255,0.7)",
+              borderLeft: "1.5px solid rgba(255,255,255,0.25)",
             }}
           >
             They understood the clinical context, not just the catalogue.
@@ -323,7 +323,7 @@ const EditorialHero = () => {
                 </div>
                 <div
                   className="font-geist uppercase mt-2 whitespace-pre-line"
-                  style={{ fontSize: "8px", letterSpacing: "0.13em", color: "rgba(255,255,255,0.18)", lineHeight: 1.5, fontWeight: 300 }}
+                  style={{ fontSize: "8px", letterSpacing: "0.13em", color: "rgba(255,255,255,0.55)", lineHeight: 1.5, fontWeight: 400 }}
                 >
                   {s.label}
                 </div>
