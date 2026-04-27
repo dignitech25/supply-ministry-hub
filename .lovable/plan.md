@@ -1,57 +1,49 @@
-## Problem
+## Goal
+Lift body-copy contrast across the site so paragraphs are comfortably readable on both cream and purple sections, without changing the overall brand feel.
 
-Your screenshot shows the iMessage / social link preview for `supplyministry.com.au`. It's still rendering the **old branding**:
+## Current problem
+- **On purple (`bg-violet`)**: paragraphs use `text-cream/60`, `/70`, `/75`. At ~60–75% opacity over saturated purple, contrast falls below WCAG AA for body text.
+- **On cream (`bg-cream`)**: `text-muted-body` is `#7A7060` (warm taupe). Elegant, but reads as washed-out at 14–18px.
+- **Italic accents** in headings use `text-gold` = `#C4BAFF` (lavender). Per your choice, we will switch these to warm cream/white for max readability and a clean monochrome feel on purple.
 
-- Old logo mark (the purple cube-and-arrows icon)
-- Old tagline lockup ("Assistive Technology, Simplified / For OTs, Case Managers & Care Teams / supplyministry.com.au")
-- White background
+## Changes
 
-The site itself has since moved to the new identity: the **dome / figure mark** with the bold deep-purple "Supply Ministry" wordmark on a **cream background**.
+### 1. Token updates (`src/index.css`)
+Adjust the two tokens driving most of the issue:
+- `--muted-body`: `35 12% 43%` → `30 15% 28%` (about `#544637` — still warm and editorial, but ~AA-compliant on cream).
+- `--gold`: `249 100% 87%` → `36 32% 93%` (alias to cream `#F4EFE6`). This makes every existing `text-gold` / `fill-gold` automatically render as warm cream on purple, no per-component edits required for accents.
+- Leave `--pill-highlight` pointing at the old lavender so any decorative pill chips keep their tint (we can revisit if you prefer).
 
-The preview is driven by a single file: **`public/og-image.jpg`** (1536×1024 today, declared as 1200×630 in the meta tags). Every social platform (iMessage, Slack, WhatsApp, LinkedIn, Facebook, X) reads this file to build the link card. As long as it shows the old mark, every shared link will look out of date, regardless of how good the live site looks.
+Dark-mode block: no changes (homepage doesn't use dark mode).
 
-`index.html` and `src/components/SEO.tsx` already reference `https://www.supplyministry.com.au/og-image.jpg` correctly — no markup change is required. Only the image asset needs to be replaced.
+### 2. Sweep low-opacity cream body copy
+Replace washed-out paragraph opacities with a single readable value (`text-cream/85`) on these paragraph-level usages. Headings, eyebrow labels (`/60` uppercase micro-labels), and footer captions stay untouched per your "body copy only" scope.
 
-## Plan
+Files and specific lines to update:
+- `src/pages/Index.tsx`
+  - L127 testimonials subhead `text-cream/75` → `text-cream/85`
+  - L188 contact section paragraph `text-cream/75` → `text-cream/85`
+  - (Leave L125, L186 eyebrow `cream/60` and L209 footer caption `cream/50` as-is — they're labels, not body.)
+  - (Leave contact email links L200, L205 `cream/70` — they have hover-to-solid-cream and are link affordances; bump only if you want.)
+- `src/components/AboutSection.tsx`
+  - L55 lead paragraph `text-cream/75` → `text-cream/85`
+  - L72 value-card description `text-cream/70` → `text-cream/85`
+- `src/components/editorial/EditorialHero.tsx` — audit any `cream/60-75` body paragraphs and lift to `/85` (eyebrow labels stay).
+- Quick `rg` sweep across `src/pages/*.tsx` and `src/components/**` for `text-cream/(60|65|70|75)` on `<p>` elements; lift to `/85`. Leave matches on `<span>` eyebrow labels, captions, and link hovers.
 
-### 1. Generate a new `og-image.jpg` matching current branding
-- **Dimensions:** exactly **1200 × 630 px** (the standard OG/Twitter card size — fixes the current 1536×1024 mismatch with the declared meta dimensions).
-- **Background:** brand cream (`#F4EFE6`) to match the site shell and the new logo's native canvas.
-- **Logo:** the new Supply Ministry horizontal lockup (dome + figure mark + bold purple "Supply Ministry" wordmark). Source: `public/Supply_Ministry_logo_new.png` (or `Supply_Ministry_horizontal_new.svg` if it renders cleanly).
-- **Wordmark/tagline (below logo, brand purple `#5E45FF`):**
-  - Headline: **"Assistive Technology, Simplified"** (Geist, semibold)
-  - Subline: **"For OTs, Case Managers & Care Teams"** (Geist, regular, smaller, slightly muted purple)
-  - Footer line: **"supplyministry.com.au"** (Geist, smaller, muted)
-- **Composition:** logo top-third, taglines centered in lower two-thirds, generous padding so nothing gets clipped by Twitter's rounded corners or iMessage's edge crop.
-- **No em dashes** anywhere in the copy (per project policy).
+### 3. No change to
+- `text-gold` usages — they automatically become warm cream via the token change.
+- Eyebrow micro-labels (`text-cream/60`, `text-muted-body uppercase tracking-[0.18em]`) — these are intentional low-emphasis labels and meet AA at their small + tracked sizing.
+- Buttons, borders, dividers.
 
-The image will be generated via a Python/Pillow script in `/tmp`, written directly to `public/og-image.jpg` as a high-quality JPEG (~85% quality, sRGB).
-
-### 2. QA the result
-- Convert the generated JPG to a preview image and inspect it before considering the task done.
-- Verify: dimensions = 1200×630, file size reasonable (<400 KB), text is legible, logo is sharp, brand colors correct, no clipping, no em dashes.
-
-### 3. Add a cache-busting query string to the meta tags
-Social platforms (especially iMessage, WhatsApp, Facebook) cache OG images aggressively — sometimes for weeks. To force a re-fetch on next share:
-- Update `index.html`: change `og:image` and `twitter:image` URLs to `…/og-image.jpg?v=2`
-- Update `src/components/SEO.tsx`: change `DEFAULT_OG_IMAGE` constant to the same `?v=2` URL
-
-This guarantees all newly-shared links pull the new image immediately.
-
-### 4. Note about already-shared links
-The preview in your screenshot is from a previously-shared message. Apple/iMessage caches that locally per-conversation and **will not** refresh it just because we updated the file. Once published with the new image + cache-buster, **a fresh share of the link in a new message** will show the updated card. We'll call this out explicitly so you know what to expect.
-
-### 5. Publish reminder
-The OG image is served from the live custom domain (`www.supplyministry.com.au`). After the change, you'll need to **Publish** the project so social scrapers can fetch the new file from production.
-
-## Files to change
-
-- `public/og-image.jpg` — replaced with new 1200×630 branded image
-- `index.html` — bump OG/Twitter image URL to `?v=2`
-- `src/components/SEO.tsx` — bump `DEFAULT_OG_IMAGE` to `?v=2`
+## Verification
+After applying:
+- Spot-check homepage hero, About, Sleep Choice, Testimonials, Contact, FAQ.
+- Confirm italic accent words ("solutions", "Choice", "say", "started") read as warm cream on purple.
+- Confirm cream-section paragraphs (Sleep Choice steps, About story, founders) read noticeably darker.
+- Run a quick contrast pass (cream/85 on `--violet` ≈ AA; new muted-body on cream ≈ AA).
 
 ## Out of scope
-
-- Favicon (separate, already handled)
-- Any layout/copy changes to the live site
-- Per-page custom OG images (the global default covers your current need)
+- Accent color experiments (gold/amber, darker periwinkle) — can revisit if you want a non-monochrome look later.
+- Eyebrow labels and footer captions.
+- Dark mode tokens.
