@@ -147,7 +147,7 @@ const EditorialHero = () => {
               style={{
                 fontWeight: 300,
                 fontSize: "13px",
-                color: "rgba(255,255,255,0.36)",
+                color: "rgba(255,255,255,0.65)",
                 lineHeight: 1.85,
               }}
             >
