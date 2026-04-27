@@ -305,7 +305,7 @@ const EditorialHero = () => {
           </h1>
           <p
             className="font-geist mb-8"
-            style={{ fontSize: "13px", fontWeight: 300, color: "rgba(255,255,255,0.36)", lineHeight: 1.85 }}
+            style={{ fontSize: "13px", fontWeight: 300, color: "rgba(255,255,255,0.65)", lineHeight: 1.85 }}
           >
             We connect the people who care for others with the right assistive technology, sourced ethically, documented carefully, delivered with genuine respect.
           </p>
