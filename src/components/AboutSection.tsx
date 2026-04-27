@@ -52,7 +52,7 @@ const AboutSection = () => {
           <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-cream mb-6">
             Connecting care with <span className="italic text-gold">solutions</span>
           </h2>
-          <p className="text-lg text-cream/75 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg text-cream/85 max-w-4xl mx-auto leading-relaxed">
             Founded by Alex Hampel and David Hyman, Supply Ministry combines decades of experience 
             in mobility and assistive technology to simplify the process of choosing and supplying 
             the right equipment for your clients across Australia.
@@ -69,7 +69,7 @@ const AboutSection = () => {
                   <IconComponent className="h-8 w-8 text-cream" />
                 </div>
                 <h3 className="font-geist text-lg text-cream mb-2">{value.title}</h3>
-                <p className="text-cream/70 text-sm">{value.description}</p>
+                <p className="text-cream/85 text-sm">{value.description}</p>
               </div>
             );
           })}

@@ -25,22 +25,22 @@ const Quote = () => {
             <h1 className="text-4xl md:text-5xl font-geist font-light tracking-tight leading-[1.05] text-cream mb-4">
               Request a <span className="italic text-gold">quote</span>
             </h1>
-            <p className="text-lg text-cream/75">
+            <p className="text-lg text-cream/85">
               Tell us about your requirements and we'll get back to you with a tailored quote.
             </p>
           </div>
           
           {/* Trust Signals */}
           <div className="flex flex-wrap justify-center gap-6 mb-8">
-            <div className="flex items-center gap-2 text-sm text-cream/75">
+            <div className="flex items-center gap-2 text-sm text-cream/85">
               <Clock className="h-4 w-4 text-gold" />
               <span>Response within 24 hours</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-cream/75">
+            <div className="flex items-center gap-2 text-sm text-cream/85">
               <Shield className="h-4 w-4 text-gold" />
               <span>No obligation quote</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-cream/75">
+            <div className="flex items-center gap-2 text-sm text-cream/85">
               <Phone className="h-4 w-4 text-gold" />
               <span>Expert support available</span>
             </div>
