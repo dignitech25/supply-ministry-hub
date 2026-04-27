@@ -115,8 +115,8 @@ const EditorialHero = () => {
               style={{
                 fontWeight: 200,
                 fontSize: "13px",
-                color: "rgba(255,255,255,0.32)",
-                borderLeft: "1.5px solid rgba(255,255,255,0.12)",
+                color: "rgba(255,255,255,0.7)",
+                borderLeft: "1.5px solid rgba(255,255,255,0.25)",
               }}
             >
               They understood the clinical context, not just the catalogue.
