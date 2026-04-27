@@ -54,9 +54,9 @@
     --cream-image: 36 22% 85%;       /* #E2DBD0 */
     --ink: 30 33% 8%;                /* #1A1209 */
     --cream-border: 36 18% 83%;      /* #DDD7CC */
-    --muted-body: 35 12% 43%;        /* #7A7060 */
+    --muted-body: 30 15% 28%;        /* #534637 — darker warm taupe for AA contrast */
     --muted-label: 36 11% 73%;       /* #C4BFB5 */
-    --gold: 249 100% 87%;            /* Lavender accent #C4BAFF */
+    --gold: 36 32% 93%;              /* Warm cream accent (alias of --cream) for high contrast on violet */
     --pill-highlight: 249 100% 87%;  /* alias of --gold for legacy refs */
     
     /* Design System Tokens */

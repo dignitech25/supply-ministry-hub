@@ -30,7 +30,7 @@ const SleepChoice = () => {
               Sleep that <span className="italic text-gold">restores</span>.
             </h1>
             
-            <p className="text-xl text-cream/75 mb-8 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl text-cream/85 mb-8 leading-relaxed max-w-3xl mx-auto">
               Take the guesswork out of bed and mattress selection with our risk-free 7-day trial program. 
               Find the perfect sleep solution for your clients with confidence.
             </p>
