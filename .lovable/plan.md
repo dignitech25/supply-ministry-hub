@@ -1,57 +1,92 @@
-## Problem
+## Section 1 — HERO: implementation plan
 
-Your screenshot shows the iMessage / social link preview for `supplyministry.com.au`. It's still rendering the **old branding**:
+All copy below is inserted verbatim from the rewrite document. No interpretation, no styling changes beyond what is explicitly stated. Italic-gold last-word pattern is **not** propagated.
 
-- Old logo mark (the purple cube-and-arrows icon)
-- Old tagline lockup ("Assistive Technology, Simplified / For OTs, Case Managers & Care Teams / supplyministry.com.au")
-- White background
+### File 1: `src/components/editorial/EditorialHero.tsx`
 
-The site itself has since moved to the new identity: the **dome / figure mark** with the bold deep-purple "Supply Ministry" wordmark on a **cream background**.
+**1a. Italic eyebrow above the headline — DELETE (not replaced).**
 
-The preview is driven by a single file: **`public/og-image.jpg`** (1536×1024 today, declared as 1200×630 in the meta tags). Every social platform (iMessage, Slack, WhatsApp, LinkedIn, Facebook, X) reads this file to build the link card. As long as it shows the old mark, every shared link will look out of date, regardless of how good the live site looks.
+Remove both instances of:
+> *They understood the clinical context, not just the catalogue.*
 
-`index.html` and `src/components/SEO.tsx` already reference `https://www.supplyministry.com.au/og-image.jpg` correctly — no markup change is required. Only the image asset needs to be replaced.
+- Desktop block: the `<p className="font-serif-italic italic mb-10 pl-4 max-w-[280px]">` element (and its surrounding wrapper styling, including the left border) — deleted entirely.
+- Mobile block: the matching `<p className="font-serif-italic italic mb-6 pl-4">` element — deleted entirely.
 
-## Plan
+No replacement element is inserted.
 
-### 1. Generate a new `og-image.jpg` matching current branding
-- **Dimensions:** exactly **1200 × 630 px** (the standard OG/Twitter card size — fixes the current 1536×1024 mismatch with the declared meta dimensions).
-- **Background:** brand cream (`#F4EFE6`) to match the site shell and the new logo's native canvas.
-- **Logo:** the new Supply Ministry horizontal lockup (dome + figure mark + bold purple "Supply Ministry" wordmark). Source: `public/Supply_Ministry_logo_new.png` (or `Supply_Ministry_horizontal_new.svg` if it renders cleanly).
-- **Wordmark/tagline (below logo, brand purple `#5E45FF`):**
-  - Headline: **"Assistive Technology, Simplified"** (Geist, semibold)
-  - Subline: **"For OTs, Case Managers & Care Teams"** (Geist, regular, smaller, slightly muted purple)
-  - Footer line: **"supplyministry.com.au"** (Geist, smaller, muted)
-- **Composition:** logo top-third, taglines centered in lower two-thirds, generous padding so nothing gets clipped by Twitter's rounded corners or iMessage's edge crop.
-- **No em dashes** anywhere in the copy (per project policy).
+**1b. Headline — replace.**
 
-The image will be generated via a Python/Pillow script in `/tmp`, written directly to `public/og-image.jpg` as a high-quality JPEG (~85% quality, sRGB).
+Current desktop H1 reads `Equipment / that changes / lives` (with "changes" italic-gold).
+Current mobile H1 reads `Equipment that changes lives` (same styling).
 
-### 2. QA the result
-- Convert the generated JPG to a preview image and inspect it before considering the task done.
-- Verify: dimensions = 1200×630, file size reasonable (<400 KB), text is legible, logo is sharp, brand colors correct, no clipping, no em dashes.
+Replace both with the supplied line, verbatim, **with no italic-gold treatment** (the rewrite document specifies plain copy):
 
-### 3. Add a cache-busting query string to the meta tags
-Social platforms (especially iMessage, WhatsApp, Facebook) cache OG images aggressively — sometimes for weeks. To force a re-fetch on next share:
-- Update `index.html`: change `og:image` and `twitter:image` URLs to `…/og-image.jpg?v=2`
-- Update `src/components/SEO.tsx`: change `DEFAULT_OG_IMAGE` constant to the same `?v=2` URL
+> Helping people feel safer and more comfortable at home.
 
-This guarantees all newly-shared links pull the new image immediately.
+Both desktop and mobile H1 will render this single sentence as plain cream text. Existing font, weight, size, and line-height styles on the H1 are preserved.
 
-### 4. Note about already-shared links
-The preview in your screenshot is from a previously-shared message. Apple/iMessage caches that locally per-conversation and **will not** refresh it just because we updated the file. Once published with the new image + cache-buster, **a fresh share of the link in a new message** will show the updated card. We'll call this out explicitly so you know what to expect.
+**1c. Sub-headline — replace.**
 
-### 5. Publish reminder
-The OG image is served from the live custom domain (`www.supplyministry.com.au`). After the change, you'll need to **Publish** the project so social scrapers can fetch the new file from production.
+Current sub paragraph (both desktop and mobile) reads:
+> *We connect the people who care for others with the right assistive technology, sourced ethically, documented carefully, delivered with genuine respect.*
 
-## Files to change
+Replace with, verbatim:
 
-- `public/og-image.jpg` — replaced with new 1200×630 branded image
-- `index.html` — bump OG/Twitter image URL to `?v=2`
-- `src/components/SEO.tsx` — bump `DEFAULT_OG_IMAGE` to `?v=2`
+> We work with occupational therapists, home care managers, support coordinators, and the families they support. We find the right equipment, deliver it carefully, set it up, and stay close until everyone is happy with it.
 
-## Out of scope
+Existing paragraph styles preserved on both layouts.
 
-- Favicon (separate, already handled)
-- Any layout/copy changes to the live site
-- Per-page custom OG images (the global default covers your current need)
+**1d. Stats row — replace all three stats.**
+
+Update the `stats` array. Each stat is split into a numeric/symbol portion and a label. The numeric portion goes into the large editorial display; the label goes into the small uppercase caption underneath. The italic-gold suffix treatment on the number is **kept** structurally (since stats already use this pattern site-wide), but only where there is a natural suffix segment.
+
+| Slot | `number` | `suffix` | `label` |
+|---|---|---|---|
+| 1 | `5-10` | ` homes a week` | `Across Greater Melbourne` |
+| 2 | `24` | ` hour response` | `On every quote we receive` |
+| 3 | `2,000` | `+ products` | `From the brands we trust` |
+
+Notes:
+- Suffixes here are word phrases, not single characters. The existing italic-gold span will render the suffix in italic gold. If that visually breaks (long phrase wrapping awkwardly at the supplied 36px / 28px sizes on the current viewport), I will flag it after build for your review — I will not change the words.
+- Labels drop the existing `whitespace-pre-line` `\n` linebreaks; each new label is a single line.
+
+**1e. Persona tabs — replace all four personas.**
+
+Update the `audiences` array. Tab labels, names, descriptions, and CTA labels are all replaced verbatim. Tab `id`s and `ctaHref`s preserved where the destination is unchanged; one new destination is introduced.
+
+| id | tabLabel / tabLabelLines | name | description | ctaLabel | ctaHref |
+|---|---|---|---|---|---|
+| `ot` | `Occupational therapist` / [`Occupational`, `therapist`] | `An occupational therapist.` | `You write the recommendation. We will source exactly what you have asked for and put it on one quote. If something is not in our range, ask us. Most of the time we can get it.` | `Find products for your clients.` | `/products` |
+| `aged-care` | `Home care manager` / [`Home care`, `manager`] | `A home care manager or case manager.` | `You manage the case. We manage the equipment, the procurement, and the conversations with the family, so the only thing you hear back from them is that they are happy.` | `Browse equipment for home care.` | `/products` |
+| `coordinator` | `Support coordinator` / [`Support`, `coordinator`] | `A support coordinator.` | `We will go above and beyond to get your participants the equipment they need, quickly and safely.` | `Source equipment for participants.` | `/products` |
+| `participant` | `NDIS participant` / [`NDIS`, `participant`] | `An NDIS participant, or a family member helping someone you love.` | `Bringing new equipment into your home is a big deal. We do not rush. We answer your questions and we make sure you are happy with what arrives.` | `Talk to us about what is needed.` | `/quote` |
+
+Note: the `aged-care` persona's tab label changes from "Aged care provider" to "Home care manager"; the underlying `id` is left as `aged-care` to avoid touching unrelated state. If you want the id renamed too, say the word and I will rename it in this same section.
+
+### File 2: `src/components/editorial/EditorialNavigation.tsx`
+
+**2a. Primary CTA — desktop slot.**
+
+Line 73, inside the `/quote` Link:
+- Current: `<span className="hidden md:inline">Start your quote</span>`
+- New: `<span className="hidden md:inline">Talk to us</span>`
+
+**2b. Mobile compact slot — UNCHANGED.**
+
+Line 72 (`<span className="md:hidden">Get quote</span>`) remains exactly as-is per the rewrite document ("Unchanged from current site.").
+
+### Out of scope for Section 1
+
+- SEO meta, OG, Twitter, alt text, aria labels: not supplied in this section, not touched.
+- Italic-gold treatment on the new headline: not propagated (no instruction given).
+- Existing video, hero image, layout, spacing, colors: untouched.
+- Audience tab `id` `aged-care` left unchanged to avoid downstream side effects unless you instruct otherwise.
+- Floating Smart CTA, footer, supplier strip, trust bar, FAQ, About, featured products: not part of Section 1.
+
+### Confirmation output
+
+After build, I will reply with one line only:
+
+`Section 1 inserted, X lines updated, Y lines deleted.`
+
+Awaiting approval to implement.

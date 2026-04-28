@@ -70,7 +70,7 @@ const EditorialNavigation = () => {
             className="font-geist text-sm md:text-base font-semibold bg-violet text-cream px-4 py-2 md:px-7 md:py-3 rounded-full hover:opacity-90 transition-opacity whitespace-nowrap"
           >
             <span className="md:hidden">Get quote</span>
-            <span className="hidden md:inline">Start your quote</span>
+            <span className="hidden md:inline">Talk to us</span>
           </Link>
         </div>
       </div>
