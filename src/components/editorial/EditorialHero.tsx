@@ -138,7 +138,7 @@ const EditorialHero = () => {
 
           {/* Stats row */}
           <div
-            className="mt-10 pt-7 flex gap-9"
+            className="pt-7 flex gap-9"
             style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
           >
             {stats.map((s) => (
