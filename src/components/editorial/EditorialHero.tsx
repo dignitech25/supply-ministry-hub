@@ -107,8 +107,8 @@ const EditorialHero = () => {
         </div>
 
         {/* Column 1: Left content panel */}
-        <div className="flex flex-col justify-center" style={{ padding: "56px 52px 56px 44px", gap: "44px" }}>
-          <div>
+        <div className="flex flex-col" style={{ padding: "56px 52px 40px 44px" }}>
+          <div className="flex-1 flex flex-col justify-center">
             <h1
               className="font-editorial mb-[26px] text-cream"
               style={{
@@ -138,27 +138,27 @@ const EditorialHero = () => {
 
           {/* Stats row */}
           <div
-            className="pt-7 flex gap-9"
+            className="mt-auto pt-5 flex gap-9"
             style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
           >
             {stats.map((s) => (
               <div key={s.label}>
                 <div
-                  className="font-editorial text-cream"
-                  style={{ fontWeight: 200, fontSize: "36px", lineHeight: 1 }}
+                  className="font-geist text-cream"
+                  style={{ fontWeight: 400, fontSize: "15px", lineHeight: 1.2 }}
                 >
                   {s.number}
-                  <span className="italic" style={{ color: "hsl(var(--gold))" }}>
+                  <span style={{ color: "rgba(255,255,255,0.85)", fontWeight: 300 }}>
                     {s.suffix}
                   </span>
                 </div>
                 <div
-                  className="font-geist uppercase mt-2 whitespace-pre-line"
+                  className="font-geist uppercase mt-1.5 whitespace-pre-line"
                   style={{
                     fontWeight: 400,
                     fontSize: "9px",
                     letterSpacing: "0.13em",
-                    color: "rgba(255,255,255,0.55)",
+                    color: "rgba(255,255,255,0.45)",
                     lineHeight: 1.65,
                   }}
                 >
