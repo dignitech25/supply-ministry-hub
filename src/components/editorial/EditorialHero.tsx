@@ -144,16 +144,16 @@ const EditorialHero = () => {
             {stats.map((s) => (
               <div key={s.label}>
                 <div
-                  className="font-geist text-cream"
-                  style={{ fontWeight: 400, fontSize: "15px", lineHeight: 1.2 }}
+                  className="font-editorial text-cream"
+                  style={{ fontWeight: 200, fontSize: "22px", lineHeight: 1 }}
                 >
                   {s.number}
-                  <span style={{ color: "rgba(255,255,255,0.85)", fontWeight: 300 }}>
+                  <span className="italic" style={{ color: "hsl(var(--gold))" }}>
                     {s.suffix}
                   </span>
                 </div>
                 <div
-                  className="font-geist uppercase mt-1.5 whitespace-pre-line"
+                  className="font-geist uppercase mt-2 whitespace-pre-line"
                   style={{
                     fontWeight: 400,
                     fontSize: "9px",
