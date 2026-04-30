@@ -1,37 +1,29 @@
 type Proof = {
   eyebrow: string;
-  headlineLead: string;
-  headlineAccent: string;
-  headlineTrail?: string;
+  headline: string;
   sub: string;
 };
 
 const proofs: Proof[] = [
   {
-    eyebrow: "Clinician trusted",
-    headlineLead: "OT",
-    headlineAccent: "referred",
-    sub: "Specs and trial documentation included with every quote.",
+    eyebrow: "For occupational therapists",
+    headline: "We can source you anything",
+    sub: "If it is not in our range, ask. We will find it.",
   },
   {
-    eyebrow: "Procurement",
-    headlineLead: "Aged care and",
-    headlineAccent: "NDIS-ready",
-    sub: "Compliant quotes formatted for plan managers and funding bodies.",
+    eyebrow: "For the family",
+    headline: "We talk to the people who matter",
+    sub: "We stay in touch with the family directly, so nothing gets lost in translation.",
   },
   {
-    eyebrow: "Turnaround",
-    headlineAccent: "24-hour",
-    headlineLead: "",
-    headlineTrail: "response",
-    sub: "We reply to quote requests within one business day.",
+    eyebrow: "24 hour response",
+    headline: "We get back to you the same day",
+    sub: "Every quote, every time.",
   },
   {
-    eyebrow: "Catalogue",
-    headlineAccent: "2,000+",
-    headlineLead: "",
-    headlineTrail: "products",
-    sub: "Sourced from Australia's leading assistive technology suppliers.",
+    eyebrow: "15+ years",
+    headline: "We have been in this work a long time",
+    sub: "Most of the situations that come up, we have seen before.",
   },
 ];
 
@@ -57,14 +49,7 @@ const TrustBar = () => {
                 {p.eyebrow}
               </span>
               <h3 className="font-geist text-xl md:text-2xl font-light tracking-tight text-ink leading-tight mb-2">
-                {p.headlineLead && <span>{p.headlineLead} </span>}
-                <span
-                  className="italic"
-                  style={{ color: "hsl(var(--gold))" }}
-                >
-                  {p.headlineAccent}
-                </span>
-                {p.headlineTrail && <span> {p.headlineTrail}</span>}
+                {p.headline}
               </h3>
               <p className="text-sm text-muted-body leading-relaxed">
                 {p.sub}
