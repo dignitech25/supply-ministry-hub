@@ -123,27 +123,26 @@ const Index = () => {
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
                 <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">Testimonials</p>
-                <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-cream mb-4">What our clients <span className="italic text-gold">say</span></h2>
-                <p className="text-lg text-cream/75">Trusted by leading healthcare providers across Australia</p>
+                <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-cream mb-4">What people say about working with us</h2>
               </div>
               <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 {[
                   {
-                    company: "Disability Support Provider",
-                    quote: "Supply Ministry has transformed how we source assistive technology. Their fast quote turnaround means our clients get sorted without the usual procurement delays.",
-                    role: "Operations Manager",
+                    company: "Community Practice",
+                    quote: "It feels like working with someone who has actually been in a client's home.",
+                    role: "Occupational Therapist, north-eastern Melbourne",
                     rating: 5
                   },
                   {
-                    company: "Aged Care Facility",
-                    quote: "The personal service and expert advice we receive from Supply Ministry is unmatched. They truly understand our clients' needs.",
-                    role: "Occupational Therapist",
+                    company: "Aged Care Provider",
+                    quote: "I called on Tuesday. The bed was in her room on Friday. The family rang me to say thank you, which never happens.",
+                    role: "Home Care Manager, Melbourne metropolitan",
                     rating: 5
                   },
                   {
-                    company: "Community Services Organization",
-                    quote: "From mobility aids to home modifications, Supply Ministry consistently delivers quality products and exceptional service.",
-                    role: "Support Coordinator",
+                    company: "NDIS Plan Management",
+                    quote: "I started using them on one client. Now they do everything.",
+                    role: "Support Coordinator, eastern Melbourne suburbs",
                     rating: 5
                   }
                 ].map((testimonial, index) => (
