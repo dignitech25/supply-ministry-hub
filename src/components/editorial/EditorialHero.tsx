@@ -19,47 +19,47 @@ const audiences: Audience[] = [
     id: "ot",
     tabLabel: "Occupational therapist",
     tabLabelLines: ["Occupational", "therapist"],
-    name: "An occupational therapist.",
+    name: "An occupational therapist",
     description:
       "You write the recommendation. We will source exactly what you have asked for and put it on one quote. If something is not in our range, ask us. Most of the time we can get it.",
-    ctaLabel: "Find products for your clients.",
+    ctaLabel: "Find products for your clients",
     ctaHref: "/products",
   },
   {
     id: "aged-care",
     tabLabel: "Home care manager",
     tabLabelLines: ["Home care", "manager"],
-    name: "A home care manager or case manager.",
+    name: "A home care manager or case manager",
     description:
       "You manage the case. We manage the equipment, the procurement, and the conversations with the family, so the only thing you hear back from them is that they are happy.",
-    ctaLabel: "Browse equipment for home care.",
+    ctaLabel: "Browse equipment for home care",
     ctaHref: "/products",
   },
   {
     id: "coordinator",
     tabLabel: "Support coordinator",
     tabLabelLines: ["Support", "coordinator"],
-    name: "A support coordinator.",
+    name: "A support coordinator",
     description:
       "We will go above and beyond to get your participants the equipment they need, quickly and safely.",
-    ctaLabel: "Source equipment for participants.",
+    ctaLabel: "Source equipment for participants",
     ctaHref: "/products",
   },
   {
     id: "participant",
     tabLabel: "NDIS participant",
     tabLabelLines: ["NDIS", "participant"],
-    name: "An NDIS participant, or a family member helping someone you love.",
+    name: "An NDIS participant, or a family member helping someone you love",
     description:
       "Bringing new equipment into your home is a big deal. We do not rush. We answer your questions and we make sure you are happy with what arrives.",
-    ctaLabel: "Talk to us about what is needed.",
+    ctaLabel: "Talk to us about what is needed",
     ctaHref: "/quote",
   },
 ];
 
 const stats = [
   { number: "5-10", suffix: " homes a week", label: "Across Greater Melbourne" },
-  { number: "24", suffix: " hour response", label: "On every quote we receive" },
+  { number: "24hr", suffix: " response", label: "On every quote we receive" },
   { number: "2,000", suffix: "+ products", label: "From the brands we trust" },
 ];
 
@@ -119,7 +119,7 @@ const EditorialHero = () => {
                 letterSpacing: "-0.025em",
               }}
             >
-              Helping people feel safer and more comfortable at home.
+              Helping people feel safer and more comfortable at home
             </h1>
             <p
               className="font-geist max-w-[290px]"
@@ -265,7 +265,7 @@ const EditorialHero = () => {
             className="font-editorial mb-5 text-cream"
             style={{ fontWeight: 200, fontSize: "44px", lineHeight: 0.95, letterSpacing: "-0.025em" }}
           >
-            Helping people feel safer and more comfortable at home.
+            Helping people feel safer and more comfortable at home
           </h1>
           <p
             className="font-geist mb-8"
