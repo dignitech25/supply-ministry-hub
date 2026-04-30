@@ -119,7 +119,10 @@ const EditorialHero = () => {
                 letterSpacing: "-0.025em",
               }}
             >
-              Helping people feel safer and more comfortable at home
+              Helping people feel safer and more comfortable at{" "}
+              <span className="italic" style={{ color: "hsl(var(--gold))" }}>
+                home
+              </span>
             </h1>
             <p
               className="font-geist max-w-[290px]"
@@ -265,7 +268,10 @@ const EditorialHero = () => {
             className="font-editorial mb-5 text-cream"
             style={{ fontWeight: 200, fontSize: "44px", lineHeight: 0.95, letterSpacing: "-0.025em" }}
           >
-            Helping people feel safer and more comfortable at home
+            Helping people feel safer and more comfortable at{" "}
+            <span className="italic" style={{ color: "hsl(var(--gold))" }}>
+              home
+            </span>
           </h1>
           <p
             className="font-geist mb-8"
