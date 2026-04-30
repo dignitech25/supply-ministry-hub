@@ -21,7 +21,7 @@ const audiences: Audience[] = [
     tabLabelLines: ["Occupational", "therapist"],
     name: "An occupational therapist",
     description:
-      "You write the recommendation. We will source exactly what you have asked for and put it on one quote. If something is not in our range, ask us. Most of the time we can get it.",
+      "You write the recommendation. We source exactly what you asked for, on one quote.",
     ctaLabel: "Find products for your clients",
     ctaHref: "/products",
   },
@@ -31,7 +31,7 @@ const audiences: Audience[] = [
     tabLabelLines: ["Home care", "manager"],
     name: "A home care manager or case manager",
     description:
-      "You manage the case. We manage the equipment, the procurement, and the conversations with the family, so the only thing you hear back from them is that they are happy.",
+      "We manage the equipment and the family conversations, so the only thing you hear back is that they are happy.",
     ctaLabel: "Browse equipment for home care",
     ctaHref: "/products",
   },
@@ -41,7 +41,7 @@ const audiences: Audience[] = [
     tabLabelLines: ["Support", "coordinator"],
     name: "A support coordinator",
     description:
-      "We will go above and beyond to get your participants the equipment they need, quickly and safely.",
+      "We get your participants the equipment they need, quickly and safely.",
     ctaLabel: "Source equipment for participants",
     ctaHref: "/products",
   },
@@ -51,7 +51,7 @@ const audiences: Audience[] = [
     tabLabelLines: ["NDIS", "participant"],
     name: "An NDIS participant, or a family member helping someone you love",
     description:
-      "Bringing new equipment into your home is a big deal. We do not rush. We answer your questions and we make sure you are happy with what arrives.",
+      "We do not rush. We answer your questions and make sure you are happy with what arrives.",
     ctaLabel: "Talk to us about what is needed",
     ctaHref: "/quote",
   },
@@ -60,7 +60,6 @@ const audiences: Audience[] = [
 const stats = [
   { number: "5-10", suffix: " homes a week", label: "Across Greater Melbourne" },
   { number: "24hr", suffix: " response", label: "On every quote we receive" },
-  { number: "2,000", suffix: "+ products", label: "From the brands we trust" },
 ];
 
 const EditorialHero = () => {
@@ -133,7 +132,7 @@ const EditorialHero = () => {
                 lineHeight: 1.85,
               }}
             >
-              We work with occupational therapists, home care managers, support coordinators, and the families they support. We find the right equipment, deliver it carefully, set it up, and stay close until everyone is happy with it.
+              We find the right equipment, deliver it carefully, set it up, and stay close until everyone is happy with it.
             </p>
           </div>
 
@@ -277,10 +276,10 @@ const EditorialHero = () => {
             className="font-geist mb-8"
             style={{ fontSize: "15px", fontWeight: 300, color: "rgba(255,255,255,0.65)", lineHeight: 1.85 }}
           >
-            We work with occupational therapists, home care managers, support coordinators, and the families they support. We find the right equipment, deliver it carefully, set it up, and stay close until everyone is happy with it.
+            We find the right equipment, deliver it carefully, set it up, and stay close until everyone is happy with it.
           </p>
           <div
-            className="pt-6 grid grid-cols-3 gap-4"
+            className="pt-6 grid grid-cols-2 gap-4"
             style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
           >
             {stats.map((s) => (
