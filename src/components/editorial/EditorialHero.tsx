@@ -107,7 +107,7 @@ const EditorialHero = () => {
         </div>
 
         {/* Column 1: Left content panel */}
-        <div className="flex flex-col justify-between" style={{ padding: "56px 52px 48px 44px" }}>
+        <div className="flex flex-col justify-center" style={{ padding: "56px 52px 56px 44px", gap: "44px" }}>
           <div>
             <h1
               className="font-editorial mb-[26px] text-cream"
