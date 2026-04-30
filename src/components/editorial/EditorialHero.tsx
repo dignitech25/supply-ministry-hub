@@ -183,7 +183,7 @@ const EditorialHero = () => {
               playsInline
               preload="metadata"
               aria-label="Supply Ministry assistive equipment in use"
-              className="absolute inset-0 w-full h-full object-cover object-top"
+              className="absolute inset-0 w-full h-full object-cover object-center"
               width={896}
               height={1184}
             />
@@ -311,7 +311,7 @@ const EditorialHero = () => {
             playsInline
             preload="metadata"
             aria-label="Supply Ministry assistive equipment in use"
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className="absolute inset-0 w-full h-full object-cover object-center"
             width={896}
             height={1184}
           />
