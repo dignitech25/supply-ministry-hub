@@ -124,12 +124,13 @@ const EditorialHero = () => {
               </span>
             </h1>
             <p
-              className="font-geist max-w-[290px]"
+              className="font-geist max-w-[520px]"
               style={{
-                fontWeight: 300,
-                fontSize: "15px",
-                color: "rgba(255,255,255,0.65)",
-                lineHeight: 1.85,
+                fontWeight: 400,
+                fontSize: "19px",
+                color: "rgba(255,255,255,0.88)",
+                lineHeight: 1.55,
+                letterSpacing: "-0.005em",
               }}
             >
               Mobility aids, beds, bathroom equipment, daily living aids and home modifications. One quote, one delivery, one supplier.
