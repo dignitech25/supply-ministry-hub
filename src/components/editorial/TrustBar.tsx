@@ -7,8 +7,8 @@ type Proof = {
 const proofs: Proof[] = [
   {
     eyebrow: "For occupational therapists",
-    headline: "We can source you anything",
-    sub: "If it is not in our range, ask. We will find it.",
+    headline: "We source what you prescribe. Nothing else.",
+    sub: "Your clinical recommendation is not ours to change. We source it exactly or we ask you first.",
   },
   {
     eyebrow: "For the family",
