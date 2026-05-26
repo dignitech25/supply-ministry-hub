@@ -46,7 +46,7 @@ const AboutSection = () => {
         <div className="text-center mb-16">
           <p className="font-geist text-[11px] tracking-[0.18em] uppercase text-cream/60 mb-4">About us</p>
           <h2 className="font-geist font-light tracking-tight leading-[1.05] text-5xl md:text-6xl text-cream mb-6">
-            We exist to support people at their most vulnerable, and the families who care for them
+            Built for the people who do this work, and the clients depending on them.
           </h2>
           <p className="text-lg text-cream/75 max-w-4xl mx-auto leading-relaxed mb-6">
             We bring assistive technology into the homes of people who need it, with the care and consideration that should already be standard.
