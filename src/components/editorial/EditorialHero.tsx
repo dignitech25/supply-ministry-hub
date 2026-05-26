@@ -112,8 +112,8 @@ const EditorialHero = () => {
             <h1
               className="font-editorial mb-[26px] text-cream"
               style={{
-                fontWeight: 200,
-                fontSize: "64px",
+                fontWeight: 300,
+                fontSize: "68px",
                 lineHeight: 0.95,
                 letterSpacing: "-0.025em",
               }}
@@ -132,7 +132,7 @@ const EditorialHero = () => {
                 lineHeight: 1.85,
               }}
             >
-              We find the right equipment, deliver it carefully, set it up, and stay close until everyone is happy with it.
+              Mobility aids, beds, bathroom equipment, daily living aids and home modifications. One quote, one delivery, one supplier.
             </p>
           </div>
 
