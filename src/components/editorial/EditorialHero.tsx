@@ -118,9 +118,9 @@ const EditorialHero = () => {
                 letterSpacing: "-0.025em",
               }}
             >
-              Helping people feel safer and more comfortable at{" "}
+            Every item on the list,{" "}
               <span className="italic" style={{ color: "hsl(var(--gold))" }}>
-                home
+                one supplier.
               </span>
             </h1>
             <p
