@@ -69,7 +69,7 @@ const EditorialHero = () => {
   return (
     <section className="bg-violet">
       {/* Desktop layout */}
-      <div className="hidden min-[960px]:grid min-[960px]:grid-cols-[132px_1fr_42%] min-h-[640px]">
+      <div className="hidden min-[960px]:grid min-[960px]:grid-cols-[132px_1fr_42%] min-h-[720px]">
         {/* Column 0: Vertical audience tabs */}
         <div className="flex flex-col border-r border-white/[0.12]">
           {audiences.map((aud, idx) => {
@@ -107,46 +107,73 @@ const EditorialHero = () => {
         </div>
 
         {/* Column 1: Left content panel */}
-        <div className="flex flex-col" style={{ padding: "56px 52px 40px 44px" }}>
-          <div className="flex-1 flex flex-col justify-center">
-            <h1
-              className="font-editorial mb-[26px] text-cream"
+        <div
+          className="flex flex-col justify-between"
+          style={{ padding: "72px 64px 48px 56px" }}
+        >
+          {/* Headline */}
+          <h1
+            className="font-editorial text-cream max-w-[820px]"
+            style={{
+              fontWeight: 300,
+              fontSize: "82px",
+              lineHeight: 0.98,
+              letterSpacing: "-0.028em",
+            }}
+          >
+            Every item on the list,{" "}
+            <span className="italic" style={{ color: "hsl(var(--gold))" }}>
+              one supplier.
+            </span>
+          </h1>
+
+          {/* Positioning statement: elevated to definitional scale */}
+          <div className="max-w-[680px]">
+            <span
+              aria-hidden="true"
+              className="block mb-7"
+              style={{
+                width: "48px",
+                height: "1px",
+                background: "hsl(var(--gold))",
+                opacity: 0.85,
+              }}
+            />
+            <p
+              className="font-geist text-cream"
               style={{
                 fontWeight: 300,
-                fontSize: "68px",
-                lineHeight: 0.95,
-                letterSpacing: "-0.025em",
+                fontSize: "26px",
+                lineHeight: 1.35,
+                letterSpacing: "-0.012em",
+                color: "rgba(255,255,255,0.94)",
               }}
             >
-            Every item on the list,{" "}
-              <span className="italic" style={{ color: "hsl(var(--gold))" }}>
-                one supplier.
-              </span>
-            </h1>
+              Mobility aids, beds, bathroom equipment, daily living aids and home modifications.
+            </p>
             <p
-              className="font-geist max-w-[520px]"
+              className="font-geist uppercase mt-5"
               style={{
-                fontWeight: 400,
-                fontSize: "19px",
-                color: "rgba(255,255,255,0.88)",
-                lineHeight: 1.55,
-                letterSpacing: "-0.005em",
+                fontSize: "11px",
+                fontWeight: 500,
+                letterSpacing: "0.24em",
+                color: "rgba(255,255,255,0.55)",
               }}
             >
-              Mobility aids, beds, bathroom equipment, daily living aids and home modifications. One quote, one delivery, one supplier.
+              One quote &nbsp;·&nbsp; One delivery &nbsp;·&nbsp; One supplier
             </p>
           </div>
 
           {/* Stats row */}
           <div
-            className="mt-auto pt-5 flex gap-9"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+            className="pt-10 grid grid-cols-2 gap-16"
+            style={{ borderTop: "1px solid hsl(var(--gold) / 0.22)" }}
           >
             {stats.map((s) => (
               <div key={s.label}>
                 <div
                   className="font-editorial text-cream"
-                  style={{ fontWeight: 200, fontSize: "22px", lineHeight: 1 }}
+                  style={{ fontWeight: 200, fontSize: "30px", lineHeight: 1 }}
                 >
                   {s.number}
                   <span className="italic" style={{ color: "hsl(var(--gold))" }}>
@@ -154,12 +181,12 @@ const EditorialHero = () => {
                   </span>
                 </div>
                 <div
-                  className="font-geist uppercase mt-2 whitespace-pre-line"
+                  className="font-geist uppercase mt-3 whitespace-pre-line"
                   style={{
                     fontWeight: 400,
-                    fontSize: "9px",
-                    letterSpacing: "0.13em",
-                    color: "rgba(255,255,255,0.45)",
+                    fontSize: "10px",
+                    letterSpacing: "0.18em",
+                    color: "rgba(255,255,255,0.5)",
                     lineHeight: 1.65,
                   }}
                 >
