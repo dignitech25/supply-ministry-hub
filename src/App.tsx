@@ -22,6 +22,7 @@ const Resources = lazy(() => import("./pages/Resources"));
 const Quote = lazy(() => import("./pages/Quote"));
 const SupportAtHome = lazy(() => import("./pages/SupportAtHome"));
 const RentToBuy = lazy(() => import("./pages/RentToBuy"));
+const HomeModifications = lazy(() => import("./pages/HomeModifications"));
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
                   <Route path="/resources" element={<Resources />} />
                   <Route path="/support-at-home" element={<SupportAtHome />} />
                   <Route path="/rent-to-buy" element={<RentToBuy />} />
+                  <Route path="/home-modifications" element={<HomeModifications />} />
                   
                   <Route path="/products" element={<Products />} />
                   <Route path="/products/:sku" element={<ProductDetail />} />
