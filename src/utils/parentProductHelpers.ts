@@ -14,6 +14,10 @@ interface CacheEntry {
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 const cache = new Map<string, CacheEntry>();
 
+const PRODUCT_DETAIL_COLUMNS = 'sku,handle,title,brand,size,size_normalized,color_normalized,price_rrp,price_discounted,image_url,description,description_short,description_long,clinical_use_case,specifications,top_level_category,subcategory' as const;
+
+const PRODUCT_GROUPING_COLUMNS = 'sku,handle,title,brand,size,size_normalized,color_normalized,price_rrp,price_discounted,image_url,top_level_category,subcategory' as const;
+
 export async function hydrateWithFullDescriptions<T extends { sku?: string; description?: string | null }>(products: T[]): Promise<T[]> {
   const skus = Array.from(new Set(products.map((product) => product.sku).filter(Boolean))) as string[];
   if (skus.length === 0) return products;
@@ -67,11 +71,12 @@ export async function fetchParentProduct(slug: string): Promise<ParentProduct | 
     const slugParts = slug.split('_');
     const brand = slugParts[0];
     
-    // Fetch all products that could match this parent
-    // We need to fetch broadly and then group to find the right parent
+    // Legacy parent URLs contain a generated slug rather than a SKU. Fetch only
+    // the lightweight grouping fields for the likely brand, identify the exact
+    // product family, then load that one family in full.
     const { data: products, error } = await supabase
       .from('products_categorized')
-      .select('*')
+      .select(PRODUCT_GROUPING_COLUMNS)
       .ilike('brand', `%${brand}%`);
     
     if (error) {
@@ -83,10 +88,7 @@ export async function fetchParentProduct(slug: string): Promise<ParentProduct | 
       return null;
     }
     
-    const hydratedProducts = await hydrateWithFullDescriptions(products);
-
-    // Group products into parents
-    const parentMap = groupIntoParents(hydratedProducts);
+    const parentMap = groupIntoParents(products);
     
     // Find the matching parent
     const parent = parentMap.get(slug);
@@ -95,13 +97,11 @@ export async function fetchParentProduct(slug: string): Promise<ParentProduct | 
       return null;
     }
     
-    // Cache the result
-    cache.set(slug, {
-      data: parent,
-      timestamp: Date.now(),
-    });
-    
-    return parent;
+    const detailedParent = await fetchParentProductBySku(parent.defaultVariant.sku);
+    if (!detailedParent) return null;
+
+    cache.set(slug, { data: detailedParent, timestamp: Date.now() });
+    return detailedParent;
   } catch (error) {
     console.error('Error in fetchParentProduct:', error);
     return null;
@@ -128,11 +128,15 @@ export async function fetchParentProductByHandle(handle: string): Promise<Parent
  * Internal helper to fetch parent product by any unique field
  */
 async function fetchParentProductByField(field: 'sku' | 'handle', value: string): Promise<ParentProduct | null> {
+  const cacheKey = `${field}:${value}`;
+  const cached = cache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) return cached.data;
+
   try {
-    // Fetch the specific product
+    // Resolve the requested product with a small lookup first.
     const { data: product, error } = await supabase
       .from('products_categorized')
-      .select('*')
+      .select('sku,handle,title,brand')
       .eq(field, value)
       .limit(1)
       .maybeSingle();
@@ -142,11 +146,16 @@ async function fetchParentProductByField(field: 'sku' | 'handle', value: string)
       return null;
     }
     
-    // Fetch all variants with the same handle or brand
+    if (!product.title || !product.brand) return null;
+
+    // Product handles are unique per variant in this catalogue. Brand + title is
+    // the exact family key used by groupIntoParents, so this retrieves variants
+    // without downloading the supplier's entire range.
     const { data: relatedProducts, error: relatedError } = await supabase
       .from('products_categorized')
-      .select('*')
-      .or(`handle.eq.${product.handle},brand.ilike.%${product.brand}%`);
+      .select(PRODUCT_DETAIL_COLUMNS)
+      .eq('brand', product.brand)
+      .eq('title', product.title);
     
     if (relatedError) {
       console.error('Error fetching related products:', relatedError);
@@ -155,7 +164,8 @@ async function fetchParentProductByField(field: 'sku' | 'handle', value: string)
     
     const hydratedProducts = await hydrateWithFullDescriptions(relatedProducts || []);
 
-    // Group and find parent
+    // A product family normally has only a handful of rows, so one focused
+    // description lookup preserves full copy without the catalogue-wide fan-out.
     const parentMap = groupIntoParents(hydratedProducts);
     
     // Find which parent contains this SKU
@@ -163,6 +173,8 @@ async function fetchParentProductByField(field: 'sku' | 'handle', value: string)
       if (parent.variants.some(v => 
         field === 'sku' ? v.sku === value : v.handle === value
       )) {
+        cache.set(cacheKey, { data: parent, timestamp: Date.now() });
+        cache.set(parent.slug, { data: parent, timestamp: Date.now() });
         return parent;
       }
     }
@@ -188,7 +200,7 @@ export async function fetchAllParentProducts(options?: {
   pageSize?: number;
 }): Promise<{ parents: ParentProduct[]; total: number }> {
   try {
-    let query = supabase.from('products_categorized').select('*', { count: 'exact' });
+    let query = supabase.from('products_categorized').select(PRODUCT_DETAIL_COLUMNS, { count: 'exact' });
     
     // Apply filters
     if (options?.search) {
@@ -218,10 +230,8 @@ export async function fetchAllParentProducts(options?: {
       return { parents: [], total: 0 };
     }
     
-    const hydratedProducts = await hydrateWithFullDescriptions(products);
-
     // Group into parents
-    const parentMap = groupIntoParents(hydratedProducts);
+    const parentMap = groupIntoParents(products);
     let parents = Array.from(parentMap.values());
     
     // Apply sorting

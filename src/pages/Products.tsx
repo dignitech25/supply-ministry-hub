@@ -17,9 +17,42 @@ import { createBreadcrumbSchema } from '@/components/SEO';
 
 import { formatPrice } from '@/utils/productHelpers';
 import { groupIntoParents } from '@/utils/variantHelpers';
-import { hydrateWithFullDescriptions } from '@/utils/parentProductHelpers';
+
+const LISTING_COLUMNS = 'sku,title,brand,price_rrp,price_discounted,image_url,top_level_category,subcategory';
+const BATCH_SIZE = 1000;
+
+async function fetchAllRows(buildQuery: (withCount: boolean) => any): Promise<any[]> {
+  const firstResult = await buildQuery(true)
+    .order('sku', { ascending: true })
+    .range(0, BATCH_SIZE - 1) as { data: any[] | null; error: any; count: number | null };
+
+  if (firstResult.error) throw firstResult.error;
+
+  const rows = firstResult.data || [];
+  const total = firstResult.count ?? rows.length;
+  const remainingPages = Math.ceil(total / BATCH_SIZE) - 1;
+
+  if (remainingPages <= 0) return rows;
+
+  const pageResults = await Promise.all(
+    Array.from({ length: remainingPages }, (_, index) => {
+      const from = (index + 1) * BATCH_SIZE;
+      return buildQuery(false)
+        .order('sku', { ascending: true })
+        .range(from, from + BATCH_SIZE - 1) as PromiseLike<{ data: any[] | null; error: any }>;
+    })
+  );
+
+  pageResults.forEach(({ data, error }) => {
+    if (error) throw error;
+    if (data) rows.push(...data);
+  });
+
+  return rows;
+}
 
 interface DisplayProduct {
+  sku: string;
   slug: string;
   baseName: string;
   brand: string;
@@ -100,14 +133,14 @@ export default function Products() {
         return;
       }
 
-      const { data } = await supabase
+      const data = await fetchAllRows((withCount) => supabase
         .from('products_categorized' as any)
-        .select('subcategory')
+        .select('sku,subcategory', withCount ? { count: 'exact' } : {})
         .in('top_level_category', selectedCategories)
-        .not('subcategory', 'is', null) as { data: any[] | null };
+        .not('subcategory', 'is', null));
 
       const uniqueSubcategories = Array.from(
-        new Set((data || []).map(p => p.subcategory).filter(Boolean))
+        new Set(data.map(p => p.subcategory).filter(Boolean))
       ) as string[];
 
       setFilterOptions(prev => ({ ...prev, subcategories: uniqueSubcategories.sort() }));
@@ -145,15 +178,13 @@ export default function Products() {
         'Home & Safety'
       ];
 
-      const { data, error } = await supabase
+      const data = await fetchAllRows((withCount) => supabase
         .from('products_categorized' as any)
-        .select('brand') as { data: any[] | null; error: any };
-      
-      if (error) throw error;
+        .select('sku,brand', withCount ? { count: 'exact' } : {}));
       
       const brands = new Set<string>();
 
-      (data || []).forEach(product => {
+      data.forEach(product => {
         if (product.brand) brands.add(product.brand);
       });
 
@@ -171,55 +202,33 @@ export default function Products() {
     setLoading(true);
     try {
       // Build query with filters
-      let query = supabase
-        .from('products_categorized' as any)
-        .select('*');
-      
-      // Apply all filters
-      if (debouncedSearch) {
-        query = query.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,description_long.ilike.%${debouncedSearch}%,sku.ilike.%${debouncedSearch}%`);
-      }
-      if (selectedCategories.length > 0) {
-        query = query.in('top_level_category', selectedCategories);
-      }
-      if (selectedSubcategories.length > 0) {
-        query = query.in('subcategory', selectedSubcategories);
-      }
-      if (selectedBrands.length > 0) {
-        query = query.in('brand', selectedBrands);
-      }
+      const allData = await fetchAllRows((withCount) => {
+        let query = supabase
+          .from('products_categorized' as any)
+          .select(LISTING_COLUMNS, withCount ? { count: 'exact' } : {});
 
-      // Fetch all data in batches (PostgREST has 1000 row limit per request)
-      let allData: any[] = [];
-      const batchSize = 1000;
-      let offset = 0;
-      let hasMore = true;
-
-      while (hasMore) {
-        const batchQuery = query.range(offset, offset + batchSize - 1);
-        const { data, error } = await batchQuery as { data: any[] | null; error: any };
-        
-        if (error) {
-          console.error('Fetch error:', error);
-          throw error;
+        if (debouncedSearch) {
+          query = query.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,description_long.ilike.%${debouncedSearch}%,sku.ilike.%${debouncedSearch}%`);
+        }
+        if (selectedCategories.length > 0) {
+          query = query.in('top_level_category', selectedCategories);
+        }
+        if (selectedSubcategories.length > 0) {
+          query = query.in('subcategory', selectedSubcategories);
+        }
+        if (selectedBrands.length > 0) {
+          query = query.in('brand', selectedBrands);
         }
 
-        if (data && data.length > 0) {
-          allData = [...allData, ...data];
-          hasMore = data.length === batchSize;
-          offset += batchSize;
-        } else {
-          hasMore = false;
-        }
-      }
+        return query;
+      });
 
       console.log(`✅ Fetched ${allData.length} total variants`);
       
-      const hydratedData = await hydrateWithFullDescriptions(allData);
-
       // Group variants into parent products
-      const parentMap = groupIntoParents(hydratedData);
-      let displayProducts: DisplayProduct[] = Array.from(parentMap.values()).map(parent => ({
+      const parentMap = groupIntoParents(allData);
+      const displayProducts: DisplayProduct[] = Array.from(parentMap.values()).map(parent => ({
+        sku: parent.defaultVariant.sku,
         slug: parent.slug,
         baseName: parent.baseName,
         brand: parent.brand,
@@ -441,13 +450,15 @@ export default function Products() {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                   {products.map((product) => (
-                    <Link key={product.slug} to={`/product/${product.slug}`}>
+                    <Link key={product.slug} to={`/products/${product.sku}`}>
                       <Card className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer h-full bg-cream-alt border-cream-border">
                         <div className="aspect-square bg-cream-image relative">
                           {product.imageUrl ? (
                             <img
                               src={product.imageUrl}
                               alt={product.baseName}
+                              loading="lazy"
+                              decoding="async"
                               className="object-cover w-full h-full"
                             />
                           ) : (

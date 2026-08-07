@@ -66,7 +66,10 @@ export default function ProductDetail() {
 
         if (parentData) {
           setParent(parentData);
-          setSelectedVariant(parentData.defaultVariant);
+          const requestedVariant = parentData.variants.find(
+            (variant) => variant.sku === identifier || variant.handle === identifier
+          );
+          setSelectedVariant(requestedVariant || parentData.defaultVariant);
         }
       } catch (error) {
         console.error('Error fetching product:', error);
