@@ -38,11 +38,17 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Server-side role check using has_role (SECURITY DEFINER).
-    const { data: hasAdminRole, error: roleError } = await userClient.rpc(
-      "has_role",
-      { _user_id: userData.user.id, _role: "admin" },
-    );
+    // Privileged client (bypasses RLS) — used for the role check and the read below.
+    const adminClient = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+
+    // Server-side role check against user_roles.
+    const { data: roleRow, error: roleError } = await adminClient
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userData.user.id)
+      .eq("role", "admin")
+      .maybeSingle();
+    const hasAdminRole = !!roleRow;
 
     if (roleError) {
       console.error("Role check failed:", roleError);
@@ -59,8 +65,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Privileged read using service role (bypasses RLS) — caller already verified as admin.
-    const adminClient = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
     const { data, error } = await adminClient
       .from("products_categorized")
       .select(
