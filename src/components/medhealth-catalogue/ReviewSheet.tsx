@@ -225,7 +225,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
               </div>
 
               <div className="mt-5 space-y-3">
-                {[
+                {([
                   { id: "name", label: "Your name", value: name, set: setName, required: true },
                   {
                     id: "email",
@@ -257,7 +257,14 @@ export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
                     set: setSuburb,
                     required: true,
                   },
-                ].map((f) => (
+                ] as Array<{
+                  id: string;
+                  label: string;
+                  value: string;
+                  set: (v: string) => void;
+                  required: boolean;
+                  type?: string;
+                }>).map((f) => (
                   <div key={f.id}>
                     <label
                       htmlFor={f.id}
