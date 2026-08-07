@@ -104,6 +104,7 @@ export type Database = {
           collection: string
           created_at: string
           id: string
+          image_url: string | null
           key_specifications: string | null
           price_rrp: number | null
           product_code: string | null
@@ -117,6 +118,7 @@ export type Database = {
           collection?: string
           created_at?: string
           id?: string
+          image_url?: string | null
           key_specifications?: string | null
           price_rrp?: number | null
           product_code?: string | null
@@ -130,6 +132,7 @@ export type Database = {
           collection?: string
           created_at?: string
           id?: string
+          image_url?: string | null
           key_specifications?: string | null
           price_rrp?: number | null
           product_code?: string | null
