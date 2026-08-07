@@ -19,7 +19,7 @@ function formatRequirements(lines: Line[], total: number) {
   const body = lines
     .map(
       (l) =>
-        `${l.qty} x ${l.product.product_name} (${l.product.product_code}) — ${money(
+        `${l.qty} x ${l.product.product_name} (${l.product.product_code}) - ${money(
           l.product.price_rrp,
         )} ea = ${money((l.product.price_rrp ?? 0) * l.qty)}`,
     )
@@ -29,6 +29,8 @@ function formatRequirements(lines: Line[], total: number) {
 
 export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [clientRef, setClientRef] = useState("");
   const [suburb, setSuburb] = useState("");
   const [state, setState] = useState<"form" | "sending" | "done" | "error">("form");
@@ -56,11 +58,13 @@ export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
     const [first, ...rest] = name.trim().split(/\s+/);
     const { error } = await supabase.from("quote_requests").insert({
       first_name: first ?? "",
-      last_name: rest.join(" ") || null,
+      last_name: rest.join(" ") || (first ?? ""),
+      email: email.trim(),
+      phone: phone.trim(),
       organization: "MedHealth",
       category: "MedHealth catalogue request",
       requirements: formatRequirements(lines, total),
-      timeline: null,
+      timeline: "Not specified",
       source_url: typeof window !== "undefined" ? window.location.href : null,
       metadata: {
         reference: ref,
@@ -224,6 +228,22 @@ export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
                 {[
                   { id: "name", label: "Your name", value: name, set: setName, required: true },
                   {
+                    id: "email",
+                    label: "Email",
+                    value: email,
+                    set: setEmail,
+                    required: true,
+                    type: "email",
+                  },
+                  {
+                    id: "phone",
+                    label: "Phone",
+                    value: phone,
+                    set: setPhone,
+                    required: true,
+                    type: "tel",
+                  },
+                  {
                     id: "clientref",
                     label: "Client reference",
                     value: clientRef,
@@ -247,6 +267,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
                     </label>
                     <input
                       id={f.id}
+                      type={f.type ?? "text"}
                       value={f.value}
                       required={f.required}
                       maxLength={120}
@@ -265,7 +286,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
                   style={{ backgroundColor: "rgba(236,28,36,0.1)", color: "#EC1C24" }}
                 >
                   <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                  We couldn't send that request. Check your connection and try again — your
+                  We couldn't send that request. Check your connection and try again, your
                   selection has been kept.
                 </p>
               )}
