@@ -132,7 +132,7 @@ const MedHealthCapability = () => {
       className="min-h-screen bg-background font-[Outfit,system-ui,sans-serif] text-[#231F20] antialiased"
     >
       <Helmet>
-        <title>Dedicated catalogue — Supply Ministry</title>
+        <title>Dedicated catalogue | Supply Ministry</title>
         <meta name="description" content="Private assistive technology ordering catalogue." />
         <meta name="robots" content="noindex, nofollow" />
         <link

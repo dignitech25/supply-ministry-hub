@@ -73,7 +73,7 @@ export const money = (n: number | null | undefined) =>
       }).format(n);
 
 /**
- * Clinical kits are derived from the real rows returned by Supabase — no
+ * Clinical kits are derived from the real rows returned by Supabase, no
  * invented products or prices. A kit that matches nothing is not rendered.
  */
 export interface KitRule {
