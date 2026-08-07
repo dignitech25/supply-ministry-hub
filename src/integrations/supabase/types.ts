@@ -97,6 +97,48 @@ export type Database = {
           },
         ]
       }
+      microsite_products: {
+        Row: {
+          category: string | null
+          clinical_group: string | null
+          collection: string
+          created_at: string
+          id: string
+          key_specifications: string | null
+          price_rrp: number | null
+          product_code: string | null
+          product_name: string
+          sort_order: number
+          status: string
+        }
+        Insert: {
+          category?: string | null
+          clinical_group?: string | null
+          collection?: string
+          created_at?: string
+          id?: string
+          key_specifications?: string | null
+          price_rrp?: number | null
+          product_code?: string | null
+          product_name: string
+          sort_order?: number
+          status?: string
+        }
+        Update: {
+          category?: string | null
+          clinical_group?: string | null
+          collection?: string
+          created_at?: string
+          id?: string
+          key_specifications?: string | null
+          price_rrp?: number | null
+          product_code?: string | null
+          product_name?: string
+          sort_order?: number
+          status?: string
+        }
+        Relationships: []
+      }
       product_assets: {
         Row: {
           asset_type: string
@@ -244,6 +286,87 @@ export type Database = {
           Subcategory?: string | null
           Type?: string | null
           URL_Slug?: string | null
+        }
+        Relationships: []
+      }
+      product_image_assets: {
+        Row: {
+          content_type: string | null
+          created_at: string
+          error_message: string | null
+          height: number | null
+          id: number
+          migrated_at: string | null
+          optimized_bytes: number | null
+          original_bytes: number | null
+          public_url: string | null
+          sha256: string | null
+          source_url: string
+          status: string
+          storage_path: string | null
+          verified_at: string | null
+          width: number | null
+        }
+        Insert: {
+          content_type?: string | null
+          created_at?: string
+          error_message?: string | null
+          height?: number | null
+          id?: never
+          migrated_at?: string | null
+          optimized_bytes?: number | null
+          original_bytes?: number | null
+          public_url?: string | null
+          sha256?: string | null
+          source_url: string
+          status?: string
+          storage_path?: string | null
+          verified_at?: string | null
+          width?: number | null
+        }
+        Update: {
+          content_type?: string | null
+          created_at?: string
+          error_message?: string | null
+          height?: number | null
+          id?: never
+          migrated_at?: string | null
+          optimized_bytes?: number | null
+          original_bytes?: number | null
+          public_url?: string | null
+          sha256?: string | null
+          source_url?: string
+          status?: string
+          storage_path?: string | null
+          verified_at?: string | null
+          width?: number | null
+        }
+        Relationships: []
+      }
+      product_image_url_history: {
+        Row: {
+          id: number
+          migrated_at: string
+          new_url: string
+          old_url: string
+          sku: string
+          table_name: string
+        }
+        Insert: {
+          id?: never
+          migrated_at?: string
+          new_url: string
+          old_url: string
+          sku: string
+          table_name: string
+        }
+        Update: {
+          id?: never
+          migrated_at?: string
+          new_url?: string
+          old_url?: string
+          sku?: string
+          table_name?: string
         }
         Relationships: []
       }
