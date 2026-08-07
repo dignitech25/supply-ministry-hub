@@ -817,13 +817,6 @@ export type Database = {
         }[]
       }
       generate_quote_ref_code: { Args: never; Returns: string }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
       make_quote_number: { Args: never; Returns: string }
       normalize_product_description_text: {
         Args: { input_text: string }
