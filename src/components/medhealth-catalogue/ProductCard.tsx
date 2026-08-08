@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { Bath, Shirt, MoveRight, Package, Check } from "lucide-react";
-import { CATEGORIES, firstSentence, money, normaliseCategory, type Product } from "@/lib/medhealth-catalogue";
+import {
+  CATEGORIES,
+  firstSentence,
+  money,
+  normaliseCategory,
+  shortGroupLabel,
+  type Product,
+} from "@/lib/medhealth-catalogue";
+import { HOUSE, PARTNER } from "@/partners/medhealth";
 import { QtyStepper } from "./QtyStepper";
 
 export function CategoryIcon({
@@ -15,14 +23,31 @@ export function CategoryIcon({
   return <Icon className={className} strokeWidth={1.5} aria-hidden="true" />;
 }
 
-export function ProductThumb({ product, size = "md" }: { product: Product; size?: "sm" | "md" }) {
+export function ProductThumb({
+  product,
+  size = "md",
+}: {
+  product: Product;
+  size?: "sm" | "md" | "fill";
+}) {
   const [imgError, setImgError] = useState(false);
   const hasImage = product.image_url && !imgError;
 
+  const box =
+    size === "fill"
+      ? "aspect-square w-full"
+      : size === "sm"
+        ? "h-12 w-12 shrink-0"
+        : "h-20 w-20 shrink-0";
+
   return (
     <div
-      className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl p-1.5 ${size === "sm" ? "h-11 w-11" : "h-20 w-20"}`}
-      style={{ backgroundColor: "#F4EFE6", color: "#010A16" }}
+      className={`flex items-center justify-center overflow-hidden rounded-xl border p-1.5 ${box}`}
+      style={{
+        backgroundColor: "#FFFFFF",
+        borderColor: PARTNER.rule,
+        color: PARTNER.ink,
+      }}
       aria-label={hasImage ? product.product_name : `${product.category} placeholder image`}
       role="img"
     >
@@ -32,7 +57,8 @@ export function ProductThumb({ product, size = "md" }: { product: Product; size?
           alt={product.product_name}
           loading="lazy"
           onError={() => setImgError(true)}
-          className="h-full w-full object-contain"
+          className="max-h-full max-w-full object-contain mix-blend-multiply"
+          style={{ width: "100%", height: "100%" }}
         />
       ) : (
         <CategoryIcon
@@ -70,19 +96,24 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
         selected ? "shadow-md" : ""
       }`}
       style={{
-        borderColor: selected ? "#3D2D9E" : "hsl(var(--border))",
+        borderColor: selected ? HOUSE.violet : "hsl(var(--border))",
       }}
     >
       <div className="flex items-start gap-3">
         <ProductThumb product={product} size="sm" />
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-            {product.clinical_group}
+          <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+            <span className="sr-only">{product.clinical_group}</span>
+            <span aria-hidden="true">{shortGroupLabel(product.clinical_group)}</span>
           </p>
-          <h3 className="mt-0.5 text-sm font-semibold leading-snug" style={{ color: "#231F20" }}>
+          <h3
+            className="mt-0.5 line-clamp-2 h-[2.6rem] text-sm font-semibold leading-snug"
+            title={product.product_name}
+            style={{ color: "#231F20" }}
+          >
             {product.product_name}
           </h3>
-          <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
+          <p className="mt-0.5 line-clamp-2 h-[2rem] text-xs leading-4 text-muted-foreground">
             {firstSentence(product.key_specifications)}
           </p>
         </div>
@@ -90,8 +121,8 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
           aria-hidden="true"
           className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors"
           style={{
-            borderColor: selected ? "#3D2D9E" : "hsl(var(--border))",
-            backgroundColor: selected ? "#3D2D9E" : "transparent",
+            borderColor: selected ? HOUSE.violet : "hsl(var(--border))",
+            backgroundColor: selected ? HOUSE.violet : "transparent",
             color: selected ? "#F4EFE6" : "transparent",
           }}
         >
