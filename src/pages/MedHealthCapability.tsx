@@ -7,6 +7,7 @@ import {
   buildKits,
   downloadCsv,
   fetchProducts,
+  fetchSourceOnRequest,
   money,
   groupOf,
   toCsv,
@@ -19,6 +20,7 @@ import { ProductCard } from "@/components/medhealth-catalogue/ProductCard";
 import { KitsRow } from "@/components/medhealth-catalogue/KitsRow";
 import { KitSheet, type Kit } from "@/components/medhealth-catalogue/KitSheet";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
+import { SourceOnRequest } from "@/components/medhealth-catalogue/SourceOnRequest";
 
 const PARTNER_NAME = PARTNER.name;
 const FONT = "Raleway, system-ui, sans-serif";
@@ -45,6 +47,11 @@ const MedHealthCapability = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["microsite_products", "medhealth"],
     queryFn: fetchProducts,
+  });
+
+  const { data: sourceItems } = useQuery({
+    queryKey: ["microsite_products", "medhealth", "source_on_request"],
+    queryFn: fetchSourceOnRequest,
   });
 
   const products = useMemo(() => data ?? [], [data]);
@@ -157,14 +164,13 @@ const MedHealthCapability = () => {
         />
       </Helmet>
 
-      {/* Two tone rule, house violet into partner ink, with a short accent terminal. */}
-      <div className="flex h-1.5 w-full">
-        <div
-          className="flex-1"
-          style={{ backgroundImage: `linear-gradient(90deg, ${HOUSE.violet} 0%, ${PARTNER.ink} 100%)` }}
-        />
-        <div className="w-16 sm:w-24" style={{ backgroundColor: PARTNER.accent }} />
-      </div>
+      {/* One continuous rule: house violet, through partner ink, into partner accent. */}
+      <div
+        className="h-1.5 w-full"
+        style={{
+          backgroundImage: `linear-gradient(90deg, ${HOUSE.violet} 0%, ${PARTNER.ink} 55%, ${PARTNER.accent} 100%)`,
+        }}
+      />
 
       {/* Masthead */}
       <header
@@ -177,17 +183,24 @@ const MedHealthCapability = () => {
             <button
               type="button"
               onClick={() => itemCount > 0 && setReviewing(true)}
-              className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-50"
+              className="flex min-h-11 min-w-[7.5rem] shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-100"
               disabled={itemCount === 0}
-              style={{ backgroundColor: HOUSE.violet, color: "#F4EFE6" }}
+              style={
+                itemCount === 0
+                  ? { backgroundColor: "rgba(61,45,158,0.12)", color: HOUSE.violet }
+                  : { backgroundColor: HOUSE.violet, color: "#F4EFE6" }
+              }
+              aria-label={`Review selection, ${itemCount} item${itemCount === 1 ? "" : "s"}, ${money(total)}`}
             >
               <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-              <span className="hidden sm:inline">{itemCount} item{itemCount === 1 ? "" : "s"}</span>
+              <span className="hidden whitespace-nowrap sm:inline">
+                {itemCount} item{itemCount === 1 ? "" : "s"}
+              </span>
               <span className="sm:hidden">{itemCount}</span>
-              <span className="opacity-80">{money(total)}</span>
+              <span className="whitespace-nowrap opacity-80">{money(total)}</span>
             </button>
             <span
-              className="hidden rounded-full border px-3 py-1 text-xs font-medium md:inline-block"
+              className="hidden whitespace-nowrap rounded-full border px-3 py-1 text-xs font-medium lg:inline-block"
               style={{ borderColor: PARTNER.rule, color: PARTNER.ink }}
             >
               {PARTNER.badge}
@@ -198,14 +211,17 @@ const MedHealthCapability = () => {
 
       <div className="mx-auto max-w-6xl px-4 pb-5 pt-7 sm:px-6">
         <h1
-          className="text-balance text-2xl font-semibold leading-tight tracking-tight sm:text-4xl"
+          className="max-w-3xl text-balance text-2xl font-semibold leading-tight tracking-tight sm:text-4xl"
           style={{ color: PARTNER.ink }}
         >
-          Assistive technology catalogue for the {PARTNER_NAME} team
+          Assistive technology, chosen for {PARTNER_NAME} caseloads
         </h1>
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed sm:text-base" style={{ color: "rgba(1,10,22,0.68)" }}>
-          {PARTNER.scope} Select individual items or a clinical kit, then send it through for a
-          formal quote.
+        <p
+          className="mt-2 max-w-[46ch] text-balance text-sm leading-relaxed sm:text-base"
+          style={{ color: "rgba(1,10,22,0.68)" }}
+        >
+          Built around injury rehabilitation and return to work occupational therapy. Select items
+          or a clinical kit, then send it through for a formal quote.
         </p>
       </div>
 
@@ -221,8 +237,8 @@ const MedHealthCapability = () => {
             <button
               type="button"
               onClick={goHome}
-              className="flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#010A16" }}
+              className="flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              style={{ backgroundColor: HOUSE.violet }}
             >
               <Home className="h-4 w-4" aria-hidden="true" /> Catalogue home
             </button>
@@ -237,14 +253,14 @@ const MedHealthCapability = () => {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search name, spec or code"
                 aria-label="Search products"
-                className="min-h-10 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-sm outline-none focus:border-[#010A16]"
+                className="min-h-11 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-sm outline-none focus:border-[#3D2D9E] focus:ring-2 focus:ring-[#3D2D9E]/25"
               />
             </div>
             <button
               type="button"
               onClick={exportVisible}
-              className="flex min-h-10 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
-              style={{ borderColor: "rgba(1,10,22,0.4)", color: "#010A16" }}
+              className="flex min-h-11 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors hover:bg-[rgba(61,45,158,0.08)]"
+              style={{ borderColor: HOUSE.violet, color: HOUSE.violet }}
             >
               <Download className="h-4 w-4" aria-hidden="true" /> Export
             </button>
@@ -257,10 +273,10 @@ const MedHealthCapability = () => {
                 type="button"
                 aria-pressed={tab === c}
                 onClick={() => setTab(c)}
-                className="min-h-9 shrink-0 rounded-full border px-3 text-xs font-semibold transition-colors"
+                className="min-h-11 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-colors"
                 style={{
-                  borderColor: tab === c ? "#010A16" : "hsl(var(--border))",
-                  backgroundColor: tab === c ? "#010A16" : "transparent",
+                  borderColor: tab === c ? HOUSE.violet : "hsl(var(--border))",
+                  backgroundColor: tab === c ? HOUSE.violet : "transparent",
                   color: tab === c ? "#F4EFE6" : "#231F20",
                 }}
               >
@@ -302,7 +318,15 @@ const MedHealthCapability = () => {
                   >
                     {group}
                   </h2>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  <div
+                    className={`grid gap-3 sm:grid-cols-2 ${
+                      items.length <= 2
+                        ? "lg:grid-cols-2"
+                        : items.length === 3
+                          ? "lg:grid-cols-3"
+                          : "lg:grid-cols-3 xl:grid-cols-4"
+                    }`}
+                  >
                     {items.map((p) => (
                       <ProductCard
                         key={p.product_code}
@@ -316,6 +340,8 @@ const MedHealthCapability = () => {
                 </section>
               ))
             )}
+
+            {tab === "All" && !query && <SourceOnRequest items={sourceItems ?? []} />}
           </>
         )}
       </main>
