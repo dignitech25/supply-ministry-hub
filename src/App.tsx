@@ -4,7 +4,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { HelmetProvider } from 'react-helmet-async';
 import { QuoteProvider } from "@/contexts/QuoteContext";
 import { QuoteDrawer } from "@/components/QuoteDrawer";
 import ErrorBoundary from "@/components/ErrorBoundary";
@@ -34,7 +33,6 @@ const PageLoader = () => (
 );
 
 const App = () => (
-  <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <QuoteProvider>
         <TooltipProvider>
@@ -70,7 +68,6 @@ const App = () => (
         </TooltipProvider>
       </QuoteProvider>
     </QueryClientProvider>
-  </HelmetProvider>
 );
 
 export default App;

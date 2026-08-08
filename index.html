@@ -3,15 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Route-varying metadata is owned by src/components/SEO.tsx through
+      useDocumentHead. The generic tags below are a non-JavaScript fallback for
+      link-preview crawlers; useDocumentHead replaces conflicting tags once the
+      app starts. A static canonical/og:url is deliberately omitted because it
+      would incorrectly claim every route is the homepage for non-JS clients.
+
+      Keep these values generic. Product- or route-specific fallbacks require
+      server/edge rendering and cannot be made correct in this static file.
+    -->
     <title>Supply Ministry - Assistive Technology Solutions Australia | Mobility Aids & NDIS Equipment</title>
-    <meta name="description" content="Supply Ministry connects care with solutions. Leading supplier of mobility aids, daily living equipment, and assistive technology for Australian healthcare professionals and NDIS providers." />
+    <meta name="description" content="Supply Ministry connects care with solutions. Mobility aids, assistive technology and NDIS equipment for Australian clinicians, participants and care providers." />
     <meta name="author" content="Supply Ministry" />
-    <meta name="keywords" content="assistive technology, mobility equipment, NDIS supplier, healthcare equipment Australia, mobility aids, daily living aids, home safety equipment" />
 
     <meta property="og:title" content="Supply Ministry - Assistive Technology Solutions Australia" />
-    <meta property="og:description" content="Leading supplier of mobility aids and assistive technology for Australian healthcare professionals. Trusted by therapists and NDIS providers nationwide." />
+    <meta property="og:description" content="Mobility aids, assistive technology and NDIS equipment backed by responsive Australian support." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.supplyministry.com.au/" />
     <meta property="og:image" content="https://www.supplyministry.com.au/og-image.jpg?v=5fbf8be1" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -19,15 +27,14 @@
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Supply Ministry - Assistive Technology Solutions Australia" />
-    <meta name="twitter:description" content="Leading supplier of mobility aids and assistive technology for Australian healthcare professionals." />
+    <meta name="twitter:description" content="Mobility aids, assistive technology and NDIS equipment backed by responsive Australian support." />
     <meta name="twitter:image" content="https://www.supplyministry.com.au/og-image.jpg?v=5fbf8be1" />
-    
+
     <!-- Mobile browser theme color -->
     <meta name="theme-color" content="#F4EFE6" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    
-    <link rel="canonical" href="https://www.supplyministry.com.au/" />
+
     <link rel="icon" type="image/x-icon" href="/favicon.ico?v=sm2026a">
     <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png?v=ff16b597">
     <link rel="shortcut icon" href="/favicon.ico?v=sm2026a">

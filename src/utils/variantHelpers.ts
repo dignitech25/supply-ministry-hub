@@ -4,6 +4,14 @@
  */
 
 import { cleanDescription } from './productHelpers';
+import {
+  comparePricedVariants,
+  getEffectiveVariantPrice,
+  parseCataloguePrice,
+  selectDefaultPricedVariant,
+} from './catalogueSelection';
+
+export { getEffectiveVariantPrice, parseCataloguePrice } from './catalogueSelection';
 
 export interface ProductVariant {
   sku: string;
@@ -156,7 +164,7 @@ export function parseColor(variant: any): string | undefined {
  */
 export function calculateFromPrice(variants: ProductVariant[]): number | null {
   const prices = variants
-    .map(v => v.priceDiscounted || v.priceRrp)
+    .map(getEffectiveVariantPrice)
     .filter((p): p is number => p !== null && p !== undefined);
   
   if (prices.length === 0) return null;
@@ -171,18 +179,7 @@ export function selectDefaultVariant(variants: ProductVariant[]): ProductVariant
     throw new Error('Cannot select default variant from empty array');
   }
   
-  // Find cheapest variant
-  const withPrices = variants.filter(v => v.priceDiscounted || v.priceRrp);
-  if (withPrices.length > 0) {
-    return withPrices.reduce((cheapest, current) => {
-      const currentPrice = current.priceDiscounted || current.priceRrp || Infinity;
-      const cheapestPrice = cheapest.priceDiscounted || cheapest.priceRrp || Infinity;
-      return currentPrice < cheapestPrice ? current : cheapest;
-    });
-  }
-  
-  // Fall back to first variant
-  return variants[0];
+  return selectDefaultPricedVariant(variants);
 }
 
 /**
@@ -224,9 +221,7 @@ export function groupIntoParents(products: any[]): Map<string, ParentProduct> {
         parent.fromPrice = calculateFromPrice(parent.variants);
         
         // Update default variant if this one is cheaper
-        const currentDefaultPrice = parent.defaultVariant.priceDiscounted || parent.defaultVariant.priceRrp || Infinity;
-        const newPrice = variant.priceDiscounted || variant.priceRrp || Infinity;
-        if (newPrice < currentDefaultPrice) {
+        if (comparePricedVariants(variant, parent.defaultVariant) < 0) {
           parent.defaultVariant = variant;
         }
       } else {
@@ -244,7 +239,7 @@ export function groupIntoParents(products: any[]): Map<string, ParentProduct> {
           variants: [variant],
           uniqueSizes: variant.size ? [variant.size] : [],
           uniqueColors: variant.color ? [variant.color] : [],
-          fromPrice: variant.priceDiscounted || variant.priceRrp,
+          fromPrice: getEffectiveVariantPrice(variant),
           defaultVariant: variant,
         });
       }
@@ -281,8 +276,8 @@ function normalizeVariant(product: any): ProductVariant {
     sizeNormalized: product.size_normalized,
     color: parseColor(product),
     colorNormalized: product.color_normalized,
-    priceRrp: product.price_rrp,
-    priceDiscounted: product.price_discounted,
+    priceRrp: parseCataloguePrice(product.price_rrp),
+    priceDiscounted: parseCataloguePrice(product.price_discounted),
     imageUrl: product.image_url,
     description: descriptions.shortDescription,
     descriptionLong: descriptions.longDescription,

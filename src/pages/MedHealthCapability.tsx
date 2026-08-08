@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Helmet } from "react-helmet-async";
+import SEO from "@/components/SEO";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Download, Loader2, Home, ShoppingBag, Mail, Phone } from "lucide-react";
 import {
@@ -269,15 +269,18 @@ const MedHealthCapability = () => {
       style={{ ...theme, fontFamily: FONT }}
       className="min-h-screen bg-background text-[#231F20] antialiased"
     >
-      <Helmet>
-        <title>Dedicated catalogue | Supply Ministry</title>
-        <meta name="description" content="Private assistive technology ordering catalogue." />
-        <meta name="robots" content="noindex, nofollow" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </Helmet>
+      {/*
+        NOTE: this block previously also injected a Raleway stylesheet <link>.
+        It is not reinstated here because Helmet never rendered it, so the page
+        has always displayed with the fallback font. Adding the webfont now
+        would be a visual change, which belongs in a design pass rather than
+        this correctness fix.
+      */}
+      <SEO
+        title="Dedicated catalogue | Supply Ministry"
+        description="Private assistive technology ordering catalogue."
+        noindex
+      />
 
       {/* One continuous rule: house violet, through partner ink, into partner accent. */}
       <div

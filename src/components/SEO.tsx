@@ -1,5 +1,5 @@
-import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
+import { useDocumentHead } from '@/hooks/useDocumentHead';
 
 interface SEOProps {
   title?: string;
@@ -14,6 +14,13 @@ interface SEOProps {
 const SITE_URL = 'https://www.supplyministry.com.au';
 const DEFAULT_OG_IMAGE = 'https://www.supplyministry.com.au/og-image.jpg?v=5fbf8be1';
 
+/**
+ * Sets the document head for a route.
+ *
+ * Renders nothing. Previously this returned a <Helmet> tree, which was verified
+ * to emit nothing at all -- see src/hooks/useDocumentHead.ts for the evidence.
+ * The prop interface is unchanged, so call sites did not need to move.
+ */
 const SEO = ({
   title = "Supply Ministry | Assistive Technology & Mobility Solutions",
   description = "Supply Ministry connects care with solutions. Australia's trusted provider of assistive technology, mobility aids, and therapeutic equipment for NDIS, aged care, and disability support.",
@@ -25,59 +32,40 @@ const SEO = ({
 }: SEOProps) => {
   const location = useLocation();
   const siteTitle = title.includes("Supply Ministry") ? title : `${title} | Supply Ministry`;
-  
-  // Auto-generate canonical URL if not provided
+
+  // Canonical deliberately ignores the query string: filter and pagination
+  // permutations of /products must not each claim to be a separate page.
   const canonicalUrl = canonical || `${SITE_URL}${location.pathname}`;
-  
-  // Use provided image or default
   const ogImage = image || DEFAULT_OG_IMAGE;
-  
-  // Handle single or multiple JSON-LD scripts
-  const jsonLdScripts = jsonLd 
-    ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd])
-    : [];
-  
-  return (
-    <Helmet>
-      <title>{siteTitle}</title>
-      <meta name="description" content={description} />
-      
-      {/* Indexing control */}
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
-      
-      {/* Open Graph */}
-      <meta property="og:title" content={siteTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:type" content={type} />
-      <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:image" content={ogImage} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta property="og:site_name" content="Supply Ministry" />
-      
-      {/* Twitter Card */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={siteTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={ogImage} />
-      
-      {/* Canonical */}
-      <link rel="canonical" href={canonicalUrl} />
-      
-      {/* Hreflang */}
-      <link rel="alternate" hrefLang="en-AU" href={canonicalUrl} />
-      <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
-      
-      {/* JSON-LD Structured Data */}
-      {jsonLdScripts.map((script, index) => (
-        <script 
-          key={index}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(script) }}
-        />
-      ))}
-    </Helmet>
-  );
+  const jsonLdScripts = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+
+  useDocumentHead({
+    title: siteTitle,
+    meta: [
+      { name: 'description', content: description },
+      ...(noindex ? [{ name: 'robots', content: 'noindex, nofollow' }] : []),
+      { property: 'og:title', content: siteTitle },
+      { property: 'og:description', content: description },
+      { property: 'og:type', content: type },
+      { property: 'og:url', content: canonicalUrl },
+      { property: 'og:image', content: ogImage },
+      { property: 'og:image:width', content: '1200' },
+      { property: 'og:image:height', content: '630' },
+      { property: 'og:site_name', content: 'Supply Ministry' },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: siteTitle },
+      { name: 'twitter:description', content: description },
+      { name: 'twitter:image', content: ogImage },
+    ],
+    links: [
+      { rel: 'canonical', href: canonicalUrl },
+      { rel: 'alternate', href: canonicalUrl, hreflang: 'en-AU' },
+      { rel: 'alternate', href: canonicalUrl, hreflang: 'x-default' },
+    ],
+    jsonLd: jsonLdScripts,
+  });
+
+  return null;
 };
 
 // Organization schema for sitewide use
@@ -121,11 +109,12 @@ export const createProductSchema = (product: {
     "name": product.brand
   } : undefined,
   "image": product.image,
+  // Deliberately no `availability`: there is no stock or lead-time source of
+  // truth behind this catalogue, so asserting InStock would be unsupported.
   "offers": product.price ? {
     "@type": "Offer",
     "price": product.price,
-    "priceCurrency": "AUD",
-    "availability": "https://schema.org/InStock"
+    "priceCurrency": "AUD"
   } : undefined
 });
 

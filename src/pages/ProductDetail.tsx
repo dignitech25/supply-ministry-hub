@@ -21,7 +21,7 @@ import { useQuote } from '@/contexts/QuoteContext';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchParentProduct, fetchParentProductBySku, fetchParentProductByHandle } from '@/utils/parentProductHelpers';
-import { ParentProduct, ProductVariant } from '@/utils/variantHelpers';
+import { getEffectiveVariantPrice, ParentProduct, ProductVariant } from '@/utils/variantHelpers';
 import { formatPrice, getDescriptionParagraphs, cleanDescription } from '@/utils/productHelpers';
 import ProductSEOContent, { hasProductSEOContent, getProductFAQs } from '@/components/ProductSEOContent';
 import Footer from '@/components/Footer';
@@ -113,7 +113,12 @@ export default function ProductDetail() {
   const handleAddToQuote = () => {
     if (!selectedVariant || !parent) return;
 
-    const unitPrice = selectedVariant.priceDiscounted || selectedVariant.priceRrp || undefined;
+    // QuoteItem.unitPrice is typed `number`, but price_discounted is a TEXT
+    // column, so a string was being written into the basket and persisted to
+    // localStorage. Nothing sums these today, which is the only reason it has
+    // not produced a wrong total -- coerce at the boundary rather than rely on
+    // that staying true.
+    const unitPrice = getEffectiveVariantPrice(selectedVariant) ?? undefined;
 
     addItem({
       id: selectedVariant.sku,
@@ -154,15 +159,21 @@ export default function ProductDetail() {
       } : undefined,
       "image": selectedVariant.imageUrl,
       "category": parent.subcategory || parent.category,
+      // No `availability` is emitted. The catalogue holds no stock, lead-time
+      // or backorder data, so any availability value here would be a claim the
+      // business cannot substantiate -- and Google surfaces it as an in-stock
+      // badge to clinicians specifying equipment for a funded plan.
+      // price_discounted is a TEXT column in products_categorized. Variant
+      // normalization now coerces it once at the data boundary so JSON-LD and
+      // quote values remain numeric.
       "offers": {
         "@type": "AggregateOffer",
-        "lowPrice": parent.fromPrice || undefined,
+        "lowPrice": parent.fromPrice ?? undefined,
         "highPrice": parent.variants.reduce((max, v) => {
-          const price = v.priceDiscounted || v.priceRrp || 0;
+          const price = getEffectiveVariantPrice(v) ?? 0;
           return price > max ? price : max;
         }, 0) || undefined,
         "priceCurrency": "AUD",
-        "availability": "https://schema.org/InStock",
         "offerCount": parent.variants.length
       }
     };
@@ -298,12 +309,19 @@ export default function ProductDetail() {
     .filter(Boolean);
   const cleanedDescription = cleanDescription(descriptionParagraphs.join('\n\n'));
 
+  // Every variant of a family is reachable at its own /products/:sku URL, and
+  // each one previously self-canonicalised. That advertised 3,347 competing
+  // URLs for 513 real pages, splitting ranking signals across near-identical
+  // content. All variants of a family now point at one canonical URL.
+  const familyCanonicalUrl = `${SITE_URL}/products/${encodeURIComponent(parent.defaultVariant.sku)}`;
+
   return (
     <div className="min-h-screen bg-violet text-cream">
-      <SEO 
+      <SEO
         title={`${parent.baseName}${parent.brand ? ` by ${parent.brand}` : ''}`}
         description={cleanedDescription.slice(0, 155) || `Shop ${parent.baseName} from Supply Ministry. Quality assistive technology with fast quote turnaround and expert support.`}
         image={selectedVariant.imageUrl || undefined}
+        canonical={familyCanonicalUrl}
         jsonLd={getJsonLdSchemas()}
       />
       <EditorialNavigation />

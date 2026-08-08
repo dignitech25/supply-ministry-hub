@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Filter, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -17,9 +17,13 @@ import { createBreadcrumbSchema } from '@/components/SEO';
 
 import { formatPrice } from '@/utils/productHelpers';
 import { groupIntoParents } from '@/utils/variantHelpers';
+import { buildProductSearchFilter } from '@/utils/searchQuery';
+import { readFilterParam } from '@/utils/catalogueFilters';
 
 const LISTING_COLUMNS = 'sku,title,brand,price_rrp,price_discounted,image_url,top_level_category,subcategory';
 const BATCH_SIZE = 1000;
+
+const SEARCH_COLUMNS = ['title', 'brand', 'description_long', 'sku'] as const;
 
 async function fetchAllRows(buildQuery: (withCount: boolean) => any): Promise<any[]> {
   const firstResult = await buildQuery(true)
@@ -72,19 +76,20 @@ export default function Products() {
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [debouncedSearch, setDebouncedSearch] = useState(searchParams.get('search') || '');
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    searchParams.get('category')?.split(',').filter(Boolean) || []
+    readFilterParam(searchParams, 'category', true)
   );
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(
-    searchParams.get('subcategory')?.split(',').filter(Boolean) || []
+    readFilterParam(searchParams, 'subcategory', false)
   );
   const [selectedBrands, setSelectedBrands] = useState<string[]>(
-    searchParams.get('brand')?.split(',').filter(Boolean) || []
+    readFilterParam(searchParams, 'brand', true)
   );
   const [sortBy, setSortBy] = useState<string>(searchParams.get('sort') || 'recent');
   const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1'));
   const [totalCount, setTotalCount] = useState(0);
   const [filterOptions, setFilterOptions] = useState({ categories: [], subcategories: [], brands: [] });
-  
+  const latestRequestRef = useRef(0);
+
   const productsPerPage = 24;
   const totalPages = Math.ceil(totalCount / productsPerPage);
 
@@ -109,16 +114,13 @@ export default function Products() {
 
   // Sync state with URL params when they change
   useEffect(() => {
-    const categoryParam = searchParams.get('category');
-    const subcategoryParam = searchParams.get('subcategory');
-    const brandParam = searchParams.get('brand');
     const searchParam = searchParams.get('search');
     const sortParam = searchParams.get('sort');
     const pageParam = searchParams.get('page');
 
-    setSelectedCategories(categoryParam?.split(',').filter(Boolean) || []);
-    setSelectedSubcategories(subcategoryParam?.split(',').filter(Boolean) || []);
-    setSelectedBrands(brandParam?.split(',').filter(Boolean) || []);
+    setSelectedCategories(readFilterParam(searchParams, 'category', true));
+    setSelectedSubcategories(readFilterParam(searchParams, 'subcategory', false));
+    setSelectedBrands(readFilterParam(searchParams, 'brand', true));
     setSearchTerm(searchParam || '');
     setSortBy(sortParam || 'recent');
     setCurrentPage(parseInt(pageParam || '1'));
@@ -156,14 +158,15 @@ export default function Products() {
 
   // Update URL params when filters change
   useEffect(() => {
-    const params: Record<string, string> = {};
-    if (debouncedSearch) params.search = debouncedSearch;
-    if (selectedCategories.length > 0) params.category = selectedCategories.join(',');
-    if (selectedSubcategories.length > 0) params.subcategory = selectedSubcategories.join(',');
-    if (selectedBrands.length > 0) params.brand = selectedBrands.join(',');
-    if (sortBy !== 'recent') params.sort = sortBy;
-    if (currentPage > 1) params.page = currentPage.toString();
-    setSearchParams(params);
+    // Repeated keys rather than comma-joined values -- see readFilterParam().
+    const params = new URLSearchParams();
+    if (debouncedSearch) params.set('search', debouncedSearch);
+    selectedCategories.forEach((value) => params.append('category', value));
+    selectedSubcategories.forEach((value) => params.append('subcategory', value));
+    selectedBrands.forEach((value) => params.append('brand', value));
+    if (sortBy !== 'recent') params.set('sort', sortBy);
+    if (currentPage > 1) params.set('page', currentPage.toString());
+    setSearchParams(params, { replace: true });
   }, [debouncedSearch, selectedCategories, selectedSubcategories, selectedBrands, sortBy, currentPage]);
 
   const fetchFilterOptions = async () => {
@@ -199,6 +202,11 @@ export default function Products() {
   };
 
   const fetchProducts = async () => {
+    // Filter changes fire faster than Supabase responds. Without a token the
+    // slower of two in-flight requests can resolve last and repaint the grid
+    // with results for a filter the user has already cleared.
+    const requestId = ++latestRequestRef.current;
+
     setLoading(true);
     try {
       // Build query with filters
@@ -207,8 +215,9 @@ export default function Products() {
           .from('products_categorized' as any)
           .select(LISTING_COLUMNS, withCount ? { count: 'exact' } : {});
 
-        if (debouncedSearch) {
-          query = query.or(`title.ilike.%${debouncedSearch}%,brand.ilike.%${debouncedSearch}%,description_long.ilike.%${debouncedSearch}%,sku.ilike.%${debouncedSearch}%`);
+        const searchFilter = buildProductSearchFilter(debouncedSearch, SEARCH_COLUMNS);
+        if (searchFilter) {
+          query = query.or(searchFilter);
         }
         if (selectedCategories.length > 0) {
           query = query.in('top_level_category', selectedCategories);
@@ -223,8 +232,8 @@ export default function Products() {
         return query;
       });
 
-      console.log(`✅ Fetched ${allData.length} total variants`);
-      
+      if (requestId !== latestRequestRef.current) return;
+
       // Group variants into parent products
       const parentMap = groupIntoParents(allData);
       const displayProducts: DisplayProduct[] = Array.from(parentMap.values()).map(parent => ({
@@ -254,8 +263,6 @@ export default function Products() {
           displayProducts.sort((a, b) => a.brand.localeCompare(b.brand) || a.baseName.localeCompare(b.baseName));
       }
       
-      console.log(`Displaying ${displayProducts.length} parent products (from ${allData.length} variants)`);
-      
       // Apply pagination
       const from_page = (currentPage - 1) * productsPerPage;
       const to_page = from_page + productsPerPage;
@@ -264,7 +271,7 @@ export default function Products() {
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
-      setLoading(false);
+      if (requestId === latestRequestRef.current) setLoading(false);
     }
   };
 
