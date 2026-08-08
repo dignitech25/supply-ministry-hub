@@ -23,7 +23,7 @@ export async function fetchProducts(): Promise<Product[]> {
   const { data, error } = await supabase
     .from("microsite_products")
     .select(
-      "clinical_group, status, product_name, product_code, category, price_rrp, key_specifications, sort_order",
+      "clinical_group, status, product_name, product_code, category, price_rrp, key_specifications, sort_order, image_url",
     )
     .eq("collection", "medhealth")
     .order("sort_order", { ascending: true })
