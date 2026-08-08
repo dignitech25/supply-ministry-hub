@@ -332,7 +332,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                 type="submit"
                 disabled={state === "sending" || isEmpty}
                 className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-base font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-                style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
+                style={{ backgroundColor: "#3D2D9E" }}
               >
                 {state === "sending" && <Loader2 className="h-4 w-4 animate-spin" />}
                 {state === "sending" ? "Sending" : state === "error" ? "Try again" : "Send request"}
