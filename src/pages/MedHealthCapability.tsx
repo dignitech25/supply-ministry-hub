@@ -213,15 +213,15 @@ const MedHealthCapability = () => {
 
       {/* Sticky toolbar */}
       <div
-        className="sticky top-0 z-30 mt-6 border-b border-border backdrop-blur-md"
-        style={{ backgroundColor: "rgba(255,255,255,0.85)" }}
+        className="sticky top-[65px] z-30 border-b border-border backdrop-blur-md"
+        style={{ backgroundColor: "rgba(255,255,255,0.92)" }}
       >
-        <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="mx-auto max-w-6xl px-4 py-2.5 sm:px-6">
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
             <button
               type="button"
               onClick={goHome}
-              className="flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              className="flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#010A16" }}
             >
               <Home className="h-4 w-4" aria-hidden="true" /> Catalogue home
@@ -237,27 +237,27 @@ const MedHealthCapability = () => {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search name, spec or code"
                 aria-label="Search products"
-                className="min-h-11 w-full rounded-xl border border-border bg-card pl-9 pr-3 text-base outline-none focus:border-[#010A16]"
+                className="min-h-10 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-sm outline-none focus:border-[#010A16]"
               />
             </div>
             <button
               type="button"
               onClick={exportVisible}
-              className="flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
+              className="flex min-h-10 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
               style={{ borderColor: "rgba(1,10,22,0.4)", color: "#010A16" }}
             >
               <Download className="h-4 w-4" aria-hidden="true" /> Export
             </button>
           </div>
 
-          <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
+          <div className="-mx-4 mt-2.5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
             {["All", ...CATEGORIES].map((c) => (
               <button
                 key={c}
                 type="button"
                 aria-pressed={tab === c}
                 onClick={() => setTab(c)}
-                className="min-h-11 shrink-0 rounded-full border px-4 text-sm font-medium transition-colors"
+                className="min-h-9 shrink-0 rounded-full border px-3 text-xs font-semibold transition-colors"
                 style={{
                   borderColor: tab === c ? "#010A16" : "hsl(var(--border))",
                   backgroundColor: tab === c ? "#010A16" : "transparent",
@@ -271,7 +271,7 @@ const MedHealthCapability = () => {
         </div>
       </div>
 
-      <main className="mx-auto max-w-6xl px-4 pb-40 pt-6 sm:px-6">
+      <main className="mx-auto max-w-6xl px-4 pb-40 pt-5 sm:px-6">
         {isLoading ? (
           <div className="flex items-center gap-2 py-16 text-sm text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" /> Loading catalogue…
