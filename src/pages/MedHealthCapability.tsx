@@ -156,41 +156,42 @@ const MedHealthCapability = () => {
         />
       </Helmet>
 
-      <div className="h-1.5 w-full" style={{ backgroundImage: "linear-gradient(90deg, #3D2D9E 0%, #33456B 38%, #2A5263 72%, #FCB040 100%)" }} />
+      {/* Two tone rule, house violet into partner ink, with a short accent terminal. */}
+      <div className="flex h-1.5 w-full">
+        <div
+          className="flex-1"
+          style={{ backgroundImage: `linear-gradient(90deg, ${HOUSE.violet} 0%, ${PARTNER.ink} 100%)` }}
+        />
+        <div className="w-16 sm:w-24" style={{ backgroundColor: PARTNER.accent }} />
+      </div>
 
       {/* Masthead */}
-      <header style={{ backgroundColor: "#F4EFE6" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <button
-            type="button"
-            onClick={goHome}
-            aria-label="Back to catalogue home"
-            className="rounded-lg transition-opacity hover:opacity-80"
-          >
-            <SupplyMinistryLogo />
-          </button>
+      <header style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}>
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
+          <PartnerLockup onHome={goHome} />
           <span
             className="rounded-full border px-3 py-1 text-xs font-medium"
-            style={{ borderColor: "rgba(61,45,158,0.3)", color: "#3D2D9E" }}
+            style={{ borderColor: PARTNER.rule, color: PARTNER.ink }}
           >
-            Dedicated catalogue
+            {PARTNER.badge}
           </span>
         </div>
       </header>
 
-      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6">
         <h1
-          className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl"
-          style={{ fontFamily: "Outfit, system-ui, sans-serif" }}
+          className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-[42px]"
+          style={{ color: PARTNER.ink, fontFamily: "Outfit, system-ui, sans-serif" }}
         >
-          Assistive technology catalogue for{" "}
-          <MedHealthLogo className="text-3xl sm:text-4xl" />
+          Assistive technology catalogue for the {PARTNER_NAME} team
         </h1>
-        <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-          A dedicated selection for the {PARTNER_NAME} injury-rehabilitation and OT team. Select
-          items or a clinical kit, then send through for a formal quote.
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed sm:text-base" style={{ color: "rgba(1,10,22,0.68)" }}>
+          {PARTNER.scope} Select individual items or a clinical kit, then send it through for a
+          formal quote.
         </p>
       </div>
+
+      <PartnerContextBand />
 
       {/* Sticky toolbar */}
       <div
