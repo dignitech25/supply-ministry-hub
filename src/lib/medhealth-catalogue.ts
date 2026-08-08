@@ -150,12 +150,6 @@ export const KIT_RULES: KitRule[] = [
     blurb: "Sock aid, reacher, shoe horn and long-handled sponge.",
     codes: ["SMDL10339", "SMDL1024/81", "SMDL10921/16", "SMDL10093"],
   },
-  {
-    id: "seated-shower",
-    name: "Seated shower and turning",
-    blurb: "Shower chair, padded bench, swivel cushion and short reacher.",
-    codes: ["SMBA5300A", "SMBABE3645", "SMDL12135", "SMDL10204/65"],
-  },
 ];
 
 export function buildKits(products: Product[]) {
