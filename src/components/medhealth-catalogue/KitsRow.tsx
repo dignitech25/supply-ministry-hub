@@ -1,16 +1,17 @@
 import { Layers } from "lucide-react";
 import { money, type Product } from "@/lib/medhealth-catalogue";
 import { ProductThumb } from "./ProductCard";
+import type { Kit } from "./KitSheet";
 
-interface Kit {
-  id: string;
-  name: string;
-  blurb: string;
-  items: Product[];
-  subtotal: number;
-}
-
-export function KitsRow({ kits, onAdd }: { kits: Kit[]; onAdd: (items: Product[]) => void }) {
+export function KitsRow({
+  kits,
+  onAdd,
+  onView,
+}: {
+  kits: Kit[];
+  onAdd: (items: Product[]) => void;
+  onView: (kit: Kit) => void;
+}) {
   if (kits.length === 0) return null;
 
   return (
@@ -58,14 +59,28 @@ export function KitsRow({ kits, onAdd }: { kits: Kit[]; onAdd: (items: Product[]
               </span>
             </div>
 
-            <button
-              type="button"
-              onClick={() => onAdd(kit.items)}
-              className="mt-3 flex min-h-11 w-full items-center justify-center rounded-xl px-4 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
-            >
-              Add kit to selection
-            </button>
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={() => onView(kit)}
+                className="flex min-h-11 flex-1 items-center justify-center rounded-xl border px-3 text-sm font-semibold transition-colors hover:bg-[rgba(51,69,107,0.1)]"
+                style={{
+                  borderColor: "rgba(51,69,107,0.4)",
+                  color: "#33456B",
+                  fontFamily: "Outfit, system-ui, sans-serif",
+                }}
+              >
+                View kit
+              </button>
+              <button
+                type="button"
+                onClick={() => onAdd(kit.items)}
+                className="flex min-h-11 flex-1 items-center justify-center rounded-xl px-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
+              >
+                Add kit
+              </button>
+            </div>
           </article>
         ))}
       </div>
