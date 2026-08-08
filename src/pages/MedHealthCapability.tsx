@@ -167,26 +167,43 @@ const MedHealthCapability = () => {
       </div>
 
       {/* Masthead */}
-      <header style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}>
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
+      <header
+        className="sticky top-0 z-40"
+        style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <PartnerLockup onHome={goHome} />
-          <span
-            className="rounded-full border px-3 py-1 text-xs font-medium"
-            style={{ borderColor: PARTNER.rule, color: PARTNER.ink }}
-          >
-            {PARTNER.badge}
-          </span>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => itemCount > 0 && setReviewing(true)}
+              className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-50"
+              disabled={itemCount === 0}
+              style={{ backgroundColor: HOUSE.violet, color: "#F4EFE6" }}
+            >
+              <ShoppingBag className="h-4 w-4" aria-hidden="true" />
+              <span className="hidden sm:inline">{itemCount} item{itemCount === 1 ? "" : "s"}</span>
+              <span className="sm:hidden">{itemCount}</span>
+              <span className="opacity-80">{money(total)}</span>
+            </button>
+            <span
+              className="hidden rounded-full border px-3 py-1 text-xs font-medium md:inline-block"
+              style={{ borderColor: PARTNER.rule, color: PARTNER.ink }}
+            >
+              {PARTNER.badge}
+            </span>
+          </div>
         </div>
       </header>
 
-      <div className="mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pb-5 pt-7 sm:px-6">
         <h1
-          className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-[42px]"
-          style={{ color: PARTNER.ink, fontFamily: "Outfit, system-ui, sans-serif" }}
+          className="text-balance text-2xl font-semibold leading-tight tracking-tight sm:text-4xl"
+          style={{ color: PARTNER.ink }}
         >
           Assistive technology catalogue for the {PARTNER_NAME} team
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed sm:text-base" style={{ color: "rgba(1,10,22,0.68)" }}>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed sm:text-base" style={{ color: "rgba(1,10,22,0.68)" }}>
           {PARTNER.scope} Select individual items or a clinical kit, then send it through for a
           formal quote.
         </p>
