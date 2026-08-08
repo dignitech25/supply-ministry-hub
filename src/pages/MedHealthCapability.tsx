@@ -317,7 +317,11 @@ const MedHealthCapability = () => {
                   key={c}
                   type="button"
                   aria-pressed={selected}
-                  onClick={() => setTab(c)}
+                  onClick={() => {
+                    setTab(c);
+                    setSpyGroup(null);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                   className="min-h-11 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-colors"
                   style={{
                     borderColor: selected || spied ? HOUSE.violet : "hsl(var(--border))",
