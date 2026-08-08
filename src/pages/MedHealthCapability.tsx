@@ -151,6 +151,49 @@ const MedHealthCapability = () => {
     return () => observer.disconnect();
   }, [tab, query, groupKeys]);
 
+  /**
+   * A single active pill at any time: the tapped tab when a filter or search is
+   * applied, otherwise whichever section the reader has scrolled into.
+   */
+  const activePill =
+    tab !== "All" || query.trim()
+      ? tab
+      : spyGroup
+        ? normaliseCategory(spyGroup)
+        : "All";
+
+  // Measure the active pill so the sliding indicator lands exactly under it.
+  useEffect(() => {
+    const strip = pillStripRef.current;
+    const el = pillRefs.current.get(activePill);
+    if (!strip || !el) return;
+
+    const measure = () => {
+      const node = pillRefs.current.get(activePill);
+      if (!node) return;
+      setPuck({ left: node.offsetLeft, width: node.offsetWidth });
+    };
+
+    measure();
+    const id = requestAnimationFrame(() => {
+      measure();
+      setPuckReady(true);
+    });
+
+    el.scrollIntoView({ inline: "nearest", block: "nearest" });
+
+    const ro = new ResizeObserver(measure);
+    ro.observe(strip);
+    window.addEventListener("resize", measure);
+    document.fonts?.ready.then(measure).catch(() => {});
+
+    return () => {
+      cancelAnimationFrame(id);
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [activePill, counts]);
+
   const lines: Line[] = useMemo(
     () =>
       products
