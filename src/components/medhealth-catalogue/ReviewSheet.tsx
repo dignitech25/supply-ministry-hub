@@ -193,7 +193,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                     />
                     <span
                       className="min-w-[4.5rem] text-right text-sm font-semibold"
-                      style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
+                      style={{ color: "#010A16" }}
                     >
                       {money((l.product.price_rrp ?? 0) * l.qty)}
                     </span>
@@ -212,13 +212,13 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
               <div className="mt-3 flex items-baseline justify-between border-t-2 border-[#231F20]/10 pt-3">
                 <span
                   className="text-sm font-semibold"
-                  style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
+                  style={{ color: "#231F20" }}
                 >
                   Indicative total
                 </span>
                 <span
                   className="text-xl font-bold"
-                  style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
+                  style={{ color: "#010A16" }}
                 >
                   {money(total)}
                 </span>
