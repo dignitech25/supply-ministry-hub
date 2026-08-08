@@ -99,17 +99,21 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
         </span>
       </div>
 
-      <div className="mt-3 flex items-end justify-between gap-3">
-        <div>
-          <p className="text-base font-bold" style={{ color: "#010A16" }}>
+      <div className="mt-auto flex h-12 items-center justify-between gap-2 pt-3">
+        <div className="min-w-0">
+          <p className="text-base font-bold leading-tight" style={{ color: "#010A16" }}>
             {money(product.price_rrp)}
           </p>
-          <p className="text-[10px] text-muted-foreground">Code {product.product_code}</p>
+          <p className="truncate whitespace-nowrap text-[10px] leading-tight text-muted-foreground">
+            Code {product.product_code}
+          </p>
         </div>
 
-        {selected && (
-          <QtyStepper qty={qty} label={product.product_name} onQty={onQty} />
-        )}
+        <div className="shrink-0">
+          {selected && (
+            <QtyStepper qty={qty} label={product.product_name} onQty={onQty} size="sm" />
+          )}
+        </div>
       </div>
     </div>
   );
