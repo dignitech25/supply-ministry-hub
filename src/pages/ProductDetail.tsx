@@ -21,7 +21,7 @@ import { useQuote } from '@/contexts/QuoteContext';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchParentProduct, fetchParentProductBySku, fetchParentProductByHandle } from '@/utils/parentProductHelpers';
-import { ParentProduct, ProductVariant } from '@/utils/variantHelpers';
+import { getEffectiveVariantPrice, ParentProduct, ProductVariant } from '@/utils/variantHelpers';
 import { formatPrice, getDescriptionParagraphs, cleanDescription } from '@/utils/productHelpers';
 import ProductSEOContent, { hasProductSEOContent, getProductFAQs } from '@/components/ProductSEOContent';
 import Footer from '@/components/Footer';
@@ -118,9 +118,7 @@ export default function ProductDetail() {
     // localStorage. Nothing sums these today, which is the only reason it has
     // not produced a wrong total -- coerce at the boundary rather than rely on
     // that staying true.
-    const rawPrice = selectedVariant.priceDiscounted ?? selectedVariant.priceRrp;
-    const parsedPrice = rawPrice === null || rawPrice === undefined ? NaN : Number(rawPrice);
-    const unitPrice = Number.isFinite(parsedPrice) ? parsedPrice : undefined;
+    const unitPrice = getEffectiveVariantPrice(selectedVariant) ?? undefined;
 
     addItem({
       id: selectedVariant.sku,
@@ -165,15 +163,15 @@ export default function ProductDetail() {
       // or backorder data, so any availability value here would be a claim the
       // business cannot substantiate -- and Google surfaces it as an in-stock
       // badge to clinicians specifying equipment for a funded plan.
-      // price_discounted is a TEXT column in products_categorized, so these
-      // values arrive as strings and were being emitted as strings in JSON-LD
-      // ("2428.0"). schema.org price properties must be numeric.
+      // price_discounted is a TEXT column in products_categorized. Variant
+      // normalization now coerces it once at the data boundary so JSON-LD and
+      // quote values remain numeric.
       "offers": {
         "@type": "AggregateOffer",
-        "lowPrice": Number(parent.fromPrice) || undefined,
+        "lowPrice": parent.fromPrice ?? undefined,
         "highPrice": parent.variants.reduce((max, v) => {
-          const price = Number(v.priceDiscounted ?? v.priceRrp ?? 0);
-          return Number.isFinite(price) && price > max ? price : max;
+          const price = getEffectiveVariantPrice(v) ?? 0;
+          return price > max ? price : max;
         }, 0) || undefined,
         "priceCurrency": "AUD",
         "offerCount": parent.variants.length

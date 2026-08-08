@@ -18,37 +18,12 @@ import { createBreadcrumbSchema } from '@/components/SEO';
 import { formatPrice } from '@/utils/productHelpers';
 import { groupIntoParents } from '@/utils/variantHelpers';
 import { buildProductSearchFilter } from '@/utils/searchQuery';
+import { readFilterParam } from '@/utils/catalogueFilters';
 
 const LISTING_COLUMNS = 'sku,title,brand,price_rrp,price_discounted,image_url,top_level_category,subcategory';
 const BATCH_SIZE = 1000;
 
 const SEARCH_COLUMNS = ['title', 'brand', 'description_long', 'sku'] as const;
-
-/**
- * Reads a repeatable filter parameter from the URL.
- *
- * Filter values are now written as repeated keys (`?brand=A&brand=B`) because
- * the previous comma-joined encoding could not represent a value that itself
- * contains a comma. Three real subcategories do -- and "Mattresses, Pressure
- * Care" alone covers 846 of 3,347 variants. Selecting it wrote
- * `?subcategory=Mattresses, Pressure Care`, which the reader split back into
- * two names that match nothing, so the single largest subcategory in the
- * catalogue returned "No products found" every time.
- *
- * `splitLegacyCommas` is enabled only for parameters whose values are verified
- * comma-free in the source data (30 brands, 6 categories), so old shared links
- * keep working. It is off for subcategory, where a comma is part of the name.
- */
-function readFilterParam(
-  params: URLSearchParams,
-  key: string,
-  splitLegacyCommas: boolean
-): string[] {
-  const values = params.getAll(key).filter(Boolean);
-  if (values.length > 1 || !splitLegacyCommas) return values;
-  if (values.length === 1) return values[0].split(',').map((v) => v.trim()).filter(Boolean);
-  return [];
-}
 
 async function fetchAllRows(buildQuery: (withCount: boolean) => any): Promise<any[]> {
   const firstResult = await buildQuery(true)

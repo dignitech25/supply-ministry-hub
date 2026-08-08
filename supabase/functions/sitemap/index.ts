@@ -1,4 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { groupRepresentativeVariants } from "../_shared/catalogueSelection.ts";
+import type { CatalogueVariantRow } from "../_shared/catalogueSelection.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -6,7 +8,6 @@ const corsHeaders = {
 };
 
 const SITE_URL = "https://www.supplyministry.com.au";
-const TODAY = new Date().toISOString().split("T")[0];
 
 // PostgREST caps a single response at 1,000 rows. The catalogue is larger than
 // that, so every read here must page explicitly -- an unpaged select silently
@@ -25,13 +26,6 @@ const STATIC_PAGES = [
   { loc: `${SITE_URL}/terms`, changefreq: "yearly", priority: "0.3" },
 ];
 
-interface VariantRow {
-  sku: string;
-  brand: string | null;
-  title: string | null;
-  price_rrp: number | null;
-}
-
 function xmlEscape(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -41,10 +35,9 @@ function xmlEscape(value: string): string {
     .replace(/'/g, "&apos;");
 }
 
-function urlEntry(loc: string, changefreq: string, priority: string, lastmod: string): string {
+function urlEntry(loc: string, changefreq: string, priority: string): string {
   return `  <url>
     <loc>${xmlEscape(loc)}</loc>
-    <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`;
@@ -66,11 +59,11 @@ Deno.serve(async (req) => {
     // catalogue can actually render. Sitemapping `products` advertised ~1,103
     // URLs the site cannot display, and because the SPA returns HTTP 200 for
     // unknown routes, each one was a soft 404 rather than an honest error.
-    const rows: VariantRow[] = [];
+    const rows: CatalogueVariantRow[] = [];
     for (let offset = 0; ; offset += PAGE_SIZE) {
       const { data, error } = await supabase
         .from("products_categorized")
-        .select("sku, brand, title, price_rrp")
+        .select("sku, brand, title, price_rrp, price_discounted")
         .not("title", "is", null)
         .not("brand", "is", null)
         .order("sku", { ascending: true })
@@ -79,7 +72,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
       if (!data || data.length === 0) break;
 
-      rows.push(...(data as VariantRow[]));
+      rows.push(...(data as CatalogueVariantRow[]));
       if (data.length < PAGE_SIZE) break;
     }
 
@@ -89,34 +82,18 @@ Deno.serve(async (req) => {
     // the same page, so that published 3,347 near-duplicate URLs for 513 real
     // pages and split ranking signals across them. One canonical URL per family
     // is emitted instead, matching the canonical tag on the page itself.
-    const families = new Map<string, VariantRow>();
-    for (const row of rows) {
-      const key = `${row.brand}|${row.title}`;
-      const incumbent = families.get(key);
-      if (!incumbent) {
-        families.set(key, row);
-        continue;
-      }
-      // Deterministic representative: cheapest, ties broken by SKU. Must match
-      // the canonical chosen on the product page.
-      const a = row.price_rrp ?? Number.POSITIVE_INFINITY;
-      const b = incumbent.price_rrp ?? Number.POSITIVE_INFINITY;
-      if (a < b || (a === b && row.sku < incumbent.sku)) {
-        families.set(key, row);
-      }
-    }
+    const families = groupRepresentativeVariants(rows);
 
-    const productUrls = [...families.values()].map((family) =>
+    const productUrls = families.map((family) =>
       urlEntry(
         `${SITE_URL}/products/${encodeURIComponent(family.sku)}`,
         "weekly",
         "0.7",
-        TODAY,
       )
     );
 
     const staticUrls = STATIC_PAGES.map((page) =>
-      urlEntry(page.loc, page.changefreq, page.priority, TODAY)
+      urlEntry(page.loc, page.changefreq, page.priority)
     );
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>

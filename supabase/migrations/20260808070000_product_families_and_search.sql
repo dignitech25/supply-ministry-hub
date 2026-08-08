@@ -79,8 +79,11 @@ comment on function public.sm_safe_numeric(text) is
 -- family and breaks the URL that occupational therapists have bookmarked or
 -- that Google has indexed.
 --
--- This table persists a surrogate id and slug so identity survives title edits.
--- The (brand, title) pair becomes a *lookup key for import*, not the identity.
+-- This table persists a surrogate id and slug. Once variants have a family_id,
+-- rebuild_product_families() resolves the family by that id before considering
+-- the editable (brand, title) lookup key. This preserves identity across title
+-- corrections. A private SKU-to-family key table also restores identity when
+-- an importer recreates catalogue rows and loses their family_id values.
 -- -----------------------------------------------------------------------------
 
 create table if not exists public.product_families (
@@ -115,7 +118,7 @@ create table if not exists public.product_families (
 );
 
 comment on table public.product_families is
-  'One row per displayed product family. Rebuilt from products_categorized by rebuild_product_families(). Slug and id are stable across supplier title changes.';
+  'One row per displayed product family. Rebuilt from products_categorized; linked variants preserve family id and slug across supplier title changes.';
 comment on column public.product_families.slug is
   'Stable public URL segment. Generated once on insert and never regenerated, so indexed URLs survive title corrections.';
 comment on column public.product_families.representative_sku is
@@ -128,6 +131,24 @@ create index if not exists idx_pf_min_price     on public.product_families (min_
 create index if not exists idx_pf_search_doc    on public.product_families using gin (search_document);
 create index if not exists idx_pf_search_trgm   on public.product_families using gin (search_text public.gin_trgm_ops);
 create index if not exists idx_pf_variant_skus  on public.product_families using gin (variant_skus);
+
+-- Keep SKU-to-family identity outside the imported catalogue table as a second
+-- line of defence. If an import recreates rows and loses family_id, a surviving
+-- SKU can still recover its established family before title matching occurs.
+-- A simultaneous SKU + title replacement remains intentionally manual because
+-- there is no trustworthy automatic identity signal in that case.
+create schema if not exists private;
+revoke all on schema private from public, anon, authenticated;
+
+create table if not exists private.product_family_variant_keys (
+  sku           text primary key,
+  family_id     uuid not null references public.product_families(id) on delete cascade,
+  first_seen_at timestamptz not null default now(),
+  last_seen_at  timestamptz not null default now()
+);
+
+create index if not exists idx_pf_variant_keys_family_id
+  on private.product_family_variant_keys (family_id);
 
 -- Link variants back to their family.
 alter table public.products_categorized
@@ -180,6 +201,65 @@ declare
   v_linked      integer := 0;
   v_deactivated integer := 0;
 begin
+  -- Recover identity after an importer has recreated a known SKU without
+  -- carrying its family_id column forward.
+  update public.products_categorized pc
+     set family_id = known.family_id
+    from private.product_family_variant_keys known
+   where pc.sku = known.sku
+     and pc.family_id is null;
+
+  if exists (
+    select 1
+      from public.products_categorized pc
+     where pc.family_id is not null
+       and (pc.brand is null or pc.title is null)
+  ) then
+    raise exception using
+      message = 'A linked product variant is missing its brand or title',
+      hint = 'Correct the source row before rebuilding product families.';
+  end if;
+
+  -- A linked family must resolve to exactly one current (brand, title) pair.
+  -- If an import only updates some variants in a family, guessing which title
+  -- should win would silently split or merge public URLs. Fail transactionally
+  -- and send the family for manual correction instead.
+  if exists (
+    select 1
+      from public.products_categorized pc
+     where pc.family_id is not null
+     group by pc.family_id
+    having count(distinct (pc.brand, pc.title)) > 1
+  ) then
+    raise exception using
+      message = 'A linked product family contains multiple brand/title identities',
+      hint = 'Correct the inconsistent variants or clear only the incorrect family_id values, then rerun.';
+  end if;
+
+  -- Resolve already-linked families by immutable family_id first. This is the
+  -- step that makes a supplier title correction update the existing family
+  -- instead of minting a new id and slug. The unique (brand, title) constraint
+  -- intentionally turns ambiguous merges into a transaction failure.
+  with linked_identity as (
+    select
+      pc.family_id,
+      min(pc.brand) as brand,
+      min(pc.title) as title
+    from public.products_categorized pc
+    where pc.family_id is not null
+      and pc.brand is not null
+      and pc.title is not null
+    group by pc.family_id
+  )
+  update public.product_families pf
+     set brand = li.brand,
+         title = li.title,
+         display_name = li.title,
+         updated_at = now()
+    from linked_identity li
+   where pf.id = li.family_id
+     and (pf.brand, pf.title) is distinct from (li.brand, li.title);
+
   with agg as (
     select
       pc.brand,
@@ -187,21 +267,20 @@ begin
       -- Deterministic representative variant: cheapest, ties broken by SKU so
       -- the choice never flips between rebuilds.
       (array_agg(pc.image_url order by
-        coalesce(least(pc.price_rrp::numeric, public.sm_safe_numeric(pc.price_discounted)),
+        coalesce(public.sm_safe_numeric(pc.price_discounted),
                  pc.price_rrp::numeric) nulls last, pc.sku))[1] as primary_image_url,
       (array_agg(pc.sku order by
-        coalesce(least(pc.price_rrp::numeric, public.sm_safe_numeric(pc.price_discounted)),
+        coalesce(public.sm_safe_numeric(pc.price_discounted),
                  pc.price_rrp::numeric) nulls last, pc.sku))[1] as representative_sku,
       (array_agg(pc.top_level_category order by pc.sku))[1]     as top_level_category,
       (array_agg(pc.subcategory order by pc.sku))[1]            as subcategory,
-      -- Effective price uses LEAST(rrp, discounted) rather than preferring the
-      -- discounted column outright: 15 production rows carry a "discounted"
-      -- price ABOVE rrp, which the current client logic would display as the
-      -- headline price.
-      min(coalesce(least(pc.price_rrp::numeric, public.sm_safe_numeric(pc.price_discounted)),
-                   pc.price_rrp::numeric))                      as min_price,
-      max(coalesce(least(pc.price_rrp::numeric, public.sm_safe_numeric(pc.price_discounted)),
-                   pc.price_rrp::numeric))                      as max_price,
+      -- price_discounted is the live storefront price. A value above RRP is a
+      -- data-quality issue to surface, not permission to silently show the old
+      -- lower RRP and create a margin risk.
+      min(coalesce(public.sm_safe_numeric(pc.price_discounted),
+                   pc.price_rrp::numeric))                       as min_price,
+      max(coalesce(public.sm_safe_numeric(pc.price_discounted),
+                   pc.price_rrp::numeric))                       as max_price,
       count(*)::integer                                          as variant_count,
       array_agg(distinct pc.sku)                                 as variant_skus,
       string_agg(distinct coalesce(pc.sku_clean, pc.sku), ' ')   as sku_blob
@@ -256,6 +335,19 @@ begin
 
   get diagnostics v_linked = row_count;
 
+  -- Persist the latest known SKU membership so identity can be restored after
+  -- future imports. Reusing a SKU for an unrelated product is unsupported and
+  -- must be corrected at source rather than silently creating a second owner.
+  insert into private.product_family_variant_keys as known (
+    sku, family_id, first_seen_at, last_seen_at
+  )
+  select pc.sku, pc.family_id, now(), now()
+    from public.products_categorized pc
+   where pc.family_id is not null
+  on conflict (sku) do update set
+    family_id = excluded.family_id,
+    last_seen_at = now();
+
   -- Families whose variants have all disappeared from the import are hidden,
   -- never deleted, so their URLs can 301 rather than 404.
   update public.product_families pf
@@ -273,7 +365,7 @@ end;
 $$;
 
 comment on function public.rebuild_product_families() is
-  'Idempotent rebuild of product_families from products_categorized. Run after every supplier import. Preserves family id and slug.';
+  'Idempotent rebuild from products_categorized. Linked variants preserve family id and slug; inconsistent linked identities fail transactionally.';
 
 
 -- -----------------------------------------------------------------------------
@@ -315,7 +407,7 @@ returns table (
 )
 language sql
 stable
-security definer
+security invoker
 set search_path = ''
 as $$
   with params as (
@@ -386,7 +478,7 @@ create or replace function public.get_catalogue_facets(
 returns table (facet_type text, value text, family_count bigint)
 language sql
 stable
-security definer
+security invoker
 set search_path = ''
 as $$
   select 'brand', pf.brand, count(*)
@@ -421,11 +513,28 @@ alter table public.product_families enable row level security;
 drop policy if exists "Product families are publicly readable" on public.product_families;
 create policy "Product families are publicly readable"
   on public.product_families for select
+  to anon, authenticated
   using (is_active);
 
-revoke all on function public.rebuild_product_families()      from anon, authenticated;
+-- Postgres grants EXECUTE on new functions to PUBLIC by default. Revoking only
+-- from anon/authenticated is insufficient because both inherit from PUBLIC.
+-- The write-capable SECURITY DEFINER function must never be anonymously
+-- callable through /rest/v1/rpc/rebuild_product_families.
+revoke execute on function public.rebuild_product_families() from public, anon, authenticated;
+grant  execute on function public.rebuild_product_families() to service_role;
+
+-- Read RPCs do not need elevated privileges: grant the underlying RLS-filtered
+-- table and execute them as the caller.
+grant select on table public.product_families to anon, authenticated;
+
+revoke execute on function public.search_product_families(text, text[], text[], text[], text, integer, integer) from public;
+revoke execute on function public.get_catalogue_facets(text[]) from public;
 grant  execute on function public.search_product_families(text, text[], text[], text[], text, integer, integer) to anon, authenticated;
 grant  execute on function public.get_catalogue_facets(text[]) to anon, authenticated;
+
+-- Helpers are implementation details, not public API endpoints.
+revoke execute on function public.sm_safe_numeric(text) from public, anon, authenticated;
+revoke execute on function public.sm_slugify(text, text) from public, anon, authenticated;
 
 
 -- -----------------------------------------------------------------------------
@@ -444,6 +553,7 @@ select public.rebuild_product_families();
 --   drop function if exists public.sm_slugify(text, text);
 --   drop function if exists public.sm_safe_numeric(text);
 --   alter table public.products_categorized drop column if exists family_id;
+--   drop table if exists private.product_family_variant_keys;
 --   drop table if exists public.product_families;
 --   -- indexes on products_categorized are safe to keep; drop individually if required.
 -- =============================================================================
