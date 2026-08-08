@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { X, Copy, Download, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { X, Copy, Download, CheckCircle2, Loader2, AlertCircle, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { downloadCsv, makeReference, money, toCsv, type Product } from "@/lib/medhealth-catalogue";
+import { QtyStepper } from "./QtyStepper";
 
 export interface Line {
   product: Product;
@@ -13,6 +14,8 @@ interface Props {
   total: number;
   onClose: () => void;
   onComplete: () => void;
+  onQty: (code: string, delta: number) => void;
+  onRemove: (code: string) => void;
 }
 
 function formatRequirements(lines: Line[], total: number) {
@@ -27,7 +30,9 @@ function formatRequirements(lines: Line[], total: number) {
   return `${body}\n\nIndicative total: ${money(total)} (ex delivery, GST-free status confirmed on quote)`;
 }
 
-export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
+export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove }: Props) {
+  const isEmpty = lines.length === 0;
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
