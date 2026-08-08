@@ -24,27 +24,9 @@ export const PARTNER = {
   preparedFor: "Prepared for",
   /** Badge shown at the right of the masthead. */
   badge: "Dedicated catalogue, August 2026",
-  /** One line naming the clinical scope this selection was built around. */
-  scope:
-    "Built around injury rehabilitation and return to work occupational therapy caseloads.",
-  /** Three short context lines shown above the catalogue. */
-  context: [
-    {
-      title: "Why this selection",
-      body: "Curated for injury rehab and return-to-work OT caseloads, not a full trade catalogue.",
-    },
-    {
-      title: "How pricing works",
-      body: "Prices are indicative RRP. Your formal quote confirms delivery, setup and GST-free status.",
-    },
-    {
-      title: "What happens next",
-      body: "Send a selection and receive a written quote, delivery, setup and follow-up support.",
-    },
-  ],
   /** Footer disclaimer. Ownership rule: our document, referencing them. */
   disclaimer:
-    "Supply Ministry Pty Ltd, a Dignitech brand. Prepared by Supply Ministry for the MedHealth team, August 2026. This page is unlisted and not indexed. It is not a statement of partnership, endorsement or approval by MedHealth. GST-free status on eligible items confirmed on quote.",
+    "Supply Ministry Pty Ltd, a Dignitech brand. Prepared by Supply Ministry for the MedHealth team, August 2026. This page is unlisted and not indexed. It is not a statement of partnership, endorsement or approval by MedHealth.",
 } as const;
 
 /** Supply Ministry identity. Owns every action colour. */

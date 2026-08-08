@@ -13,7 +13,6 @@ import {
   type Product,
 } from "@/lib/medhealth-catalogue";
 import { MedHealthLogo, SupplyMinistryLogo, PartnerLockup } from "@/components/medhealth-catalogue/Brand";
-import { PartnerContextBand } from "@/components/medhealth-catalogue/PartnerContextBand";
 import { PARTNER, HOUSE } from "@/partners/medhealth";
 import { ProductCard } from "@/components/medhealth-catalogue/ProductCard";
 import { KitsRow } from "@/components/medhealth-catalogue/KitsRow";
@@ -223,18 +222,15 @@ const MedHealthCapability = () => {
           className="max-w-3xl text-balance text-2xl font-semibold leading-tight tracking-tight sm:text-4xl"
           style={{ color: PARTNER.ink }}
         >
-          Assistive technology, chosen for {PARTNER_NAME} caseloads
+          Assistive technology catalogue for the {PARTNER_NAME} team
         </h1>
         <p
           className="mt-2 max-w-[58ch] text-pretty text-sm leading-relaxed sm:text-base"
           style={{ color: "rgba(1,10,22,0.68)" }}
         >
-          Built around injury rehabilitation and return to work occupational therapy. Select items
-          or a clinical kit, then send it through for a formal quote.
+          Select individual items or a clinical kit, then review and send your request.
         </p>
       </div>
-
-      <PartnerContextBand />
 
       {/* Sticky toolbar */}
       <div
@@ -404,7 +400,7 @@ const MedHealthCapability = () => {
                 {itemCount} item{itemCount === 1 ? "" : "s"} selected
               </p>
               <p className="text-xs" style={{ color: "rgba(244,239,230,0.7)" }}>
-                Indicative total {money(total)}
+                Product subtotal {money(total)}
               </p>
             </div>
             <button
