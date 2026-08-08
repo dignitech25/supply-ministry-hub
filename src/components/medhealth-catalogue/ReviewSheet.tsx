@@ -142,7 +142,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
               type="button"
               onClick={onClose}
               className="mt-2 min-h-11 rounded-xl px-8 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
+              style={{ backgroundColor: "#3D2D9E" }}
             >
               Back to catalogue
             </button>
@@ -156,7 +156,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
             </p>
             <p
               className="text-2xl font-bold tracking-tight"
-              style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
+              style={{ color: "#231F20" }}
             >
               {reference}
             </p>
@@ -168,7 +168,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
               type="button"
               onClick={onComplete}
               className="mt-3 min-h-11 rounded-xl px-8 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
+              style={{ backgroundColor: "#3D2D9E" }}
             >
               Done
             </button>
