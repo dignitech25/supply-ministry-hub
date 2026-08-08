@@ -1,5 +1,6 @@
 import { Layers } from "lucide-react";
 import { money, type Product } from "@/lib/medhealth-catalogue";
+import { HOUSE, PARTNER } from "@/partners/medhealth";
 import { ProductThumb } from "./ProductCard";
 import type { Kit } from "./KitSheet";
 
@@ -17,11 +18,11 @@ export function KitsRow({
   return (
     <section aria-labelledby="kits-heading" className="mb-6 rounded-xl border border-border bg-card p-4">
       <div className="mb-3 flex items-center gap-2">
-        <Layers className="h-4 w-4" style={{ color: "#010A16" }} aria-hidden="true" />
+        <Layers className="h-4 w-4" style={{ color: HOUSE.violet }} aria-hidden="true" />
         <h2
           id="kits-heading"
           className="text-xs font-semibold uppercase tracking-[0.12em]"
-          style={{ color: "#231F20" }}
+          style={{ color: PARTNER.ink }}
         >
           Clinical kits
         </h2>
@@ -30,20 +31,25 @@ export function KitsRow({
         Grouped for MedHealth caseloads, so a common setup is one click rather than ten.
       </p>
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {kits.map((kit) => (
           <article
             key={kit.id}
-            className="flex flex-col rounded-xl border border-border bg-white p-3 transition-colors hover:border-[#010A16]"
+            className="flex flex-col rounded-xl border border-border bg-white p-3 transition-colors hover:border-[#3D2D9E]"
           >
             <h3 className="text-sm font-semibold" style={{ color: "#231F20" }}>
               {kit.name}
             </h3>
-            <p className="mt-0.5 text-xs text-muted-foreground">{kit.blurb}</p>
+            <p className="mt-0.5 line-clamp-2 h-8 text-xs leading-4 text-muted-foreground">
+              {kit.blurb}
+            </p>
 
-            <div className="mt-2.5 flex flex-wrap gap-1.5">
+            <div
+              className="mt-2.5 grid gap-1.5"
+              style={{ gridTemplateColumns: `repeat(${kit.items.length}, minmax(0, 1fr))` }}
+            >
               {kit.items.map((p) => (
-                <ProductThumb key={p.product_code} product={p} size="sm" />
+                <ProductThumb key={p.product_code} product={p} size="fill" />
               ))}
             </div>
 
@@ -60,10 +66,10 @@ export function KitsRow({
               <button
                 type="button"
                 onClick={() => onView(kit)}
-                className="flex min-h-9 flex-1 items-center justify-center rounded-lg border px-2 text-xs font-semibold transition-colors hover:bg-[rgba(1,10,22,0.1)]"
+                className="flex min-h-9 flex-1 items-center justify-center rounded-lg border px-2 text-xs font-semibold transition-colors hover:bg-[rgba(61,45,158,0.08)]"
                 style={{
-                  borderColor: "rgba(1,10,22,0.4)",
-                  color: "#010A16",
+                  borderColor: HOUSE.violet,
+                  color: HOUSE.violet,
                 }}
               >
                 View kit
@@ -72,7 +78,7 @@ export function KitsRow({
                 type="button"
                 onClick={() => onAdd(kit.items)}
                 className="flex min-h-9 flex-1 items-center justify-center rounded-lg px-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
-                style={{ backgroundColor: "#3D2D9E" }}
+                style={{ backgroundColor: HOUSE.violet }}
               >
                 Add kit
               </button>
