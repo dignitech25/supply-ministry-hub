@@ -144,15 +144,15 @@ const MedHealthCapability = () => {
 
   return (
     <div
-      style={theme}
-      className="min-h-screen bg-background font-[Outfit,system-ui,sans-serif] text-[#231F20] antialiased"
+      style={{ ...theme, fontFamily: FONT }}
+      className="min-h-screen bg-background text-[#231F20] antialiased"
     >
       <Helmet>
         <title>Dedicated catalogue | Supply Ministry</title>
         <meta name="description" content="Private assistive technology ordering catalogue." />
         <meta name="robots" content="noindex, nofollow" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </Helmet>
