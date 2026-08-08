@@ -3,31 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Supply Ministry - Assistive Technology Solutions Australia | Mobility Aids & NDIS Equipment</title>
-    <meta name="description" content="Supply Ministry connects care with solutions. Leading supplier of mobility aids, daily living equipment, and assistive technology for Australian healthcare professionals and NDIS providers." />
-    <meta name="author" content="Supply Ministry" />
-    <meta name="keywords" content="assistive technology, mobility equipment, NDIS supplier, healthcare equipment Australia, mobility aids, daily living aids, home safety equipment" />
+    <!--
+      Route-varying metadata (title, description, canonical, Open Graph, Twitter)
+      is owned exclusively by src/components/SEO.tsx via react-helmet-async.
 
-    <meta property="og:title" content="Supply Ministry - Assistive Technology Solutions Australia" />
-    <meta property="og:description" content="Leading supplier of mobility aids and assistive technology for Australian healthcare professionals. Trusted by therapists and NDIS providers nationwide." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.supplyministry.com.au/" />
-    <meta property="og:image" content="https://www.supplyministry.com.au/og-image.jpg?v=5fbf8be1" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+      It must NOT be duplicated here. react-helmet-async only replaces tags it
+      previously rendered itself (those carrying data-rh); tags hard-coded in
+      this file are left in the DOM alongside Helmet's. The result was every
+      route serving two <meta name="description"> tags and two <link
+      rel="canonical"> tags -- one of them permanently claiming the homepage as
+      the canonical URL for every product and category page on the site.
+
+      Only route-invariant tags belong below.
+    -->
+    <title>Supply Ministry - Assistive Technology Solutions Australia | Mobility Aids & NDIS Equipment</title>
+    <meta name="author" content="Supply Ministry" />
+
     <meta property="og:site_name" content="Supply Ministry" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Supply Ministry - Assistive Technology Solutions Australia" />
-    <meta name="twitter:description" content="Leading supplier of mobility aids and assistive technology for Australian healthcare professionals." />
-    <meta name="twitter:image" content="https://www.supplyministry.com.au/og-image.jpg?v=5fbf8be1" />
-    
     <!-- Mobile browser theme color -->
     <meta name="theme-color" content="#F4EFE6" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    
-    <link rel="canonical" href="https://www.supplyministry.com.au/" />
+
     <link rel="icon" type="image/x-icon" href="/favicon.ico?v=sm2026a">
     <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png?v=ff16b597">
     <link rel="shortcut icon" href="/favicon.ico?v=sm2026a">

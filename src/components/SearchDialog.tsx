@@ -5,6 +5,7 @@ import { Search, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice, getImagePlaceholder } from "@/utils/productHelpers";
+import { buildProductSearchFilter } from "@/utils/searchQuery";
 
 interface SearchResult {
   sku: string;
@@ -37,10 +38,17 @@ export const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
 
     setIsLoading(true);
     try {
+      const searchFilter = buildProductSearchFilter(query, ["title", "sku", "brand"]);
+      if (!searchFilter) {
+        setResults([]);
+        setSelectedIndex(-1);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("products_categorized")
         .select("sku, title, brand, image_url, price_rrp, product_type")
-        .or(`title.ilike.%${query}%,sku.ilike.%${query}%,brand.ilike.%${query}%`)
+        .or(searchFilter)
         .limit(8);
 
       if (error) throw error;
