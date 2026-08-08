@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { money, type Product } from "@/lib/medhealth-catalogue";
+import { HOUSE } from "@/partners/medhealth";
 import { ProductThumb } from "./ProductCard";
 
 export interface Kit {
@@ -85,7 +86,7 @@ export function KitSheet({
               onClose();
             }}
             className="min-h-11 rounded-xl px-5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#3D2D9E" }}
+            style={{ backgroundColor: HOUSE.violet }}
           >
             Add kit to selection
           </button>
