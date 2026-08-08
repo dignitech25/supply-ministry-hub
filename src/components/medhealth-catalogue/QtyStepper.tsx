@@ -13,7 +13,7 @@ export function QtyStepper({ qty, label, onQty, size = "md" }: Props) {
   return (
     <div
       className="flex items-center gap-1 rounded-full border p-1"
-      style={{ borderColor: "rgba(51,69,107,0.4)", backgroundColor: "rgba(51,69,107,0.1)" }}
+      style={{ borderColor: "rgba(1,10,22,0.4)", backgroundColor: "rgba(1,10,22,0.1)" }}
       onClick={(e) => e.stopPropagation()}
       onKeyDown={(e) => e.stopPropagation()}
     >
@@ -22,7 +22,7 @@ export function QtyStepper({ qty, label, onQty, size = "md" }: Props) {
         aria-label={`Decrease quantity of ${label}`}
         onClick={() => onQty(-1)}
         className={`flex ${btn} items-center justify-center rounded-full transition-colors hover:bg-white`}
-        style={{ color: "#33456B" }}
+        style={{ color: "#010A16" }}
       >
         <Minus className="h-4 w-4" />
       </button>
@@ -38,7 +38,7 @@ export function QtyStepper({ qty, label, onQty, size = "md" }: Props) {
         aria-label={`Increase quantity of ${label}`}
         onClick={() => onQty(1)}
         className={`flex ${btn} items-center justify-center rounded-full transition-colors hover:bg-white`}
-        style={{ color: "#33456B" }}
+        style={{ color: "#010A16" }}
       >
         <Plus className="h-4 w-4" />
       </button>

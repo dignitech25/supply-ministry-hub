@@ -111,7 +111,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
         <div
           className="h-1 w-full"
           style={{
-            backgroundImage: "linear-gradient(90deg, #3D2D9E 0%, #33456B 38%, #2A5263 72%, #FCB040 100%)",
+            backgroundImage: "linear-gradient(90deg, #3D2D9E 0%, #010A16 38%, #010A16 72%, #FCB040 100%)",
           }}
         />
 
@@ -193,7 +193,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                     />
                     <span
                       className="min-w-[4.5rem] text-right text-sm font-semibold"
-                      style={{ color: "#2A5263", fontFamily: "Outfit, system-ui, sans-serif" }}
+                      style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
                     >
                       {money((l.product.price_rrp ?? 0) * l.qty)}
                     </span>
@@ -218,7 +218,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                 </span>
                 <span
                   className="text-xl font-bold"
-                  style={{ color: "#2A5263", fontFamily: "Outfit, system-ui, sans-serif" }}
+                  style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
                 >
                   {money(total)}
                 </span>
@@ -232,8 +232,8 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                     setCopied(true);
                     setTimeout(() => setCopied(false), 2000);
                   }}
-                  className="focus-blend flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 text-sm font-medium transition-colors hover:bg-[rgba(51,69,107,0.1)]"
-                  style={{ borderColor: "rgba(51,69,107,0.4)", color: "#33456B" }}
+                  className="focus-blend flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
+                  style={{ borderColor: "rgba(1,10,22,0.4)", color: "#010A16" }}
                 >
                   <Copy className="h-4 w-4" /> {copied ? "Copied" : "Copy list"}
                 </button>
@@ -245,8 +245,8 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                       toCsv(csvRows, ["Category", "Product", "Code", "Qty", "Price"]),
                     )
                   }
-                  className="focus-blend flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 text-sm font-medium transition-colors hover:bg-[rgba(51,69,107,0.1)]"
-                  style={{ borderColor: "rgba(51,69,107,0.4)", color: "#33456B" }}
+                  className="focus-blend flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
+                  style={{ borderColor: "rgba(1,10,22,0.4)", color: "#010A16" }}
                 >
                   <Download className="h-4 w-4" /> Download CSV
                 </button>
@@ -307,7 +307,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                       required={f.required}
                       maxLength={120}
                       onChange={(e) => f.set(e.target.value)}
-                      className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-base outline-none focus:border-[#33456B]"
+                      className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-base outline-none focus:border-[#010A16]"
                       style={{ color: "#231F20" }}
                     />
                   </div>

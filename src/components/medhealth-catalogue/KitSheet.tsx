@@ -62,7 +62,7 @@ export function KitSheet({
                 </p>
                 <p className="text-xs text-muted-foreground">{p.product_code}</p>
               </div>
-              <span className="text-sm font-semibold" style={{ color: "#2A5263" }}>
+              <span className="text-sm font-semibold" style={{ color: "#010A16" }}>
                 {p.price_rrp != null ? money(p.price_rrp) : "On quote"}
               </span>
             </li>
@@ -74,7 +74,7 @@ export function KitSheet({
             <p className="text-xs text-muted-foreground">
               {kit.items.length} item{kit.items.length === 1 ? "" : "s"}
             </p>
-            <p className="text-base font-bold" style={{ color: "#2A5263" }}>
+            <p className="text-base font-bold" style={{ color: "#010A16" }}>
               {money(kit.subtotal)}
             </p>
           </div>
