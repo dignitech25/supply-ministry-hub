@@ -106,11 +106,13 @@ export type Database = {
           id: string
           image_url: string | null
           key_specifications: string | null
+          price_hire_weekly: number | null
           price_rrp: number | null
           product_code: string | null
           product_name: string
           sort_order: number
           status: string
+          supply_mode: string
         }
         Insert: {
           category?: string | null
@@ -120,11 +122,13 @@ export type Database = {
           id?: string
           image_url?: string | null
           key_specifications?: string | null
+          price_hire_weekly?: number | null
           price_rrp?: number | null
           product_code?: string | null
           product_name: string
           sort_order?: number
           status?: string
+          supply_mode?: string
         }
         Update: {
           category?: string | null
@@ -134,11 +138,13 @@ export type Database = {
           id?: string
           image_url?: string | null
           key_specifications?: string | null
+          price_hire_weekly?: number | null
           price_rrp?: number | null
           product_code?: string | null
           product_name?: string
           sort_order?: number
           status?: string
+          supply_mode?: string
         }
         Relationships: []
       }
