@@ -36,7 +36,7 @@ export function KitSheet({
             <h2
               id="kit-sheet-title"
               className="text-lg font-semibold"
-              style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
+              style={{ color: "#231F20" }}
             >
               {kit.name}
             </h2>
