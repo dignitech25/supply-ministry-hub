@@ -292,15 +292,15 @@ const MedHealthCapability = () => {
               </p>
             ) : (
               grouped.map(([group, items]) => (
-                <section key={group} className="mb-10" aria-labelledby={`g-${group}`}>
+                <section key={group} className="mb-8" aria-labelledby={`g-${group}`}>
                   <h2
                     id={`g-${group}`}
-                    className="mb-3 text-sm font-semibold uppercase tracking-wide"
-                    style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
+                    className="mb-2.5 text-xs font-semibold uppercase tracking-[0.12em]"
+                    style={{ color: "#010A16" }}
                   >
                     {group}
                   </h2>
-                  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {items.map((p) => (
                       <ProductCard
                         key={p.product_code}
