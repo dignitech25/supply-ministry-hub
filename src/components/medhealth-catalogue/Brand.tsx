@@ -42,7 +42,7 @@ export function MedHealthLogo({ className = "" }: { className?: string }) {
  */
 export function PartnerLockup({ onHome }: { onHome?: () => void }) {
   return (
-    <div className="flex items-center gap-4 sm:gap-5">
+    <div className="flex items-center gap-4 sm:gap-6">
       <button
         type="button"
         onClick={onHome}
@@ -53,17 +53,17 @@ export function PartnerLockup({ onHome }: { onHome?: () => void }) {
       </button>
       <span
         aria-hidden="true"
-        className="h-9 w-px shrink-0"
+        className="h-8 w-px shrink-0"
         style={{ backgroundColor: PARTNER.rule }}
       />
-      <div className="min-w-0">
+      <div className="min-w-0 leading-none">
         <span
-          className="block text-[10px] font-semibold uppercase tracking-[0.16em]"
-          style={{ color: "rgba(1,10,22,0.55)" }}
+          className="block text-[9px] font-semibold uppercase leading-none tracking-[0.2em]"
+          style={{ color: "rgba(1,10,22,0.5)" }}
         >
           {PARTNER.preparedFor}
         </span>
-        <MedHealthLogo className="mt-0.5 text-[22px] sm:text-[26px]" />
+        <MedHealthLogo className="mt-[7px] text-[17px] opacity-90 sm:text-[19px]" />
       </div>
     </div>
   );
