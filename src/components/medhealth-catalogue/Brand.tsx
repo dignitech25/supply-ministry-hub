@@ -1,6 +1,5 @@
-import medHealthLogo from "@/assets/medhealth-logo.png.asset.json";
-
 const SUPPLY_MINISTRY_LOGO = "/Supply_Ministry_logo_new_cropped.png";
+const MEDHEALTH_LOGO = "/medhealth-logo.png";
 
 /** Supply Ministry mark, used on its own in tight spaces such as the footer. */
 export function ArcMark({ className = "h-9 w-9" }: { className?: string }) {
@@ -28,7 +27,7 @@ export function SupplyMinistryLogo({ compact = false }: { compact?: boolean }) {
 export function MedHealthLogo({ className = "" }: { className?: string }) {
   return (
     <img
-      src={medHealthLogo.url}
+      src={MEDHEALTH_LOGO}
       alt="MedHealth"
       className={`inline-block h-[1em] w-auto translate-y-[0.1em] object-contain align-baseline ${className}`}
     />
