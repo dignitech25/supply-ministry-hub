@@ -27,7 +27,7 @@ function formatRequirements(lines: Line[], total: number) {
         )} ea = ${money((l.product.price_rrp ?? 0) * l.qty)}`,
     )
     .join("\n");
-  return `${body}\n\nIndicative total: ${money(total)} (ex delivery, GST-free status confirmed on quote)`;
+  return `${body}\n\nProduct subtotal: ${money(total)}\nDelivery quoted separately.`;
 }
 
 export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove }: Props) {
@@ -161,8 +161,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
               {reference}
             </p>
             <p className="max-w-xs text-xs text-muted-foreground">
-              Quote your reference in any follow-up. Pricing is indicative; GST-free status on
-              eligible items is confirmed on quote.
+              Quote your reference in any follow-up.
             </p>
             <button
               type="button"
@@ -216,7 +215,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                   className="text-sm font-semibold"
                   style={{ color: "#231F20" }}
                 >
-                  Indicative total
+                  Product subtotal
                 </span>
                 <span
                   className="text-xl font-bold tabular-nums"
@@ -225,6 +224,9 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                   {money(total)}
                 </span>
               </div>
+              <p className="mt-1 text-right text-xs text-muted-foreground">
+                Delivery quoted separately.
+              </p>
 
               <div className="mt-3 flex gap-2">
                 <button
