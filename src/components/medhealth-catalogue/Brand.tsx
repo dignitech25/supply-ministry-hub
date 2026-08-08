@@ -31,7 +31,7 @@ export function MedHealthLogo({ className = "" }: { className?: string }) {
     <img
       src={MEDHEALTH_LOGO}
       alt={PARTNER.name}
-      className={`inline-block h-[1em] w-auto translate-y-[0.1em] object-contain align-baseline ${className}`}
+      className={`inline-block h-[1em] w-auto max-w-none shrink-0 translate-y-[0.1em] object-contain align-baseline ${className}`}
     />
   );
 }
