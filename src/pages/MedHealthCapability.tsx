@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Download, Loader2, AlertCircle, Home } from "lucide-react";
+import { Search, Download, Loader2, AlertCircle, Home, ShoppingBag } from "lucide-react";
 import {
   CATEGORIES,
   buildKits,
@@ -21,6 +21,7 @@ import { KitSheet, type Kit } from "@/components/medhealth-catalogue/KitSheet";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
 
 const PARTNER_NAME = PARTNER.name;
+const FONT = "Raleway, system-ui, sans-serif";
 
 /** Every partner-specific value comes from src/partners/medhealth.ts. */
 const theme = {
@@ -143,15 +144,15 @@ const MedHealthCapability = () => {
 
   return (
     <div
-      style={theme}
-      className="min-h-screen bg-background font-[Outfit,system-ui,sans-serif] text-[#231F20] antialiased"
+      style={{ ...theme, fontFamily: FONT }}
+      className="min-h-screen bg-background text-[#231F20] antialiased"
     >
       <Helmet>
         <title>Dedicated catalogue | Supply Ministry</title>
         <meta name="description" content="Private assistive technology ordering catalogue." />
         <meta name="robots" content="noindex, nofollow" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </Helmet>
@@ -166,26 +167,43 @@ const MedHealthCapability = () => {
       </div>
 
       {/* Masthead */}
-      <header style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}>
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
+      <header
+        className="sticky top-0 z-40"
+        style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <PartnerLockup onHome={goHome} />
-          <span
-            className="rounded-full border px-3 py-1 text-xs font-medium"
-            style={{ borderColor: PARTNER.rule, color: PARTNER.ink }}
-          >
-            {PARTNER.badge}
-          </span>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => itemCount > 0 && setReviewing(true)}
+              className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-50"
+              disabled={itemCount === 0}
+              style={{ backgroundColor: HOUSE.violet, color: "#F4EFE6" }}
+            >
+              <ShoppingBag className="h-4 w-4" aria-hidden="true" />
+              <span className="hidden sm:inline">{itemCount} item{itemCount === 1 ? "" : "s"}</span>
+              <span className="sm:hidden">{itemCount}</span>
+              <span className="opacity-80">{money(total)}</span>
+            </button>
+            <span
+              className="hidden rounded-full border px-3 py-1 text-xs font-medium md:inline-block"
+              style={{ borderColor: PARTNER.rule, color: PARTNER.ink }}
+            >
+              {PARTNER.badge}
+            </span>
+          </div>
         </div>
       </header>
 
-      <div className="mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pb-5 pt-7 sm:px-6">
         <h1
-          className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-[42px]"
-          style={{ color: PARTNER.ink, fontFamily: "Outfit, system-ui, sans-serif" }}
+          className="text-balance text-2xl font-semibold leading-tight tracking-tight sm:text-4xl"
+          style={{ color: PARTNER.ink }}
         >
           Assistive technology catalogue for the {PARTNER_NAME} team
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed sm:text-base" style={{ color: "rgba(1,10,22,0.68)" }}>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed sm:text-base" style={{ color: "rgba(1,10,22,0.68)" }}>
           {PARTNER.scope} Select individual items or a clinical kit, then send it through for a
           formal quote.
         </p>
@@ -195,15 +213,15 @@ const MedHealthCapability = () => {
 
       {/* Sticky toolbar */}
       <div
-        className="sticky top-0 z-30 mt-6 border-b border-border backdrop-blur-md"
-        style={{ backgroundColor: "rgba(255,255,255,0.85)" }}
+        className="sticky top-[65px] z-30 border-b border-border backdrop-blur-md"
+        style={{ backgroundColor: "rgba(255,255,255,0.92)" }}
       >
-        <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="mx-auto max-w-6xl px-4 py-2.5 sm:px-6">
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
             <button
               type="button"
               onClick={goHome}
-              className="flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              className="flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#010A16" }}
             >
               <Home className="h-4 w-4" aria-hidden="true" /> Catalogue home
@@ -219,27 +237,27 @@ const MedHealthCapability = () => {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search name, spec or code"
                 aria-label="Search products"
-                className="min-h-11 w-full rounded-xl border border-border bg-card pl-9 pr-3 text-base outline-none focus:border-[#010A16]"
+                className="min-h-10 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-sm outline-none focus:border-[#010A16]"
               />
             </div>
             <button
               type="button"
               onClick={exportVisible}
-              className="flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
+              className="flex min-h-10 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
               style={{ borderColor: "rgba(1,10,22,0.4)", color: "#010A16" }}
             >
               <Download className="h-4 w-4" aria-hidden="true" /> Export
             </button>
           </div>
 
-          <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
+          <div className="-mx-4 mt-2.5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
             {["All", ...CATEGORIES].map((c) => (
               <button
                 key={c}
                 type="button"
                 aria-pressed={tab === c}
                 onClick={() => setTab(c)}
-                className="min-h-11 shrink-0 rounded-full border px-4 text-sm font-medium transition-colors"
+                className="min-h-9 shrink-0 rounded-full border px-3 text-xs font-semibold transition-colors"
                 style={{
                   borderColor: tab === c ? "#010A16" : "hsl(var(--border))",
                   backgroundColor: tab === c ? "#010A16" : "transparent",
@@ -253,7 +271,7 @@ const MedHealthCapability = () => {
         </div>
       </div>
 
-      <main className="mx-auto max-w-6xl px-4 pb-40 pt-6 sm:px-6">
+      <main className="mx-auto max-w-6xl px-4 pb-40 pt-5 sm:px-6">
         {isLoading ? (
           <div className="flex items-center gap-2 py-16 text-sm text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" /> Loading catalogue…
@@ -274,15 +292,15 @@ const MedHealthCapability = () => {
               </p>
             ) : (
               grouped.map(([group, items]) => (
-                <section key={group} className="mb-10" aria-labelledby={`g-${group}`}>
+                <section key={group} className="mb-8" aria-labelledby={`g-${group}`}>
                   <h2
                     id={`g-${group}`}
-                    className="mb-3 text-sm font-semibold uppercase tracking-wide"
-                    style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
+                    className="mb-2.5 text-xs font-semibold uppercase tracking-[0.12em]"
+                    style={{ color: "#010A16" }}
                   >
                     {group}
                   </h2>
-                  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {items.map((p) => (
                       <ProductCard
                         key={p.product_code}

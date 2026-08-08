@@ -119,7 +119,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
           <h2
             id="review-title"
             className="text-lg font-semibold"
-            style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
+            style={{ color: "#231F20" }}
           >
             {state === "done" ? "Request sent" : "Review & send"}
           </h2>
@@ -142,7 +142,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
               type="button"
               onClick={onClose}
               className="mt-2 min-h-11 rounded-xl px-8 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
+              style={{ backgroundColor: "#3D2D9E" }}
             >
               Back to catalogue
             </button>
@@ -156,7 +156,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
             </p>
             <p
               className="text-2xl font-bold tracking-tight"
-              style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
+              style={{ color: "#231F20" }}
             >
               {reference}
             </p>
@@ -168,7 +168,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
               type="button"
               onClick={onComplete}
               className="mt-3 min-h-11 rounded-xl px-8 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
+              style={{ backgroundColor: "#3D2D9E" }}
             >
               Done
             </button>
@@ -193,7 +193,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                     />
                     <span
                       className="min-w-[4.5rem] text-right text-sm font-semibold"
-                      style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
+                      style={{ color: "#010A16" }}
                     >
                       {money((l.product.price_rrp ?? 0) * l.qty)}
                     </span>
@@ -212,13 +212,13 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
               <div className="mt-3 flex items-baseline justify-between border-t-2 border-[#231F20]/10 pt-3">
                 <span
                   className="text-sm font-semibold"
-                  style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
+                  style={{ color: "#231F20" }}
                 >
                   Indicative total
                 </span>
                 <span
                   className="text-xl font-bold"
-                  style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
+                  style={{ color: "#010A16" }}
                 >
                   {money(total)}
                 </span>
@@ -332,7 +332,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                 type="submit"
                 disabled={state === "sending" || isEmpty}
                 className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-base font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-                style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
+                style={{ backgroundColor: "#3D2D9E" }}
               >
                 {state === "sending" && <Loader2 className="h-4 w-4 animate-spin" />}
                 {state === "sending" ? "Sending" : state === "error" ? "Try again" : "Send request"}

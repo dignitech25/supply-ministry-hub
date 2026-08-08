@@ -66,51 +66,45 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
           onToggle();
         }
       }}
-      className={`group relative flex cursor-pointer flex-col rounded-2xl border-2 bg-white p-4 text-left transition-all hover:shadow-md ${
+      className={`group relative flex cursor-pointer flex-col rounded-xl border-2 bg-white p-3 text-left transition-all hover:shadow-md ${
         selected ? "shadow-md" : ""
       }`}
       style={{
         borderColor: selected ? "#3D2D9E" : "hsl(var(--border))",
       }}
     >
-      <div className="flex items-start gap-4">
-        <ProductThumb product={product} />
+      <div className="flex items-start gap-3">
+        <ProductThumb product={product} size="sm" />
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
             {product.clinical_group}
           </p>
-          <h3
-            className="mt-1 text-base font-semibold leading-snug"
-            style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
-          >
+          <h3 className="mt-0.5 text-sm font-semibold leading-snug" style={{ color: "#231F20" }}>
             {product.product_name}
           </h3>
-          <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+          <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
             {firstSentence(product.key_specifications)}
           </p>
         </div>
         <span
           aria-hidden="true"
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition-colors"
+          className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors"
           style={{
             borderColor: selected ? "#3D2D9E" : "hsl(var(--border))",
             backgroundColor: selected ? "#3D2D9E" : "transparent",
             color: selected ? "#F4EFE6" : "transparent",
           }}
         >
-          <Check className="h-4 w-4" strokeWidth={3} />
+          <Check className="h-3 w-3" strokeWidth={3} />
         </span>
       </div>
 
-      <div className="mt-4 flex items-end justify-between gap-3">
+      <div className="mt-3 flex items-end justify-between gap-3">
         <div>
-          <p
-            className="text-lg font-bold"
-            style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
-          >
+          <p className="text-base font-bold" style={{ color: "#010A16" }}>
             {money(product.price_rrp)}
           </p>
-          <p className="text-xs text-muted-foreground">Code {product.product_code}</p>
+          <p className="text-[10px] text-muted-foreground">Code {product.product_code}</p>
         </div>
 
         {selected && (

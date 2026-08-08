@@ -36,7 +36,7 @@ export function KitSheet({
             <h2
               id="kit-sheet-title"
               className="text-lg font-semibold"
-              style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
+              style={{ color: "#231F20" }}
             >
               {kit.name}
             </h2>
@@ -85,7 +85,7 @@ export function KitSheet({
               onClose();
             }}
             className="min-h-11 rounded-xl px-5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
+            style={{ backgroundColor: "#3D2D9E" }}
           >
             Add kit to selection
           </button>
