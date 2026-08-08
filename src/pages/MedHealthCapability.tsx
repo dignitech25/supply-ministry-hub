@@ -204,7 +204,7 @@ const MedHealthCapability = () => {
               type="button"
               onClick={goHome}
               className="flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#33456B" }}
+              style={{ backgroundColor: "#010A16" }}
             >
               <Home className="h-4 w-4" aria-hidden="true" /> Catalogue home
             </button>
@@ -219,14 +219,14 @@ const MedHealthCapability = () => {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search name, spec or code"
                 aria-label="Search products"
-                className="min-h-11 w-full rounded-xl border border-border bg-card pl-9 pr-3 text-base outline-none focus:border-[#33456B]"
+                className="min-h-11 w-full rounded-xl border border-border bg-card pl-9 pr-3 text-base outline-none focus:border-[#010A16]"
               />
             </div>
             <button
               type="button"
               onClick={exportVisible}
-              className="flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-medium transition-colors hover:bg-[rgba(51,69,107,0.1)]"
-              style={{ borderColor: "rgba(51,69,107,0.4)", color: "#33456B" }}
+              className="flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
+              style={{ borderColor: "rgba(1,10,22,0.4)", color: "#010A16" }}
             >
               <Download className="h-4 w-4" aria-hidden="true" /> Export
             </button>
@@ -241,8 +241,8 @@ const MedHealthCapability = () => {
                 onClick={() => setTab(c)}
                 className="min-h-11 shrink-0 rounded-full border px-4 text-sm font-medium transition-colors"
                 style={{
-                  borderColor: tab === c ? "#33456B" : "hsl(var(--border))",
-                  backgroundColor: tab === c ? "#33456B" : "transparent",
+                  borderColor: tab === c ? "#010A16" : "hsl(var(--border))",
+                  backgroundColor: tab === c ? "#010A16" : "transparent",
                   color: tab === c ? "#F4EFE6" : "#231F20",
                 }}
               >
@@ -278,7 +278,7 @@ const MedHealthCapability = () => {
                   <h2
                     id={`g-${group}`}
                     className="mb-3 text-sm font-semibold uppercase tracking-wide"
-                    style={{ color: "#33456B", fontFamily: "Outfit, system-ui, sans-serif" }}
+                    style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
                   >
                     {group}
                   </h2>
