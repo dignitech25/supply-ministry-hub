@@ -12,26 +12,26 @@ import {
   toCsv,
   type Product,
 } from "@/lib/medhealth-catalogue";
-import { MedHealthLogo, SupplyMinistryLogo } from "@/components/medhealth-catalogue/Brand";
+import { MedHealthLogo, SupplyMinistryLogo, PartnerLockup } from "@/components/medhealth-catalogue/Brand";
+import { PartnerContextBand } from "@/components/medhealth-catalogue/PartnerContextBand";
+import { PARTNER, HOUSE } from "@/partners/medhealth";
 import { ProductCard } from "@/components/medhealth-catalogue/ProductCard";
 import { KitsRow } from "@/components/medhealth-catalogue/KitsRow";
 import { KitSheet, type Kit } from "@/components/medhealth-catalogue/KitSheet";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
 
-const PARTNER_NAME = "MedHealth";
+const PARTNER_NAME = PARTNER.name;
 
+/** Every partner-specific value comes from src/partners/medhealth.ts. */
 const theme = {
-  "--sm": "#3D2D9E",
-  "--sm-hover": "#2E2178",
-  "--sm-cream": "#F4EFE6",
-  "--sm-cream-2": "#FBF8F2",
-  "--p-ink": "#231F20",
-  "--p-ink-soft": "#4C6B77",
-  "--p-accent": "#2A5263",
-  "--p-accent-pale": "#E3EEF1",
-  "--blend": "#33456B",
-  "--mh-amber": "#FCB040",
-  "--mh-red": "#EC1C24",
+  "--sm": HOUSE.violet,
+  "--sm-hover": HOUSE.violetHover,
+  "--sm-cream": HOUSE.cream,
+  "--sm-cream-2": HOUSE.cream2,
+  "--p-ink": PARTNER.ink,
+  "--p-accent": PARTNER.accent,
+  "--p-accent-pale": PARTNER.accentPale,
+  "--p-rule": PARTNER.rule,
 } as React.CSSProperties;
 
 const MedHealthCapability = () => {
