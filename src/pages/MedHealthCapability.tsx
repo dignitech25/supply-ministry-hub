@@ -12,7 +12,7 @@ import {
   toCsv,
   type Product,
 } from "@/lib/medhealth-catalogue";
-import { MedHealthLogo, SupplyMinistryLogo, ArcMark } from "@/components/medhealth-catalogue/Brand";
+import { MedHealthLogo, SupplyMinistryLogo } from "@/components/medhealth-catalogue/Brand";
 import { ProductCard } from "@/components/medhealth-catalogue/ProductCard";
 import { KitsRow } from "@/components/medhealth-catalogue/KitsRow";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
@@ -271,12 +271,9 @@ const MedHealthCapability = () => {
       <footer className="border-t border-border" style={{ backgroundColor: "#F4EFE6" }}>
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <div className="flex items-center gap-2" style={{ color: "#3D2D9E" }}>
-              <ArcMark className="h-6 w-6" />
-              <span className="text-sm font-semibold">Supply Ministry</span>
-            </div>
+            <SupplyMinistryLogo compact />
             <span className="text-border">|</span>
-            <MedHealthLogo className="text-sm" />
+            <MedHealthLogo className="text-xl" />
           </div>
           <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted-foreground">
             Supply Ministry Pty Ltd, a Dignitech brand. Prepared for the MedHealth team, August
