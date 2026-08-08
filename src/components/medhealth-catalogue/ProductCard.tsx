@@ -15,17 +15,30 @@ export function CategoryIcon({
 }
 
 export function ProductThumb({ product, size = "md" }: { product: Product; size?: "sm" | "md" }) {
+  const [imgError, setImgError] = useState(false);
+  const hasImage = product.image_url && !imgError;
+
   return (
     <div
-      className={`flex shrink-0 items-center justify-center rounded-xl ${size === "sm" ? "h-11 w-11" : "h-20 w-20"}`}
+      className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl p-1.5 ${size === "sm" ? "h-11 w-11" : "h-20 w-20"}`}
       style={{ backgroundColor: "#F4EFE6", color: "#2A5263" }}
-      aria-label={`${product.category} placeholder image`}
+      aria-label={hasImage ? product.product_name : `${product.category} placeholder image`}
       role="img"
     >
-      <CategoryIcon
-        category={product.clinical_group || product.category}
-        className={size === "sm" ? "h-5 w-5" : "h-8 w-8"}
-      />
+      {hasImage ? (
+        <img
+          src={product.image_url!}
+          alt={product.product_name}
+          loading="lazy"
+          onError={() => setImgError(true)}
+          className="h-full w-full object-contain"
+        />
+      ) : (
+        <CategoryIcon
+          category={product.clinical_group || product.category}
+          className={size === "sm" ? "h-5 w-5" : "h-8 w-8"}
+        />
+      )}
     </div>
   );
 }
