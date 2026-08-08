@@ -413,6 +413,13 @@ as $$
   with params as (
     select
       nullif(btrim(coalesce(p_query, '')), '')            as q,
+      -- LIKE metacharacters in user input must match literally. Without this,
+      -- a query of '%' expands to ILIKE '%%%' and returns the entire
+      -- catalogue, which both misleads the shopper and destroys the genuine
+      -- zero-result signal that catalogue-gap reporting depends on.
+      '%' || replace(replace(replace(
+        nullif(btrim(coalesce(p_query, '')), ''),
+        '\', '\\'), '%', '\%'), '_', '\_') || '%'         as q_like,
       greatest(1, least(coalesce(p_limit, 24), 96))       as lim,
       greatest(0, coalesce(p_offset, 0))                  as off
   ),
@@ -423,7 +430,7 @@ as $$
       (select vs from unnest(pf.variant_skus) vs
         where upper(vs) = upper((select q from params)) limit 1)          as exact_sku,
       (select vs from unnest(pf.variant_skus) vs
-        where vs ilike '%' || (select q from params) || '%' limit 1)      as partial_sku,
+        where vs ilike (select q_like from params) escape '\' limit 1)    as partial_sku,
       case
         when (select q from params) is null then 0
         else ts_rank(pf.search_document,
@@ -437,8 +444,9 @@ as $$
       and (
         params.q is null
         or pf.search_document @@ websearch_to_tsquery('english', params.q)
-        or pf.search_text ilike '%' || params.q || '%'
-        or exists (select 1 from unnest(pf.variant_skus) vs where vs ilike '%' || params.q || '%')
+        or pf.search_text ilike params.q_like escape '\'
+        or exists (select 1 from unnest(pf.variant_skus) vs
+                    where vs ilike params.q_like escape '\')
       )
   )
   select

@@ -28,6 +28,20 @@ describe('product families migration security guards', () => {
     ));
   });
 
+  it('matches LIKE metacharacters in search input literally', () => {
+    // Verified on PostgreSQL 17.10: before this escaping, a query of '%'
+    // expanded to ILIKE '%%%' and returned every active family. That both
+    // misleads the shopper and erases the genuine zero-result signal that
+    // catalogue-gap reporting is meant to collect.
+    assert.ok(migration.includes("'%', '\\%'"), 'percent must be escaped');
+    assert.ok(migration.includes("'_', '\\_'"), 'underscore must be escaped');
+
+    // Every ILIKE against user input must consume the escaped pattern.
+    assert.doesNotMatch(migration, /ilike '%' \|\| params\.q \|\| '%'/);
+    assert.doesNotMatch(migration, /ilike '%' \|\| \(select q from params\) \|\| '%'/);
+    assert.equal(migration.match(/ilike[\s\S]{0,40}?escape '\\'/g)?.length, 3);
+  });
+
   it('recovers persisted family identity before matching editable titles', () => {
     const recovery = migration.indexOf('from private.product_family_variant_keys known');
     const titleUpdate = migration.indexOf('with linked_identity as');
