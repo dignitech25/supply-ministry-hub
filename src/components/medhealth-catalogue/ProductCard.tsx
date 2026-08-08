@@ -35,7 +35,7 @@ export function ProductThumb({
 
   const box =
     size === "fill"
-      ? "aspect-square w-full"
+      ? "h-full w-full"
       : size === "sm"
         ? "h-12 w-12 shrink-0"
         : "h-20 w-20 shrink-0";

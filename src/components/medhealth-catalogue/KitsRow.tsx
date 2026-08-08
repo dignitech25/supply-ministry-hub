@@ -45,7 +45,7 @@ export function KitsRow({
             </p>
 
             <div
-              className="mt-2.5 grid gap-1.5"
+              className="mt-2.5 grid h-20 gap-1.5"
               style={{ gridTemplateColumns: `repeat(${kit.items.length}, minmax(0, 1fr))` }}
             >
               {kit.items.map((p) => (
@@ -53,7 +53,7 @@ export function KitsRow({
               ))}
             </div>
 
-            <div className="mt-2.5 flex items-baseline justify-between">
+            <div className="mt-auto flex items-baseline justify-between pt-2.5">
               <span className="text-xs text-muted-foreground">
                 {kit.items.length} item{kit.items.length === 1 ? "" : "s"}
               </span>
