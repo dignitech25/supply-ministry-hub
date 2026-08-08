@@ -217,15 +217,15 @@ const MedHealthCapability = () => {
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 pb-3 pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pb-3 pt-5 sm:px-6">
         <h1
-          className="text-balance text-base font-semibold leading-snug tracking-tight sm:text-xl"
+          className="text-balance text-lg font-bold leading-tight tracking-tight sm:text-2xl"
           style={{ color: PARTNER.ink }}
         >
           Assistive technology catalogue for the {PARTNER_NAME} team
         </h1>
         <p
-          className="text-pretty text-xs leading-relaxed sm:text-sm"
+          className="text-pretty pt-1.5 text-xs leading-relaxed sm:text-sm"
           style={{ color: "rgba(1,10,22,0.68)" }}
         >
           Select individual items or a clinical kit, then review and send your request.
