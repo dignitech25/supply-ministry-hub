@@ -61,6 +61,10 @@ const MedHealthCapability = () => {
   const [spyGroup, setSpyGroup] = useState<string | null>(null);
   const stickyRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef(new Map<string, HTMLElement>());
+  const pillStripRef = useRef<HTMLDivElement | null>(null);
+  const pillRefs = useRef(new Map<string, HTMLButtonElement>());
+  const [puck, setPuck] = useState<{ left: number; width: number } | null>(null);
+  const [puckReady, setPuckReady] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["microsite_products", "medhealth"],
