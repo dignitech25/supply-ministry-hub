@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { X, Copy, Download, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { X, Copy, Download, CheckCircle2, Loader2, AlertCircle, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { downloadCsv, makeReference, money, toCsv, type Product } from "@/lib/medhealth-catalogue";
+import { QtyStepper } from "./QtyStepper";
 
 export interface Line {
   product: Product;
@@ -13,6 +14,8 @@ interface Props {
   total: number;
   onClose: () => void;
   onComplete: () => void;
+  onQty: (code: string, delta: number) => void;
+  onRemove: (code: string) => void;
 }
 
 function formatRequirements(lines: Line[], total: number) {
@@ -27,7 +30,9 @@ function formatRequirements(lines: Line[], total: number) {
   return `${body}\n\nIndicative total: ${money(total)} (ex delivery, GST-free status confirmed on quote)`;
 }
 
-export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
+export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove }: Props) {
+  const isEmpty = lines.length === 0;
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -128,7 +133,21 @@ export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
           </button>
         </header>
 
-        {state === "done" ? (
+        {isEmpty && state !== "done" ? (
+          <div className="flex flex-col items-center gap-3 px-6 py-12 text-center">
+            <p className="text-sm text-muted-foreground">
+              Your selection is empty. Add items from the catalogue and they will appear here.
+            </p>
+            <button
+              type="button"
+              onClick={onClose}
+              className="mt-2 min-h-11 rounded-xl px-8 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
+            >
+              Back to catalogue
+            </button>
+          </div>
+        ) : state === "done" ? (
           <div className="flex flex-col items-center gap-3 px-6 py-10 text-center">
             <CheckCircle2 className="h-12 w-12" style={{ color: "#3D2D9E" }} strokeWidth={1.5} />
             <p className="text-sm text-muted-foreground">
@@ -158,25 +177,33 @@ export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
             <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
               <ul className="divide-y divide-border">
                 {lines.map((l) => (
-                  <li key={l.product.product_code} className="flex items-baseline gap-3 py-2.5">
-                    <span
-                      className="text-sm font-semibold"
-                      style={{ color: "#33456B", fontFamily: "Outfit, system-ui, sans-serif" }}
-                    >
-                      {l.qty}×
-                    </span>
-                    <span className="flex-1 text-sm" style={{ color: "#231F20" }}>
+                  <li key={l.product.product_code} className="flex flex-wrap items-center gap-x-3 gap-y-2 py-3">
+                    <span className="min-w-[8rem] flex-1 text-sm" style={{ color: "#231F20" }}>
                       {l.product.product_name}
                       <span className="ml-1 text-xs text-muted-foreground">
                         {l.product.product_code}
                       </span>
                     </span>
+                    <QtyStepper
+                      qty={l.qty}
+                      label={l.product.product_name}
+                      onQty={(d) => onQty(l.product.product_code, d)}
+                      size="sm"
+                    />
                     <span
-                      className="text-sm font-semibold"
+                      className="min-w-[4.5rem] text-right text-sm font-semibold"
                       style={{ color: "#2A5263", fontFamily: "Outfit, system-ui, sans-serif" }}
                     >
                       {money((l.product.price_rrp ?? 0) * l.qty)}
                     </span>
+                    <button
+                      type="button"
+                      onClick={() => onRemove(l.product.product_code)}
+                      aria-label={`Remove ${l.product.product_name} from your selection`}
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#F4EFE6] hover:text-[#EC1C24]"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -302,7 +329,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete }: Props) {
             <div className="border-t border-border px-5 py-4">
               <button
                 type="submit"
-                disabled={state === "sending"}
+                disabled={state === "sending" || isEmpty}
                 className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-base font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
                 style={{ backgroundColor: "#3D2D9E", fontFamily: "Outfit, system-ui, sans-serif" }}
               >
