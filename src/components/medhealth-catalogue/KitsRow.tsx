@@ -16,22 +16,37 @@ export function KitsRow({
   if (kits.length === 0) return null;
 
   return (
-    <section aria-labelledby="kits-heading" className="mb-6 rounded-xl border border-border bg-card p-4">
-      <div className="mb-3 flex items-center gap-2">
-        <Layers className="h-4 w-4" style={{ color: HOUSE.violet }} aria-hidden="true" />
-        <h2
-          id="kits-heading"
-          className="text-xs font-semibold uppercase tracking-[0.12em]"
-          style={{ color: PARTNER.ink }}
-        >
-          Clinical kits
-        </h2>
-      </div>
-      <p className="mb-4 text-sm text-muted-foreground">
-        Grouped for MedHealth caseloads, so a common setup is one click rather than ten.
-      </p>
+    <section
+      aria-labelledby="kits-heading"
+      className="mb-9 overflow-hidden rounded-2xl border"
+      style={{ borderColor: "rgba(61,45,158,0.22)", backgroundColor: HOUSE.cream }}
+    >
+      <div className="h-1 w-full" style={{ backgroundColor: HOUSE.violet }} />
+      <div className="p-4 sm:p-6">
+        <div className="mb-4 sm:mb-5">
+          <p
+            className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.18em]"
+            style={{ color: "rgba(61,45,158,0.75)" }}
+          >
+            <Layers className="h-3.5 w-3.5" aria-hidden="true" /> Fast-start bundles
+          </p>
+          <h2
+            id="kits-heading"
+            className="mt-1 text-xl font-bold tracking-tight sm:text-2xl"
+            style={{ color: HOUSE.violet }}
+          >
+            Clinical kits
+          </h2>
+          <p
+            className="mt-1.5 max-w-[62ch] text-sm leading-relaxed"
+            style={{ color: "rgba(1,10,22,0.7)" }}
+          >
+            Each kit adds a clinically useful starting selection in one tap, grouped for MedHealth
+            caseloads and ready to adjust before you send.
+          </p>
+        </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {kits.map((kit) => (
           <article
             key={kit.id}
@@ -85,6 +100,7 @@ export function KitsRow({
             </div>
           </article>
         ))}
+        </div>
       </div>
     </section>
   );
