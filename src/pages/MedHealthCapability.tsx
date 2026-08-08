@@ -25,6 +25,21 @@ import { SourceOnRequest } from "@/components/medhealth-catalogue/SourceOnReques
 const PARTNER_NAME = PARTNER.name;
 const FONT = "Raleway, system-ui, sans-serif";
 
+/**
+ * Pick a column count that leaves the last row looking intentional rather than
+ * like a broken four-up grid. Prefers an exact fit, then a near-full last row.
+ */
+const colsFor = (n: number) => {
+  for (const c of [4, 3, 2]) if (n % c === 0) return c;
+  for (const c of [4, 3, 2]) if (n % c >= c - 1) return c;
+  return 3;
+};
+const COL_CLASS: Record<number, string> = {
+  4: "lg:grid-cols-3 xl:grid-cols-4",
+  3: "lg:grid-cols-3",
+  2: "lg:grid-cols-2",
+};
+
 /** Every partner-specific value comes from src/partners/medhealth.ts. */
 const theme = {
   "--sm": HOUSE.violet,
@@ -217,7 +232,7 @@ const MedHealthCapability = () => {
           Assistive technology, chosen for {PARTNER_NAME} caseloads
         </h1>
         <p
-          className="mt-2 max-w-[46ch] text-balance text-sm leading-relaxed sm:text-base"
+          className="mt-2 max-w-[58ch] text-pretty text-sm leading-relaxed sm:text-base"
           style={{ color: "rgba(1,10,22,0.68)" }}
         >
           Built around injury rehabilitation and return to work occupational therapy. Select items
@@ -318,15 +333,7 @@ const MedHealthCapability = () => {
                   >
                     {group}
                   </h2>
-                  <div
-                    className={`grid gap-3 sm:grid-cols-2 ${
-                      items.length <= 2
-                        ? "lg:grid-cols-2"
-                        : items.length === 3
-                          ? "lg:grid-cols-3"
-                          : "lg:grid-cols-3 xl:grid-cols-4"
-                    }`}
-                  >
+                  <div className={`grid gap-3 sm:grid-cols-2 ${COL_CLASS[colsFor(items.length)]}`}>
                     {items.map((p) => (
                       <ProductCard
                         key={p.product_code}
