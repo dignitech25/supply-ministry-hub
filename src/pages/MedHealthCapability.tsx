@@ -120,18 +120,27 @@ const MedHealthCapability = () => {
     const visible = new Set<string>();
 
     const pick = () => {
-      let best: string | null = null;
-      let bestTop = Infinity;
+      // The section the reader is actually in: the last one whose heading has
+      // passed under the sticky bars, falling back to the next one below.
+      let passed: string | null = null;
+      let passedTop = -Infinity;
+      let upcoming: string | null = null;
+      let upcomingTop = Infinity;
       for (const key of visible) {
         const el = entriesMap.get(key);
         if (!el) continue;
         const top = el.getBoundingClientRect().top;
-        if (top < bestTop) {
-          bestTop = top;
-          best = key;
+        if (top <= headerH + 8) {
+          if (top > passedTop) {
+            passedTop = top;
+            passed = key;
+          }
+        } else if (top < upcomingTop) {
+          upcomingTop = top;
+          upcoming = key;
         }
       }
-      setSpyGroup(best);
+      setSpyGroup(passed ?? upcoming);
     };
 
     const observer = new IntersectionObserver(
