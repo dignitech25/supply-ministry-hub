@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Download, Loader2, Home, ShoppingBag, Mail, Phone } from "lucide-react";
@@ -9,6 +9,7 @@ import {
   fetchProducts,
   money,
   groupOf,
+  normaliseCategory,
   toCsv,
   type Product,
 } from "@/lib/medhealth-catalogue";
@@ -56,6 +57,10 @@ const MedHealthCapability = () => {
   const [selection, setSelection] = useState<Record<string, number>>({});
   const [reviewing, setReviewing] = useState(false);
   const [viewingKit, setViewingKit] = useState<Kit | null>(null);
+  /** Purely visual scroll indicator. Never affects filtering. */
+  const [spyGroup, setSpyGroup] = useState<string | null>(null);
+  const stickyRef = useRef<HTMLDivElement | null>(null);
+  const sectionRefs = useRef(new Map<string, HTMLElement>());
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["microsite_products", "medhealth"],
@@ -95,6 +100,52 @@ const MedHealthCapability = () => {
   }, [visible]);
 
   const kits = useMemo(() => buildKits(products), [products]);
+
+  const groupKeys = useMemo(() => grouped.map(([g]) => g).join("|"), [grouped]);
+
+  // Scroll-spy: highlights the pill for the section under the sticky bars.
+  useEffect(() => {
+    if (tab !== "All" || query.trim()) {
+      setSpyGroup(null);
+      return;
+    }
+    const entriesMap = sectionRefs.current;
+    if (entriesMap.size === 0) return;
+
+    const headerH = stickyRef.current?.offsetHeight ?? 120;
+    const visible = new Set<string>();
+
+    const pick = () => {
+      let best: string | null = null;
+      let bestTop = Infinity;
+      for (const key of visible) {
+        const el = entriesMap.get(key);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top;
+        if (top < bestTop) {
+          bestTop = top;
+          best = key;
+        }
+      }
+      setSpyGroup(best);
+    };
+
+    const observer = new IntersectionObserver(
+      (obsEntries) => {
+        for (const e of obsEntries) {
+          const key = (e.target as HTMLElement).dataset.group;
+          if (!key) continue;
+          if (e.isIntersecting) visible.add(key);
+          else visible.delete(key);
+        }
+        pick();
+      },
+      { rootMargin: `-${headerH}px 0px -55% 0px`, threshold: 0 },
+    );
+
+    for (const el of entriesMap.values()) observer.observe(el);
+    return () => observer.disconnect();
+  }, [tab, query, groupKeys]);
 
   const lines: Line[] = useMemo(
     () =>
@@ -180,9 +231,9 @@ const MedHealthCapability = () => {
         }}
       />
 
-      {/* Masthead */}
+      {/* Masthead and toolbar share one sticky container so they can never mismatch. */}
+      <div ref={stickyRef} className="sticky top-0 z-40">
       <header
-        className="sticky top-0 z-40"
         style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -217,25 +268,10 @@ const MedHealthCapability = () => {
         </div>
       </header>
 
-      <div className="mx-auto max-w-6xl px-4 pb-3 pt-5 sm:px-6">
-        <h1
-          className="text-balance text-lg font-bold leading-tight tracking-tight sm:text-2xl"
-          style={{ color: PARTNER.ink }}
-        >
-          Assistive technology catalogue for the {PARTNER_NAME} team
-        </h1>
-        <p
-          className="text-pretty pt-1.5 text-xs leading-relaxed sm:text-sm"
-          style={{ color: "rgba(1,10,22,0.68)" }}
-        >
-          Select individual items or a clinical kit, then review and send your request.
-        </p>
-      </div>
-
-      {/* Sticky toolbar */}
+      {/* Toolbar */}
       <div
-        className="sticky top-[65px] z-30 border-b border-border backdrop-blur-md"
-        style={{ backgroundColor: "rgba(255,255,255,0.92)" }}
+        className="border-b border-border backdrop-blur-md"
+        style={{ backgroundColor: "rgba(255,255,255,0.97)" }}
       >
         <div className="mx-auto max-w-6xl px-4 py-2.5 sm:px-6">
           <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
@@ -272,24 +308,49 @@ const MedHealthCapability = () => {
           </div>
 
           <div className="-mx-4 mt-2.5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
-            {["All", ...CATEGORIES].map((c) => (
-              <button
-                key={c}
-                type="button"
-                aria-pressed={tab === c}
-                onClick={() => setTab(c)}
-                className="min-h-11 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-colors"
-                style={{
-                  borderColor: tab === c ? HOUSE.violet : "hsl(var(--border))",
-                  backgroundColor: tab === c ? HOUSE.violet : "transparent",
-                  color: tab === c ? "#F4EFE6" : "#231F20",
-                }}
-              >
-                {c} <span className="opacity-70">({counts[c] ?? 0})</span>
-              </button>
-            ))}
+            {["All", ...CATEGORIES].map((c) => {
+              const selected = tab === c;
+              const spied =
+                !selected && tab === "All" && spyGroup != null && normaliseCategory(spyGroup) === c;
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => setTab(c)}
+                  className="min-h-11 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-colors"
+                  style={{
+                    borderColor: selected || spied ? HOUSE.violet : "hsl(var(--border))",
+                    backgroundColor: selected
+                      ? HOUSE.violet
+                      : spied
+                        ? "rgba(61,45,158,0.10)"
+                        : "transparent",
+                    color: selected ? "#F4EFE6" : spied ? HOUSE.violet : "#231F20",
+                  }}
+                >
+                  {c} <span className="opacity-70">({counts[c] ?? 0})</span>
+                </button>
+              );
+            })}
           </div>
         </div>
+      </div>
+      </div>
+
+      <div className="mx-auto max-w-6xl px-4 pb-1 pt-5 sm:px-6">
+        <h1
+          className="text-balance text-lg font-bold leading-tight tracking-tight sm:text-2xl"
+          style={{ color: PARTNER.ink }}
+        >
+          Assistive technology catalogue for the {PARTNER_NAME} team
+        </h1>
+        <p
+          className="text-pretty pt-1.5 text-xs leading-relaxed sm:text-sm"
+          style={{ color: "rgba(1,10,22,0.68)" }}
+        >
+          Select individual items or a clinical kit, then review and send your request.
+        </p>
       </div>
 
       <main
@@ -315,7 +376,16 @@ const MedHealthCapability = () => {
               </p>
             ) : (
               grouped.map(([group, items]) => (
-                <section key={group} className="mb-8" aria-labelledby={`g-${group}`}>
+                <section
+                  key={group}
+                  data-group={group}
+                  ref={(el) => {
+                    if (el) sectionRefs.current.set(group, el);
+                    else sectionRefs.current.delete(group);
+                  }}
+                  className="mb-8"
+                  aria-labelledby={`g-${group}`}
+                >
                   <h2
                     id={`g-${group}`}
                     className="mb-2.5 text-xs font-semibold uppercase tracking-[0.12em]"
