@@ -8,7 +8,6 @@ import SEO from '@/components/SEO';
 import EditorialNavigation from '@/components/editorial/EditorialNavigation';
 import { ProductFilterSidebar } from '@/components/ProductFilterSidebar';
 import { ActiveFilterTags, ActiveFilter } from '@/components/ActiveFilterTags';
-import { supabase } from '@/integrations/supabase/client';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from '@/components/ui/pagination';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -16,44 +15,28 @@ import Footer from '@/components/Footer';
 import { createBreadcrumbSchema } from '@/components/SEO';
 
 import { formatPrice } from '@/utils/productHelpers';
-import { groupIntoParents } from '@/utils/variantHelpers';
-import { buildProductSearchFilter } from '@/utils/searchQuery';
+import { extractBaseName } from '@/utils/variantHelpers';
 import { readFilterParam } from '@/utils/catalogueFilters';
+import {
+  searchProductFamilies,
+  getCatalogueFacets,
+  toPrice,
+  type CatalogueSort,
+} from '@/utils/catalogueApi';
 
-const LISTING_COLUMNS = 'sku,title,brand,price_rrp,price_discounted,image_url,top_level_category,subcategory';
-const BATCH_SIZE = 1000;
-
-const SEARCH_COLUMNS = ['title', 'brand', 'description_long', 'sku'] as const;
-
-async function fetchAllRows(buildQuery: (withCount: boolean) => any): Promise<any[]> {
-  const firstResult = await buildQuery(true)
-    .order('sku', { ascending: true })
-    .range(0, BATCH_SIZE - 1) as { data: any[] | null; error: any; count: number | null };
-
-  if (firstResult.error) throw firstResult.error;
-
-  const rows = firstResult.data || [];
-  const total = firstResult.count ?? rows.length;
-  const remainingPages = Math.ceil(total / BATCH_SIZE) - 1;
-
-  if (remainingPages <= 0) return rows;
-
-  const pageResults = await Promise.all(
-    Array.from({ length: remainingPages }, (_, index) => {
-      const from = (index + 1) * BATCH_SIZE;
-      return buildQuery(false)
-        .order('sku', { ascending: true })
-        .range(from, from + BATCH_SIZE - 1) as PromiseLike<{ data: any[] | null; error: any }>;
-    })
-  );
-
-  pageResults.forEach(({ data, error }) => {
-    if (error) throw error;
-    if (data) rows.push(...data);
-  });
-
-  return rows;
-}
+/**
+ * The catalogue used to sort client-side over the whole grouped set. The RPC
+ * sorts server-side, so the UI's sort keys map onto its vocabulary. 'recent'
+ * never actually meant recent -- it sorted alphabetically by brand -- and
+ * 'relevance' falls through to brand/title ordering when there is no query,
+ * so the default ordering is unchanged.
+ */
+const SORT_MAP: Record<string, CatalogueSort> = {
+  recent: 'relevance',
+  'brand-az': 'brand-az',
+  'price-low': 'price-low',
+  'price-high': 'price-high',
+};
 
 interface DisplayProduct {
   sku: string;
@@ -126,29 +109,28 @@ export default function Products() {
     setCurrentPage(parseInt(pageParam || '1'));
   }, [searchParams]);
 
-  // Fetch subcategories when categories change
+  // Subcategory facets follow the selected categories -- one indexed aggregate
+  // instead of re-downloading every variant row.
   useEffect(() => {
-    const fetchSubcategories = async () => {
+    let cancelled = false;
+    const loadSubcategories = async () => {
       if (selectedCategories.length === 0) {
         setFilterOptions(prev => ({ ...prev, subcategories: [] }));
         setSelectedSubcategories([]);
         return;
       }
-
-      const data = await fetchAllRows((withCount) => supabase
-        .from('products_categorized' as any)
-        .select('sku,subcategory', withCount ? { count: 'exact' } : {})
-        .in('top_level_category', selectedCategories)
-        .not('subcategory', 'is', null));
-
-      const uniqueSubcategories = Array.from(
-        new Set(data.map(p => p.subcategory).filter(Boolean))
-      ) as string[];
-
-      setFilterOptions(prev => ({ ...prev, subcategories: uniqueSubcategories.sort() }));
+      try {
+        const facets = await getCatalogueFacets(selectedCategories);
+        if (!cancelled) {
+          setFilterOptions(prev => ({ ...prev, subcategories: facets.subcategories }));
+        }
+      } catch (error) {
+        console.error('Error fetching subcategory facets:', error);
+      }
     };
 
-    fetchSubcategories();
+    loadSubcategories();
+    return () => { cancelled = true; };
   }, [selectedCategories]);
 
   // Fetch products when filters change
@@ -171,30 +153,14 @@ export default function Products() {
 
   const fetchFilterOptions = async () => {
     try {
-      // Use predefined clean categories
-      const cleanCategories = [
-        'Mobility',
-        'Bedroom & Comfort',
-        'Seating & Chairs',
-        'Bathroom & Toileting',
-        'Accessible & Consumables',
-        'Home & Safety'
-      ];
-
-      const data = await fetchAllRows((withCount) => supabase
-        .from('products_categorized' as any)
-        .select('sku,brand', withCount ? { count: 'exact' } : {}));
-      
-      const brands = new Set<string>();
-
-      data.forEach(product => {
-        if (product.brand) brands.add(product.brand);
-      });
-
+      // Categories and brands now come from the family table, so the list
+      // reflects what is actually in the catalogue rather than a hardcoded
+      // array that had already drifted from the data.
+      const facets = await getCatalogueFacets();
       setFilterOptions({
-        categories: cleanCategories,
+        categories: facets.categories,
         subcategories: [],
-        brands: Array.from(brands).sort(),
+        brands: facets.brands,
       });
     } catch (error) {
       console.error('Error fetching filter options:', error);
@@ -209,67 +175,38 @@ export default function Products() {
 
     setLoading(true);
     try {
-      // Build query with filters
-      const allData = await fetchAllRows((withCount) => {
-        let query = supabase
-          .from('products_categorized' as any)
-          .select(LISTING_COLUMNS, withCount ? { count: 'exact' } : {});
-
-        const searchFilter = buildProductSearchFilter(debouncedSearch, SEARCH_COLUMNS);
-        if (searchFilter) {
-          query = query.or(searchFilter);
-        }
-        if (selectedCategories.length > 0) {
-          query = query.in('top_level_category', selectedCategories);
-        }
-        if (selectedSubcategories.length > 0) {
-          query = query.in('subcategory', selectedSubcategories);
-        }
-        if (selectedBrands.length > 0) {
-          query = query.in('brand', selectedBrands);
-        }
-
-        return query;
+      const { families, totalCount: total } = await searchProductFamilies({
+        query: debouncedSearch,
+        categories: selectedCategories,
+        subcategories: selectedSubcategories,
+        brands: selectedBrands,
+        sort: SORT_MAP[sortBy] ?? 'relevance',
+        limit: productsPerPage,
+        offset: (currentPage - 1) * productsPerPage,
       });
 
       if (requestId !== latestRequestRef.current) return;
 
-      // Group variants into parent products
-      const parentMap = groupIntoParents(allData);
-      const displayProducts: DisplayProduct[] = Array.from(parentMap.values()).map(parent => ({
-        sku: parent.defaultVariant.sku,
-        slug: parent.slug,
-        baseName: parent.baseName,
-        brand: parent.brand,
-        category: parent.category || '',
-        subcategory: parent.subcategory || '',
-        imageUrl: parent.defaultVariant.imageUrl || null,
-        fromPrice: parent.fromPrice,
-        variantCount: parent.variants.length,
-      }));
-      
-      // Apply sorting
-      switch (sortBy) {
-        case 'brand-az':
-          displayProducts.sort((a, b) => a.brand.localeCompare(b.brand));
-          break;
-        case 'price-low':
-          displayProducts.sort((a, b) => (a.fromPrice || Infinity) - (b.fromPrice || Infinity));
-          break;
-        case 'price-high':
-          displayProducts.sort((a, b) => (b.fromPrice || 0) - (a.fromPrice || 0));
-          break;
-        default:
-          displayProducts.sort((a, b) => a.brand.localeCompare(b.brand) || a.baseName.localeCompare(b.baseName));
-      }
-      
-      // Apply pagination
-      const from_page = (currentPage - 1) * productsPerPage;
-      const to_page = from_page + productsPerPage;
-      setProducts(displayProducts.slice(from_page, to_page));
-      setTotalCount(displayProducts.length);
+      setProducts(families.map((family) => ({
+        // matched_sku is set when the query matched a specific variant, so an
+        // exact SKU search opens that variant rather than the family default.
+        sku: family.matched_sku || family.representative_sku || '',
+        slug: family.slug,
+        baseName: extractBaseName(family.display_name || family.title || ''),
+        brand: family.brand || '',
+        category: family.top_level_category || '',
+        subcategory: family.subcategory || '',
+        imageUrl: family.primary_image_url,
+        fromPrice: toPrice(family.min_price),
+        variantCount: family.variant_count,
+      })));
+      setTotalCount(total);
     } catch (error) {
       console.error('Error fetching products:', error);
+      if (requestId === latestRequestRef.current) {
+        setProducts([]);
+        setTotalCount(0);
+      }
     } finally {
       if (requestId === latestRequestRef.current) setLoading(false);
     }
