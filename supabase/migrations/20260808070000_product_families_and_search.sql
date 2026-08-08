@@ -533,6 +533,24 @@ grant  execute on function public.rebuild_product_families() to service_role;
 
 -- Read RPCs do not need elevated privileges: grant the underlying RLS-filtered
 -- table and execute them as the caller.
+--
+-- The REVOKE is not redundant. Supabase configures
+--   alter default privileges in schema public grant all on tables
+--     to anon, authenticated, service_role
+-- so a newly created public table hands anon INSERT/UPDATE/DELETE the moment it
+-- exists, whatever the creating migration intended. Confirmed on production
+-- 2026-08-08: product_families came into being with anon holding full DML.
+--
+-- RLS did deny those writes, because only a SELECT policy exists -- but that
+-- left row level security as the single control. Dropping the surplus grants
+-- means a future permissive policy, or RLS being switched off, cannot silently
+-- expose catalogue writes to anonymous callers.
+--
+-- A local PostgreSQL rehearsal cannot catch this: stock Postgres has no such
+-- default privileges, so the same assertion passes locally and fails on
+-- Supabase.
+revoke insert, update, delete, truncate, references, trigger
+  on public.product_families from anon, authenticated;
 grant select on table public.product_families to anon, authenticated;
 
 revoke execute on function public.search_product_families(text, text[], text[], text[], text, integer, integer) from public;
