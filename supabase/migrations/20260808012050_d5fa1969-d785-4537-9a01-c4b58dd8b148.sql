@@ -1,0 +1,1 @@
+DELETE FROM public.quote_requests WHERE email = 'test-bot@example.com';
