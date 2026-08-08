@@ -29,7 +29,7 @@ export function QtyStepper({ qty, label, onQty, size = "md" }: Props) {
       <span
         aria-live="polite"
         className="min-w-6 text-center text-base font-semibold"
-        style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
+        style={{ color: "#231F20" }}
       >
         {qty}
       </span>
