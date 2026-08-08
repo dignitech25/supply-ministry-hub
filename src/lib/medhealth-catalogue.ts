@@ -16,6 +16,7 @@ export interface Product {
   price_rrp: number | null;
   key_specifications: string | null;
   sort_order: number | null;
+  image_url: string | null;
 }
 
 export async function fetchProducts(): Promise<Product[]> {
