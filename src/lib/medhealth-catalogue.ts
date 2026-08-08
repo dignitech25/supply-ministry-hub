@@ -33,6 +33,31 @@ export async function fetchProducts(): Promise<Product[]> {
   return (data ?? []).filter((p) => p.status === "priced");
 }
 
+export interface SourceItem {
+  product_name: string;
+  clinical_group: string;
+}
+
+/**
+ * Items MedHealth can ask us to source. These are deliberately kept apart from
+ * the priced catalogue: no codes, no prices, never selectable.
+ */
+export async function fetchSourceOnRequest(): Promise<SourceItem[]> {
+  const { data, error } = await supabase
+    .from("microsite_products")
+    .select("product_name, clinical_group, status, sort_order")
+    .eq("collection", "medhealth")
+    .eq("status", "source_on_request")
+    .order("sort_order", { ascending: true })
+    .returns<Array<SourceItem & { status: string; sort_order: number | null }>>();
+
+  if (error) throw error;
+  return (data ?? []).map(({ product_name, clinical_group }) => ({
+    product_name,
+    clinical_group: clinical_group || "Other",
+  }));
+}
+
 export const CATEGORIES = [
   "Bathing & showering",
   "Dressing & reaching",
@@ -54,6 +79,20 @@ export function groupOf(p: Product): string {
   const byGroup = normaliseCategory(p.clinical_group ?? "");
   if ((CATEGORIES as readonly string[]).includes(byGroup)) return byGroup;
   return normaliseCategory(p.category ?? "");
+}
+
+/**
+ * Short visual label for a clinical group. The full group name is kept for
+ * screen readers and filter chips, this is only to stop card eyebrows wrapping.
+ */
+const SHORT_LABELS: Record<string, string> = {
+  "Bathing & showering": "Bathing",
+  "Dressing & reaching": "Dressing",
+  "Transfers & positioning": "Transfers",
+};
+
+export function shortGroupLabel(group: string): string {
+  return SHORT_LABELS[normaliseCategory(group ?? "")] ?? group ?? "";
 }
 
 /** First sentence of the specification, used as the card description. */
