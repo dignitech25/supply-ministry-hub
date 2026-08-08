@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Download, Loader2, AlertCircle, Home } from "lucide-react";
+import { Search, Download, Loader2, AlertCircle, Home, ShoppingBag } from "lucide-react";
 import {
   CATEGORIES,
   buildKits,
@@ -21,6 +21,7 @@ import { KitSheet, type Kit } from "@/components/medhealth-catalogue/KitSheet";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
 
 const PARTNER_NAME = PARTNER.name;
+const FONT = "Raleway, system-ui, sans-serif";
 
 /** Every partner-specific value comes from src/partners/medhealth.ts. */
 const theme = {
