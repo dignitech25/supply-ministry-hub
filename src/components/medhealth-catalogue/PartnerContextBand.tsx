@@ -8,9 +8,9 @@ export function PartnerContextBand() {
       style={{ backgroundColor: PARTNER.accentPale, borderColor: PARTNER.rule }}
       className="border-y"
     >
-      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-5 sm:grid-cols-3 sm:px-6">
+      <div className="mx-auto grid max-w-6xl gap-x-10 gap-y-6 px-4 py-5 sm:grid-cols-3 sm:px-6">
         {PARTNER.context.map((c) => (
-          <div key={c.title}>
+          <div key={c.title} className="min-w-0">
             <div
               className="mb-2 h-0.5 w-7 rounded-full"
               style={{ backgroundColor: PARTNER.accent }}

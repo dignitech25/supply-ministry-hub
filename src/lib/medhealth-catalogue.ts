@@ -33,6 +33,31 @@ export async function fetchProducts(): Promise<Product[]> {
   return (data ?? []).filter((p) => p.status === "priced");
 }
 
+export interface SourceItem {
+  product_name: string;
+  clinical_group: string;
+}
+
+/**
+ * Items MedHealth can ask us to source. These are deliberately kept apart from
+ * the priced catalogue: no codes, no prices, never selectable.
+ */
+export async function fetchSourceOnRequest(): Promise<SourceItem[]> {
+  const { data, error } = await supabase
+    .from("microsite_products")
+    .select("product_name, clinical_group, status, sort_order")
+    .eq("collection", "medhealth")
+    .eq("status", "source_on_request")
+    .order("sort_order", { ascending: true })
+    .returns<Array<SourceItem & { status: string; sort_order: number | null }>>();
+
+  if (error) throw error;
+  return (data ?? []).map(({ product_name, clinical_group }) => ({
+    product_name,
+    clinical_group: clinical_group || "Other",
+  }));
+}
+
 export const CATEGORIES = [
   "Bathing & showering",
   "Dressing & reaching",
@@ -56,6 +81,20 @@ export function groupOf(p: Product): string {
   return normaliseCategory(p.category ?? "");
 }
 
+/**
+ * Short visual label for a clinical group. The full group name is kept for
+ * screen readers and filter chips, this is only to stop card eyebrows wrapping.
+ */
+const SHORT_LABELS: Record<string, string> = {
+  "Bathing & showering": "Bathing",
+  "Dressing & reaching": "Dressing",
+  "Transfers & positioning": "Transfers",
+};
+
+export function shortGroupLabel(group: string): string {
+  return SHORT_LABELS[normaliseCategory(group ?? "")] ?? group ?? "";
+}
+
 /** First sentence of the specification, used as the card description. */
 export function firstSentence(text: string | null | undefined): string {
   if (!text) return "";
@@ -74,60 +113,57 @@ export const money = (n: number | null | undefined) =>
       }).format(n);
 
 /**
- * Clinical kits are derived from the real rows returned by Supabase, no
- * invented products or prices. A kit that matches nothing is not rendered.
+ * Clinical kits are fixed, explicit compositions of real catalogue codes.
+ * Every code below exists in microsite_products, no product or price is
+ * invented, and no code appears in more than one kit, so two kits can never
+ * end up with the same items or the same subtotal by accident.
  */
 export interface KitRule {
   id: string;
   name: string;
   blurb: string;
-  match: (p: Product) => boolean;
-  limit: number;
+  codes: readonly string[];
 }
-
-const has = (p: Product, ...words: string[]) => {
-  const hay = `${p.product_name} ${p.key_specifications ?? ""} ${p.clinical_group}`.toLowerCase();
-  return words.some((w) => hay.includes(w));
-};
 
 export const KIT_RULES: KitRule[] = [
   {
     id: "bathroom-safety",
     name: "Bathroom safety starter",
-    blurb: "Core grab, seat and step items for a first bathroom review.",
-    match: (p) =>
-      groupOf(p) === CATEGORIES[0] &&
-      has(p, "rail", "grab", "stool", "seat", "mat", "step"),
-    limit: 4,
+    blurb: "Non-slip surfaces and a seat for a first bathroom review.",
+    codes: ["SMBA12740", "SMBA12739", "SMBA10511CA"],
   },
   {
     id: "over-bath",
     name: "Over-bath transfer",
-    blurb: "Board, rail and support set for an over-bath transfer plan.",
-    match: (p) => has(p, "bath board", "bath", "board", "swivel", "transfer"),
-    limit: 4,
+    blurb: "Board, bench and leg support for an over-bath transfer plan.",
+    codes: ["SMBABE68801", "SMBABE98309", "SMDL10318"],
   },
   {
     id: "bariatric",
     name: "Bariatric bathroom",
-    blurb: "Higher safe-working-load bathroom items.",
-    match: (p) => has(p, "bariatric", "heavy duty", "wide", "xl"),
-    limit: 4,
+    blurb: "Higher safe-working-load seating and bench.",
+    codes: ["SMBABE688024HD", "SMBABE98310B"],
   },
   {
     id: "lower-limb-dressing",
     name: "Lower-limb dressing",
-    blurb: "Reachers, sock aids and long-handled dressing tools.",
-    match: (p) =>
-      groupOf(p) === CATEGORIES[1] &&
-      has(p, "sock", "reacher", "shoe horn", "dressing", "stocking", "long handle"),
-    limit: 4,
+    blurb: "Sock aid, reacher, shoe horn and long-handled sponge.",
+    codes: ["SMDL10339", "SMDL1024/81", "SMDL10921/16", "SMDL10093"],
+  },
+  {
+    id: "seated-shower",
+    name: "Seated shower and turning",
+    blurb: "Shower chair, padded bench, swivel cushion and short reacher.",
+    codes: ["SMBA5300A", "SMBABE3645", "SMDL12135", "SMDL10204/65"],
   },
 ];
 
 export function buildKits(products: Product[]) {
+  const byCode = new Map(products.map((p) => [p.product_code, p]));
   return KIT_RULES.map((rule) => {
-    const items = products.filter(rule.match).slice(0, rule.limit);
+    const items = rule.codes
+      .map((c) => byCode.get(c))
+      .filter((p): p is Product => Boolean(p));
     const subtotal = items.reduce((sum, p) => sum + (p.price_rrp ?? 0), 0);
     return { ...rule, items, subtotal };
   }).filter((k) => k.items.length >= 2);

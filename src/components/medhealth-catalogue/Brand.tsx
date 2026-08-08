@@ -31,7 +31,7 @@ export function MedHealthLogo({ className = "" }: { className?: string }) {
     <img
       src={MEDHEALTH_LOGO}
       alt={PARTNER.name}
-      className={`inline-block h-[1em] w-auto translate-y-[0.1em] object-contain align-baseline ${className}`}
+      className={`inline-block h-[1em] w-auto max-w-none shrink-0 translate-y-[0.1em] object-contain align-baseline ${className}`}
     />
   );
 }
@@ -42,7 +42,7 @@ export function MedHealthLogo({ className = "" }: { className?: string }) {
  */
 export function PartnerLockup({ onHome }: { onHome?: () => void }) {
   return (
-    <div className="flex items-center gap-4 sm:gap-6">
+    <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 sm:gap-x-6">
       <button
         type="button"
         onClick={onHome}
@@ -58,12 +58,12 @@ export function PartnerLockup({ onHome }: { onHome?: () => void }) {
       />
       <div className="min-w-0 leading-none">
         <span
-          className="block text-[9px] font-semibold uppercase leading-none tracking-[0.2em]"
+          className="block text-[9px] font-semibold uppercase leading-none tracking-[0.18em]"
           style={{ color: "rgba(1,10,22,0.5)" }}
         >
           {PARTNER.preparedFor}
         </span>
-        <MedHealthLogo className="mt-[7px] text-[17px] opacity-90 sm:text-[19px]" />
+        <MedHealthLogo className="mt-[7px] text-[16px] opacity-90 sm:text-[19px]" />
       </div>
     </div>
   );
