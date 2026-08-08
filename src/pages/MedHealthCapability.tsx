@@ -301,17 +301,21 @@ const MedHealthCapability = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border" style={{ backgroundColor: "#F4EFE6" }}>
+      <footer style={{ backgroundColor: HOUSE.cream, borderTop: `1px solid ${PARTNER.rule}` }}>
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <SupplyMinistryLogo compact />
-            <span className="text-border">|</span>
+            <span aria-hidden="true" className="h-6 w-px" style={{ backgroundColor: PARTNER.rule }} />
+            <span
+              className="text-[10px] font-semibold uppercase tracking-[0.16em]"
+              style={{ color: "rgba(1,10,22,0.55)" }}
+            >
+              {PARTNER.preparedFor}
+            </span>
             <MedHealthLogo className="text-xl" />
           </div>
           <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted-foreground">
-            Supply Ministry Pty Ltd, a Dignitech brand. Prepared for the MedHealth team, August
-            2026. Not a statement of partnership, endorsement or approval by MedHealth. GST-free
-            status on eligible items confirmed on quote.
+            {PARTNER.disclaimer}
           </p>
         </div>
       </footer>
