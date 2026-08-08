@@ -63,7 +63,7 @@ export function PartnerLockup({ onHome }: { onHome?: () => void }) {
         >
           {PARTNER.preparedFor}
         </span>
-        <MedHealthLogo className="mt-[7px] text-[16px] opacity-90 sm:text-[19px]" />
+        <MedHealthLogo className="mt-[5px] text-[24px] opacity-100 sm:mt-[7px] sm:text-[19px] sm:opacity-90" />
       </div>
     </div>
   );
