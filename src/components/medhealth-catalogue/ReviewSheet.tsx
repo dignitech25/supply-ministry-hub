@@ -119,7 +119,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
           <h2
             id="review-title"
             className="text-lg font-semibold"
-            style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
+            style={{ color: "#231F20" }}
           >
             {state === "done" ? "Request sent" : "Review & send"}
           </h2>
