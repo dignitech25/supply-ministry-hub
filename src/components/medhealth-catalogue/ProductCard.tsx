@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Bath, Shirt, MoveRight, Package, Check, Minus, Plus } from "lucide-react";
 import { CATEGORIES, firstSentence, money, normaliseCategory, type Product } from "@/lib/medhealth-catalogue";
 
