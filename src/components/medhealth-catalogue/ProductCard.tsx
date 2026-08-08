@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Bath, Shirt, MoveRight, Package, Check, Minus, Plus } from "lucide-react";
+import { Bath, Shirt, MoveRight, Package, Check } from "lucide-react";
 import { CATEGORIES, firstSentence, money, normaliseCategory, type Product } from "@/lib/medhealth-catalogue";
+import { QtyStepper } from "./QtyStepper";
 
 export function CategoryIcon({
   category,
@@ -113,38 +114,7 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
         </div>
 
         {selected && (
-          <div
-            className="flex items-center gap-1 rounded-full border p-1"
-            style={{ borderColor: "rgba(51,69,107,0.4)", backgroundColor: "rgba(51,69,107,0.1)" }}
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              aria-label={`Decrease quantity of ${product.product_name}`}
-              onClick={() => onQty(-1)}
-              className="flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-white"
-              style={{ color: "#33456B" }}
-            >
-              <Minus className="h-4 w-4" />
-            </button>
-            <span
-              aria-live="polite"
-              className="min-w-6 text-center text-base font-semibold"
-              style={{ color: "#231F20", fontFamily: "Outfit, system-ui, sans-serif" }}
-            >
-              {qty}
-            </span>
-            <button
-              type="button"
-              aria-label={`Increase quantity of ${product.product_name}`}
-              onClick={() => onQty(1)}
-              className="flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-white"
-              style={{ color: "#33456B" }}
-            >
-              <Plus className="h-4 w-4" />
-            </button>
-          </div>
+          <QtyStepper qty={qty} label={product.product_name} onQty={onQty} />
         )}
       </div>
     </div>
