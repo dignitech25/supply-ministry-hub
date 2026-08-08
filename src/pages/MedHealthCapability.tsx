@@ -1,13 +1,12 @@
 import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Download, Loader2, AlertCircle, Home, ShoppingBag } from "lucide-react";
+import { Search, Download, Loader2, Home, ShoppingBag, Mail, Phone } from "lucide-react";
 import {
   CATEGORIES,
   buildKits,
   downloadCsv,
   fetchProducts,
-  fetchSourceOnRequest,
   money,
   groupOf,
   toCsv,
@@ -20,7 +19,7 @@ import { ProductCard } from "@/components/medhealth-catalogue/ProductCard";
 import { KitsRow } from "@/components/medhealth-catalogue/KitsRow";
 import { KitSheet, type Kit } from "@/components/medhealth-catalogue/KitSheet";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
-import { SourceOnRequest } from "@/components/medhealth-catalogue/SourceOnRequest";
+import { SourcingCallout } from "@/components/medhealth-catalogue/SourcingCallout";
 
 const PARTNER_NAME = PARTNER.name;
 const FONT = "Raleway, system-ui, sans-serif";
@@ -62,11 +61,6 @@ const MedHealthCapability = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["microsite_products", "medhealth"],
     queryFn: fetchProducts,
-  });
-
-  const { data: sourceItems } = useQuery({
-    queryKey: ["microsite_products", "medhealth", "source_on_request"],
-    queryFn: fetchSourceOnRequest,
   });
 
   const products = useMemo(() => data ?? [], [data]);
@@ -348,7 +342,7 @@ const MedHealthCapability = () => {
               ))
             )}
 
-            {tab === "All" && !query && <SourceOnRequest items={sourceItems ?? []} />}
+            <SourcingCallout />
           </>
         )}
       </main>
@@ -367,6 +361,26 @@ const MedHealthCapability = () => {
             </span>
             <MedHealthLogo className="text-xl" />
           </div>
+
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            <a
+              href="tel:0404593090"
+              aria-label="Call Supply Ministry on 0404 593 090"
+              className="flex min-h-11 items-center gap-2 rounded-xl border px-4 text-sm font-semibold transition-colors hover:bg-[rgba(61,45,158,0.08)]"
+              style={{ borderColor: HOUSE.violet, color: HOUSE.violet }}
+            >
+              <Phone className="h-4 w-4" aria-hidden="true" /> 0404 593 090
+            </a>
+            <a
+              href="mailto:hello@supplyministry.com.au"
+              aria-label="Email Supply Ministry at hello@supplyministry.com.au"
+              className="flex min-h-11 items-center gap-2 rounded-xl border px-4 text-sm font-semibold transition-colors hover:bg-[rgba(61,45,158,0.08)]"
+              style={{ borderColor: HOUSE.violet, color: HOUSE.violet }}
+            >
+              <Mail className="h-4 w-4" aria-hidden="true" /> hello@supplyministry.com.au
+            </a>
+          </div>
+
           <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted-foreground">
             {PARTNER.disclaimer}
           </p>

@@ -1,6 +1,6 @@
 import { Layers } from "lucide-react";
 import { money, type Product } from "@/lib/medhealth-catalogue";
-import { HOUSE, PARTNER } from "@/partners/medhealth";
+import { HOUSE } from "@/partners/medhealth";
 import { ProductThumb } from "./ProductCard";
 import type { Kit } from "./KitSheet";
 
