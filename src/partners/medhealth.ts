@@ -31,15 +31,15 @@ export const PARTNER = {
   context: [
     {
       title: "Why this selection",
-      body: "Chosen for the equipment your OTs prescribe most often in injury rehabilitation and return to work assessments, rather than a full trade catalogue.",
+      body: "Curated for injury rehab and return-to-work OT caseloads, not a full trade catalogue.",
     },
     {
       title: "How pricing works",
-      body: "Prices shown are indicative recommended retail. Your formal quote confirms delivery, setup and GST-free status on eligible items.",
+      body: "Prices are indicative RRP. Your formal quote confirms delivery, setup and GST-free status.",
     },
     {
       title: "What happens next",
-      body: "Send a selection and you get a written quote back with a reference number. We deliver, set up in the home, and stay close until everyone is happy with it.",
+      body: "Send a selection and receive a written quote, delivery, setup and follow-up support.",
     },
   ],
   /** Footer disclaimer. Ownership rule: our document, referencing them. */
