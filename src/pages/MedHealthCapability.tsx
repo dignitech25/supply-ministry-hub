@@ -114,6 +114,13 @@ const MedHealthCapability = () => {
       return next;
     });
 
+  const removeItem = (code: string) =>
+    setSelection((s) => {
+      const next = { ...s };
+      delete next[code];
+      return next;
+    });
+
   const goHome = () => {
     setTab("All");
     setQuery("");
@@ -352,6 +359,8 @@ const MedHealthCapability = () => {
         <ReviewSheet
           lines={lines}
           total={total}
+          onQty={bumpQty}
+          onRemove={removeItem}
           onClose={() => setReviewing(false)}
           onComplete={() => {
             setSelection({});
