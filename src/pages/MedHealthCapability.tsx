@@ -271,7 +271,9 @@ const MedHealthCapability = () => {
         </div>
       </div>
 
-      <main className="mx-auto max-w-6xl px-4 pb-40 pt-5 sm:px-6">
+      <main
+        className={`mx-auto max-w-6xl px-4 pt-5 sm:px-6 ${lines.length > 0 ? "pb-56" : "pb-24"}`}
+      >
         {isLoading ? (
           <div className="flex items-center gap-2 py-16 text-sm text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" /> Loading catalogue…
