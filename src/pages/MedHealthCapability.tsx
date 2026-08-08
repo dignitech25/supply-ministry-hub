@@ -321,11 +321,11 @@ const MedHealthCapability = () => {
         style={{ backgroundColor: "rgba(255,255,255,0.97)" }}
       >
         <div className="mx-auto max-w-6xl px-4 py-2.5 sm:px-6">
-          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
+          <div className="flex flex-row items-center gap-2.5">
             <button
               type="button"
               onClick={goHome}
-              className="flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              className="hidden min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-sm font-medium text-white transition-opacity hover:opacity-90 sm:flex"
               style={{ backgroundColor: HOUSE.violet }}
             >
               <Home className="h-4 w-4" aria-hidden="true" /> Catalogue home
@@ -347,43 +347,57 @@ const MedHealthCapability = () => {
             <button
               type="button"
               onClick={exportVisible}
-              className="flex min-h-11 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors hover:bg-[rgba(61,45,158,0.08)]"
+              className="hidden min-h-11 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors hover:bg-[rgba(61,45,158,0.08)] sm:flex"
               style={{ borderColor: HOUSE.violet, color: HOUSE.violet }}
             >
               <Download className="h-4 w-4" aria-hidden="true" /> Export
             </button>
           </div>
 
-          <div className="-mx-4 mt-2.5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
-            {["All", ...CATEGORIES].map((c) => {
-              const selected = tab === c;
-              const spied =
-                !selected && tab === "All" && spyGroup != null && normaliseCategory(spyGroup) === c;
-              return (
-                <button
-                  key={c}
-                  type="button"
-                  aria-pressed={selected}
-                  onClick={() => {
-                    setTab(c);
-                    setSpyGroup(null);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="min-h-11 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-colors"
+          <div className="-mx-4 mt-2.5 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
+            <div ref={pillStripRef} className="relative flex w-max gap-2">
+              {puck && (
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-0 top-0 h-full rounded-full motion-reduce:!transition-none"
                   style={{
-                    borderColor: selected || spied ? HOUSE.violet : "hsl(var(--border))",
-                    backgroundColor: selected
-                      ? HOUSE.violet
-                      : spied
-                        ? "rgba(61,45,158,0.10)"
-                        : "transparent",
-                    color: selected ? "#F4EFE6" : spied ? HOUSE.violet : "#231F20",
+                    width: puck.width,
+                    transform: `translateX(${puck.left}px)`,
+                    backgroundColor: HOUSE.violet,
+                    transition: puckReady
+                      ? "transform 220ms cubic-bezier(0.22,1,0.36,1), width 220ms cubic-bezier(0.22,1,0.36,1)"
+                      : "none",
                   }}
-                >
-                  {c} <span className="opacity-70">({counts[c] ?? 0})</span>
-                </button>
-              );
-            })}
+                />
+              )}
+              {["All", ...CATEGORIES].map((c) => {
+                const active = activePill === c;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    ref={(el) => {
+                      if (el) pillRefs.current.set(c, el);
+                      else pillRefs.current.delete(c);
+                    }}
+                    aria-pressed={tab === c}
+                    onClick={() => {
+                      setTab(c);
+                      setSpyGroup(null);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    className="relative z-10 min-h-11 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-colors duration-200"
+                    style={{
+                      borderColor: active ? HOUSE.violet : "hsl(var(--border))",
+                      backgroundColor: "transparent",
+                      color: active ? "#F4EFE6" : "#231F20",
+                    }}
+                  >
+                    {c} <span className="opacity-70">({counts[c] ?? 0})</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
