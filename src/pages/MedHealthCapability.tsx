@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Download, Loader2, AlertCircle } from "lucide-react";
+import { Search, Download, Loader2, AlertCircle, Home } from "lucide-react";
 import {
   CATEGORIES,
   buildKits,
@@ -15,6 +15,7 @@ import {
 import { MedHealthLogo, SupplyMinistryLogo } from "@/components/medhealth-catalogue/Brand";
 import { ProductCard } from "@/components/medhealth-catalogue/ProductCard";
 import { KitsRow } from "@/components/medhealth-catalogue/KitsRow";
+import { KitSheet, type Kit } from "@/components/medhealth-catalogue/KitSheet";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
 
 const PARTNER_NAME = "MedHealth";
@@ -38,6 +39,7 @@ const MedHealthCapability = () => {
   const [query, setQuery] = useState("");
   const [selection, setSelection] = useState<Record<string, number>>({});
   const [reviewing, setReviewing] = useState(false);
+  const [viewingKit, setViewingKit] = useState<Kit | null>(null);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["microsite_products", "medhealth"],
@@ -112,6 +114,12 @@ const MedHealthCapability = () => {
       return next;
     });
 
+  const goHome = () => {
+    setTab("All");
+    setQuery("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const exportVisible = () =>
     downloadCsv(
       "supply-ministry-catalogue.csv",
@@ -146,7 +154,14 @@ const MedHealthCapability = () => {
       {/* Masthead */}
       <header style={{ backgroundColor: "#F4EFE6" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <SupplyMinistryLogo />
+          <button
+            type="button"
+            onClick={goHome}
+            aria-label="Back to catalogue home"
+            className="rounded-lg transition-opacity hover:opacity-80"
+          >
+            <SupplyMinistryLogo />
+          </button>
           <span
             className="rounded-full border px-3 py-1 text-xs font-medium"
             style={{ borderColor: "rgba(61,45,158,0.3)", color: "#3D2D9E" }}
@@ -177,6 +192,14 @@ const MedHealthCapability = () => {
       >
         <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <button
+              type="button"
+              onClick={goHome}
+              className="flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#33456B" }}
+            >
+              <Home className="h-4 w-4" aria-hidden="true" /> Catalogue home
+            </button>
             <div className="relative flex-1">
               <Search
                 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
@@ -233,7 +256,9 @@ const MedHealthCapability = () => {
           </p>
         ) : (
           <>
-            {tab === "All" && !query && <KitsRow kits={kits} onAdd={addKit} />}
+            {tab === "All" && !query && (
+              <KitsRow kits={kits} onAdd={addKit} onView={(k) => setViewingKit(k)} />
+            )}
 
             {grouped.length === 0 ? (
               <p className="py-16 text-center text-sm text-muted-foreground">
@@ -333,6 +358,10 @@ const MedHealthCapability = () => {
             setReviewing(false);
           }}
         />
+      )}
+
+      {viewingKit && (
+        <KitSheet kit={viewingKit} onClose={() => setViewingKit(null)} onAdd={addKit} />
       )}
     </div>
   );
