@@ -22,7 +22,7 @@ export function ProductThumb({ product, size = "md" }: { product: Product; size?
   return (
     <div
       className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl p-1.5 ${size === "sm" ? "h-11 w-11" : "h-20 w-20"}`}
-      style={{ backgroundColor: "#F4EFE6", color: "#2A5263" }}
+      style={{ backgroundColor: "#F4EFE6", color: "#010A16" }}
       aria-label={hasImage ? product.product_name : `${product.category} placeholder image`}
       role="img"
     >
@@ -106,7 +106,7 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
         <div>
           <p
             className="text-lg font-bold"
-            style={{ color: "#2A5263", fontFamily: "Outfit, system-ui, sans-serif" }}
+            style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
           >
             {money(product.price_rrp)}
           </p>

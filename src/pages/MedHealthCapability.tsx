@@ -12,26 +12,26 @@ import {
   toCsv,
   type Product,
 } from "@/lib/medhealth-catalogue";
-import { MedHealthLogo, SupplyMinistryLogo } from "@/components/medhealth-catalogue/Brand";
+import { MedHealthLogo, SupplyMinistryLogo, PartnerLockup } from "@/components/medhealth-catalogue/Brand";
+import { PartnerContextBand } from "@/components/medhealth-catalogue/PartnerContextBand";
+import { PARTNER, HOUSE } from "@/partners/medhealth";
 import { ProductCard } from "@/components/medhealth-catalogue/ProductCard";
 import { KitsRow } from "@/components/medhealth-catalogue/KitsRow";
 import { KitSheet, type Kit } from "@/components/medhealth-catalogue/KitSheet";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
 
-const PARTNER_NAME = "MedHealth";
+const PARTNER_NAME = PARTNER.name;
 
+/** Every partner-specific value comes from src/partners/medhealth.ts. */
 const theme = {
-  "--sm": "#3D2D9E",
-  "--sm-hover": "#2E2178",
-  "--sm-cream": "#F4EFE6",
-  "--sm-cream-2": "#FBF8F2",
-  "--p-ink": "#231F20",
-  "--p-ink-soft": "#4C6B77",
-  "--p-accent": "#2A5263",
-  "--p-accent-pale": "#E3EEF1",
-  "--blend": "#33456B",
-  "--mh-amber": "#FCB040",
-  "--mh-red": "#EC1C24",
+  "--sm": HOUSE.violet,
+  "--sm-hover": HOUSE.violetHover,
+  "--sm-cream": HOUSE.cream,
+  "--sm-cream-2": HOUSE.cream2,
+  "--p-ink": PARTNER.ink,
+  "--p-accent": PARTNER.accent,
+  "--p-accent-pale": PARTNER.accentPale,
+  "--p-rule": PARTNER.rule,
 } as React.CSSProperties;
 
 const MedHealthCapability = () => {
@@ -156,41 +156,42 @@ const MedHealthCapability = () => {
         />
       </Helmet>
 
-      <div className="h-1.5 w-full" style={{ backgroundImage: "linear-gradient(90deg, #3D2D9E 0%, #33456B 38%, #2A5263 72%, #FCB040 100%)" }} />
+      {/* Two tone rule, house violet into partner ink, with a short accent terminal. */}
+      <div className="flex h-1.5 w-full">
+        <div
+          className="flex-1"
+          style={{ backgroundImage: `linear-gradient(90deg, ${HOUSE.violet} 0%, ${PARTNER.ink} 100%)` }}
+        />
+        <div className="w-16 sm:w-24" style={{ backgroundColor: PARTNER.accent }} />
+      </div>
 
       {/* Masthead */}
-      <header style={{ backgroundColor: "#F4EFE6" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <button
-            type="button"
-            onClick={goHome}
-            aria-label="Back to catalogue home"
-            className="rounded-lg transition-opacity hover:opacity-80"
-          >
-            <SupplyMinistryLogo />
-          </button>
+      <header style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}>
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
+          <PartnerLockup onHome={goHome} />
           <span
             className="rounded-full border px-3 py-1 text-xs font-medium"
-            style={{ borderColor: "rgba(61,45,158,0.3)", color: "#3D2D9E" }}
+            style={{ borderColor: PARTNER.rule, color: PARTNER.ink }}
           >
-            Dedicated catalogue
+            {PARTNER.badge}
           </span>
         </div>
       </header>
 
-      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6">
         <h1
-          className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl"
-          style={{ fontFamily: "Outfit, system-ui, sans-serif" }}
+          className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-[42px]"
+          style={{ color: PARTNER.ink, fontFamily: "Outfit, system-ui, sans-serif" }}
         >
-          Assistive technology catalogue for{" "}
-          <MedHealthLogo className="text-3xl sm:text-4xl" />
+          Assistive technology catalogue for the {PARTNER_NAME} team
         </h1>
-        <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-          A dedicated selection for the {PARTNER_NAME} injury-rehabilitation and OT team. Select
-          items or a clinical kit, then send through for a formal quote.
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed sm:text-base" style={{ color: "rgba(1,10,22,0.68)" }}>
+          {PARTNER.scope} Select individual items or a clinical kit, then send it through for a
+          formal quote.
         </p>
       </div>
+
+      <PartnerContextBand />
 
       {/* Sticky toolbar */}
       <div
@@ -203,7 +204,7 @@ const MedHealthCapability = () => {
               type="button"
               onClick={goHome}
               className="flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#33456B" }}
+              style={{ backgroundColor: "#010A16" }}
             >
               <Home className="h-4 w-4" aria-hidden="true" /> Catalogue home
             </button>
@@ -218,14 +219,14 @@ const MedHealthCapability = () => {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search name, spec or code"
                 aria-label="Search products"
-                className="min-h-11 w-full rounded-xl border border-border bg-card pl-9 pr-3 text-base outline-none focus:border-[#33456B]"
+                className="min-h-11 w-full rounded-xl border border-border bg-card pl-9 pr-3 text-base outline-none focus:border-[#010A16]"
               />
             </div>
             <button
               type="button"
               onClick={exportVisible}
-              className="flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-medium transition-colors hover:bg-[rgba(51,69,107,0.1)]"
-              style={{ borderColor: "rgba(51,69,107,0.4)", color: "#33456B" }}
+              className="flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
+              style={{ borderColor: "rgba(1,10,22,0.4)", color: "#010A16" }}
             >
               <Download className="h-4 w-4" aria-hidden="true" /> Export
             </button>
@@ -240,8 +241,8 @@ const MedHealthCapability = () => {
                 onClick={() => setTab(c)}
                 className="min-h-11 shrink-0 rounded-full border px-4 text-sm font-medium transition-colors"
                 style={{
-                  borderColor: tab === c ? "#33456B" : "hsl(var(--border))",
-                  backgroundColor: tab === c ? "#33456B" : "transparent",
+                  borderColor: tab === c ? "#010A16" : "hsl(var(--border))",
+                  backgroundColor: tab === c ? "#010A16" : "transparent",
                   color: tab === c ? "#F4EFE6" : "#231F20",
                 }}
               >
@@ -277,7 +278,7 @@ const MedHealthCapability = () => {
                   <h2
                     id={`g-${group}`}
                     className="mb-3 text-sm font-semibold uppercase tracking-wide"
-                    style={{ color: "#33456B", fontFamily: "Outfit, system-ui, sans-serif" }}
+                    style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
                   >
                     {group}
                   </h2>
@@ -300,17 +301,21 @@ const MedHealthCapability = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border" style={{ backgroundColor: "#F4EFE6" }}>
+      <footer style={{ backgroundColor: HOUSE.cream, borderTop: `1px solid ${PARTNER.rule}` }}>
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <SupplyMinistryLogo compact />
-            <span className="text-border">|</span>
+            <span aria-hidden="true" className="h-6 w-px" style={{ backgroundColor: PARTNER.rule }} />
+            <span
+              className="text-[10px] font-semibold uppercase tracking-[0.16em]"
+              style={{ color: "rgba(1,10,22,0.55)" }}
+            >
+              {PARTNER.preparedFor}
+            </span>
             <MedHealthLogo className="text-xl" />
           </div>
           <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted-foreground">
-            Supply Ministry Pty Ltd, a Dignitech brand. Prepared for the MedHealth team, August
-            2026. Not a statement of partnership, endorsement or approval by MedHealth. GST-free
-            status on eligible items confirmed on quote.
+            {PARTNER.disclaimer}
           </p>
         </div>
       </footer>

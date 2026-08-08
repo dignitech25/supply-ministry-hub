@@ -17,7 +17,7 @@ export function KitsRow({
   return (
     <section aria-labelledby="kits-heading" className="mb-8">
       <div className="mb-3 flex items-center gap-2">
-        <Layers className="h-4 w-4" style={{ color: "#33456B" }} aria-hidden="true" />
+        <Layers className="h-4 w-4" style={{ color: "#010A16" }} aria-hidden="true" />
         <h2
           id="kits-heading"
           className="text-sm font-semibold uppercase tracking-wide"
@@ -26,12 +26,15 @@ export function KitsRow({
           Clinical kits
         </h2>
       </div>
+      <p className="-mt-2 mb-4 text-sm text-muted-foreground">
+        Grouped for MedHealth caseloads, so a common setup is one click rather than ten.
+      </p>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {kits.map((kit) => (
           <article
             key={kit.id}
-            className="flex flex-col rounded-2xl border border-border bg-card p-4 transition-colors hover:border-[#33456B]"
+            className="flex flex-col rounded-2xl border border-border bg-card p-4 transition-colors hover:border-[#010A16]"
           >
             <h3
               className="text-base font-semibold"
@@ -53,7 +56,7 @@ export function KitsRow({
               </span>
               <span
                 className="text-base font-bold"
-                style={{ color: "#2A5263", fontFamily: "Outfit, system-ui, sans-serif" }}
+                style={{ color: "#010A16", fontFamily: "Outfit, system-ui, sans-serif" }}
               >
                 {money(kit.subtotal)}
               </span>
@@ -63,10 +66,10 @@ export function KitsRow({
               <button
                 type="button"
                 onClick={() => onView(kit)}
-                className="flex min-h-11 flex-1 items-center justify-center rounded-xl border px-3 text-sm font-semibold transition-colors hover:bg-[rgba(51,69,107,0.1)]"
+                className="flex min-h-11 flex-1 items-center justify-center rounded-xl border px-3 text-sm font-semibold transition-colors hover:bg-[rgba(1,10,22,0.1)]"
                 style={{
-                  borderColor: "rgba(51,69,107,0.4)",
-                  color: "#33456B",
+                  borderColor: "rgba(1,10,22,0.4)",
+                  color: "#010A16",
                   fontFamily: "Outfit, system-ui, sans-serif",
                 }}
               >
