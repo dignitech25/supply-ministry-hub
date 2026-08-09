@@ -77,7 +77,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
 
           <div className="space-y-1">
-            {product.price_discounted && product.price_rrp ? (
+            {isOnSale(product.price_rrp, product.price_discounted) ? (
               <>
                 <p className="text-2xl font-geist font-semibold text-ink">
                   {formatPrice(product.price_discounted)}
@@ -89,6 +89,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             ) : product.price_rrp ? (
               <p className="text-2xl font-geist font-semibold text-ink">
                 {formatPrice(product.price_rrp)}
+              </p>
+            ) : product.price_discounted ? (
+              <p className="text-2xl font-geist font-semibold text-ink">
+                {formatPrice(product.price_discounted)}
               </p>
             ) : (
               <p className="text-lg text-muted-foreground">

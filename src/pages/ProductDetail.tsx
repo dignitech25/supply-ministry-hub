@@ -400,7 +400,7 @@ export default function ProductDetail() {
             </div>
 
             <div className="space-y-2">
-              {selectedVariant.priceDiscounted && selectedVariant.priceRrp ? (
+              {isOnSale(selectedVariant.priceRrp, selectedVariant.priceDiscounted) ? (
                 <>
                   <p className="text-4xl font-geist font-semibold text-ink">
                     {formatPrice(selectedVariant.priceDiscounted)}
@@ -412,6 +412,10 @@ export default function ProductDetail() {
               ) : selectedVariant.priceRrp ? (
                 <p className="text-4xl font-geist font-semibold text-ink">
                   {formatPrice(selectedVariant.priceRrp)}
+                </p>
+              ) : selectedVariant.priceDiscounted ? (
+                <p className="text-4xl font-geist font-semibold text-ink">
+                  {formatPrice(selectedVariant.priceDiscounted)}
                 </p>
               ) : (
                 <p className="text-2xl text-muted-body">
