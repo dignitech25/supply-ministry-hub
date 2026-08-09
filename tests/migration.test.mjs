@@ -28,6 +28,20 @@ describe('product families migration security guards', () => {
     ));
   });
 
+  it('strips the DML grants Supabase adds to every new public table', () => {
+    // Supabase sets `alter default privileges in schema public grant all on
+    // tables to anon, authenticated, service_role`, so product_families was
+    // created on production with anon holding INSERT/UPDATE/DELETE. RLS denied
+    // the writes, but only because a single SELECT policy happened to be the
+    // sole policy -- the grants themselves have to go.
+    assert.ok(migration.includes(
+      'revoke insert, update, delete, truncate, references, trigger\n  on public.product_families from anon, authenticated;',
+    ));
+    assert.ok(migration.includes(
+      'grant select on table public.product_families to anon, authenticated;',
+    ));
+  });
+
   it('matches LIKE metacharacters in search input literally', () => {
     // Verified on PostgreSQL 17.10: before this escaping, a query of '%'
     // expanded to ILIKE '%%%' and returned every active family. That both
