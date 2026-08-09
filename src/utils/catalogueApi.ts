@@ -1,6 +1,26 @@
 import { supabase } from '@/integrations/supabase/client';
 
 /**
+ * The generated Supabase types are produced from the table definitions and do
+ * not know about these RPCs, so `supabase.rpc` is not typed for them. This is a
+ * single narrow escape hatch rather than an `any` at every call site: the
+ * argument and return shapes are still checked against the interfaces below.
+ */
+export interface RpcResult<T> {
+  data: T | null;
+  error: { message: string } | null;
+}
+
+/**
+ * Called through a wrapper rather than assigned as a bare reference:
+ * `supabase.rpc` uses `this` internally, so detaching it into a const throws
+ * "Cannot read properties of undefined (reading 'rest')" at the first call.
+ */
+export function rpc<T>(fn: string, args: Record<string, unknown>): PromiseLike<RpcResult<T>> {
+  return supabase.rpc(fn as never, args as never) as unknown as PromiseLike<RpcResult<T>>;
+}
+
+/**
  * Server-side catalogue access.
  *
  * Replaces the previous client-side pattern, which fetched every matching
@@ -55,7 +75,7 @@ export interface CatalogueResult {
 export async function searchProductFamilies(
   options: CatalogueQuery = {}
 ): Promise<CatalogueResult> {
-  const { data, error } = await (supabase.rpc as any)('search_product_families', {
+  const { data, error } = await rpc<ProductFamilyRow[]>('search_product_families', {
     p_query: options.query?.trim() || null,
     p_categories: options.categories?.length ? options.categories : null,
     p_subcategories: options.subcategories?.length ? options.subcategories : null,
@@ -65,9 +85,9 @@ export async function searchProductFamilies(
     p_offset: options.offset ?? 0,
   });
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 
-  const families = (data ?? []) as ProductFamilyRow[];
+  const families = data ?? [];
   // total_count is a window function over the filtered set, so it is identical
   // on every row and absent when there are none.
   return { families, totalCount: families[0]?.total_count ?? 0 };
@@ -84,13 +104,14 @@ export interface CatalogueFacets {
  * list, and downloading them again whenever a category was picked.
  */
 export async function getCatalogueFacets(categories?: string[]): Promise<CatalogueFacets> {
-  const { data, error } = await (supabase.rpc as any)('get_catalogue_facets', {
-    p_categories: categories?.length ? categories : null,
-  });
+  const { data, error } = await rpc<{ facet_type: string; value: string }[]>(
+    'get_catalogue_facets',
+    { p_categories: categories?.length ? categories : null }
+  );
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 
-  const rows = (data ?? []) as { facet_type: string; value: string }[];
+  const rows = data ?? [];
   const pick = (type: string) =>
     rows.filter((r) => r.facet_type === type && r.value).map((r) => r.value);
 
