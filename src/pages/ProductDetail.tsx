@@ -22,7 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchParentProduct, fetchParentProductBySku, fetchParentProductByHandle } from '@/utils/parentProductHelpers';
 import { getEffectiveVariantPrice, ParentProduct, ProductVariant } from '@/utils/variantHelpers';
-import { formatPrice, getDescriptionParagraphs, cleanDescription } from '@/utils/productHelpers';
+import { formatPrice, getDescriptionParagraphs, cleanDescription, isOnSale } from '@/utils/productHelpers';
 import ProductSEOContent, { hasProductSEOContent, getProductFAQs } from '@/components/ProductSEOContent';
 import Footer from '@/components/Footer';
 import { createBreadcrumbSchema } from '@/components/SEO';
