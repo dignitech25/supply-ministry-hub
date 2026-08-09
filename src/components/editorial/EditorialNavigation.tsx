@@ -1,8 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Search, ShoppingCart } from "lucide-react";
 import { useQuote } from "@/contexts/QuoteContext";
 import { SearchDialog } from "@/components/SearchDialog";
+import ProductSearch from "@/components/ProductSearch";
 
 const navLinks = [
   { label: "Products", href: "/products" },
@@ -12,10 +13,8 @@ const navLinks = [
 ];
 
 const EditorialNavigation = () => {
-  const location = useLocation();
   const { totalItems, toggleDrawer } = useQuote();
   const [searchOpen, setSearchOpen] = useState(false);
-  const showSearch = location.pathname.startsWith("/products");
   const showCart = totalItems > 0;
 
   return (
@@ -29,7 +28,20 @@ const EditorialNavigation = () => {
           />
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
+        {/*
+          Search was previously an icon, and only on /products -- so there was no
+          way to search from the homepage at all. It is now a persistent field on
+          every route, because finding a known product is the main journey.
+
+          The field takes priority over the marketing links at md, which is why
+          those move to lg. Below md there is no room for both, so search falls
+          back to a one-tap dialog.
+        */}
+        <div className="hidden md:block flex-1 max-w-sm mx-4">
+          <ProductSearch source="header" />
+        </div>
+
+        <div className="hidden lg:flex items-center gap-8 shrink-0">
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -42,16 +54,14 @@ const EditorialNavigation = () => {
         </div>
 
         <div className="flex items-center gap-2 md:gap-3 shrink-0">
-          {showSearch && (
-            <button
-              type="button"
-              onClick={() => setSearchOpen(true)}
-              aria-label="Search products"
-              className="p-2 rounded-full text-violet/70 hover:text-violet hover:bg-violet/5 transition-colors"
-            >
-              <Search className="h-5 w-5" />
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search products"
+            className="md:hidden p-2 rounded-full text-violet/70 hover:text-violet hover:bg-violet/5 transition-colors"
+          >
+            <Search className="h-5 w-5" />
+          </button>
           {showCart && (
             <button
               type="button"
