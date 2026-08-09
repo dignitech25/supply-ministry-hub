@@ -1,6 +1,6 @@
 import { Layers } from "lucide-react";
 import { money, type Product } from "@/lib/medhealth-catalogue";
-import { HOUSE } from "@/partners/medhealth";
+import { BRAND_RULE, HOUSE } from "@/partners/medhealth";
 import { ProductThumb } from "./ProductCard";
 import type { Kit } from "./KitSheet";
 
@@ -21,7 +21,7 @@ export function KitsRow({
       className="mb-9 overflow-hidden rounded-2xl border"
       style={{ borderColor: "rgba(61,45,158,0.22)", backgroundColor: HOUSE.cream }}
     >
-      <div className="h-1 w-full" style={{ backgroundColor: HOUSE.violet }} />
+      <div className="h-1.5 w-full" style={{ backgroundImage: BRAND_RULE }} />
       <div className="p-4 sm:p-6">
         <div className="mb-4 sm:mb-5">
           <p

@@ -20,6 +20,16 @@ export const PARTNER = {
   rule: "rgba(1,10,22,0.12)",
   /** Warm ground the page sits on. */
   ground: "#F4EFE6",
+  /**
+   * Colours sampled from the partner's own multicoloured circle mark.
+   * Used for the shared brand rule at the top of the page and on the
+   * clinical kits panel.
+   */
+  circle: {
+    blue: "#6895C4",
+    red: "#EC1C24",
+    amber: "#FCB040",
+  },
   /** Prepared-for label shown above the partner mark in the masthead. */
   preparedFor: "Prepared for",
   /** Badge shown at the right of the masthead. */
@@ -37,3 +47,10 @@ export const HOUSE = {
   cream2: "#FBF8F2",
   ink: "#231F20",
 } as const;
+
+/**
+ * The one brand rule used on this account: Supply Ministry violet leads, then
+ * the three colours of the partner's circle mark. Used for the page top rule
+ * and the top border of the clinical kits panel so both read as one theme.
+ */
+export const BRAND_RULE = `linear-gradient(90deg, ${HOUSE.violet} 0%, ${HOUSE.violet} 22%, ${PARTNER.circle.blue} 48%, ${PARTNER.circle.red} 74%, ${PARTNER.circle.amber} 100%)`;

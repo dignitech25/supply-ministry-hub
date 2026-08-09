@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Bath, Shirt, MoveRight, Package, Check } from "lucide-react";
 import {
   CATEGORIES,
@@ -10,6 +11,10 @@ import {
 } from "@/lib/medhealth-catalogue";
 import { HOUSE, PARTNER } from "@/partners/medhealth";
 import { QtyStepper } from "./QtyStepper";
+
+/** Detail page URL for a catalogue product. */
+export const productHref = (code: string) =>
+  `/partners/medhealth-capability-2026/product/${encodeURIComponent(code)}`;
 
 export function CategoryIcon({
   category,
@@ -79,17 +84,18 @@ interface Props {
 
 export function ProductCard({ product, qty, onToggle, onQty }: Props) {
   const selected = qty > 0;
+  const navigate = useNavigate();
 
   return (
     <div
       role="button"
       tabIndex={0}
-      aria-pressed={selected}
-      onClick={onToggle}
+      aria-label={`View ${product.product_name}`}
+      onClick={() => navigate(productHref(product.product_code))}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          onToggle();
+          navigate(productHref(product.product_code));
         }
       }}
       className={`group relative flex cursor-pointer flex-col rounded-xl border-2 bg-white p-3 text-left transition-all hover:shadow-md ${
@@ -117,17 +123,23 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
             {firstSentence(product.key_specifications)}
           </p>
         </div>
-        <span
-          aria-hidden="true"
-          className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors"
+        <button
+          type="button"
+          aria-pressed={selected}
+          aria-label={selected ? `Remove ${product.product_name} from selection` : `Add ${product.product_name} to selection`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggle();
+          }}
+          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors"
           style={{
             borderColor: selected ? HOUSE.violet : "hsl(var(--border))",
             backgroundColor: selected ? HOUSE.violet : "transparent",
             color: selected ? "#F4EFE6" : "transparent",
           }}
         >
-          <Check className="h-3 w-3" strokeWidth={3} />
-        </span>
+          <Check className="h-3.5 w-3.5" strokeWidth={3} aria-hidden="true" />
+        </button>
       </div>
 
       <div className="mt-auto flex h-12 items-center justify-between gap-2 pt-3">
@@ -135,12 +147,17 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
           <p className="text-base font-bold leading-tight" style={{ color: "#010A16" }}>
             {money(product.price_rrp)}
           </p>
-          <p className="truncate whitespace-nowrap text-[10px] leading-tight text-muted-foreground">
-            Code {product.product_code}
-          </p>
+          <Link
+            to={productHref(product.product_code)}
+            onClick={(e) => e.stopPropagation()}
+            className="truncate whitespace-nowrap text-[10px] font-semibold leading-tight underline underline-offset-2"
+            style={{ color: HOUSE.violet }}
+          >
+            View details
+          </Link>
         </div>
 
-        <div className="shrink-0">
+        <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
           {selected && (
             <QtyStepper qty={qty} label={product.product_name} onQty={onQty} size="sm" />
           )}

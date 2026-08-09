@@ -23,6 +23,8 @@ const SupportAtHome = lazy(() => import("./pages/SupportAtHome"));
 const RentToBuy = lazy(() => import("./pages/RentToBuy"));
 const HomeModifications = lazy(() => import("./pages/HomeModifications"));
 const MedHealthCapability = lazy(() => import("./pages/MedHealthCapability"));
+const MedHealthProduct = lazy(() => import("./pages/MedHealthProduct"));
+import { MedHealthSelectionProvider } from "@/contexts/MedHealthSelectionContext";
 
 const queryClient = new QueryClient();
 
@@ -51,7 +53,22 @@ const App = () => (
                   <Route path="/support-at-home" element={<SupportAtHome />} />
                   <Route path="/rent-to-buy" element={<RentToBuy />} />
                   <Route path="/home-modifications" element={<HomeModifications />} />
-                  <Route path="/partners/medhealth-capability-2026" element={<MedHealthCapability />} />
+                  <Route
+                    path="/partners/medhealth-capability-2026"
+                    element={
+                      <MedHealthSelectionProvider>
+                        <MedHealthCapability />
+                      </MedHealthSelectionProvider>
+                    }
+                  />
+                  <Route
+                    path="/partners/medhealth-capability-2026/product/:code"
+                    element={
+                      <MedHealthSelectionProvider>
+                        <MedHealthProduct />
+                      </MedHealthSelectionProvider>
+                    }
+                  />
                   
                   <Route path="/products" element={<Products />} />
                   <Route path="/products/:sku" element={<ProductDetail />} />

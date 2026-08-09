@@ -1,7 +1,8 @@
 import { X } from "lucide-react";
+import { Link } from "react-router-dom";
 import { money, type Product } from "@/lib/medhealth-catalogue";
 import { HOUSE } from "@/partners/medhealth";
-import { ProductThumb } from "./ProductCard";
+import { ProductThumb, productHref } from "./ProductCard";
 
 export interface Kit {
   id: string;
@@ -58,9 +59,14 @@ export function KitSheet({
             <li key={p.product_code} className="flex items-center gap-3 py-3">
               <ProductThumb product={p} size="sm" />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium" style={{ color: "#231F20" }}>
+                <Link
+                  to={productHref(p.product_code)}
+                  onClick={onClose}
+                  className="block truncate text-sm font-medium underline-offset-2 hover:underline"
+                  style={{ color: "#231F20" }}
+                >
                   {p.product_name}
-                </p>
+                </Link>
                 <p className="text-xs text-muted-foreground">{p.product_code}</p>
               </div>
               <span className="text-sm font-semibold" style={{ color: "#010A16" }}>
