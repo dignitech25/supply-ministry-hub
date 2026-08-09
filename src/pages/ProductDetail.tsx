@@ -22,7 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { fetchParentProduct, fetchParentProductBySku, fetchParentProductByHandle } from '@/utils/parentProductHelpers';
 import { getEffectiveVariantPrice, ParentProduct, ProductVariant } from '@/utils/variantHelpers';
-import { formatPrice, getDescriptionParagraphs, cleanDescription } from '@/utils/productHelpers';
+import { formatPrice, getDescriptionParagraphs, cleanDescription, isOnSale } from '@/utils/productHelpers';
 import ProductSEOContent, { hasProductSEOContent, getProductFAQs } from '@/components/ProductSEOContent';
 import Footer from '@/components/Footer';
 import { createBreadcrumbSchema } from '@/components/SEO';
@@ -400,7 +400,7 @@ export default function ProductDetail() {
             </div>
 
             <div className="space-y-2">
-              {selectedVariant.priceDiscounted && selectedVariant.priceRrp ? (
+              {isOnSale(selectedVariant.priceRrp, selectedVariant.priceDiscounted) ? (
                 <>
                   <p className="text-4xl font-geist font-semibold text-ink">
                     {formatPrice(selectedVariant.priceDiscounted)}
@@ -412,6 +412,10 @@ export default function ProductDetail() {
               ) : selectedVariant.priceRrp ? (
                 <p className="text-4xl font-geist font-semibold text-ink">
                   {formatPrice(selectedVariant.priceRrp)}
+                </p>
+              ) : selectedVariant.priceDiscounted ? (
+                <p className="text-4xl font-geist font-semibold text-ink">
+                  {formatPrice(selectedVariant.priceDiscounted)}
                 </p>
               ) : (
                 <p className="text-2xl text-muted-body">
