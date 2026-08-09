@@ -19,12 +19,12 @@ Make the upper cards conditional rather than deleted:
 
 This applies automatically to every product page, and every future product we write enhanced content for gets the clean single-copy layout with no further code changes.
 
-Specifications and the pricing/quote block are untouched. The page meta description keeps using the feed description, so SEO metadata is unaffected.
+Scope is the main Supply Ministry site only. The MedHealth partner catalogue stays exactly as it is. Specifications and the pricing/quote block are untouched. The page meta description keeps using the feed description, so SEO metadata is unaffected.
 
 ## Technical detail
 
 - `src/pages/ProductDetail.tsx`: gate the Description card and the Clinical Use Cases card on `!hasProductSEOContent(parent.slug)`. Compute that flag once and reuse it for the existing footer condition.
-- No changes to `ProductSEOContent.tsx`, the data layer, the sitemap script, or any Supabase table.
+- No changes to `ProductSEOContent.tsx`, the data layer, the sitemap script, any Supabase table, or anything under the MedHealth partner routes.
 - Verify on `/products/BEB046745` (enhanced: upper cards gone) and one ordinary product (upper cards still present), then run a type check.
 
 ## If you would rather go further
