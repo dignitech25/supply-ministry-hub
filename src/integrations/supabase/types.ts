@@ -97,6 +97,69 @@ export type Database = {
           },
         ]
       }
+      category_overrides: {
+        Row: {
+          brand: string
+          created_at: string
+          note: string | null
+          subcategory: string
+          title: string
+          top_level: string
+        }
+        Insert: {
+          brand: string
+          created_at?: string
+          note?: string | null
+          subcategory: string
+          title: string
+          top_level: string
+        }
+        Update: {
+          brand?: string
+          created_at?: string
+          note?: string | null
+          subcategory?: string
+          title?: string
+          top_level?: string
+        }
+        Relationships: []
+      }
+      category_rules: {
+        Row: {
+          aux_re: string | null
+          created_at: string
+          exclude_re: string | null
+          include_re: string
+          is_active: boolean
+          note: string | null
+          priority: number
+          subcategory: string
+          top_level: string
+        }
+        Insert: {
+          aux_re?: string | null
+          created_at?: string
+          exclude_re?: string | null
+          include_re: string
+          is_active?: boolean
+          note?: string | null
+          priority: number
+          subcategory: string
+          top_level: string
+        }
+        Update: {
+          aux_re?: string | null
+          created_at?: string
+          exclude_re?: string | null
+          include_re?: string
+          is_active?: boolean
+          note?: string | null
+          priority?: number
+          subcategory?: string
+          top_level?: string
+        }
+        Relationships: []
+      }
       microsite_products: {
         Row: {
           category: string | null
@@ -298,6 +361,81 @@ export type Database = {
         }
         Relationships: []
       }
+      product_families: {
+        Row: {
+          brand: string
+          created_at: string
+          display_name: string | null
+          id: string
+          is_active: boolean
+          max_price: number | null
+          min_price: number | null
+          primary_image_url: string | null
+          proposed_rule: number | null
+          proposed_subcategory: string | null
+          proposed_top_level: string | null
+          representative_sku: string | null
+          search_document: unknown
+          search_text: string | null
+          slug: string
+          subcategory: string | null
+          taxonomy_reviewed: boolean
+          title: string
+          top_level_category: string | null
+          updated_at: string
+          variant_count: number
+          variant_skus: string[]
+        }
+        Insert: {
+          brand: string
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          is_active?: boolean
+          max_price?: number | null
+          min_price?: number | null
+          primary_image_url?: string | null
+          proposed_rule?: number | null
+          proposed_subcategory?: string | null
+          proposed_top_level?: string | null
+          representative_sku?: string | null
+          search_document?: unknown
+          search_text?: string | null
+          slug: string
+          subcategory?: string | null
+          taxonomy_reviewed?: boolean
+          title: string
+          top_level_category?: string | null
+          updated_at?: string
+          variant_count?: number
+          variant_skus?: string[]
+        }
+        Update: {
+          brand?: string
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          is_active?: boolean
+          max_price?: number | null
+          min_price?: number | null
+          primary_image_url?: string | null
+          proposed_rule?: number | null
+          proposed_subcategory?: string | null
+          proposed_top_level?: string | null
+          representative_sku?: string | null
+          search_document?: unknown
+          search_text?: string | null
+          slug?: string
+          subcategory?: string | null
+          taxonomy_reviewed?: boolean
+          title?: string
+          top_level_category?: string | null
+          updated_at?: string
+          variant_count?: number
+          variant_skus?: string[]
+        }
+        Relationships: []
+      }
       product_image_assets: {
         Row: {
           content_type: string | null
@@ -457,6 +595,7 @@ export type Database = {
           description_long: string | null
           description_short: string | null
           description_source_concat: string | null
+          family_id: string | null
           handle: string | null
           image_url: string | null
           is_consumable: string | null
@@ -503,6 +642,7 @@ export type Database = {
           description_long?: string | null
           description_short?: string | null
           description_source_concat?: string | null
+          family_id?: string | null
           handle?: string | null
           image_url?: string | null
           is_consumable?: string | null
@@ -549,6 +689,7 @@ export type Database = {
           description_long?: string | null
           description_short?: string | null
           description_source_concat?: string | null
+          family_id?: string | null
           handle?: string | null
           image_url?: string | null
           is_consumable?: string | null
@@ -581,7 +722,22 @@ export type Database = {
           top_level_category?: string | null
           vendor?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "products_categorized_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "product_families"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "products_categorized_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "taxonomy_review_queue"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       quote_items: {
         Row: {
@@ -789,6 +945,33 @@ export type Database = {
         }
         Relationships: []
       }
+      search_events: {
+        Row: {
+          created_at: string
+          id: string
+          query: string
+          result_count: number
+          session_id: string | null
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          query: string
+          result_count: number
+          session_id?: string | null
+          source: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          query?: string
+          result_count?: number
+          session_id?: string | null
+          source?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -815,9 +998,59 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      search_gaps: {
+        Row: {
+          distinct_sessions: number | null
+          last_searched: string | null
+          query: string | null
+          times_searched: number | null
+        }
+        Relationships: []
+      }
+      search_summary: {
+        Row: {
+          day: string | null
+          searches: number | null
+          sessions: number | null
+          zero_result: number | null
+          zero_result_pct: number | null
+        }
+        Relationships: []
+      }
+      taxonomy_review_queue: {
+        Row: {
+          brand: string | null
+          id: string | null
+          slug: string | null
+          subcategory: string | null
+          title: string | null
+          top_level_category: string | null
+          variant_count: number | null
+        }
+        Insert: {
+          brand?: string | null
+          id?: string | null
+          slug?: string | null
+          subcategory?: string | null
+          title?: string | null
+          top_level_category?: string | null
+          variant_count?: number | null
+        }
+        Update: {
+          brand?: string | null
+          id?: string | null
+          slug?: string | null
+          subcategory?: string | null
+          title?: string | null
+          top_level_category?: string | null
+          variant_count?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      apply_category_overrides: { Args: never; Returns: number }
+      apply_taxonomy_proposal: { Args: never; Returns: number }
       create_quote_with_items: {
         Args: { p_payload: Json }
         Returns: {
@@ -826,13 +1059,81 @@ export type Database = {
         }[]
       }
       generate_quote_ref_code: { Args: never; Returns: string }
+      get_catalogue_facets: {
+        Args: { p_categories?: string[] }
+        Returns: {
+          facet_type: string
+          family_count: number
+          value: string
+        }[]
+      }
+      log_search_event: {
+        Args: {
+          p_query: string
+          p_result_count: number
+          p_session_id?: string
+          p_source?: string
+        }
+        Returns: undefined
+      }
       make_quote_number: { Args: never; Returns: string }
       normalize_product_description_text: {
         Args: { input_text: string }
         Returns: string
       }
+      propose_product_taxonomy: {
+        Args: never
+        Returns: {
+          proposed: number
+          unmatched: number
+        }[]
+      }
+      rebuild_product_families: {
+        Args: never
+        Returns: {
+          families_deactivated: number
+          families_upserted: number
+          variants_linked: number
+        }[]
+      }
+      search_product_families: {
+        Args: {
+          p_brands?: string[]
+          p_categories?: string[]
+          p_limit?: number
+          p_offset?: number
+          p_query?: string
+          p_sort?: string
+          p_subcategories?: string[]
+        }
+        Returns: {
+          brand: string
+          display_name: string
+          id: string
+          matched_sku: string
+          max_price: number
+          min_price: number
+          primary_image_url: string
+          representative_sku: string
+          slug: string
+          subcategory: string
+          title: string
+          top_level_category: string
+          total_count: number
+          variant_count: number
+        }[]
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      sm_match_text: {
+        Args: { p_brand: string; p_title: string }
+        Returns: string
+      }
+      sm_safe_numeric: { Args: { p_value: string }; Returns: number }
+      sm_slugify: {
+        Args: { p_brand: string; p_title: string }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "admin" | "staff" | "user"
