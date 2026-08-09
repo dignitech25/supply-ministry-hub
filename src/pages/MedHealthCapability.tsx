@@ -522,7 +522,7 @@ const MedHealthCapability = () => {
             </div>
             <button
               type="button"
-              onClick={() => setSelection({})}
+              onClick={clear}
               className="min-h-11 rounded-xl px-3 text-sm font-medium transition-colors hover:text-white"
               style={{ color: "rgba(244,239,230,0.8)" }}
             >
@@ -548,7 +548,7 @@ const MedHealthCapability = () => {
           onRemove={removeItem}
           onClose={() => setReviewing(false)}
           onComplete={() => {
-            setSelection({});
+            clear();
             setReviewing(false);
           }}
         />
