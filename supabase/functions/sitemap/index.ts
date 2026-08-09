@@ -1,6 +1,4 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { groupRepresentativeVariants } from "../_shared/catalogueSelection.ts";
-import type { CatalogueVariantRow } from "../_shared/catalogueSelection.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -8,10 +6,10 @@ const corsHeaders = {
 };
 
 const SITE_URL = "https://www.supplyministry.com.au";
+const TODAY = new Date().toISOString().split("T")[0];
 
-// PostgREST caps a single response at 1,000 rows. The catalogue is larger than
-// that, so every read here must page explicitly -- an unpaged select silently
-// truncated the sitemap to the first 1,000 rows.
+// PostgREST caps a single response at 1,000 rows. The previous version of this
+// function did not page, so it silently emitted only the first 1,000 products.
 const PAGE_SIZE = 1000;
 
 const STATIC_PAGES = [
@@ -26,6 +24,11 @@ const STATIC_PAGES = [
   { loc: `${SITE_URL}/terms`, changefreq: "yearly", priority: "0.3" },
 ];
 
+interface FamilyRow {
+  representative_sku: string | null;
+  updated_at: string | null;
+}
+
 function xmlEscape(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -35,9 +38,10 @@ function xmlEscape(value: string): string {
     .replace(/'/g, "&apos;");
 }
 
-function urlEntry(loc: string, changefreq: string, priority: string): string {
+function urlEntry(loc: string, changefreq: string, priority: string, lastmod: string): string {
   return `  <url>
     <loc>${xmlEscape(loc)}</loc>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`;
@@ -49,51 +53,48 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
 
-    // Read products_categorized, NOT products.
+    // Read product_families, not products.
     //
-    // `products` holds 4,450 rows; `products_categorized` holds the 3,347 the
-    // catalogue can actually render. Sitemapping `products` advertised ~1,103
-    // URLs the site cannot display, and because the SPA returns HTTP 200 for
-    // unknown routes, each one was a soft 404 rather than an honest error.
-    const rows: CatalogueVariantRow[] = [];
+    // `products` holds 4,450 rows including ~1,103 the storefront cannot render,
+    // and one URL per SKU published 3,347 near-duplicates for 513 real pages.
+    // product_families is one row per displayed page and carries the same
+    // representative_sku the product page emits as its canonical, so the sitemap
+    // and the canonical tag cannot disagree.
+    const families: FamilyRow[] = [];
     for (let offset = 0; ; offset += PAGE_SIZE) {
       const { data, error } = await supabase
-        .from("products_categorized")
-        .select("sku, brand, title, price_rrp, price_discounted")
-        .not("title", "is", null)
-        .not("brand", "is", null)
-        .order("sku", { ascending: true })
+        .from("product_families")
+        .select("representative_sku, updated_at")
+        .eq("is_active", true)
+        .not("representative_sku", "is", null)
+        .order("representative_sku", { ascending: true })
         .range(offset, offset + PAGE_SIZE - 1);
 
       if (error) throw error;
       if (!data || data.length === 0) break;
 
-      rows.push(...(data as CatalogueVariantRow[]));
+      families.push(...(data as FamilyRow[]));
       if (data.length < PAGE_SIZE) break;
     }
 
-    // Collapse variants to one entry per product family.
-    //
-    // Previously this emitted one URL per SKU. Every variant of a family renders
-    // the same page, so that published 3,347 near-duplicate URLs for 513 real
-    // pages and split ranking signals across them. One canonical URL per family
-    // is emitted instead, matching the canonical tag on the page itself.
-    const families = groupRepresentativeVariants(rows);
+    const productUrls = families
+      .filter((f) => f.representative_sku)
+      .map((f) =>
+        urlEntry(
+          `${SITE_URL}/products/${encodeURIComponent(f.representative_sku!)}`,
+          "weekly",
+          "0.7",
+          f.updated_at ? f.updated_at.split("T")[0] : TODAY,
+        )
+      );
 
-    const productUrls = families.map((family) =>
-      urlEntry(
-        `${SITE_URL}/products/${encodeURIComponent(family.sku)}`,
-        "weekly",
-        "0.7",
-      )
-    );
-
-    const staticUrls = STATIC_PAGES.map((page) =>
-      urlEntry(page.loc, page.changefreq, page.priority)
+    const staticUrls = STATIC_PAGES.map((p) =>
+      urlEntry(p.loc, p.changefreq, p.priority, TODAY)
     );
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -102,9 +103,7 @@ ${staticUrls.join("\n")}
 ${productUrls.join("\n")}
 </urlset>`;
 
-    console.log(
-      `Sitemap: ${staticUrls.length} static + ${productUrls.length} families (from ${rows.length} variants)`,
-    );
+    console.log(`Sitemap: ${staticUrls.length} static + ${productUrls.length} families`);
 
     return new Response(xml, {
       status: 200,
