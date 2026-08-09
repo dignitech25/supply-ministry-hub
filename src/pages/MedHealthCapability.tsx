@@ -14,7 +14,8 @@ import {
   type Product,
 } from "@/lib/medhealth-catalogue";
 import { MedHealthLogo, SupplyMinistryLogo, PartnerLockup } from "@/components/medhealth-catalogue/Brand";
-import { PARTNER, HOUSE } from "@/partners/medhealth";
+import { PARTNER, HOUSE, BRAND_RULE } from "@/partners/medhealth";
+import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
 import { ProductCard } from "@/components/medhealth-catalogue/ProductCard";
 import { KitsRow } from "@/components/medhealth-catalogue/KitsRow";
 import { KitSheet, type Kit } from "@/components/medhealth-catalogue/KitSheet";
@@ -54,7 +55,7 @@ const theme = {
 const MedHealthCapability = () => {
   const [tab, setTab] = useState<string>("All");
   const [query, setQuery] = useState("");
-  const [selection, setSelection] = useState<Record<string, number>>({});
+  const { selection, toggle, bumpQty, removeItem, addMany, clear } = useMedHealthSelection();
   const [reviewing, setReviewing] = useState(false);
   const [viewingKit, setViewingKit] = useState<Kit | null>(null);
   /** Purely visual scroll indicator. Never affects filtering. */
@@ -213,36 +214,7 @@ const MedHealthCapability = () => {
   const itemCount = lines.reduce((s, l) => s + l.qty, 0);
   const total = lines.reduce((s, l) => s + (l.product.price_rrp ?? 0) * l.qty, 0);
 
-  const toggle = (code: string) =>
-    setSelection((s) => {
-      const next = { ...s };
-      if (next[code]) delete next[code];
-      else next[code] = 1;
-      return next;
-    });
-
-  const bumpQty = (code: string, delta: number) =>
-    setSelection((s) => {
-      const q = (s[code] ?? 0) + delta;
-      const next = { ...s };
-      if (q <= 0) delete next[code];
-      else next[code] = q;
-      return next;
-    });
-
-  const addKit = (items: Product[]) =>
-    setSelection((s) => {
-      const next = { ...s };
-      for (const p of items) next[p.product_code] = (next[p.product_code] ?? 0) + 1;
-      return next;
-    });
-
-  const removeItem = (code: string) =>
-    setSelection((s) => {
-      const next = { ...s };
-      delete next[code];
-      return next;
-    });
+  const addKit = (items: Product[]) => addMany(items.map((p) => p.product_code));
 
   const goHome = () => {
     setTab("All");
@@ -282,12 +254,10 @@ const MedHealthCapability = () => {
         noindex
       />
 
-      {/* One continuous rule: house violet, through partner ink, into partner accent. */}
+      {/* One continuous rule: house violet into the partner's circle colours. */}
       <div
         className="h-1.5 w-full"
-        style={{
-          backgroundImage: `linear-gradient(90deg, ${HOUSE.violet} 0%, ${PARTNER.ink} 55%, ${PARTNER.accent} 100%)`,
-        }}
+        style={{ backgroundImage: BRAND_RULE }}
       />
 
       {/* Masthead and toolbar share one sticky container so they can never mismatch. */}
