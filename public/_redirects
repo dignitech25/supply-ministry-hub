@@ -1,18 +1,13 @@
 # Redirect all non-www traffic to www permanently
 #
-# NOTE: this rule is currently NOT what is serving the apex redirect in
-# production. https://supplyministry.com.au/ answers with a 302 (verified
-# 2026-08-08) despite the forced 301 below, and the response carries
-# `server: cloudflare`. The redirect is therefore being applied at the
-# Cloudflare edge, ahead of this file. Changing the status code to 301 has to
-# be done in the Cloudflare dashboard (Rules -> Redirect Rules); editing this
-# line alone will not do it.
+# NOTE: this rule is not what serves the apex redirect in production. The
+# redirect is applied at the Cloudflare edge, ahead of this file. Changing the
+# status code has to be done in the Cloudflare dashboard (Rules -> Redirect
+# Rules); editing this line alone will not do it.
 https://supplyministry.com.au/* https://www.supplyministry.com.au/:splat 301!
 
-# Dynamic sitemap served from the Supabase edge function.
-#
-# This rewrite was previously shadowed by a physical public/sitemap.xml, which
-# static hosts serve in preference to a non-forced rewrite. That is why the live
-# sitemap only ever showed six hand-written URLs. The static file has been
-# removed and the rule is now forced, so the edge function actually answers.
-/sitemap.xml https://yngbsrovafbnczjaybkc.supabase.co/functions/v1/sitemap 200!
+# NOTE: /sitemap.xml is deliberately NOT proxied here any more. Lovable static
+# hosting does not process _redirects at all, so the Netlify-style `200!`
+# force-proxy to the Supabase edge function never took effect on the custom
+# domain and a stale six-URL response kept being served. The sitemap is now a
+# real static file generated at build time by scripts/generate-sitemap.ts.
