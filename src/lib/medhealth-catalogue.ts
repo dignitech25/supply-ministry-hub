@@ -221,32 +221,59 @@ export interface KitRule {
   name: string;
   blurb: string;
   codes: readonly string[];
+  /** Shown in the compact featured row. The rest live in the all-kits sheet. */
+  featured?: boolean;
+  /** Optional clinical note surfaced in the kit detail sheet. */
+  note?: string;
 }
 
 export const KIT_RULES: KitRule[] = [
   {
-    id: "bathroom-safety",
-    name: "Bathroom safety starter",
-    blurb: "Non-slip surfaces and a seat for a first bathroom review.",
-    codes: ["SMBA12740", "SMBA12739", "SMBA10511CA"],
+    id: "lower-limb-recovery",
+    name: "Lower-Limb Recovery Kit",
+    blurb: "Everyday aids for dressing and managing reduced lower-limb movement or bending.",
+    featured: true,
+    codes: ["SMDL10318", "SMDL10204-81", "SMDL10339", "SMDL10921-16", "SMDLDRESSSTICK"],
   },
   {
-    id: "over-bath",
-    name: "Over-bath transfer",
-    blurb: "Board, bench and leg support for an over-bath transfer plan.",
-    codes: ["SMBABE68801", "SMBABE98309", "SMDL10318"],
+    id: "vehicle-transfer",
+    name: "Vehicle Transfer Kit",
+    blurb: "Practical support for entering, repositioning within and exiting a vehicle.",
+    featured: true,
+    codes: ["SMDLCARHANDYBAR", "SMDL12135", "SMDL10318"],
   },
   {
-    id: "bariatric",
-    name: "Bariatric bathroom",
-    blurb: "Higher safe-working-load seating and bench.",
-    codes: ["SMBABE68024HD", "SMBABE98310B"],
+    id: "shower-independence",
+    name: "Shower Independence Kit",
+    blurb: "Stability, slip reduction and extended reach for everyday showering.",
+    featured: true,
+    codes: ["SMBA10511CA", "SMBA12740", "SMDL10093"],
   },
   {
-    id: "lower-limb-dressing",
-    name: "Lower-limb dressing",
-    blurb: "Sock aid, reacher, shoe horn and long-handled sponge.",
-    codes: ["SMDL10339", "SMDL10204-81", "SMDL10921-16", "SMDL10093"],
+    id: "bed-mobility",
+    name: "Bed Mobility & Positioning Kit",
+    blurb: "Practical bedside aids for repositioning, leg support and getting into or out of bed.",
+    featured: true,
+    note: "Bed-stick suitability and compatibility should be confirmed for the individual bed and user.",
+    codes: ["SMBRACBS", "SMBRIC182", "SMBRIC184", "SMDL10318"],
+  },
+  {
+    id: "kitchen-grip-opening",
+    name: "Kitchen Grip & Opening Kit",
+    blurb: "Opening tools for reduced grip strength, dexterity or one-handed use.",
+    codes: ["SMDLJAROPENERAUTO", "SMDLPREPWORKS6IN1", "SMDLCANOPENERRECHG"],
+  },
+  {
+    id: "safe-meal-preparation",
+    name: "Safe Meal Preparation Kit",
+    blurb: "A coordinated setup for seated preparation, stabilising food and safer pouring.",
+    codes: ["SMDLKITCHENWORKSTATION", "SMDLPTKD", "SMDLCHP213500"],
+  },
+  {
+    id: "long-reach-grooming",
+    name: "Long-Reach Grooming Kit",
+    blurb: "Extended-reach personal-care tools for limited shoulder movement or reach.",
+    codes: ["SMDL10093", "SMDLHAIRWASHER", "SMDL80210072-H-L"],
   },
 ];
 
@@ -259,6 +286,51 @@ export function buildKits(products: Product[]) {
     const subtotal = items.reduce((sum, p) => sum + (p.price_rrp ?? 0), 0);
     return { ...rule, items, subtotal };
   }).filter((k) => k.items.length >= 2);
+}
+
+/**
+ * The IC333 bed package. Prices are never stored here, they are always read
+ * from the live catalogue rows the codes resolve to.
+ */
+export const BED_PACKAGE = {
+  id: "ic333-complete-bed",
+  name: "IC333 Complete Bed Package",
+  blurb: "Build a complete electric-bed setup with the appropriate mattress and bedside accessories.",
+  note: "Mattress firmness, rails and transfer supports should be selected according to the user's needs and bed-safety assessment.",
+  requiredCodes: ["SMBRIC333KS", "SMBRHB333KS", "SMBRFB333KS"] as const,
+  mattressCodes: ["SMBRIHKSL2000SQC", "SMBRIHKSL2000MQC", "SMBRIHKSL2000FQC"] as const,
+  accessoryCodes: ["SMBRACBS", "SMBRACHSR", "SMBRACLSR", "SMBRIC182", "SMBRIC184"] as const,
+} as const;
+
+export interface BedPackage {
+  required: Product[];
+  mattresses: Product[];
+  accessories: Product[];
+  /** Base plus the cheapest mattress, so the card can show a starting price. */
+  startingPrice: number | null;
+}
+
+export function buildBedPackage(products: Product[]): BedPackage | null {
+  const byCode = new Map(products.map((p) => [p.product_code, p]));
+  const pick = (codes: readonly string[]) =>
+    codes.map((c) => byCode.get(c)).filter((p): p is Product => Boolean(p));
+
+  const required = pick(BED_PACKAGE.requiredCodes);
+  const mattresses = pick(BED_PACKAGE.mattressCodes);
+  if (required.length === 0 || mattresses.length === 0) return null;
+
+  const base = required.reduce((s, p) => s + (p.price_rrp ?? 0), 0);
+  const cheapest = mattresses.reduce<number | null>(
+    (min, p) => (p.price_rrp != null && (min == null || p.price_rrp < min) ? p.price_rrp : min),
+    null,
+  );
+
+  return {
+    required,
+    mattresses,
+    accessories: pick(BED_PACKAGE.accessoryCodes),
+    startingPrice: cheapest == null ? null : base + cheapest,
+  };
 }
 
 export function toCsv(rows: Array<Record<string, string | number>>, headers: string[]) {
