@@ -5,6 +5,7 @@ import { Search, Download, Loader2, ShoppingBag, Mail, Phone } from "lucide-reac
 import {
   CATEGORIES,
   buildKits,
+  buildFamilies,
   downloadCsv,
   fetchProducts,
   money,
@@ -98,10 +99,10 @@ const MedHealthCapability = () => {
   const grouped = useMemo(() => {
     const map = new Map<string, Product[]>();
     for (const p of visible) {
-      const g = p.clinical_group || "Other";
+      const g = normaliseCategory(p.clinical_group || "") || "Other";
       map.set(g, [...(map.get(g) ?? []), p]);
     }
-    return [...map.entries()];
+    return [...map.entries()].map(([g, items]) => [g, buildFamilies(items)] as const);
   }, [visible]);
 
   const kits = useMemo(() => buildKits(products), [products]);
@@ -433,13 +434,16 @@ const MedHealthCapability = () => {
                     {group}
                   </h2>
                   <div className={`grid gap-3 sm:grid-cols-2 ${COL_CLASS[colsFor(items.length)]}`}>
-                    {items.map((p) => (
+                    {items.map((f) => (
                       <ProductCard
-                        key={p.product_code}
-                        product={p}
-                        qty={selection[p.product_code] ?? 0}
-                        onToggle={() => toggle(p.product_code)}
-                        onQty={(d) => bumpQty(p.product_code, d)}
+                        key={f.key}
+                        product={f.base}
+                        displayName={f.name}
+                        variantCount={f.variants.length}
+                        minPrice={f.minPrice}
+                        qty={f.variants.reduce((s, v) => s + (selection[v.product_code] ?? 0), 0)}
+                        onToggle={() => toggle(f.base.product_code)}
+                        onQty={(d) => bumpQty(f.base.product_code, d)}
                       />
                     ))}
                   </div>

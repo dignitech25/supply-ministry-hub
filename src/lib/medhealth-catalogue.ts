@@ -17,13 +17,18 @@ export interface Product {
   key_specifications: string | null;
   sort_order: number | null;
   image_url: string | null;
+  family_slug: string | null;
+  variant_label: string | null;
+  selectable_options: string | null;
+  supply_mode: string | null;
+  price_hire_weekly: number | null;
 }
 
 export async function fetchProducts(): Promise<Product[]> {
   const { data, error } = await supabase
     .from("microsite_products")
     .select(
-      "clinical_group, status, product_name, product_code, category, price_rrp, key_specifications, sort_order, image_url",
+      "clinical_group, status, product_name, product_code, category, price_rrp, key_specifications, sort_order, image_url, family_slug, variant_label, selectable_options, supply_mode, price_hire_weekly",
     )
     .eq("collection", "medhealth")
     .order("sort_order", { ascending: true })
@@ -60,17 +65,30 @@ export async function fetchSourceOnRequest(): Promise<SourceItem[]> {
 
 export const CATEGORIES = [
   "Bathing & showering",
+  "Toileting",
   "Dressing & reaching",
   "Transfers & positioning",
+  "Seating",
+  "Bed & positioning",
+  "Mobility & vehicle",
+  "Kitchen & household",
 ] as const;
 
 /** Loose match so slightly different spellings in the data still land. */
 export function normaliseCategory(raw: string): string {
   const v = (raw ?? "").toLowerCase();
-  if (v.includes("bath") || v.includes("shower") || v.includes("toilet")) return CATEGORIES[0];
-  if (v.includes("dress") || v.includes("reach")) return CATEGORIES[1];
-  if (v.includes("transfer") || v.includes("position") || v.includes("mobil"))
-    return CATEGORIES[2];
+  if (!v) return raw;
+  const exact = (CATEGORIES as readonly string[]).find((c) => c.toLowerCase() === v);
+  if (exact) return exact;
+  if (v.includes("toilet") || v.includes("continence")) return "Toileting";
+  if (v.includes("bed") || v.includes("mattress") || v.includes("sleep")) return "Bed & positioning";
+  if (v.includes("bath") || v.includes("shower")) return "Bathing & showering";
+  if (v.includes("dress") || v.includes("reach")) return "Dressing & reaching";
+  if (v.includes("seat") || v.includes("chair")) return "Seating";
+  if (v.includes("kitchen") || v.includes("household") || v.includes("eating"))
+    return "Kitchen & household";
+  if (v.includes("mobil") || v.includes("vehicle") || v.includes("walk")) return "Mobility & vehicle";
+  if (v.includes("transfer") || v.includes("position")) return "Transfers & positioning";
   return raw;
 }
 
@@ -87,8 +105,13 @@ export function groupOf(p: Product): string {
  */
 const SHORT_LABELS: Record<string, string> = {
   "Bathing & showering": "Bathing",
+  "Toileting": "Toileting",
   "Dressing & reaching": "Dressing",
   "Transfers & positioning": "Transfers",
+  "Seating": "Seating",
+  "Bed & positioning": "Bed",
+  "Mobility & vehicle": "Mobility",
+  "Kitchen & household": "Kitchen",
 };
 
 export function shortGroupLabel(group: string): string {
@@ -111,6 +134,77 @@ export const money = (n: number | null | undefined) =>
         minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
         maximumFractionDigits: 2,
       }).format(n);
+
+/**
+ * Variant families. Products sharing a family_slug are one product with
+ * options (size, firmness, length), so the grid shows a single card and the
+ * detail page lets the reader pick the variant.
+ */
+export interface Family {
+  key: string;
+  name: string;
+  base: Product;
+  variants: Product[];
+  minPrice: number | null;
+}
+
+/** Trims a trailing variant label so the family reads as one product name. */
+function familyName(base: Product): string {
+  const label = base.variant_label?.trim();
+  if (!label) return base.product_name;
+  return base.product_name
+    .replace(new RegExp(`[\\s\\u2013\\u2014-]*${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i"), "")
+    .trim() || base.product_name;
+}
+
+export function buildFamilies(products: Product[]): Family[] {
+  const out: Family[] = [];
+  const index = new Map<string, Family>();
+
+  for (const p of products) {
+    const slug = p.family_slug?.trim();
+    if (!slug) {
+      out.push({ key: p.product_code, name: p.product_name, base: p, variants: [p], minPrice: p.price_rrp });
+      continue;
+    }
+    const existing = index.get(slug);
+    if (existing) {
+      existing.variants.push(p);
+      if (p.price_rrp != null && (existing.minPrice == null || p.price_rrp < existing.minPrice)) {
+        existing.minPrice = p.price_rrp;
+      }
+      continue;
+    }
+    const fam: Family = { key: slug, name: familyName(p), base: p, variants: [p], minPrice: p.price_rrp };
+    index.set(slug, fam);
+    out.push(fam);
+  }
+
+  return out;
+}
+
+/** All variants of the family a product belongs to, in catalogue order. */
+export function variantsOf(products: Product[], product: Product): Product[] {
+  const slug = product.family_slug?.trim();
+  if (!slug) return [product];
+  return products.filter((p) => p.family_slug?.trim() === slug);
+}
+
+/** "Frame Width: 18 in | 20 in" style strings, split for display. */
+export function parseSelectableOptions(
+  raw: string | null | undefined,
+): { label: string; values: string[] } | null {
+  if (!raw?.trim()) return null;
+  const [head, ...rest] = raw.split(":");
+  const hasLabel = rest.length > 0;
+  const label = hasLabel ? head.trim() : "Options";
+  const body = hasLabel ? rest.join(":") : raw;
+  const values = body
+    .split("|")
+    .map((v) => v.trim())
+    .filter(Boolean);
+  return values.length ? { label, values } : null;
+}
 
 /**
  * Clinical kits are fixed, explicit compositions of real catalogue codes.
@@ -142,13 +236,13 @@ export const KIT_RULES: KitRule[] = [
     id: "bariatric",
     name: "Bariatric bathroom",
     blurb: "Higher safe-working-load seating and bench.",
-    codes: ["SMBABE688024HD", "SMBABE98310B"],
+    codes: ["SMBABE68024HD", "SMBABE98310B"],
   },
   {
     id: "lower-limb-dressing",
     name: "Lower-limb dressing",
     blurb: "Sock aid, reacher, shoe horn and long-handled sponge.",
-    codes: ["SMDL10339", "SMDL1024/81", "SMDL10921/16", "SMDL10093"],
+    codes: ["SMDL10339", "SMDL10204-81", "SMDL10921-16", "SMDL10093"],
   },
 ];
 

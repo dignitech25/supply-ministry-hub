@@ -166,6 +166,7 @@ export type Database = {
           clinical_group: string | null
           collection: string
           created_at: string
+          family_slug: string | null
           id: string
           image_url: string | null
           key_specifications: string | null
@@ -173,15 +174,18 @@ export type Database = {
           price_rrp: number | null
           product_code: string | null
           product_name: string
+          selectable_options: string | null
           sort_order: number
           status: string
           supply_mode: string
+          variant_label: string | null
         }
         Insert: {
           category?: string | null
           clinical_group?: string | null
           collection?: string
           created_at?: string
+          family_slug?: string | null
           id?: string
           image_url?: string | null
           key_specifications?: string | null
@@ -189,15 +193,18 @@ export type Database = {
           price_rrp?: number | null
           product_code?: string | null
           product_name: string
+          selectable_options?: string | null
           sort_order?: number
           status?: string
           supply_mode?: string
+          variant_label?: string | null
         }
         Update: {
           category?: string | null
           clinical_group?: string | null
           collection?: string
           created_at?: string
+          family_slug?: string | null
           id?: string
           image_url?: string | null
           key_specifications?: string | null
@@ -205,9 +212,11 @@ export type Database = {
           price_rrp?: number | null
           product_code?: string | null
           product_name?: string
+          selectable_options?: string | null
           sort_order?: number
           status?: string
           supply_mode?: string
+          variant_label?: string | null
         }
         Relationships: []
       }
@@ -1164,6 +1173,8 @@ export type Database = {
         Args: { p_brand: string; p_title: string }
         Returns: string
       }
+      tmp_check_b64: { Args: { data_uri: string }; Returns: string }
+      tmp_check_riff: { Args: { data_uri: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "staff" | "user"
