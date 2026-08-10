@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import SEO from "@/components/SEO";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Download, Loader2, Home, ShoppingBag, Mail, Phone } from "lucide-react";
+import { Search, Download, Loader2, ShoppingBag, Mail, Phone } from "lucide-react";
 import {
   CATEGORIES,
   buildKits,
@@ -304,14 +304,6 @@ const MedHealthCapability = () => {
       >
         <div className="mx-auto max-w-6xl px-4 py-2.5 sm:px-6">
           <div className="flex flex-row items-center gap-2.5">
-            <button
-              type="button"
-              onClick={goHome}
-              className="hidden min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-sm font-medium text-white transition-opacity hover:opacity-90 sm:flex"
-              style={{ backgroundColor: HOUSE.violet }}
-            >
-              <Home className="h-4 w-4" aria-hidden="true" /> Catalogue home
-            </button>
             <div className="relative flex-1">
               <Search
                 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"

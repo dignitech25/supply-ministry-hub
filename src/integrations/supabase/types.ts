@@ -377,6 +377,7 @@ export type Database = {
           representative_sku: string | null
           search_document: unknown
           search_text: string | null
+          sku_blob: string | null
           slug: string
           subcategory: string | null
           taxonomy_reviewed: boolean
@@ -401,6 +402,7 @@ export type Database = {
           representative_sku?: string | null
           search_document?: unknown
           search_text?: string | null
+          sku_blob?: string | null
           slug: string
           subcategory?: string | null
           taxonomy_reviewed?: boolean
@@ -425,6 +427,7 @@ export type Database = {
           representative_sku?: string | null
           search_document?: unknown
           search_text?: string | null
+          sku_blob?: string | null
           slug?: string
           subcategory?: string | null
           taxonomy_reviewed?: boolean
@@ -969,6 +972,33 @@ export type Database = {
           result_count?: number
           session_id?: string | null
           source?: string
+        }
+        Relationships: []
+      }
+      search_synonyms: {
+        Row: {
+          alias: string
+          created_at: string
+          expansion: string
+          id: string
+          is_active: boolean
+          notes: string | null
+        }
+        Insert: {
+          alias: string
+          created_at?: string
+          expansion: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+        }
+        Update: {
+          alias?: string
+          created_at?: string
+          expansion?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
         }
         Relationships: []
       }
