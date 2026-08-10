@@ -477,12 +477,12 @@ const MedHealthCapability = () => {
               <Phone className="h-4 w-4" aria-hidden="true" /> 0404 593 090
             </a>
             <a
-              href="mailto:hello@supplyministry.com.au"
-              aria-label="Email Supply Ministry at hello@supplyministry.com.au"
+              href="mailto:david@supplyministry.com.au"
+              aria-label="Email Supply Ministry at david@supplyministry.com.au"
               className="flex min-h-11 items-center gap-2 rounded-xl border px-4 text-sm font-semibold transition-colors hover:bg-[rgba(61,45,158,0.08)]"
               style={{ borderColor: HOUSE.violet, color: HOUSE.violet }}
             >
-              <Mail className="h-4 w-4" aria-hidden="true" /> hello@supplyministry.com.au
+              <Mail className="h-4 w-4" aria-hidden="true" /> david@supplyministry.com.au
             </a>
           </div>
 
