@@ -3,7 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Loader2, Mail, Phone, ShoppingBag } from "lucide-react";
 import SEO from "@/components/SEO";
-import { fetchProducts, money, type Product } from "@/lib/medhealth-catalogue";
+import {
+  fetchProducts,
+  money,
+  parseSelectableOptions,
+  variantsOf,
+  type Product,
+} from "@/lib/medhealth-catalogue";
 import { BRAND_RULE, HOUSE, PARTNER } from "@/partners/medhealth";
 import { PartnerLockup, SupplyMinistryLogo, MedHealthLogo } from "@/components/medhealth-catalogue/Brand";
 import { CategoryIcon } from "@/components/medhealth-catalogue/ProductCard";
@@ -50,6 +56,11 @@ const MedHealthProduct = () => {
 
   const products = useMemo(() => data ?? [], [data]);
   const product = products.find((p) => p.product_code === code);
+  const variants = useMemo(
+    () => (product ? variantsOf(products, product) : []),
+    [products, product],
+  );
+  const options = parseSelectableOptions(product?.selectable_options);
 
   const lines: Line[] = useMemo(
     () =>
@@ -146,6 +157,51 @@ const MedHealthProduct = () => {
                   Code {product.product_code}
                 </span>
               </div>
+
+              {variants.length > 1 && (
+                <div className="mt-5">
+                  <h2 className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: "#010A16" }}>
+                    Choose an option
+                  </h2>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {variants.map((v) => {
+                      const active = v.product_code === product.product_code;
+                      return (
+                        <Link
+                          key={v.product_code}
+                          to={`${CATALOGUE}/product/${encodeURIComponent(v.product_code)}`}
+                          aria-current={active ? "true" : undefined}
+                          className="flex min-h-11 items-center gap-2 rounded-xl border px-4 text-sm font-semibold transition-colors"
+                          style={
+                            active
+                              ? { borderColor: HOUSE.violet, backgroundColor: HOUSE.violet, color: "#F4EFE6" }
+                              : { borderColor: PARTNER.rule, color: PARTNER.ink }
+                          }
+                        >
+                          {v.variant_label || v.product_name}
+                          <span className="text-xs opacity-75">{money(v.price_rrp)}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {options && (
+                <div className="mt-5">
+                  <h2 className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: "#010A16" }}>
+                    {options.label}
+                  </h2>
+                  <ul className="mt-2 space-y-1 text-sm" style={{ color: "rgba(1,10,22,0.75)" }}>
+                    {options.values.map((v) => (
+                      <li key={v}>{v}</li>
+                    ))}
+                  </ul>
+                  <p className="mt-1.5 text-xs text-muted-foreground">
+                    Tell us which option you need when you send your request.
+                  </p>
+                </div>
+              )}
 
               {product.key_specifications && (
                 <div className="mt-5">
