@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import SEO from "@/components/SEO";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Download, Loader2, Home, ShoppingBag, Mail, Phone } from "lucide-react";
+import { Search, Download, Loader2, ShoppingBag, Mail, Phone } from "lucide-react";
 import {
   CATEGORIES,
   buildKits,
