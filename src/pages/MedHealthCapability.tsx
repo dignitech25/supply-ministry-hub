@@ -6,6 +6,7 @@ import {
   CATEGORIES,
   buildKits,
   buildFamilies,
+  buildBedPackage,
   downloadCsv,
   fetchProducts,
   money,
@@ -20,6 +21,8 @@ import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
 import { ProductCard } from "@/components/medhealth-catalogue/ProductCard";
 import { KitsRow } from "@/components/medhealth-catalogue/KitsRow";
 import { KitSheet, type Kit } from "@/components/medhealth-catalogue/KitSheet";
+import { AllKitsSheet } from "@/components/medhealth-catalogue/AllKitsSheet";
+import { BedPackageSheet } from "@/components/medhealth-catalogue/BedPackageSheet";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
 import { SourcingCallout } from "@/components/medhealth-catalogue/SourcingCallout";
 
@@ -56,9 +59,11 @@ const theme = {
 const MedHealthCapability = () => {
   const [tab, setTab] = useState<string>("All");
   const [query, setQuery] = useState("");
-  const { selection, toggle, bumpQty, removeItem, addMany, clear } = useMedHealthSelection();
+  const { selection, toggle, bumpQty, removeItem, addUnique, clear } = useMedHealthSelection();
   const [reviewing, setReviewing] = useState(false);
   const [viewingKit, setViewingKit] = useState<Kit | null>(null);
+  const [viewingAllKits, setViewingAllKits] = useState(false);
+  const [configuringBed, setConfiguringBed] = useState(false);
   /** Purely visual scroll indicator. Never affects filtering. */
   const [spyGroup, setSpyGroup] = useState<string | null>(null);
   const stickyRef = useRef<HTMLDivElement | null>(null);
@@ -76,12 +81,20 @@ const MedHealthCapability = () => {
   const products = useMemo(() => data ?? [], [data]);
 
   const counts = useMemo(() => {
-    const map: Record<string, number> = { All: products.length };
+    // Counts follow the cards on screen: a variant family renders as one card.
+    const map: Record<string, number> = {};
     for (const c of CATEGORIES) map[c] = 0;
+    const seen = new Set<string>();
+    let all = 0;
     for (const p of products) {
+      const key = p.family_slug?.trim() || p.product_code;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      all += 1;
       const c = groupOf(p);
       map[c] = (map[c] ?? 0) + 1;
     }
+    map.All = all;
     return map;
   }, [products]);
 
@@ -106,6 +119,7 @@ const MedHealthCapability = () => {
   }, [visible]);
 
   const kits = useMemo(() => buildKits(products), [products]);
+  const bedPackage = useMemo(() => buildBedPackage(products), [products]);
 
   const groupKeys = useMemo(() => grouped.map(([g]) => g).join("|"), [grouped]);
 
@@ -215,7 +229,7 @@ const MedHealthCapability = () => {
   const itemCount = lines.reduce((s, l) => s + l.qty, 0);
   const total = lines.reduce((s, l) => s + (l.product.price_rrp ?? 0) * l.qty, 0);
 
-  const addKit = (items: Product[]) => addMany(items.map((p) => p.product_code));
+  const addKit = (items: Product[]) => addUnique(items.map((p) => p.product_code));
 
   const goHome = () => {
     setTab("All");
@@ -407,7 +421,14 @@ const MedHealthCapability = () => {
         ) : (
           <>
             {tab === "All" && !query && (
-              <KitsRow kits={kits} onAdd={addKit} onView={(k) => setViewingKit(k)} />
+              <KitsRow
+                kits={kits}
+                onAdd={addKit}
+                onView={(k) => setViewingKit(k)}
+                onViewAll={() => setViewingAllKits(true)}
+                bedPackage={bedPackage}
+                onConfigureBed={() => setConfiguringBed(true)}
+              />
             )}
 
             {grouped.length === 0 ? (
@@ -552,6 +573,18 @@ const MedHealthCapability = () => {
 
       {viewingKit && (
         <KitSheet kit={viewingKit} onClose={() => setViewingKit(null)} onAdd={addKit} />
+      )}
+
+      {viewingAllKits && (
+        <AllKitsSheet kits={kits} onClose={() => setViewingAllKits(false)} onAdd={addKit} />
+      )}
+
+      {configuringBed && bedPackage && (
+        <BedPackageSheet
+          pkg={bedPackage}
+          onClose={() => setConfiguringBed(false)}
+          onAdd={addKit}
+        />
       )}
     </div>
   );
