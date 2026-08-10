@@ -10,6 +10,8 @@ export interface Kit {
   blurb: string;
   items: Product[];
   subtotal: number;
+  featured?: boolean;
+  note?: string;
 }
 
 export function KitSheet({
@@ -76,6 +78,15 @@ export function KitSheet({
           ))}
         </ul>
 
+        {kit.note && (
+          <p
+            className="border-t border-border px-5 py-3 text-xs leading-relaxed"
+            style={{ color: "rgba(1,10,22,0.7)" }}
+          >
+            {kit.note}
+          </p>
+        )}
+
         <div className="flex items-center gap-3 border-t border-border px-5 py-4">
           <div className="min-w-0 flex-1">
             <p className="text-xs text-muted-foreground">
@@ -94,7 +105,7 @@ export function KitSheet({
             className="min-h-11 rounded-xl px-5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
             style={{ backgroundColor: HOUSE.violet }}
           >
-            Add kit to selection
+            Select kit
           </button>
         </div>
       </div>
