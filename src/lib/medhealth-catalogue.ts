@@ -173,6 +173,10 @@ export function buildFamilies(products: Product[]): Family[] {
       if (p.price_rrp != null && (existing.minPrice == null || p.price_rrp < existing.minPrice)) {
         existing.minPrice = p.price_rrp;
       }
+      // Image inheritance: a family shows a photo if any variant has one.
+      if (!existing.base.image_url && p.image_url) {
+        existing.base = { ...existing.base, image_url: p.image_url };
+      }
       continue;
     }
     const fam: Family = { key: slug, name: familyName(p), base: p, variants: [p], minPrice: p.price_rrp };

@@ -20,9 +20,10 @@ import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
 const FONT = "Raleway, system-ui, sans-serif";
 const CATALOGUE = "/partners/medhealth-capability-2026";
 
-function ProductImage({ product }: { product: Product }) {
+function ProductImage({ product, fallbackSrc }: { product: Product; fallbackSrc?: string | null }) {
   const [failed, setFailed] = useState(false);
-  const hasImage = product.image_url && !failed;
+  const src = product.image_url || fallbackSrc || null;
+  const hasImage = src && !failed;
   return (
     <div
       className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-2xl border bg-white p-6"
@@ -30,8 +31,9 @@ function ProductImage({ product }: { product: Product }) {
     >
       {hasImage ? (
         <img
-          src={product.image_url!}
+          src={src!}
           alt={product.product_name}
+          onError={() => setFailed(true)}
           className="max-h-full max-w-full object-contain mix-blend-multiply"
         />
       ) : (
@@ -133,7 +135,10 @@ const MedHealthProduct = () => {
           </p>
         ) : (
           <div className="mt-4 grid gap-6 md:grid-cols-2 md:gap-10">
-            <ProductImage product={product} />
+            <ProductImage
+              product={product}
+              fallbackSrc={variants.find((v) => v.image_url)?.image_url ?? null}
+            />
 
             <div className="flex flex-col">
               <p
