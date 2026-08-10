@@ -9,6 +9,8 @@ interface Ctx {
   bumpQty: (code: string, delta: number) => void;
   removeItem: (code: string) => void;
   addMany: (codes: string[]) => void;
+  /** Adds codes at quantity one, leaving anything already selected untouched. */
+  addUnique: (codes: string[]) => void;
   clear: () => void;
 }
 
@@ -64,6 +66,12 @@ export function MedHealthSelectionProvider({ children }: { children: React.React
         setSelection((s) => {
           const next = { ...s };
           for (const c of codes) next[c] = (next[c] ?? 0) + 1;
+          return next;
+        }),
+      addUnique: (codes) =>
+        setSelection((s) => {
+          const next = { ...s };
+          for (const c of codes) if (!next[c]) next[c] = 1;
           return next;
         }),
       clear: () => setSelection({}),
