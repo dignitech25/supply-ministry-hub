@@ -135,7 +135,10 @@ const MedHealthProduct = () => {
           </p>
         ) : (
           <div className="mt-4 grid gap-6 md:grid-cols-2 md:gap-10">
-            <ProductImage product={product} />
+            <ProductImage
+              product={product}
+              fallbackSrc={variants.find((v) => v.image_url)?.image_url ?? null}
+            />
 
             <div className="flex flex-col">
               <p
