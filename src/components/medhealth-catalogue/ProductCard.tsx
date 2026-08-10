@@ -80,17 +80,34 @@ interface Props {
   qty: number;
   onToggle: () => void;
   onQty: (delta: number) => void;
+  /** More than one entry means this card stands for a family of options. */
+  variantCount?: number;
+  /** Lowest price across the family, used for the "From" price. */
+  minPrice?: number | null;
+  /** Family display name, used when variants are collapsed into one card. */
+  displayName?: string;
 }
 
-export function ProductCard({ product, qty, onToggle, onQty }: Props) {
+export function ProductCard({
+  product,
+  qty,
+  onToggle,
+  onQty,
+  variantCount = 1,
+  minPrice,
+  displayName,
+}: Props) {
   const selected = qty > 0;
   const navigate = useNavigate();
+  const hasOptions = variantCount > 1;
+  const title = displayName ?? product.product_name;
+  const price = hasOptions ? (minPrice ?? product.price_rrp) : product.price_rrp;
 
   return (
     <div
       role="button"
       tabIndex={0}
-      aria-label={`View ${product.product_name}`}
+      aria-label={`View ${title}`}
       onClick={() => navigate(productHref(product.product_code))}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -114,15 +131,18 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
           </p>
           <h3
             className="mt-0.5 line-clamp-2 h-[2.6rem] text-sm font-semibold leading-snug"
-            title={product.product_name}
+            title={title}
             style={{ color: "#231F20" }}
           >
-            {product.product_name}
+            {title}
           </h3>
           <p className="mt-0.5 line-clamp-2 h-[2rem] text-xs leading-4 text-muted-foreground">
-            {firstSentence(product.key_specifications)}
+            {hasOptions
+              ? `${variantCount} options available`
+              : firstSentence(product.key_specifications)}
           </p>
         </div>
+        {!hasOptions && (
         <button
           type="button"
           aria-pressed={selected}
@@ -140,12 +160,13 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
         >
           <Check className="h-3.5 w-3.5" strokeWidth={3} aria-hidden="true" />
         </button>
+        )}
       </div>
 
       <div className="mt-auto flex h-12 items-center justify-between gap-2 pt-3">
         <div className="min-w-0">
           <p className="text-base font-bold leading-tight" style={{ color: "#010A16" }}>
-            {money(product.price_rrp)}
+            {hasOptions ? `From ${money(price)}` : money(price)}
           </p>
           <Link
             to={productHref(product.product_code)}
@@ -153,13 +174,21 @@ export function ProductCard({ product, qty, onToggle, onQty }: Props) {
             className="truncate whitespace-nowrap text-[10px] font-semibold leading-tight underline underline-offset-2"
             style={{ color: HOUSE.violet }}
           >
-            View details
+            {hasOptions ? "Choose an option" : "View details"}
           </Link>
         </div>
 
         <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
-          {selected && (
+          {selected && !hasOptions && (
             <QtyStepper qty={qty} label={product.product_name} onQty={onQty} size="sm" />
+          )}
+          {hasOptions && selected && (
+            <span
+              className="rounded-full px-2.5 py-1 text-[11px] font-semibold"
+              style={{ backgroundColor: "rgba(61,45,158,0.12)", color: HOUSE.violet }}
+            >
+              {qty} selected
+            </span>
           )}
         </div>
       </div>
