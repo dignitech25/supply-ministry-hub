@@ -100,7 +100,7 @@ export async function exportCataloguePdf(
   const margin = 16;
 
   const [sm, mh] = await Promise.all([
-    loadImage("/Supply_Ministry_logo.png"),
+    loadImage("/Supply_Ministry_logo_new_cropped.png"),
     loadImage(PARTNER.logo),
   ]);
 
@@ -266,7 +266,7 @@ export async function exportCatalogueXlsx(
   wb.created = new Date();
 
   const [sm, mh] = await Promise.all([
-    loadImage("/Supply_Ministry_logo.png"),
+    loadImage("/Supply_Ministry_logo_new_cropped.png"),
     loadImage(PARTNER.logo),
   ]);
 
