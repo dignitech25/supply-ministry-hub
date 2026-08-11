@@ -1,6 +1,6 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import type { ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 
 interface Props {
   /** Accessible title, rendered as the visible dialog heading. */
@@ -38,8 +38,26 @@ export function ModalShell({
   children,
   footer,
 }: Props) {
+  /*
+   * The dialog closes in two steps. Radix restores focus to the trigger while
+   * its content unmounts, so the parent must keep this component mounted for
+   * that tick. Tearing the whole Root down on the close click would drop focus
+   * onto the body instead of the control that opened the dialog.
+   */
+  const [open, setOpen] = useState(true);
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
+
+  useEffect(() => {
+    if (open) return;
+    const id = window.setTimeout(() => closeRef.current(), 0);
+    return () => window.clearTimeout(id);
+  }, [open]);
+
+  const requestClose = useCallback(() => setOpen(false), []);
+
   return (
-    <DialogPrimitive.Root open onOpenChange={(open) => !open && onClose()}>
+    <DialogPrimitive.Root open={open} onOpenChange={(next) => !next && requestClose()}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[#231F20]/50 backdrop-blur-sm" />
         <DialogPrimitive.Content
