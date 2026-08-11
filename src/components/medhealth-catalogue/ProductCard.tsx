@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Bath, Shirt, MoveRight, Utensils, BedDouble, Package, Check } from "lucide-react";
+import { Bath, Shirt, MoveRight, Utensils, BedDouble, Package, Check, MapPin } from "lucide-react";
 import {
   CATEGORIES,
   firstSentence,
   groupOf,
+  hasMelbourneCondition,
   money,
   normaliseCategory,
   shortGroupLabel,
