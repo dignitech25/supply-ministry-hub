@@ -129,8 +129,15 @@ export function KitsRow({
                 Build a complete electric-bed setup with the appropriate mattress and bedside
                 accessories.
               </p>
+              <div
+                className="mt-2 inline-flex max-w-full items-center gap-1.5 rounded-md px-2 py-1 text-[11px] font-semibold"
+                style={{ backgroundColor: "rgba(61,45,158,0.10)", color: HOUSE.violet }}
+              >
+                <MapPin className="h-3 w-3 shrink-0" aria-hidden="true" />
+                <span className="break-words hyphens-none text-pretty">Greater Melbourne only</span>
+              </div>
               {bedPackage.startingPrice != null && (
-                <p className="mt-1 text-sm font-bold" style={{ color: "#010A16" }}>
+                <p className="mt-1.5 text-sm font-bold" style={{ color: "#010A16" }}>
                   Starting from {money(bedPackage.startingPrice)}
                 </p>
               )}
