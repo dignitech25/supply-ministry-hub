@@ -273,6 +273,21 @@ export function variantsOf(products: Product[], product: Product): Product[] {
   return products.filter((p) => p.family_slug?.trim() === slug);
 }
 
+/**
+ * Some larger or clinically sensitive items are only supplied and installed
+ * within Greater Melbourne. This flag drives the "Condition" notice on cards
+ * and detail pages.
+ */
+export function hasMelbourneCondition(product: Product): boolean {
+  const group = groupOf(product);
+  if (group === "Beds & positioning") return true;
+  const name = product.product_name.toLowerCase();
+  if (name.includes("recline") || name.includes("lift chair") || name.includes("power lift")) return true;
+  const slug = (product.family_slug ?? "").toLowerCase();
+  if (slug.includes("rollator") || name.includes("rollator")) return true;
+  return false;
+}
+
 /** "Frame Width: 18 in | 20 in" style strings, split for display. */
 export function parseSelectableOptions(
   raw: string | null | undefined,
