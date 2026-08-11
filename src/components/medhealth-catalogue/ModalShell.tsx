@@ -54,6 +54,22 @@ export function ModalShell({
     return () => window.clearTimeout(id);
   }, [open]);
 
+  /*
+   * Safety net for the paths that unmount this component outright, such as
+   * "Select kit": if focus has fallen to the body, put it back on the trigger.
+   */
+  const triggerRef = useRef<HTMLElement | null>(
+    typeof document !== "undefined" ? (document.activeElement as HTMLElement | null) : null,
+  );
+  useEffect(() => {
+    const trigger = triggerRef.current;
+    return () => {
+      window.setTimeout(() => {
+        if (document.activeElement === document.body && trigger?.isConnected) trigger.focus();
+      }, 0);
+    };
+  }, []);
+
   const requestClose = useCallback(() => setOpen(false), []);
 
   return (
