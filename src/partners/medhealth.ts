@@ -36,7 +36,7 @@ export const PARTNER = {
   badge: "Dedicated catalogue, August 2026",
   /** Footer disclaimer. Ownership rule: our document, referencing them. */
   disclaimer:
-    "Supply Ministry Pty Ltd, a Dignitech brand. Prepared by Supply Ministry for the MedHealth team, August 2026. This page is unlisted and not indexed. It is not a statement of partnership, endorsement or approval by MedHealth.",
+    "Supply Ministry Pty Ltd, a Dignitech brand. Prepared by Supply Ministry for the MedHealth team.",
 } as const;
 
 /** Supply Ministry identity. Owns every action colour. */
