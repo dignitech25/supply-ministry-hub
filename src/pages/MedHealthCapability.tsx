@@ -34,30 +34,8 @@ import { SourcingCallout } from "@/components/medhealth-catalogue/SourcingCallou
 const PARTNER_NAME = PARTNER.name;
 const FONT = "Raleway, system-ui, sans-serif";
 
-/**
- * Pick a column count that leaves the last row looking intentional rather than
- * like a broken four-up grid. Prefers an exact fit, then a near-full last row.
- */
-const colsFor = (n: number) => {
-  if (n <= 2) return 2;
-  if (n === 3) return 3;
-  // Fewest empty slots in the last row, preferring the wider grid on a tie.
-  let best = 4;
-  let bestGap = Infinity;
-  for (const c of [4, 3, 2]) {
-    const gap = (c - (n % c)) % c;
-    if (gap < bestGap) {
-      bestGap = gap;
-      best = c;
-    }
-  }
-  return best;
-};
-const COL_CLASS: Record<number, string> = {
-  4: "lg:grid-cols-3 xl:grid-cols-4",
-  3: "lg:grid-cols-3",
-  2: "lg:grid-cols-2",
-};
+/** One consistent grid across every category so sections scan as a set. */
+const GRID_CLASS = "lg:grid-cols-3 xl:grid-cols-4";
 
 /** Every partner-specific value comes from src/partners/medhealth.ts. */
 const theme = {
@@ -463,7 +441,7 @@ const MedHealthCapability = () => {
                   >
                     {group}
                   </h2>
-                  <div className={`grid gap-3 sm:grid-cols-2 ${COL_CLASS[colsFor(items.length)]}`}>
+                  <div className={`grid gap-3 sm:grid-cols-2 ${GRID_CLASS}`}>
                     {items.map((f) => (
                       <ProductCard
                         key={f.key}

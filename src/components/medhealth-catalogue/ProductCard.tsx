@@ -4,6 +4,7 @@ import { Bath, Shirt, MoveRight, Utensils, BedDouble, Package, Check } from "luc
 import {
   CATEGORIES,
   firstSentence,
+  groupOf,
   money,
   normaliseCategory,
   shortGroupLabel,
@@ -114,6 +115,7 @@ export function ProductCard({
   const hasOptions = variantCount > 1;
   const title = displayName ?? product.product_name;
   const price = hasOptions ? (minPrice ?? product.price_rrp) : product.price_rrp;
+  const displayGroup = groupOf(product);
 
   return (
     <div
@@ -138,8 +140,8 @@ export function ProductCard({
         <ProductThumb product={product} size="sm" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-            <span className="sr-only">{product.clinical_group}</span>
-            <span aria-hidden="true">{shortGroupLabel(product.clinical_group)}</span>
+            <span className="sr-only">{displayGroup}</span>
+            <span aria-hidden="true">{shortGroupLabel(displayGroup)}</span>
           </p>
           <h3
             className="mt-0.5 line-clamp-2 h-[2.6rem] text-sm font-semibold leading-snug"
