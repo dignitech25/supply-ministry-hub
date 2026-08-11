@@ -271,8 +271,7 @@ const MedHealthCapability = () => {
         style={{ backgroundImage: BRAND_RULE }}
       />
 
-      {/* Masthead and toolbar share one sticky container so they can never mismatch. */}
-      <div ref={stickyRef} className="sticky top-0 z-40">
+      {/* Branding, then page purpose, then the sticky search and category bar. */}
       <header
         style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}
       >
@@ -302,9 +301,25 @@ const MedHealthCapability = () => {
         </div>
       </header>
 
+      <div className="mx-auto max-w-6xl px-4 pb-4 pt-5 sm:px-6">
+        <h1
+          className="text-balance text-lg font-bold leading-tight tracking-tight sm:text-2xl"
+          style={{ color: PARTNER.ink }}
+        >
+          Assistive technology catalogue for the {PARTNER_NAME} team
+        </h1>
+        <p
+          className="text-pretty pt-1.5 text-xs leading-relaxed sm:text-sm"
+          style={{ color: "rgba(1,10,22,0.68)" }}
+        >
+          Select individual items or a clinical kit, then review and send your request.
+        </p>
+      </div>
+
       {/* Toolbar */}
       <div
-        className="border-b border-border backdrop-blur-md"
+        ref={stickyRef}
+        className="sticky top-0 z-40 border-b border-border backdrop-blur-md"
         style={{ backgroundColor: "rgba(255,255,255,0.97)" }}
       >
         <div className="mx-auto max-w-6xl px-4 py-2.5 sm:px-6">
@@ -389,22 +404,6 @@ const MedHealthCapability = () => {
             </div>
           </div>
         </div>
-      </div>
-      </div>
-
-      <div className="mx-auto max-w-6xl px-4 pb-1 pt-5 sm:px-6">
-        <h1
-          className="text-balance text-lg font-bold leading-tight tracking-tight sm:text-2xl"
-          style={{ color: PARTNER.ink }}
-        >
-          Assistive technology catalogue for the {PARTNER_NAME} team
-        </h1>
-        <p
-          className="text-pretty pt-1.5 text-xs leading-relaxed sm:text-sm"
-          style={{ color: "rgba(1,10,22,0.68)" }}
-        >
-          Select individual items or a clinical kit, then review and send your request.
-        </p>
       </div>
 
       <main

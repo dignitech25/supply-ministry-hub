@@ -7,6 +7,8 @@ import {
   fetchProducts,
   money,
   parseSelectableOptions,
+  parseSpecification,
+  specificationFor,
   variantsOf,
   type Product,
 } from "@/lib/medhealth-catalogue";
@@ -19,27 +21,6 @@ import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
 
 const FONT = "Raleway, system-ui, sans-serif";
 const CATALOGUE = "/partners/medhealth-capability-2026";
-
-/**
- * Splits raw specification text into an optional intro paragraph and a list of
- * points, stripping the asterisk or dash markers used in the source data.
- */
-function parseSpecification(text: string): { intro: string; points: string[] } {
-  const raw = text
-    .split(/\r?\n|(?=\s\*\s)|(?=^\*)/gm)
-    .flatMap((line) => line.split(/(?=\*\s?[A-Z0-9])/g))
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  const intro: string[] = [];
-  const points: string[] = [];
-  for (const line of raw) {
-    if (/^[*\-•]\s*/.test(line)) points.push(line.replace(/^[*\-•]\s*/, "").trim());
-    else if (points.length === 0) intro.push(line);
-    else points.push(line);
-  }
-  return { intro: intro.join(" ").trim(), points: points.filter(Boolean) };
-}
 
 function ProductImage({ product, fallbackSrc }: { product: Product; fallbackSrc?: string | null }) {
   const [failed, setFailed] = useState(false);
@@ -231,13 +212,13 @@ const MedHealthProduct = () => {
                 </div>
               )}
 
-              {product.key_specifications && (
+              {specificationFor(product) && (
                 <div className="mt-5">
                   <h2 className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: "#010A16" }}>
                     About this product
                   </h2>
                   {(() => {
-                    const { intro, points } = parseSpecification(product.key_specifications);
+                    const { intro, points } = parseSpecification(specificationFor(product));
                     return (
                       <div className="mt-2 max-w-[60ch] text-sm" style={{ color: "rgba(1,10,22,0.75)" }}>
                         {intro && (
@@ -299,7 +280,7 @@ const MedHealthProduct = () => {
                   <Phone className="h-4 w-4" aria-hidden="true" /> 0404 593 090
                 </a>
                 <a
-                  href={`mailto:hello@supplyministry.com.au?subject=${encodeURIComponent(`Question about ${product.product_name} (${product.product_code})`)}`}
+                  href={`mailto:david@supplyministry.com.au?subject=${encodeURIComponent(`Question about ${product.product_name} (${product.product_code})`)}`}
                   className="flex min-h-11 items-center gap-2 rounded-xl border px-4 text-sm font-semibold transition-colors hover:bg-[rgba(61,45,158,0.08)]"
                   style={{ borderColor: HOUSE.violet, color: HOUSE.violet }}
                 >
