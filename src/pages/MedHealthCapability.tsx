@@ -7,14 +7,19 @@ import {
   buildKits,
   buildFamilies,
   buildBedPackage,
-  downloadCsv,
   fetchProducts,
   money,
   groupOf,
   normaliseCategory,
-  toCsv,
   type Product,
 } from "@/lib/medhealth-catalogue";
+import { exportCataloguePdf, exportCatalogueXlsx } from "@/lib/medhealth-export";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { MedHealthLogo, SupplyMinistryLogo, PartnerLockup } from "@/components/medhealth-catalogue/Brand";
 import { PARTNER, HOUSE, BRAND_RULE } from "@/partners/medhealth";
 import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
