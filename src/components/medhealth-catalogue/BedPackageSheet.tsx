@@ -16,15 +16,18 @@ export function BedPackageSheet({
   onAdd: (items: Product[]) => void;
 }) {
   const [mattress, setMattress] = useState<string | null>(null);
+  const [rail, setRail] = useState<string>("none");
   const [accessories, setAccessories] = useState<Record<string, boolean>>({});
 
   const chosen = useMemo(() => {
     const items = [...pkg.required];
     const m = pkg.mattresses.find((p) => p.product_code === mattress);
     if (m) items.push(m);
+    const r = pkg.rails.find((p) => p.product_code === rail);
+    if (r) items.push(r);
     for (const a of pkg.accessories) if (accessories[a.product_code]) items.push(a);
     return items;
-  }, [pkg, mattress, accessories]);
+  }, [pkg, mattress, rail, accessories]);
 
   const total = chosen.reduce((s, p) => s + (p.price_rrp ?? 0), 0);
 
@@ -41,7 +44,7 @@ export function BedPackageSheet({
         <div className="flex shrink-0 items-center gap-3 border-t border-border px-5 py-4">
           <div className="min-w-0 flex-1">
             <p className="text-xs text-muted-foreground">
-              {chosen.length} item{chosen.length === 1 ? "" : "s"}
+              Current configuration, {chosen.length} item{chosen.length === 1 ? "" : "s"}
             </p>
             <p className="text-base font-bold" style={{ color: "#010A16" }}>
               {money(total)}
@@ -80,17 +83,26 @@ export function BedPackageSheet({
             ))}
           </ul>
 
-          <h3 className="mt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          <h3
+            id="bed-mattress-label"
+            className="mt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground"
+          >
             Mattress firmness, choose one
           </h3>
-          <div className="mt-2 grid gap-2 sm:grid-cols-3">
+          <div
+            role="radiogroup"
+            aria-labelledby="bed-mattress-label"
+            aria-required="true"
+            className="mt-2 grid gap-2 sm:grid-cols-3"
+          >
             {pkg.mattresses.map((p) => {
               const active = mattress === p.product_code;
               return (
                 <button
                   key={p.product_code}
                   type="button"
-                  aria-pressed={active}
+                  role="radio"
+                  aria-checked={active}
                   onClick={() => setMattress(p.product_code)}
                   className="min-h-11 rounded-lg border-2 px-3 py-2 text-left text-xs font-semibold transition-colors"
                   style={{
@@ -105,6 +117,50 @@ export function BedPackageSheet({
               );
             })}
           </div>
+
+          {pkg.rails.length > 0 && (
+            <>
+              <h3
+                id="bed-rail-label"
+                className="mt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground"
+              >
+                Side rail, optional
+              </h3>
+              <div
+                role="radiogroup"
+                aria-labelledby="bed-rail-label"
+                className="mt-2 grid gap-2 sm:grid-cols-3"
+              >
+                {[{ code: "none", label: "No side rail", price: null as number | null }, ...pkg.rails.map((p) => ({
+                  code: p.product_code,
+                  label: p.product_name,
+                  price: p.price_rrp ?? null,
+                }))].map((opt) => {
+                  const active = rail === opt.code;
+                  return (
+                    <button
+                      key={opt.code}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      onClick={() => setRail(opt.code)}
+                      className="min-h-11 rounded-lg border-2 px-3 py-2 text-left text-xs font-semibold transition-colors"
+                      style={{
+                        borderColor: active ? HOUSE.violet : "hsl(var(--border))",
+                        color: active ? HOUSE.violet : "#231F20",
+                        backgroundColor: active ? "rgba(61,45,158,0.08)" : "transparent",
+                      }}
+                    >
+                      {opt.label}
+                      {opt.price != null && (
+                        <span className="block font-normal text-muted-foreground">{money(opt.price)}</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
 
           {pkg.accessories.length > 0 && (
             <>
