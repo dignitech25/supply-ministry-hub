@@ -11,9 +11,9 @@ const { data, error } = await supabase
 if (error) { console.error(error); process.exit(1); }
 console.log('Total:', data?.length);
 for (const p of data || []) {
-  const group = (p.clinical_group || p.category || '').toLowerCase();
   const name = p.product_name.toLowerCase();
-  if (group.includes('bed') || group.includes('mattress') || group.includes('sleep') || name.includes('bed') || name.includes('recliner') || name.includes('rollator') || name.includes('rail') || name.includes('wedge')) {
+  const group = (p.clinical_group || p.category || '').toLowerCase();
+  if (name.includes('chair') || name.includes('recliner') || name.includes('seat') || name.includes('lift')) {
     console.log(`${p.product_code}\t${p.product_name}\t${p.clinical_group}\t${p.category}\t${p.family_slug || ''}`);
   }
 }
