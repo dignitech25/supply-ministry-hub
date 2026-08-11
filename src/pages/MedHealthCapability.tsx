@@ -302,12 +302,14 @@ const MedHealthCapability = () => {
               <span className="sm:hidden">{itemCount}</span>
               <span className="whitespace-nowrap opacity-80">{money(total)}</span>
             </button>
-            <span
-              className="hidden whitespace-nowrap rounded-full border px-3 py-1 text-xs font-medium lg:inline-block"
-              style={{ borderColor: PARTNER.rule, color: PARTNER.ink }}
-            >
-              {PARTNER.badge}
-            </span>
+            {PARTNER.badge && (
+              <span
+                className="hidden whitespace-nowrap rounded-full border px-3 py-1 text-xs font-medium lg:inline-block"
+                style={{ borderColor: PARTNER.rule, color: PARTNER.ink }}
+              >
+                {PARTNER.badge}
+              </span>
+            )}
           </div>
         </div>
       </header>

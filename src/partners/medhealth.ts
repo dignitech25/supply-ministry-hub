@@ -33,7 +33,7 @@ export const PARTNER = {
   /** Prepared-for label shown above the partner mark in the masthead. */
   preparedFor: "Prepared for",
   /** Badge shown at the right of the masthead. */
-  badge: "Dedicated catalogue, August 2026",
+  badge: "",
   /** Footer disclaimer. Ownership rule: our document, referencing them. */
   disclaimer:
     "Supply Ministry Pty Ltd, a Dignitech brand. Prepared by Supply Ministry for the MedHealth team.",
