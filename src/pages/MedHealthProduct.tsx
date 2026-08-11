@@ -167,6 +167,16 @@ const MedHealthProduct = () => {
                 </span>
               </div>
 
+              {hasMelbourneCondition(product) && (
+                <div
+                  className="mt-3 inline-flex max-w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold"
+                  style={{ backgroundColor: "rgba(61,45,158,0.10)", color: HOUSE.violet }}
+                >
+                  <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  <span className="break-words hyphens-none text-pretty">Condition: available Greater Melbourne only</span>
+                </div>
+              )}
+
               {variants.length > 1 && (
                 <div className="mt-5">
                   <h2 className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: "#010A16" }}>
