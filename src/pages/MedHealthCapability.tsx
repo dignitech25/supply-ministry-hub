@@ -233,6 +233,10 @@ const MedHealthCapability = () => {
   const exportContext = { filter: tab, query };
   const exportPdf = () => exportCataloguePdf(visible, kits, exportContext);
   const exportXlsx = () => exportCatalogueXlsx(visible, kits, exportContext);
+  const isFiltered = tab !== "All" || query.trim() !== "";
+  const exportLabel = isFiltered
+    ? `Export ${visible.length} result${visible.length === 1 ? "" : "s"}`
+    : "Export catalogue";
 
   return (
     <div
@@ -318,10 +322,10 @@ const MedHealthCapability = () => {
                   type="button"
                   className="flex min-h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 sm:px-4"
                   style={{ backgroundColor: HOUSE.violet }}
-                  aria-label="Export catalogue"
+                  aria-label={exportLabel}
                 >
                   <Download className="h-4 w-4" aria-hidden="true" />
-                  <span className="hidden sm:inline">Export catalogue</span>
+                  <span className="hidden sm:inline">{exportLabel}</span>
                   <span className="sm:hidden">Export</span>
                 </button>
               </DropdownMenuTrigger>
