@@ -20,6 +20,27 @@ import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
 const FONT = "Raleway, system-ui, sans-serif";
 const CATALOGUE = "/partners/medhealth-capability-2026";
 
+/**
+ * Splits raw specification text into an optional intro paragraph and a list of
+ * points, stripping the asterisk or dash markers used in the source data.
+ */
+function parseSpecification(text: string): { intro: string; points: string[] } {
+  const raw = text
+    .split(/\r?\n|(?=\s\*\s)|(?=^\*)/gm)
+    .flatMap((line) => line.split(/(?=\*\s?[A-Z0-9])/g))
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const intro: string[] = [];
+  const points: string[] = [];
+  for (const line of raw) {
+    if (/^[*\-•]\s*/.test(line)) points.push(line.replace(/^[*\-•]\s*/, "").trim());
+    else if (points.length === 0) intro.push(line);
+    else points.push(line);
+  }
+  return { intro: intro.join(" ").trim(), points: points.filter(Boolean) };
+}
+
 function ProductImage({ product, fallbackSrc }: { product: Product; fallbackSrc?: string | null }) {
   const [failed, setFailed] = useState(false);
   const src = product.image_url || fallbackSrc || null;
