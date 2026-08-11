@@ -21,7 +21,7 @@ export function QtyStepper({ qty, label, onQty, size = "md" }: Props) {
         type="button"
         aria-label={`Decrease quantity of ${label}`}
         onClick={() => onQty(-1)}
-        className={`flex ${btn} items-center justify-center rounded-full transition-colors hover:bg-white`}
+        className={`mh-tap flex ${btn} items-center justify-center rounded-full transition-colors hover:bg-white`}
         style={{ color: "#010A16" }}
       >
         <Minus className="h-4 w-4" />
@@ -37,7 +37,7 @@ export function QtyStepper({ qty, label, onQty, size = "md" }: Props) {
         type="button"
         aria-label={`Increase quantity of ${label}`}
         onClick={() => onQty(1)}
-        className={`flex ${btn} items-center justify-center rounded-full transition-colors hover:bg-white`}
+        className={`mh-tap flex ${btn} items-center justify-center rounded-full transition-colors hover:bg-white`}
         style={{ color: "#010A16" }}
       >
         <Plus className="h-4 w-4" />
