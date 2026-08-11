@@ -263,6 +263,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                   onClick={() => {
                     void navigator.clipboard.writeText(formatRequirements(lines, total));
                     setCopied(true);
+                    announce("Copied");
                     setTimeout(() => setCopied(false), 2000);
                   }}
                   className="focus-blend flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
@@ -272,12 +273,13 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                 </button>
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={() => {
                     downloadCsv(
                       "supply-ministry-selection.csv",
                       toCsv(csvRows, ["Category", "Product", "Code", "Qty", "Price"]),
-                    )
-                  }
+                    );
+                    announce("CSV downloaded.");
+                  }}
                   className="focus-blend flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl border px-3 text-sm font-medium transition-colors hover:bg-[rgba(1,10,22,0.1)]"
                   style={{ borderColor: "rgba(1,10,22,0.4)", color: "#010A16" }}
                 >
@@ -285,67 +287,90 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                 </button>
               </div>
 
-              <div className="mt-5 space-y-3">
+              <p className="mt-5 text-xs text-muted-foreground">
+                Please don't include clinical notes or sensitive client information.
+              </p>
+
+              {showSummary && Object.keys(errors).length > 1 && (
+                <div
+                  role="alert"
+                  className="mt-3 rounded-xl p-3 text-sm"
+                  style={{ backgroundColor: "rgba(236,28,36,0.1)", color: "#EC1C24" }}
+                >
+                  <p className="font-semibold">
+                    Please complete {Object.keys(errors).length} required fields.
+                  </p>
+                </div>
+              )}
+
+              <div className="mt-3 space-y-3">
                 {([
-                  { id: "name", label: "Your name", value: name, set: setName, required: true },
-                  {
-                    id: "email",
-                    label: "Email",
-                    value: email,
-                    set: setEmail,
-                    required: true,
-                    type: "email",
-                  },
-                  {
-                    id: "phone",
-                    label: "Phone",
-                    value: phone,
-                    set: setPhone,
-                    required: true,
-                    type: "tel",
-                  },
-                  {
-                    id: "clientref",
-                    label: "Client reference",
-                    value: clientRef,
-                    set: setClientRef,
-                    required: true,
-                  },
-                  {
-                    id: "suburb",
-                    label: "Delivery suburb",
-                    value: suburb,
-                    set: setSuburb,
-                    required: true,
-                  },
+                  { name: "name", label: "Your name", value: name, set: setName, required: true, autoComplete: "name" },
+                  { name: "email", label: "Email", value: email, set: setEmail, required: true, type: "email", autoComplete: "email" },
+                  { name: "phone", label: "Phone", value: phone, set: setPhone, required: false, type: "tel", autoComplete: "tel" },
+                  { name: "client_reference", label: "Client reference", value: clientRef, set: setClientRef, required: false, autoComplete: "off" },
+                  { name: "delivery_suburb", label: "Delivery suburb", value: suburb, set: setSuburb, required: true, autoComplete: "address-level2" },
                 ] as Array<{
-                  id: string;
+                  name: string;
                   label: string;
                   value: string;
                   set: (v: string) => void;
                   required: boolean;
                   type?: string;
-                }>).map((f) => (
-                  <div key={f.id}>
-                    <label
-                      htmlFor={f.id}
-                      className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-                    >
-                      {f.label}
-                    </label>
-                    <input
-                      id={f.id}
-                      type={f.type ?? "text"}
-                      value={f.value}
-                      required={f.required}
-                      maxLength={120}
-                      onChange={(e) => f.set(e.target.value)}
-                      className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-base outline-none focus:border-[#010A16]"
-                      style={{ color: "#231F20" }}
-                    />
-                  </div>
-                ))}
+                  autoComplete: string;
+                }>).map((f) => {
+                  const error = errors[f.name];
+                  return (
+                    <div key={f.name}>
+                      <label
+                        htmlFor={f.name}
+                        className="mb-1 flex items-baseline gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                      >
+                        <span>{f.label}</span>
+                        <span className="font-medium normal-case tracking-normal">
+                          {f.required ? "Required" : "Optional"}
+                        </span>
+                      </label>
+                      <input
+                        id={f.name}
+                        name={f.name}
+                        type={f.type ?? "text"}
+                        value={f.value}
+                        autoComplete={f.autoComplete}
+                        maxLength={120}
+                        aria-required={f.required || undefined}
+                        aria-invalid={error ? true : undefined}
+                        aria-describedby={error ? `${f.name}-error` : undefined}
+                        onChange={(e) => {
+                          f.set(e.target.value);
+                          if (error) {
+                            setErrors((prev) => {
+                              const next = { ...prev };
+                              delete next[f.name];
+                              return next;
+                            });
+                          }
+                        }}
+                        className="min-h-11 w-full rounded-xl border bg-background px-3 text-base outline-none focus:border-[#010A16]"
+                        style={{ color: "#231F20", borderColor: error ? "#EC1C24" : undefined }}
+                      />
+                      {error && (
+                        <p
+                          id={`${f.name}-error`}
+                          className="mt-1 text-xs font-medium"
+                          style={{ color: "#EC1C24" }}
+                        >
+                          {error}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
+
+              <p aria-live="polite" role="status" className="sr-only">
+                {status}
+              </p>
 
               {state === "error" && (
                 <p
@@ -360,7 +385,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
               )}
             </div>
 
-            <div className="border-t border-border px-5 py-4">
+            <div className="border-t border-border bg-background px-5 py-4">
               <button
                 type="submit"
                 disabled={state === "sending" || isEmpty}
