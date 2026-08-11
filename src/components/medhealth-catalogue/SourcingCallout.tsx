@@ -2,7 +2,7 @@ import { Mail, Phone } from "lucide-react";
 import { HOUSE, PARTNER } from "@/partners/medhealth";
 
 const MAILTO =
-  "mailto:hello@supplyministry.com.au?subject=MedHealth%20catalogue%20sourcing%20request";
+  "mailto:david@supplyministry.com.au?subject=MedHealth%20catalogue%20sourcing%20request";
 
 export function SourcingCallout() {
   return (
@@ -23,9 +23,6 @@ export function SourcingCallout() {
           <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "rgba(1,10,22,0.72)" }}>
             Supply Ministry can source equipment beyond this catalogue. Tell us the clinical
             requirement and we’ll find suitable options and provide a quote.
-          </p>
-          <p className="mt-1.5 text-xs" style={{ color: "rgba(1,10,22,0.55)" }}>
-            Including toileting, mobility, kitchen aids, bedroom equipment and home-safety products.
           </p>
         </div>
 

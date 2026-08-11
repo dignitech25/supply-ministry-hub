@@ -64,36 +64,75 @@ export async function fetchSourceOnRequest(): Promise<SourceItem[]> {
 }
 
 export const CATEGORIES = [
-  "Bathing & showering",
-  "Toileting",
-  "Dressing & reaching",
-  "Transfers & positioning",
-  "Seating",
-  "Bed & positioning",
-  "Mobility & vehicle",
+  "Bathroom & toileting",
+  "Dressing & personal care",
+  "Mobility, transfers & seating",
   "Kitchen & household",
+  "Beds & positioning",
 ] as const;
+
+/**
+ * Display categories are an application-layer view. Stored clinical_group,
+ * codes and prices are never modified: they are only mapped for presentation.
+ */
+const GROUP_TO_DISPLAY: Record<string, string> = {
+  "bathing & showering": "Bathroom & toileting",
+  toileting: "Bathroom & toileting",
+  bathroom: "Bathroom & toileting",
+  "dressing & reaching": "Dressing & personal care",
+  "daily living": "Dressing & personal care",
+  "transfers & positioning": "Mobility, transfers & seating",
+  seating: "Mobility, transfers & seating",
+  "mobility & vehicle": "Mobility, transfers & seating",
+  "kitchen & household": "Kitchen & household",
+  "bed & positioning": "Beds & positioning",
+  bedroom: "Beds & positioning",
+};
+
+/** Products whose stored group does not match how a clinician browses for them. */
+const CODE_TO_DISPLAY: Record<string, string> = {
+  "SMDL80210070-H-S": "Dressing & personal care",
+  "SMDL80210070-H-L": "Dressing & personal care",
+  "SMDL80210072-H-S": "Dressing & personal care",
+  "SMDL80210072-H-L": "Dressing & personal care",
+  SMDLHAIRWASHER: "Dressing & personal care",
+  SMDLTOEWASHER: "Dressing & personal care",
+  SMDLTOEWASHERPADS: "Dressing & personal care",
+  SMDLCHP213500: "Kitchen & household",
+};
 
 /** Loose match so slightly different spellings in the data still land. */
 export function normaliseCategory(raw: string): string {
-  const v = (raw ?? "").toLowerCase();
+  const v = (raw ?? "").trim().toLowerCase();
   if (!v) return raw;
   const exact = (CATEGORIES as readonly string[]).find((c) => c.toLowerCase() === v);
   if (exact) return exact;
-  if (v.includes("toilet") || v.includes("continence")) return "Toileting";
-  if (v.includes("bed") || v.includes("mattress") || v.includes("sleep")) return "Bed & positioning";
-  if (v.includes("bath") || v.includes("shower")) return "Bathing & showering";
-  if (v.includes("dress") || v.includes("reach")) return "Dressing & reaching";
-  if (v.includes("seat") || v.includes("chair")) return "Seating";
+  const mapped = GROUP_TO_DISPLAY[v];
+  if (mapped) return mapped;
+  if (v.includes("bed") || v.includes("mattress") || v.includes("sleep")) return "Beds & positioning";
+  if (v.includes("toilet") || v.includes("bath") || v.includes("shower") || v.includes("continence"))
+    return "Bathroom & toileting";
+  if (v.includes("dress") || v.includes("reach") || v.includes("groom") || v.includes("personal"))
+    return "Dressing & personal care";
   if (v.includes("kitchen") || v.includes("household") || v.includes("eating"))
     return "Kitchen & household";
-  if (v.includes("mobil") || v.includes("vehicle") || v.includes("walk")) return "Mobility & vehicle";
-  if (v.includes("transfer") || v.includes("position")) return "Transfers & positioning";
+  if (
+    v.includes("mobil") ||
+    v.includes("vehicle") ||
+    v.includes("walk") ||
+    v.includes("seat") ||
+    v.includes("chair") ||
+    v.includes("transfer") ||
+    v.includes("position")
+  )
+    return "Mobility, transfers & seating";
   return raw;
 }
 
-/** Tab grouping is derived from clinical_group, falling back to category. */
+/** Tab grouping is the consolidated display category for a product. */
 export function groupOf(p: Product): string {
+  const override = CODE_TO_DISPLAY[p.product_code];
+  if (override) return override;
   const byGroup = normaliseCategory(p.clinical_group ?? "");
   if ((CATEGORIES as readonly string[]).includes(byGroup)) return byGroup;
   return normaliseCategory(p.category ?? "");
@@ -104,25 +143,65 @@ export function groupOf(p: Product): string {
  * screen readers and filter chips, this is only to stop card eyebrows wrapping.
  */
 const SHORT_LABELS: Record<string, string> = {
-  "Bathing & showering": "Bathing",
-  "Toileting": "Toileting",
-  "Dressing & reaching": "Dressing",
-  "Transfers & positioning": "Transfers",
-  "Seating": "Seating",
-  "Bed & positioning": "Bed",
-  "Mobility & vehicle": "Mobility",
+  "Bathroom & toileting": "Bathroom",
+  "Dressing & personal care": "Dressing",
+  "Mobility, transfers & seating": "Mobility",
   "Kitchen & household": "Kitchen",
+  "Beds & positioning": "Beds",
 };
 
 export function shortGroupLabel(group: string): string {
   return SHORT_LABELS[normaliseCategory(group ?? "")] ?? group ?? "";
 }
 
-/** First sentence of the specification, used as the card description. */
+/**
+ * Safer, plainer descriptions for products where the supplier copy implies a
+ * clinical outcome. Keyed by product code, applied at display time only.
+ */
+const DESCRIPTION_OVERRIDES: Record<string, string> = {
+  SMBRACHSR:
+    "Provides a supportive bedside boundary and handhold when used with a compatible Icare bed. Suitability must be assessed for transfer, entrapment and positioning risks.",
+  SMBRACLSR:
+    "Provides a lower supportive bedside boundary and handhold when used with a compatible Icare bed. Suitability must be assessed for transfer, entrapment and positioning risks.",
+  SMBRIC182:
+    "Positioning wedge designed to support upper-body or lower-limb elevation in bed. Appropriate use and orientation should be confirmed for the individual.",
+};
+
+/** The specification text to display for a product, overrides applied. */
+export function specificationFor(p: Pick<Product, "product_code" | "key_specifications">) {
+  return DESCRIPTION_OVERRIDES[p.product_code] ?? p.key_specifications ?? "";
+}
+
+/**
+ * Splits raw specification text into an optional intro sentence and a list of
+ * points, stripping the asterisk or dash markers used in the source data.
+ * Legitimate punctuation and measurements are left untouched.
+ */
+export function parseSpecification(text: string): { intro: string; points: string[] } {
+  const raw = (text ?? "")
+    .split(/\r?\n|(?=\s\*\s)|(?=^\*)/gm)
+    .flatMap((line) => line.split(/(?=\*\s?[A-Z0-9])/g))
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const intro: string[] = [];
+  const points: string[] = [];
+  for (const line of raw) {
+    if (/^[*\-•]\s*/.test(line)) points.push(line.replace(/^[*\-•]\s*/, "").trim());
+    else if (points.length === 0) intro.push(line);
+    else points.push(line);
+  }
+  return { intro: intro.join(" ").trim(), points: points.filter(Boolean) };
+}
+
+/** First clean sentence of the specification, used as the card description. */
 export function firstSentence(text: string | null | undefined): string {
   if (!text) return "";
-  const match = text.trim().match(/^.*?[.!?](?=\s|$)/);
-  return (match ? match[0] : text.trim()).replace(/\s+/g, " ");
+  const { intro, points } = parseSpecification(text);
+  const source = (intro || points[0] || "").replace(/\s+/g, " ").trim();
+  if (!source) return "";
+  const match = source.match(/^.*?[.!?](?=\s|$)/);
+  return (match ? match[0] : source).trim();
 }
 
 export const money = (n: number | null | undefined) =>

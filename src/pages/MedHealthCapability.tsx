@@ -34,20 +34,8 @@ import { SourcingCallout } from "@/components/medhealth-catalogue/SourcingCallou
 const PARTNER_NAME = PARTNER.name;
 const FONT = "Raleway, system-ui, sans-serif";
 
-/**
- * Pick a column count that leaves the last row looking intentional rather than
- * like a broken four-up grid. Prefers an exact fit, then a near-full last row.
- */
-const colsFor = (n: number) => {
-  for (const c of [4, 3, 2]) if (n % c === 0) return c;
-  for (const c of [4, 3, 2]) if (n % c >= c - 1) return c;
-  return 3;
-};
-const COL_CLASS: Record<number, string> = {
-  4: "lg:grid-cols-3 xl:grid-cols-4",
-  3: "lg:grid-cols-3",
-  2: "lg:grid-cols-2",
-};
+/** One consistent grid across every category so sections scan as a set. */
+const GRID_CLASS = "lg:grid-cols-3 xl:grid-cols-4";
 
 /** Every partner-specific value comes from src/partners/medhealth.ts. */
 const theme = {
@@ -108,7 +96,7 @@ const MedHealthCapability = () => {
     return products.filter((p) => {
       if (tab !== "All" && groupOf(p) !== tab) return false;
       if (!q) return true;
-      return `${p.product_name} ${p.key_specifications ?? ""} ${p.product_code}`
+      return `${p.product_name} ${p.variant_label ?? ""} ${p.key_specifications ?? ""} ${p.selectable_options ?? ""} ${p.product_code}`
         .toLowerCase()
         .includes(q);
     });
@@ -117,7 +105,7 @@ const MedHealthCapability = () => {
   const grouped = useMemo(() => {
     const map = new Map<string, Product[]>();
     for (const p of visible) {
-      const g = normaliseCategory(p.clinical_group || "") || "Other";
+      const g = groupOf(p) || "Other";
       map.set(g, [...(map.get(g) ?? []), p]);
     }
     return [...map.entries()].map(([g, items]) => [g, buildFamilies(items)] as const);
@@ -271,8 +259,7 @@ const MedHealthCapability = () => {
         style={{ backgroundImage: BRAND_RULE }}
       />
 
-      {/* Masthead and toolbar share one sticky container so they can never mismatch. */}
-      <div ref={stickyRef} className="sticky top-0 z-40">
+      {/* Branding, then page purpose, then the sticky search and category bar. */}
       <header
         style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}
       >
@@ -302,9 +289,25 @@ const MedHealthCapability = () => {
         </div>
       </header>
 
+      <div className="mx-auto max-w-6xl px-4 pb-4 pt-5 sm:px-6">
+        <h1
+          className="text-balance text-lg font-bold leading-tight tracking-tight sm:text-2xl"
+          style={{ color: PARTNER.ink }}
+        >
+          Assistive technology catalogue for the {PARTNER_NAME} team
+        </h1>
+        <p
+          className="text-pretty pt-1.5 text-xs leading-relaxed sm:text-sm"
+          style={{ color: "rgba(1,10,22,0.68)" }}
+        >
+          Select individual items or a clinical kit, then review and send your request.
+        </p>
+      </div>
+
       {/* Toolbar */}
       <div
-        className="border-b border-border backdrop-blur-md"
+        ref={stickyRef}
+        className="sticky top-0 z-40 border-b border-border backdrop-blur-md"
         style={{ backgroundColor: "rgba(255,255,255,0.97)" }}
       >
         <div className="mx-auto max-w-6xl px-4 py-2.5 sm:px-6">
@@ -390,22 +393,6 @@ const MedHealthCapability = () => {
           </div>
         </div>
       </div>
-      </div>
-
-      <div className="mx-auto max-w-6xl px-4 pb-1 pt-5 sm:px-6">
-        <h1
-          className="text-balance text-lg font-bold leading-tight tracking-tight sm:text-2xl"
-          style={{ color: PARTNER.ink }}
-        >
-          Assistive technology catalogue for the {PARTNER_NAME} team
-        </h1>
-        <p
-          className="text-pretty pt-1.5 text-xs leading-relaxed sm:text-sm"
-          style={{ color: "rgba(1,10,22,0.68)" }}
-        >
-          Select individual items or a clinical kit, then review and send your request.
-        </p>
-      </div>
 
       <main
         className={`mx-auto max-w-6xl px-4 pt-5 sm:px-6 ${lines.length > 0 ? "pb-56" : "pb-24"}`}
@@ -454,7 +441,7 @@ const MedHealthCapability = () => {
                   >
                     {group}
                   </h2>
-                  <div className={`grid gap-3 sm:grid-cols-2 ${COL_CLASS[colsFor(items.length)]}`}>
+                  <div className={`grid gap-3 sm:grid-cols-2 ${GRID_CLASS}`}>
                     {items.map((f) => (
                       <ProductCard
                         key={f.key}

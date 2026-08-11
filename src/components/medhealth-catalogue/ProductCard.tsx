@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Bath, Shirt, MoveRight, Package, Check } from "lucide-react";
+import { Bath, Shirt, MoveRight, Utensils, BedDouble, Package, Check } from "lucide-react";
 import {
   CATEGORIES,
   firstSentence,
+  groupOf,
   money,
   normaliseCategory,
   shortGroupLabel,
+  specificationFor,
   type Product,
 } from "@/lib/medhealth-catalogue";
 import { HOUSE, PARTNER } from "@/partners/medhealth";
@@ -24,7 +26,18 @@ export function CategoryIcon({
   className?: string;
 }) {
   const c = normaliseCategory(category);
-  const Icon = c === CATEGORIES[0] ? Bath : c === CATEGORIES[1] ? Shirt : c === CATEGORIES[2] ? MoveRight : Package;
+  const Icon =
+    c === CATEGORIES[0]
+      ? Bath
+      : c === CATEGORIES[1]
+        ? Shirt
+        : c === CATEGORIES[2]
+          ? MoveRight
+          : c === CATEGORIES[3]
+            ? Utensils
+            : c === CATEGORIES[4]
+              ? BedDouble
+              : Package;
   return <Icon className={className} strokeWidth={1.5} aria-hidden="true" />;
 }
 
@@ -102,6 +115,7 @@ export function ProductCard({
   const hasOptions = variantCount > 1;
   const title = displayName ?? product.product_name;
   const price = hasOptions ? (minPrice ?? product.price_rrp) : product.price_rrp;
+  const displayGroup = groupOf(product);
 
   return (
     <div
@@ -126,8 +140,8 @@ export function ProductCard({
         <ProductThumb product={product} size="sm" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-            <span className="sr-only">{product.clinical_group}</span>
-            <span aria-hidden="true">{shortGroupLabel(product.clinical_group)}</span>
+            <span className="sr-only">{displayGroup}</span>
+            <span aria-hidden="true">{shortGroupLabel(displayGroup)}</span>
           </p>
           <h3
             className="mt-0.5 line-clamp-2 h-[2.6rem] text-sm font-semibold leading-snug"
@@ -139,7 +153,7 @@ export function ProductCard({
           <p className="mt-0.5 line-clamp-2 h-[2rem] text-xs leading-4 text-muted-foreground">
             {hasOptions
               ? `${variantCount} options available`
-              : firstSentence(product.key_specifications)}
+              : firstSentence(specificationFor(product))}
           </p>
         </div>
         {!hasOptions && (
