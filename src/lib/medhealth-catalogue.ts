@@ -131,9 +131,9 @@ export const money = (n: number | null | undefined) =>
     : new Intl.NumberFormat("en-AU", {
         style: "currency",
         currency: "AUD",
-        minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
-        maximumFractionDigits: 2,
-      }).format(n);
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(Math.round(n));
 
 /**
  * Variant families. Products sharing a family_slug are one product with

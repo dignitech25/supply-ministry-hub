@@ -261,7 +261,7 @@ export function exportCatalogueXlsx(
   ];
   for (const [group, items] of byGroup(products)) {
     for (const p of items) {
-      rows.push([group, p.product_name, p.product_code, p.price_rrp ?? null]);
+      rows.push([group, p.product_name, p.product_code, p.price_rrp == null ? null : Math.round(p.price_rrp)]);
     }
   }
 
@@ -277,9 +277,9 @@ export function exportCatalogueXlsx(
     const kitRows: Array<Array<string | number | null>> = [["Kit", "Product", "Code", "Price"]];
     for (const kit of kits) {
       for (const p of kit.items) {
-        kitRows.push([kit.name, p.product_name, p.product_code, p.price_rrp ?? null]);
+        kitRows.push([kit.name, p.product_name, p.product_code, p.price_rrp == null ? null : Math.round(p.price_rrp)]);
       }
-      kitRows.push(["", `${kit.name} subtotal`, "", kit.subtotal]);
+      kitRows.push(["", `${kit.name} subtotal`, "", Math.round(kit.subtotal)]);
       kitRows.push([]);
     }
     const kws = XLSX.utils.aoa_to_sheet(kitRows);
@@ -310,6 +310,6 @@ function styleHeader(ws: XLSX.WorkSheet, rowStart: number, rowEnd: number) {
 function currency(ws: XLSX.WorkSheet, rowStart: number, rowEnd: number, col: number) {
   for (let r = rowStart; r <= rowEnd; r += 1) {
     const cell = ws[XLSX.utils.encode_cell({ r, c: col })];
-    if (cell && typeof cell.v === "number") cell.z = '$#,##0.00';
+    if (cell && typeof cell.v === "number") cell.z = '$#,##0';
   }
 }
