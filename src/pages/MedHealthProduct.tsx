@@ -20,6 +20,27 @@ import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
 const FONT = "Raleway, system-ui, sans-serif";
 const CATALOGUE = "/partners/medhealth-capability-2026";
 
+/**
+ * Splits raw specification text into an optional intro paragraph and a list of
+ * points, stripping the asterisk or dash markers used in the source data.
+ */
+function parseSpecification(text: string): { intro: string; points: string[] } {
+  const raw = text
+    .split(/\r?\n|(?=\s\*\s)|(?=^\*)/gm)
+    .flatMap((line) => line.split(/(?=\*\s?[A-Z0-9])/g))
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const intro: string[] = [];
+  const points: string[] = [];
+  for (const line of raw) {
+    if (/^[*\-•]\s*/.test(line)) points.push(line.replace(/^[*\-•]\s*/, "").trim());
+    else if (points.length === 0) intro.push(line);
+    else points.push(line);
+  }
+  return { intro: intro.join(" ").trim(), points: points.filter(Boolean) };
+}
+
 function ProductImage({ product, fallbackSrc }: { product: Product; fallbackSrc?: string | null }) {
   const [failed, setFailed] = useState(false);
   const src = product.image_url || fallbackSrc || null;
@@ -197,9 +218,16 @@ const MedHealthProduct = () => {
                   <h2 className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: "#010A16" }}>
                     {options.label}
                   </h2>
-                  <ul className="mt-2 space-y-1 text-sm" style={{ color: "rgba(1,10,22,0.75)" }}>
+                  <ul className="mt-2 max-w-[60ch] space-y-1.5 text-sm" style={{ color: "rgba(1,10,22,0.75)" }}>
                     {options.values.map((v) => (
-                      <li key={v}>{v}</li>
+                      <li key={v} className="flex gap-2.5">
+                        <span
+                          aria-hidden="true"
+                          className="mt-[0.5em] h-1.5 w-1.5 shrink-0 rounded-full"
+                          style={{ backgroundColor: HOUSE.violet }}
+                        />
+                        <span className="min-w-0 break-words hyphens-none text-pretty leading-relaxed">{v}</span>
+                      </li>
                     ))}
                   </ul>
                   <p className="mt-1.5 text-xs text-muted-foreground">
@@ -213,9 +241,32 @@ const MedHealthProduct = () => {
                   <h2 className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: "#010A16" }}>
                     About this product
                   </h2>
-                  <p className="mt-2 max-w-[60ch] whitespace-pre-line text-sm leading-relaxed" style={{ color: "rgba(1,10,22,0.75)" }}>
-                    {product.key_specifications}
-                  </p>
+                  {(() => {
+                    const { intro, points } = parseSpecification(product.key_specifications);
+                    return (
+                      <div className="mt-2 max-w-[60ch] text-sm" style={{ color: "rgba(1,10,22,0.75)" }}>
+                        {intro && (
+                          <p className="break-words hyphens-none text-pretty leading-relaxed">{intro}</p>
+                        )}
+                        {points.length > 0 && (
+                          <ul className={`space-y-1.5 ${intro ? "mt-2.5" : ""}`}>
+                            {points.map((point, i) => (
+                              <li key={i} className="flex gap-2.5">
+                                <span
+                                  aria-hidden="true"
+                                  className="mt-[0.5em] h-1.5 w-1.5 shrink-0 rounded-full"
+                                  style={{ backgroundColor: HOUSE.violet }}
+                                />
+                                <span className="min-w-0 break-words hyphens-none text-pretty leading-relaxed">
+                                  {point}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 
