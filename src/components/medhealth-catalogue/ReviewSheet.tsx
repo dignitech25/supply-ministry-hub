@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Copy, Download, CheckCircle2, Loader2, AlertCircle, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { downloadCsv, makeReference, money, toCsv, type Product } from "@/lib/medhealth-catalogue";
@@ -42,6 +42,26 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
   const [state, setState] = useState<"form" | "sending" | "done" | "error">("form");
   const [reference, setReference] = useState("");
   const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showSummary, setShowSummary] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const announce = (message: string) => {
+    setStatus(message);
+    setTimeout(() => setStatus(""), 4000);
+  };
+
+  const validate = () => {
+    const next: Record<string, string> = {};
+    if (!name.trim()) next.name = "Enter your name.";
+    const mail = email.trim();
+    if (!mail) next.email = "Enter your email address.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail))
+      next.email = "Enter a valid email address, for example name@example.com.";
+    if (!suburb.trim()) next.delivery_suburb = "Enter the delivery suburb.";
+    return next;
+  };
 
   const csvRows = lines.map((l) => ({
     Category: l.product.category,
@@ -53,6 +73,17 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const found = validate();
+    setErrors(found);
+    const keys = Object.keys(found);
+    if (keys.length > 0) {
+      setShowSummary(keys.length > 1);
+      const first = formRef.current?.querySelector<HTMLInputElement>(`[name="${keys[0]}"]`);
+      first?.focus();
+      first?.scrollIntoView({ block: "center", behavior: "smooth" });
+      return;
+    }
+    setShowSummary(false);
     setState("sending");
     const ref = makeReference();
     const [first, ...rest] = name.trim().split(/\s+/);
