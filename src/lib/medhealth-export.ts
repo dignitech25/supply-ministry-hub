@@ -169,7 +169,7 @@ export async function exportCataloguePdf(
       alternateRowStyles: { fillColor: [250, 248, 244] },
       columnStyles: {
         0: { cellWidth: "auto" },
-        1: { cellWidth: 34 },
+        1: { cellWidth: 42 },
         2: { cellWidth: 24, halign: "right" },
       },
       didDrawPage: () => drawRule(),
