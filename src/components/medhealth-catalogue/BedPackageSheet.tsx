@@ -66,6 +66,14 @@ export function BedPackageSheet({
       }
     >
       <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+          <div
+            className="mb-4 inline-flex max-w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold"
+            style={{ backgroundColor: "rgba(61,45,158,0.10)", color: HOUSE.violet }}
+          >
+            <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <span className="break-words hyphens-none text-pretty">Condition: available Greater Melbourne only</span>
+          </div>
+
           <h3 className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
             Included
           </h3>
