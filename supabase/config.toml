@@ -11,3 +11,5 @@ verify_jwt = false
 
 [functions.admin-category-qa]
 verify_jwt = true
+[functions.medhealth-request-notify]
+verify_jwt = false

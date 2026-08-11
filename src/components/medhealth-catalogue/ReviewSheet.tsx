@@ -61,6 +61,13 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
     setState("sending");
     const ref = makeReference();
     const [first, ...rest] = name.trim().split(/\s+/);
+    const lineItems = lines.map((l) => ({
+      product_name: l.product.product_name,
+      product_code: l.product.product_code,
+      category: l.product.category ?? "",
+      qty: l.qty,
+      price_rrp: l.product.price_rrp ?? null,
+    }));
     const { error } = await supabase.from("quote_requests").insert({
       first_name: first ?? "",
       last_name: rest.join(" ") || (first ?? ""),
@@ -76,13 +83,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
         client_reference: clientRef,
         delivery_suburb: suburb,
         indicative_total: total,
-        line_items: lines.map((l) => ({
-          product_name: l.product.product_name,
-          product_code: l.product.product_code,
-          category: l.product.category,
-          qty: l.qty,
-          price_rrp: l.product.price_rrp,
-        })),
+        line_items: lineItems,
       },
     });
 
@@ -91,6 +92,27 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
       setState("error");
       return;
     }
+
+    // Notify the Supply Ministry team. A failure here must not lose the request.
+    try {
+      const { error: mailError } = await supabase.functions.invoke("medhealth-request-notify", {
+        body: {
+          reference: ref,
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          client_reference: clientRef.trim(),
+          delivery_suburb: suburb.trim(),
+          total,
+          source_url: typeof window !== "undefined" ? window.location.href : "",
+          lines: lineItems,
+        },
+      });
+      if (mailError) console.error("Notification email failed:", mailError);
+    } catch (err) {
+      console.error("Notification email failed:", err);
+    }
+
     setReference(ref);
     setState("done");
   };
