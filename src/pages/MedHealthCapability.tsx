@@ -242,19 +242,9 @@ const MedHealthCapability = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const exportVisible = () =>
-    downloadCsv(
-      "supply-ministry-catalogue.csv",
-      toCsv(
-        visible.map((p) => ({
-          Category: p.category,
-          Product: p.product_name,
-          Code: p.product_code,
-          Price: p.price_rrp ?? "",
-        })),
-        ["Category", "Product", "Code", "Price"],
-      ),
-    );
+  const exportContext = { filter: tab, query };
+  const exportPdf = () => exportCataloguePdf(visible, kits, exportContext);
+  const exportXlsx = () => exportCatalogueXlsx(visible, kits, exportContext);
 
   return (
     <div
