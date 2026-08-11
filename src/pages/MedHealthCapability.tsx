@@ -7,14 +7,19 @@ import {
   buildKits,
   buildFamilies,
   buildBedPackage,
-  downloadCsv,
   fetchProducts,
   money,
   groupOf,
   normaliseCategory,
-  toCsv,
   type Product,
 } from "@/lib/medhealth-catalogue";
+import { exportCataloguePdf, exportCatalogueXlsx } from "@/lib/medhealth-export";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { MedHealthLogo, SupplyMinistryLogo, PartnerLockup } from "@/components/medhealth-catalogue/Brand";
 import { PARTNER, HOUSE, BRAND_RULE } from "@/partners/medhealth";
 import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
@@ -237,19 +242,9 @@ const MedHealthCapability = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const exportVisible = () =>
-    downloadCsv(
-      "supply-ministry-catalogue.csv",
-      toCsv(
-        visible.map((p) => ({
-          Category: p.category,
-          Product: p.product_name,
-          Code: p.product_code,
-          Price: p.price_rrp ?? "",
-        })),
-        ["Category", "Product", "Code", "Price"],
-      ),
-    );
+  const exportContext = { filter: tab, query };
+  const exportPdf = () => exportCataloguePdf(visible, kits, exportContext);
+  const exportXlsx = () => exportCatalogueXlsx(visible, kits, exportContext);
 
   return (
     <div
@@ -313,6 +308,24 @@ const MedHealthCapability = () => {
       >
         <div className="mx-auto max-w-6xl px-4 py-2.5 sm:px-6">
           <div className="flex flex-row items-center gap-2.5">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="flex min-h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 sm:px-4"
+                  style={{ backgroundColor: HOUSE.violet }}
+                  aria-label="Export catalogue"
+                >
+                  <Download className="h-4 w-4" aria-hidden="true" />
+                  <span className="hidden sm:inline">Export catalogue</span>
+                  <span className="sm:hidden">Export</span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                <DropdownMenuItem onSelect={exportPdf}>PDF catalogue</DropdownMenuItem>
+                <DropdownMenuItem onSelect={exportXlsx}>Excel spreadsheet</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <div className="relative flex-1">
               <Search
                 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
@@ -327,14 +340,6 @@ const MedHealthCapability = () => {
                 className="min-h-11 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-sm outline-none focus:border-[#3D2D9E] focus:ring-2 focus:ring-[#3D2D9E]/25"
               />
             </div>
-            <button
-              type="button"
-              onClick={exportVisible}
-              className="hidden min-h-11 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors hover:bg-[rgba(61,45,158,0.08)] sm:flex"
-              style={{ borderColor: HOUSE.violet, color: HOUSE.violet }}
-            >
-              <Download className="h-4 w-4" aria-hidden="true" /> Export
-            </button>
           </div>
 
           <div className="-mx-4 mt-2.5 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
