@@ -244,71 +244,177 @@ export async function exportCataloguePdf(
 
 // -------------------------------------------------------------- Excel
 
-export function exportCatalogueXlsx(
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const argb = (hex: string) => `FF${hex.replace("#", "").toUpperCase()}`;
+const CREAM = "FFFAF8F4";
+const RULE = "FFE1DEE8";
+const MUTED = "FF787676";
+
+/**
+ * Excel export, styled to match the PDF: brand rule, both logos, violet
+ * headings and the same disclaimer and contact line.
+ */
+export async function exportCatalogueXlsx(
   products: Product[],
   kits: ExportKit[],
   ctx: ExportContext,
 ) {
-  const wb = XLSX.utils.book_new();
+  const ExcelJS = (await import("exceljs")).default;
+  const wb = new ExcelJS.Workbook();
+  wb.creator = "Supply Ministry";
+  wb.created = new Date();
 
-  const rows: Array<Array<string | number | null>> = [
-    [TITLE],
-    [SUBTITLE],
-    [contextLine(ctx)],
-    [],
-    ["Category", "Product", "Code", "Price"],
-  ];
+  const [sm, mh] = await Promise.all([
+    loadImage("/Supply_Ministry_logo.png"),
+    loadImage(PARTNER.logo),
+  ]);
+
+  const smId = sm ? wb.addImage({ base64: sm.data, extension: "png" }) : null;
+  const mhId = mh ? wb.addImage({ base64: mh.data, extension: "png" }) : null;
+
+  /** Brand rule, logos, title block. Returns the first free row. */
+  const brandHeader = (ws: any, heading: string, sub: string) => {
+    ws.getColumn(1).width = 28;
+    ws.getColumn(2).width = 52;
+    ws.getColumn(3).width = 22;
+    ws.getColumn(4).width = 14;
+
+    // Row 1: the four-colour house rule.
+    const rule = ws.getRow(1);
+    rule.height = 5;
+    const segs = [HOUSE.violet, PARTNER.circle.blue, PARTNER.circle.red, PARTNER.circle.amber];
+    segs.forEach((hex, i) => {
+      rule.getCell(i + 1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: argb(hex) } };
+    });
+
+    ws.getRow(2).height = 42;
+    if (smId != null) {
+      ws.addImage(smId, { tl: { col: 0.2, row: 1.2 }, ext: { width: 150, height: (150 * sm!.h) / sm!.w } });
+    }
+    if (mhId != null) {
+      ws.addImage(mhId, { tl: { col: 3.05, row: 1.25 }, ext: { width: 96, height: (96 * mh!.h) / mh!.w } });
+    }
+
+    ws.mergeCells("A3:D3");
+    const t = ws.getCell("A3");
+    t.value = heading;
+    t.font = { name: "Arial", size: 16, bold: true, color: { argb: argb(HOUSE.violet) } };
+    ws.getRow(3).height = 24;
+
+    ws.mergeCells("A4:D4");
+    const s = ws.getCell("A4");
+    s.value = sub;
+    s.font = { name: "Arial", size: 10, color: { argb: argb(HOUSE.ink) } };
+
+    ws.mergeCells("A5:D5");
+    const c = ws.getCell("A5");
+    c.value = contextLine(ctx);
+    c.font = { name: "Arial", size: 9, color: { argb: MUTED } };
+
+    return 7;
+  };
+
+  const headerRow = (ws: any, rowIdx: number, labels: string[]) => {
+    const row = ws.getRow(rowIdx);
+    labels.forEach((label, i) => {
+      const cell = row.getCell(i + 1);
+      cell.value = label;
+      cell.font = { name: "Arial", size: 10, bold: true, color: { argb: "FFFFFFFF" } };
+      cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: argb(HOUSE.violet) } };
+      cell.alignment = { vertical: "middle", horizontal: i === 3 ? "right" : "left" };
+    });
+    row.height = 20;
+    row.commit();
+  };
+
+  const bodyRow = (ws: any, rowIdx: number, values: Array<string | number | null>, band: boolean) => {
+    const row = ws.getRow(rowIdx);
+    values.forEach((v, i) => {
+      const cell = row.getCell(i + 1);
+      cell.value = v;
+      cell.font = { name: "Arial", size: 10, color: { argb: argb(HOUSE.ink) } };
+      if (band) cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: CREAM } };
+      cell.border = { bottom: { style: "thin", color: { argb: RULE } } };
+      if (i === 3) {
+        cell.numFmt = '$#,##0';
+        cell.alignment = { horizontal: "right" };
+      } else {
+        cell.alignment = { vertical: "top", wrapText: i === 1 };
+      }
+    });
+    row.commit();
+  };
+
+  const footer = (ws: any, rowIdx: number) => {
+    ws.mergeCells(`A${rowIdx}:D${rowIdx}`);
+    const d = ws.getCell(`A${rowIdx}`);
+    d.value = PARTNER.disclaimer;
+    d.font = { name: "Arial", size: 8, color: { argb: MUTED } };
+    ws.mergeCells(`A${rowIdx + 1}:D${rowIdx + 1}`);
+    const c = ws.getCell(`A${rowIdx + 1}`);
+    c.value = CONTACT;
+    c.font = { name: "Arial", size: 8, color: { argb: MUTED } };
+  };
+
+  // ---- Catalogue sheet
+  const ws = wb.addWorksheet("Catalogue", {
+    views: [{ state: "frozen", ySplit: 7 }],
+    pageSetup: { orientation: "portrait", fitToPage: true, fitToWidth: 1, fitToHeight: 0 },
+  });
+  let r = brandHeader(ws, TITLE, SUBTITLE);
+  headerRow(ws, r, ["Category", "Product", "Code", "Price"]);
+  const firstBody = r + 1;
+  r = firstBody;
+  let band = false;
   for (const [group, items] of byGroup(products)) {
     for (const p of items) {
-      rows.push([group, p.product_name, p.product_code, p.price_rrp == null ? null : Math.round(p.price_rrp)]);
+      bodyRow(ws, r, [group, p.product_name, p.product_code, p.price_rrp == null ? null : Math.round(p.price_rrp)], band);
+      band = !band;
+      r += 1;
     }
   }
+  ws.autoFilter = { from: { row: firstBody - 1, column: 1 }, to: { row: r - 1, column: 4 } };
+  footer(ws, r + 1);
 
-  const ws = XLSX.utils.aoa_to_sheet(rows);
-  ws["!cols"] = [{ wch: 26 }, { wch: 52 }, { wch: 22 }, { wch: 12 }];
-  ws["!freeze"] = { xSplit: 0, ySplit: 5 };
-  ws["!autofilter"] = { ref: XLSX.utils.encode_range({ s: { r: 4, c: 0 }, e: { r: rows.length - 1, c: 3 } }) };
-  styleHeader(ws, 4, 4);
-  currency(ws, 5, rows.length - 1, 3);
-  XLSX.utils.book_append_sheet(wb, ws, "Catalogue");
-
+  // ---- Clinical kits sheet
   if (kits.length) {
-    const kitRows: Array<Array<string | number | null>> = [["Kit", "Product", "Code", "Price"]];
+    const kws = wb.addWorksheet("Clinical kits", {
+      views: [{ state: "frozen", ySplit: 7 }],
+      pageSetup: { orientation: "portrait", fitToPage: true, fitToWidth: 1, fitToHeight: 0 },
+    });
+    let kr = brandHeader(kws, "Clinical kits", "Ready-made selections for common daily-living needs.");
+    headerRow(kws, kr, ["Kit", "Product", "Code", "Price"]);
+    kr += 1;
     for (const kit of kits) {
+      let b = false;
       for (const p of kit.items) {
-        kitRows.push([kit.name, p.product_name, p.product_code, p.price_rrp == null ? null : Math.round(p.price_rrp)]);
+        bodyRow(kws, kr, [kit.name, p.product_name, p.product_code, p.price_rrp == null ? null : Math.round(p.price_rrp)], b);
+        b = !b;
+        kr += 1;
       }
-      kitRows.push(["", `${kit.name} subtotal`, "", Math.round(kit.subtotal)]);
-      kitRows.push([]);
+      const sub = kws.getRow(kr);
+      sub.getCell(2).value = `${kit.name} subtotal`;
+      sub.getCell(4).value = Math.round(kit.subtotal);
+      sub.getCell(4).numFmt = '$#,##0';
+      for (let c = 1; c <= 4; c += 1) {
+        sub.getCell(c).font = { name: "Arial", size: 10, bold: true, color: { argb: argb(HOUSE.violet) } };
+        sub.getCell(c).border = { top: { style: "thin", color: { argb: argb(HOUSE.violet) } } };
+        sub.getCell(c).alignment = { horizontal: c === 4 ? "right" : "left" };
+      }
+      sub.commit();
+      kr += 2;
     }
-    const kws = XLSX.utils.aoa_to_sheet(kitRows);
-    kws["!cols"] = [{ wch: 32 }, { wch: 52 }, { wch: 22 }, { wch: 12 }];
-    kws["!freeze"] = { xSplit: 0, ySplit: 1 };
-    styleHeader(kws, 0, 0);
-    currency(kws, 1, kitRows.length - 1, 3);
-    XLSX.utils.book_append_sheet(wb, kws, "Clinical kits");
+    footer(kws, kr);
   }
 
-  XLSX.writeFile(wb, `${fileStem()}.xlsx`);
-}
-
-function styleHeader(ws: XLSX.WorkSheet, rowStart: number, rowEnd: number) {
-  for (let r = rowStart; r <= rowEnd; r += 1) {
-    for (let c = 0; c <= 3; c += 1) {
-      const ref = XLSX.utils.encode_cell({ r, c });
-      const cell = ws[ref];
-      if (!cell) continue;
-      cell.s = {
-        font: { bold: true, color: { rgb: "FFFFFF" }, name: "Arial" },
-        fill: { fgColor: { rgb: HOUSE.violet.replace("#", "") } },
-      };
-    }
-  }
-}
-
-function currency(ws: XLSX.WorkSheet, rowStart: number, rowEnd: number, col: number) {
-  for (let r = rowStart; r <= rowEnd; r += 1) {
-    const cell = ws[XLSX.utils.encode_cell({ r, c: col })];
-    if (cell && typeof cell.v === "number") cell.z = '$#,##0';
-  }
+  const buf = await wb.xlsx.writeBuffer();
+  const url = URL.createObjectURL(
+    new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }),
+  );
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${fileStem()}.xlsx`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
