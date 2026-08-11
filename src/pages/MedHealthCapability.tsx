@@ -320,13 +320,12 @@ const MedHealthCapability = () => {
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  className="flex min-h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 sm:px-4"
+                  className="hidden min-h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 sm:flex sm:px-4"
                   style={{ backgroundColor: HOUSE.violet }}
                   aria-label={exportLabel}
                 >
                   <Download className="h-4 w-4" aria-hidden="true" />
-                  <span className="hidden sm:inline">{exportLabel}</span>
-                  <span className="sm:hidden">Export</span>
+                  <span>{exportLabel}</span>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56">
