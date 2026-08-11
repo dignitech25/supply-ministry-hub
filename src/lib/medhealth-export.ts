@@ -270,8 +270,8 @@ export async function exportCatalogueXlsx(
     loadImage(PARTNER.logo),
   ]);
 
-  const smId = sm ? wb.addImage({ base64: sm.data, extension: "png" }) : null;
-  const mhId = mh ? wb.addImage({ base64: mh.data, extension: "png" }) : null;
+  const smId = sm ? wb.addImage({ base64: sm.data.split(",")[1], extension: "png" }) : null;
+  const mhId = mh ? wb.addImage({ base64: mh.data.split(",")[1], extension: "png" }) : null;
 
   /** Brand rule, logos, title block. Returns the first free row. */
   const brandHeader = (ws: any, heading: string, sub: string) => {
