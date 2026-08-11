@@ -277,7 +277,7 @@ export async function exportCatalogueXlsx(
   const brandHeader = (ws: any, heading: string, sub: string) => {
     ws.getColumn(1).width = 28;
     ws.getColumn(2).width = 52;
-    ws.getColumn(3).width = 22;
+    ws.getColumn(3).width = 28;
     ws.getColumn(4).width = 14;
 
     // Row 1: the four-colour house rule.
