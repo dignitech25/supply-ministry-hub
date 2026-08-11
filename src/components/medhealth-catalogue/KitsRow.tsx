@@ -130,7 +130,7 @@ export function KitsRow({
               </p>
               {bedPackage.startingPrice != null && (
                 <p className="mt-1 text-sm font-bold" style={{ color: "#010A16" }}>
-                  From {money(bedPackage.startingPrice)}
+                  Starting from {money(bedPackage.startingPrice)}
                 </p>
               )}
             </div>
