@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Loader2, Mail, Phone, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Loader2, Mail, MapPin, Phone, ShoppingBag } from "lucide-react";
 import SEO from "@/components/SEO";
 import {
   fetchProducts,
   groupOf,
+  hasMelbourneCondition,
   money,
   parseSelectableOptions,
   parseSpecification,
@@ -165,6 +166,16 @@ const MedHealthProduct = () => {
                   Code: {product.product_code}
                 </span>
               </div>
+
+              {hasMelbourneCondition(product) && (
+                <div
+                  className="mt-3 inline-flex max-w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold"
+                  style={{ backgroundColor: "rgba(61,45,158,0.10)", color: HOUSE.violet }}
+                >
+                  <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  <span className="break-words hyphens-none text-pretty">Condition: available Greater Melbourne only</span>
+                </div>
+              )}
 
               {variants.length > 1 && (
                 <div className="mt-5">

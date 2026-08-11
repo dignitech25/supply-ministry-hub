@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Bath, Shirt, MoveRight, Utensils, BedDouble, Package, Check } from "lucide-react";
+import { Bath, Shirt, MoveRight, Utensils, BedDouble, Package, Check, MapPin } from "lucide-react";
 import {
   CATEGORIES,
   firstSentence,
   groupOf,
+  hasMelbourneCondition,
   money,
   normaliseCategory,
   shortGroupLabel,
@@ -116,6 +117,7 @@ export function ProductCard({
   const title = displayName ?? product.product_name;
   const price = hasOptions ? (minPrice ?? product.price_rrp) : product.price_rrp;
   const displayGroup = groupOf(product);
+  const melbourneOnly = hasMelbourneCondition(product);
 
   return (
     <div
@@ -150,11 +152,18 @@ export function ProductCard({
           >
             {title}
           </h3>
-          <p className="mt-0.5 line-clamp-2 h-[2rem] text-xs leading-4 text-muted-foreground">
-            {hasOptions
-              ? `${variantCount} options available`
-              : firstSentence(specificationFor(product))}
-          </p>
+          {melbourneOnly ? (
+            <p className="mt-0.5 flex items-center gap-1 text-[10px] font-semibold leading-4" style={{ color: HOUSE.violet }}>
+              <MapPin className="h-3 w-3 shrink-0" aria-hidden="true" />
+              Greater Melbourne only
+            </p>
+          ) : (
+            <p className="mt-0.5 line-clamp-2 h-[2rem] text-xs leading-4 text-muted-foreground">
+              {hasOptions
+                ? `${variantCount} options available`
+                : firstSentence(specificationFor(product))}
+            </p>
+          )}
         </div>
         {!hasOptions && (
         <button
