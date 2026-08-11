@@ -202,8 +202,8 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                     className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:gap-x-2"
                   >
                     {/* Row 1 on narrow screens: name, code, remove. */}
-                    <div className="flex min-w-0 flex-1 items-start gap-2">
-                      <span className="min-w-0 flex-1 text-sm" style={{ color: "#231F20" }}>
+                    <div className="flex min-w-0 flex-1 items-start gap-2 sm:contents">
+                      <span className="min-w-0 flex-1 text-sm sm:order-1" style={{ color: "#231F20" }}>
                         <span className="block break-words">{l.product.product_name}</span>
                         <span className="mt-0.5 block text-xs text-muted-foreground sm:mt-0 sm:inline">
                           {l.product.product_code}
@@ -213,14 +213,14 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                         type="button"
                         onClick={() => onRemove(l.product.product_code)}
                         aria-label={`Remove ${l.product.product_name} from your selection`}
-                        className="mh-tap flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#F4EFE6] hover:text-[#EC1C24] sm:order-last"
+                        className="mh-tap flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#F4EFE6] hover:text-[#EC1C24] sm:order-4"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                     {/* Row 2 on narrow screens: stepper and line total. */}
                     <div className="flex items-center justify-between gap-2 sm:contents">
-                      <div className="shrink-0">
+                      <div className="shrink-0 sm:order-2">
                         <QtyStepper
                           qty={l.qty}
                           label={l.product.product_name}
@@ -229,7 +229,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                         />
                       </div>
                       <span
-                        className="shrink-0 text-right text-sm font-semibold tabular-nums sm:w-[5rem]"
+                        className="shrink-0 text-right text-sm font-semibold tabular-nums sm:order-3 sm:w-[5rem]"
                         style={{ color: "#010A16" }}
                       >
                         {money((l.product.price_rrp ?? 0) * l.qty)}
