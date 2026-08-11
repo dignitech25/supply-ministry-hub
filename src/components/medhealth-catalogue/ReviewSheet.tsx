@@ -193,39 +193,48 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
             </button>
           </div>
         ) : (
-          <form onSubmit={submit} className="flex min-h-0 flex-1 flex-col">
+          <form ref={formRef} noValidate onSubmit={submit} className="flex min-h-0 flex-1 flex-col">
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-8 pt-4">
               <ul className="divide-y divide-border">
                 {lines.map((l) => (
-                  <li key={l.product.product_code} className="flex items-center gap-x-2 py-3">
-                    <span className="min-w-0 flex-1 text-sm" style={{ color: "#231F20" }}>
-                      {l.product.product_name}
-                      <span className="ml-1 text-xs text-muted-foreground">
-                        {l.product.product_code}
+                  <li
+                    key={l.product.product_code}
+                    className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:gap-x-2"
+                  >
+                    {/* Row 1 on narrow screens: name, code, remove. */}
+                    <div className="flex min-w-0 flex-1 items-start gap-2">
+                      <span className="min-w-0 flex-1 text-sm" style={{ color: "#231F20" }}>
+                        <span className="block break-words">{l.product.product_name}</span>
+                        <span className="mt-0.5 block text-xs text-muted-foreground sm:mt-0 sm:inline">
+                          {l.product.product_code}
+                        </span>
                       </span>
-                    </span>
-                    <div className="shrink-0">
-                    <QtyStepper
-                      qty={l.qty}
-                      label={l.product.product_name}
-                      onQty={(d) => onQty(l.product.product_code, d)}
-                      size="sm"
-                    />
+                      <button
+                        type="button"
+                        onClick={() => onRemove(l.product.product_code)}
+                        aria-label={`Remove ${l.product.product_name} from your selection`}
+                        className="mh-tap flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#F4EFE6] hover:text-[#EC1C24] sm:order-last"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     </div>
-                    <span
-                      className="w-[5rem] shrink-0 text-right text-sm font-semibold tabular-nums"
-                      style={{ color: "#010A16" }}
-                    >
-                      {money((l.product.price_rrp ?? 0) * l.qty)}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => onRemove(l.product.product_code)}
-                      aria-label={`Remove ${l.product.product_name} from your selection`}
-                      className="mh-tap flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#F4EFE6] hover:text-[#EC1C24]"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                    {/* Row 2 on narrow screens: stepper and line total. */}
+                    <div className="flex items-center justify-between gap-2 sm:contents">
+                      <div className="shrink-0">
+                        <QtyStepper
+                          qty={l.qty}
+                          label={l.product.product_name}
+                          onQty={(d) => onQty(l.product.product_code, d)}
+                          size="sm"
+                        />
+                      </div>
+                      <span
+                        className="shrink-0 text-right text-sm font-semibold tabular-nums sm:w-[5rem]"
+                        style={{ color: "#010A16" }}
+                      >
+                        {money((l.product.price_rrp ?? 0) * l.qty)}
+                      </span>
+                    </div>
                   </li>
                 ))}
               </ul>
