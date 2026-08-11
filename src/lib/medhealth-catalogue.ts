@@ -91,7 +91,6 @@ const GROUP_TO_DISPLAY: Record<string, string> = {
 
 /** Products whose stored group does not match how a clinician browses for them. */
 const CODE_TO_DISPLAY: Record<string, string> = {
-  SMDL80210070_H_S: "Dressing & personal care",
   "SMDL80210070-H-S": "Dressing & personal care",
   "SMDL80210070-H-L": "Dressing & personal care",
   "SMDL80210072-H-S": "Dressing & personal care",
