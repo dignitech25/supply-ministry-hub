@@ -6,7 +6,6 @@
  */
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import * as XLSX from "xlsx";
 import { HOUSE, PARTNER } from "@/partners/medhealth";
 import { groupOf, money, type Product } from "@/lib/medhealth-catalogue";
 
