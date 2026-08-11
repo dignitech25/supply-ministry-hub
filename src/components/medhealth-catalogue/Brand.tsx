@@ -47,7 +47,7 @@ export function PartnerLockup({ onHome }: { onHome?: () => void }) {
         type="button"
         onClick={onHome}
         aria-label="Back to catalogue home"
-        className="rounded-lg transition-opacity hover:opacity-80"
+        className="mh-tap flex min-h-11 min-w-11 items-center rounded-lg transition-opacity hover:opacity-80"
       >
         <SupplyMinistryLogo />
       </button>

@@ -151,7 +151,7 @@ export function ProductCard({
             e.stopPropagation();
             onToggle();
           }}
-          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors"
+          className="mh-tap flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors"
           style={{
             borderColor: selected ? HOUSE.violet : "hsl(var(--border))",
             backgroundColor: selected ? HOUSE.violet : "transparent",
@@ -171,7 +171,7 @@ export function ProductCard({
           <Link
             to={productHref(product.product_code)}
             onClick={(e) => e.stopPropagation()}
-            className="truncate whitespace-nowrap text-[10px] font-semibold leading-tight underline underline-offset-2"
+            className="mh-tap inline-flex min-h-[1.25rem] items-center truncate whitespace-nowrap text-[10px] font-semibold leading-tight underline underline-offset-2"
             style={{ color: HOUSE.violet }}
           >
             {hasOptions ? "Choose an option" : "View details"}
