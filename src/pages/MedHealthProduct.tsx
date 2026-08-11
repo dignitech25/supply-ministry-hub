@@ -5,6 +5,7 @@ import { ArrowLeft, Loader2, Mail, Phone, ShoppingBag } from "lucide-react";
 import SEO from "@/components/SEO";
 import {
   fetchProducts,
+  groupOf,
   money,
   parseSelectableOptions,
   parseSpecification,
@@ -147,7 +148,7 @@ const MedHealthProduct = () => {
                 className="text-[10px] font-semibold uppercase tracking-[0.18em]"
                 style={{ color: "rgba(61,45,158,0.75)" }}
               >
-                {product.clinical_group || product.category}
+                {groupOf(product) || product.category}
               </p>
               <h1
                 className="mt-1.5 text-2xl font-bold leading-tight tracking-tight sm:text-3xl"
