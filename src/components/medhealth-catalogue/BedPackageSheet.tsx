@@ -16,7 +16,7 @@ export function BedPackageSheet({
   onAdd: (items: Product[]) => void;
 }) {
   const [mattress, setMattress] = useState<string | null>(null);
-  const [rail, setRail] = useState<string>("none");
+  const [rail, setRail] = useState<string | null>(null);
   const [accessories, setAccessories] = useState<Record<string, boolean>>({});
 
   const chosen = useMemo(() => {
@@ -52,12 +52,11 @@ export function BedPackageSheet({
           </div>
           <button
             type="button"
-            disabled={!mattress}
             onClick={() => {
               onAdd(chosen);
               onClose();
             }}
-            className="min-h-11 rounded-xl px-5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+            className="min-h-11 rounded-xl px-5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
             style={{ backgroundColor: HOUSE.violet }}
           >
             Add bed package
@@ -95,12 +94,14 @@ export function BedPackageSheet({
             id="bed-mattress-label"
             className="mt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground"
           >
-            Mattress firmness, choose one
+            Mattress, optional
           </h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Choose a firmness, or leave this blank if the mattress is already sorted. Tap again to clear.
+          </p>
           <div
-            role="radiogroup"
+            role="group"
             aria-labelledby="bed-mattress-label"
-            aria-required="true"
             className="mt-2 grid gap-2 sm:grid-cols-3"
           >
             {pkg.mattresses.map((p) => {
@@ -109,9 +110,8 @@ export function BedPackageSheet({
                 <button
                   key={p.product_code}
                   type="button"
-                  role="radio"
-                  aria-checked={active}
-                  onClick={() => setMattress(p.product_code)}
+                  aria-pressed={active}
+                  onClick={() => setMattress(active ? null : p.product_code)}
                   className="min-h-11 rounded-lg border-2 px-3 py-2 text-left text-xs font-semibold transition-colors"
                   style={{
                     borderColor: active ? HOUSE.violet : "hsl(var(--border))",
@@ -134,24 +134,26 @@ export function BedPackageSheet({
               >
                 Side rail, optional
               </h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Only one rail type can be fitted. Leave blank if no rail is needed. Tap again to clear.
+              </p>
               <div
-                role="radiogroup"
+                role="group"
                 aria-labelledby="bed-rail-label"
                 className="mt-2 grid gap-2 sm:grid-cols-3"
               >
-                {[{ code: "none", label: "No side rail", price: null as number | null }, ...pkg.rails.map((p) => ({
+                {pkg.rails.map((p) => ({
                   code: p.product_code,
                   label: p.product_name,
                   price: p.price_rrp ?? null,
-                }))].map((opt) => {
+                })).map((opt) => {
                   const active = rail === opt.code;
                   return (
                     <button
                       key={opt.code}
                       type="button"
-                      role="radio"
-                      aria-checked={active}
-                      onClick={() => setRail(opt.code)}
+                      aria-pressed={active}
+                      onClick={() => setRail(active ? null : opt.code)}
                       className="min-h-11 rounded-lg border-2 px-3 py-2 text-left text-xs font-semibold transition-colors"
                       style={{
                         borderColor: active ? HOUSE.violet : "hsl(var(--border))",
