@@ -108,7 +108,7 @@ const MedHealthCapability = () => {
     return products.filter((p) => {
       if (tab !== "All" && groupOf(p) !== tab) return false;
       if (!q) return true;
-      return `${p.product_name} ${p.key_specifications ?? ""} ${p.product_code}`
+      return `${p.product_name} ${p.variant_label ?? ""} ${p.key_specifications ?? ""} ${p.selectable_options ?? ""} ${p.product_code}`
         .toLowerCase()
         .includes(q);
     });
@@ -117,7 +117,7 @@ const MedHealthCapability = () => {
   const grouped = useMemo(() => {
     const map = new Map<string, Product[]>();
     for (const p of visible) {
-      const g = normaliseCategory(p.clinical_group || "") || "Other";
+      const g = groupOf(p) || "Other";
       map.set(g, [...(map.get(g) ?? []), p]);
     }
     return [...map.entries()].map(([g, items]) => [g, buildFamilies(items)] as const);
