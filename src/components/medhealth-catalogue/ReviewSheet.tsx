@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { X, Copy, Download, CheckCircle2, Loader2, AlertCircle, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Copy, Download, CheckCircle2, Loader2, AlertCircle, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { downloadCsv, makeReference, money, toCsv, type Product } from "@/lib/medhealth-catalogue";
 import { QtyStepper } from "./QtyStepper";
+import { ModalShell } from "./ModalShell";
 
 export interface Line {
   product: Product;
@@ -41,12 +42,6 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
   const [state, setState] = useState<"form" | "sending" | "done" | "error">("form");
   const [reference, setReference] = useState("");
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
 
   const csvRows = lines.map((l) => ({
     Category: l.product.category,
@@ -118,43 +113,15 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
-      <div
-        className="absolute inset-0 bg-[#231F20]/50 backdrop-blur-sm"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="review-title"
-        className="relative flex max-h-[92vh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl bg-card shadow-2xl sm:rounded-3xl"
-      >
-        <div
-          className="h-1 w-full"
-          style={{
-            backgroundImage: "linear-gradient(90deg, #3D2D9E 0%, #010A16 38%, #010A16 72%, #FCB040 100%)",
-          }}
-        />
-
-        <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
-          <h2
-            id="review-title"
-            className="text-lg font-semibold"
-            style={{ color: "#231F20" }}
-          >
-            {state === "done" ? "Request sent" : "Review & send"}
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#F4EFE6]"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </header>
-
+    <ModalShell
+      title={state === "done" ? "Request sent" : "Review & send"}
+      closeLabel="Close review and send"
+      onClose={onClose}
+      dismissOnOverlay={state !== "sending"}
+      maxWidthClass="sm:max-w-lg"
+      topRule="linear-gradient(90deg, #3D2D9E 0%, #010A16 38%, #010A16 72%, #FCB040 100%)"
+    >
+      <>
         {isEmpty && state !== "done" ? (
           <div className="flex flex-col items-center gap-3 px-6 py-12 text-center">
             <p className="text-sm text-muted-foreground">
@@ -224,7 +191,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
                       type="button"
                       onClick={() => onRemove(l.product.product_code)}
                       aria-label={`Remove ${l.product.product_name} from your selection`}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#F4EFE6] hover:text-[#EC1C24]"
+                      className="mh-tap flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[#F4EFE6] hover:text-[#EC1C24]"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -366,7 +333,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
             </div>
           </form>
         )}
-      </div>
-    </div>
+      </>
+    </ModalShell>
   );
 }

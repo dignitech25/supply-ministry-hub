@@ -134,3 +134,42 @@ a[href="#main-content"]:not(:focus):not(:focus-visible) {
   white-space: nowrap !important;
   border: 0 !important;
 }
+/* ---------------------------------------------------------------------------
+   MedHealth catalogue accessibility layer.
+   Scoped with [data-medhealth] so it cannot alter the rest of the site.
+   --------------------------------------------------------------------------- */
+
+/* One visible, non-colour-only focus treatment for every interactive control.
+   The white ring keeps the violet outline legible on violet buttons too. */
+[data-medhealth]
+  :where(
+    a[href],
+    button,
+    input,
+    select,
+    textarea,
+    summary,
+    [role="button"],
+    [tabindex]:not([tabindex="-1"])
+  ):focus-visible {
+  outline: 3px solid #3d2d9e;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #ffffff;
+  border-radius: 8px;
+}
+
+/* Invisible 44x44 hit area around visually small controls. */
+[data-medhealth] .mh-tap {
+  position: relative;
+}
+[data-medhealth] .mh-tap::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  min-width: 44px;
+  min-height: 44px;
+}

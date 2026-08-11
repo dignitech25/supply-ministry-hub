@@ -98,7 +98,7 @@ const MedHealthProduct = () => {
   const qty = product ? (selection[product.product_code] ?? 0) : 0;
 
   return (
-    <div style={{ fontFamily: FONT }} className="min-h-screen bg-background text-[#231F20] antialiased">
+    <div data-medhealth="" style={{ fontFamily: FONT }} className="min-h-screen bg-background text-[#231F20] antialiased">
       <SEO
         title={`${product?.product_name ?? "Product"} | Supply Ministry`}
         description="Private assistive technology ordering catalogue."

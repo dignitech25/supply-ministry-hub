@@ -248,6 +248,7 @@ const MedHealthCapability = () => {
 
   return (
     <div
+      data-medhealth=""
       style={{ ...theme, fontFamily: FONT }}
       className="min-h-screen bg-background text-[#231F20] antialiased"
     >

@@ -90,11 +90,12 @@ export function KitsRow({
 
             <button
               type="button"
+              aria-label={`Select ${kit.name}`}
               onClick={(e) => {
                 e.stopPropagation();
                 onAdd(kit.items);
               }}
-              className="mt-2.5 flex min-h-10 w-full items-center justify-center rounded-lg px-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+              className="mt-2.5 flex min-h-11 w-full items-center justify-center rounded-lg px-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: HOUSE.violet }}
             >
               Select kit
@@ -107,7 +108,7 @@ export function KitsRow({
           <button
             type="button"
             onClick={onViewAll}
-            className="text-sm font-semibold underline underline-offset-4"
+            className="mh-tap inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4"
             style={{ color: HOUSE.violet }}
           >
             View all clinical kits
