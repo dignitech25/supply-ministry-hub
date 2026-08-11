@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Check } from "lucide-react";
+import { Check, MapPin } from "lucide-react";
 import { BED_PACKAGE, money, type BedPackage, type Product } from "@/lib/medhealth-catalogue";
 import { HOUSE } from "@/partners/medhealth";
 import { ProductThumb } from "./ProductCard";
