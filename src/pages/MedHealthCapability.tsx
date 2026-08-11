@@ -39,9 +39,19 @@ const FONT = "Raleway, system-ui, sans-serif";
  * like a broken four-up grid. Prefers an exact fit, then a near-full last row.
  */
 const colsFor = (n: number) => {
-  for (const c of [4, 3, 2]) if (n % c === 0) return c;
-  for (const c of [4, 3, 2]) if (n % c >= c - 1) return c;
-  return 3;
+  if (n <= 2) return 2;
+  if (n === 3) return 3;
+  // Fewest empty slots in the last row, preferring the wider grid on a tie.
+  let best = 4;
+  let bestGap = Infinity;
+  for (const c of [4, 3, 2]) {
+    const gap = (c - (n % c)) % c;
+    if (gap < bestGap) {
+      bestGap = gap;
+      best = c;
+    }
+  }
+  return best;
 };
 const COL_CLASS: Record<number, string> = {
   4: "lg:grid-cols-3 xl:grid-cols-4",
