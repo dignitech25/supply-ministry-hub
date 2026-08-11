@@ -378,12 +378,15 @@ export const BED_PACKAGE = {
   note: "Mattress firmness, rails and transfer supports should be selected according to the user's needs and bed-safety assessment.",
   requiredCodes: ["SMBRIC333KS", "SMBRHB333KS", "SMBRFB333KS"] as const,
   mattressCodes: ["SMBRIHKSL2000SQC", "SMBRIHKSL2000MQC", "SMBRIHKSL2000FQC"] as const,
-  accessoryCodes: ["SMBRACBS", "SMBRACHSR", "SMBRACLSR", "SMBRIC182", "SMBRIC184"] as const,
+  railCodes: ["SMBRACHSR", "SMBRACLSR"] as const,
+  accessoryCodes: ["SMBRACBS", "SMBRIC182", "SMBRIC184"] as const,
 } as const;
 
 export interface BedPackage {
   required: Product[];
   mattresses: Product[];
+  /** High or low side rail, mutually exclusive inside the configurator. */
+  rails: Product[];
   accessories: Product[];
   /** Base plus the cheapest mattress, so the card can show a starting price. */
   startingPrice: number | null;
@@ -407,6 +410,7 @@ export function buildBedPackage(products: Product[]): BedPackage | null {
   return {
     required,
     mattresses,
+    rails: pick(BED_PACKAGE.railCodes),
     accessories: pick(BED_PACKAGE.accessoryCodes),
     startingPrice: cheapest == null ? null : base + cheapest,
   };
