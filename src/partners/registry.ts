@@ -38,6 +38,10 @@ export interface PartnerConfig {
   exportStem: string;
   /** Product codes hidden from this account's catalogue, grid, kits and exports. */
   excludeCodes?: readonly string[];
+  /** Clinical kit ids not offered on this account. */
+  excludeKitIds?: readonly string[];
+  /** Display category overrides by product code, applied for this account only. */
+  categoryOverrides?: Readonly<Record<string, string>>;
 }
 
 /** Supply Ministry identity. Owns every action colour. */
@@ -100,6 +104,13 @@ export const PARTNERS: Record<string, PartnerConfig> = {
       "SMBRIHKSL2000MQC",
       "SMBRIHKSL2000FQC",
     ],
+    // Without the bed frame and rails, the bed kit no longer stands up.
+    excludeKitIds: ["bed-mobility"],
+    // The remaining wedge and raiser browse as positioning aids here.
+    categoryOverrides: {
+      SMBRIC182: "Mobility, transfers & seating",
+      SMBRIC184: "Mobility, transfers & seating",
+    },
   },
 };
 
