@@ -16,6 +16,7 @@ const schema = z.object({
   delivery_suburb: z.string().max(200).optional().default(""),
   total: z.number().nonnegative(),
   source_url: z.string().max(500).optional().default(""),
+  partner: z.string().max(120).optional().default("MedHealth"),
   lines: z
     .array(
       z.object({
@@ -72,9 +73,9 @@ serve(async (req: Request): Promise<Response> => {
       from: "Supply Ministry <no-reply@supplyministry.com.au>",
       to: ["david@supplyministry.com.au", "alex@supplyministry.com.au"],
       reply_to: d.email,
-      subject: `MedHealth catalogue request ${d.reference} from ${d.name}`,
+      subject: `${d.partner} catalogue request ${d.reference} from ${d.name}`,
       html: `
-        <h2 style="font-family:Arial,sans-serif">MedHealth catalogue request</h2>
+        <h2 style="font-family:Arial,sans-serif">${esc(d.partner)} catalogue request</h2>
         <p style="font-family:Arial,sans-serif"><strong>Reference:</strong> ${esc(d.reference)}</p>
         <p style="font-family:Arial,sans-serif">
           <strong>Name:</strong> ${esc(d.name)}<br>
