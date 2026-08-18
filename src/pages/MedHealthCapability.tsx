@@ -116,7 +116,10 @@ const MedHealthCapability = () => {
   }, [visible]);
 
   const kits = useMemo(() => buildKits(products), [products]);
-  const bedPackage = useMemo(() => buildBedPackage(products), [products]);
+  const bedPackage = useMemo(
+    () => (partner.showBedPackage ? buildBedPackage(products) : null),
+    [partner.showBedPackage, products],
+  );
 
   const groupKeys = useMemo(() => grouped.map(([g]) => g).join("|"), [grouped]);
 
@@ -235,8 +238,8 @@ const MedHealthCapability = () => {
   };
 
   const exportContext = { filter: tab, query };
-  const exportPdf = () => exportCataloguePdf(visible, kits, exportContext);
-  const exportXlsx = () => exportCatalogueXlsx(visible, kits, exportContext);
+  const exportPdf = () => exportCataloguePdf(visible, kits, exportContext, partner);
+  const exportXlsx = () => exportCatalogueXlsx(visible, kits, exportContext, partner);
   const isFiltered = tab !== "All" || query.trim() !== "";
   const exportLabel = isFiltered
     ? `Export ${visible.length} result${visible.length === 1 ? "" : "s"}`
