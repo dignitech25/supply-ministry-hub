@@ -77,7 +77,12 @@ const MedHealthCapability = () => {
 
   const products = useMemo(() => {
     const hidden = new Set(partner.excludeCodes ?? []);
-    return (data ?? []).filter((p) => !hidden.has(p.product_code));
+    const overrides = partner.categoryOverrides ?? {};
+    return (data ?? [])
+      .filter((p) => !hidden.has(p.product_code))
+      .map((p) =>
+        overrides[p.product_code] ? { ...p, clinical_group: overrides[p.product_code] } : p,
+      );
   }, [data, partner]);
 
   const counts = useMemo(() => {
@@ -118,7 +123,10 @@ const MedHealthCapability = () => {
     return [...map.entries()].map(([g, items]) => [g, buildFamilies(items)] as const);
   }, [visible]);
 
-  const kits = useMemo(() => buildKits(products), [products]);
+  const kits = useMemo(() => {
+    const hiddenKits = new Set(partner.excludeKitIds ?? []);
+    return buildKits(products).filter((k) => !hiddenKits.has(k.id));
+  }, [products, partner]);
   const bedPackage = useMemo(
     () => (partner.showBedPackage ? buildBedPackage(products) : null),
     [partner.showBedPackage, products],
@@ -375,7 +383,7 @@ const MedHealthCapability = () => {
                   }}
                 />
               )}
-              {["All", ...CATEGORIES].map((c) => {
+              {["All", ...CATEGORIES.filter((c) => (counts[c] ?? 0) > 0)].map((c) => {
                 const active = activePill === c;
                 return (
                   <button
