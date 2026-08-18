@@ -12,12 +12,15 @@ import {
   specificationFor,
   type Product,
 } from "@/lib/medhealth-catalogue";
-import { HOUSE, PARTNER } from "@/partners/medhealth";
+import { HOUSE, productPath } from "@/partners/medhealth";
+import { usePartner } from "@/partners/PartnerThemeProvider";
 import { QtyStepper } from "./QtyStepper";
 
-/** Detail page URL for a catalogue product. */
-export const productHref = (code: string) =>
-  `/partners/medhealth-capability-2026/product/${encodeURIComponent(code)}`;
+/** Detail page URL for a catalogue product on the active account. */
+export function useProductHref() {
+  const { partner } = usePartner();
+  return (code: string) => productPath(partner, code);
+}
 
 export function CategoryIcon({
   category,
@@ -51,6 +54,7 @@ export function ProductThumb({
 }) {
   const [imgError, setImgError] = useState(false);
   const hasImage = product.image_url && !imgError;
+  const { partner } = usePartner();
 
   const box =
     size === "fill"
@@ -64,8 +68,8 @@ export function ProductThumb({
       className={`flex items-center justify-center overflow-hidden rounded-xl border p-1.5 ${box}`}
       style={{
         backgroundColor: "#FFFFFF",
-        borderColor: PARTNER.rule,
-        color: PARTNER.ink,
+        borderColor: partner.rule,
+        color: partner.ink,
       }}
       aria-label={hasImage ? product.product_name : `${product.category} placeholder image`}
       role="img"
@@ -113,6 +117,7 @@ export function ProductCard({
 }: Props) {
   const selected = qty > 0;
   const navigate = useNavigate();
+  const productHref = useProductHref();
   const hasOptions = variantCount > 1;
   const title = displayName ?? product.product_name;
   const price = hasOptions ? (minPrice ?? product.price_rrp) : product.price_rrp;
