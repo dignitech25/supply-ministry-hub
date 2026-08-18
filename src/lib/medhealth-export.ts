@@ -152,7 +152,7 @@ export async function exportCataloguePdf(
     doc.setTextColor(...INK);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10.5);
-    doc.text(SUBTITLE, margin, y);
+    doc.text(SUBTITLE(), margin, y);
 
     y += 5;
     doc.setFontSize(8.5);
