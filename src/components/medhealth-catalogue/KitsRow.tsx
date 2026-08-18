@@ -1,5 +1,6 @@
 import { money, type BedPackage, type Product } from "@/lib/medhealth-catalogue";
-import { BRAND_RULE, HOUSE } from "@/partners/medhealth";
+import { HOUSE } from "@/partners/medhealth";
+import { usePartner } from "@/partners/PartnerThemeProvider";
 import { ProductThumb } from "./ProductCard";
 import type { Kit } from "./KitSheet";
 import { MapPin } from "lucide-react";

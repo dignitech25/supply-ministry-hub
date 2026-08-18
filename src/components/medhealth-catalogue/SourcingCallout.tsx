@@ -1,15 +1,15 @@
 import { Mail, Phone } from "lucide-react";
-import { HOUSE, PARTNER } from "@/partners/medhealth";
-
-const MAILTO =
-  "mailto:david@supplyministry.com.au?subject=MedHealth%20catalogue%20sourcing%20request";
+import { HOUSE } from "@/partners/medhealth";
+import { usePartner } from "@/partners/PartnerThemeProvider";
 
 export function SourcingCallout() {
+  const { partner } = usePartner();
+  const MAILTO = `mailto:david@supplyministry.com.au?subject=${encodeURIComponent(`${partner.name} catalogue sourcing request`)}`;
   return (
     <section
       aria-labelledby="sourcing-heading"
       className="mt-10 rounded-2xl border p-5 sm:p-6"
-      style={{ borderColor: PARTNER.rule, backgroundColor: HOUSE.cream }}
+      style={{ borderColor: partner.rule, backgroundColor: HOUSE.cream }}
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="max-w-[52ch]">

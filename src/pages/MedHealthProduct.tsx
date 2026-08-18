@@ -14,15 +14,15 @@ import {
   variantsOf,
   type Product,
 } from "@/lib/medhealth-catalogue";
-import { BRAND_RULE, HOUSE, PARTNER } from "@/partners/medhealth";
-import { PartnerLockup, SupplyMinistryLogo, MedHealthLogo } from "@/components/medhealth-catalogue/Brand";
+import { HOUSE } from "@/partners/medhealth";
+import { usePartner } from "@/partners/PartnerThemeProvider";
+import { PartnerLockup, SupplyMinistryLogo, PartnerLogo } from "@/components/medhealth-catalogue/Brand";
 import { CategoryIcon } from "@/components/medhealth-catalogue/ProductCard";
 import { QtyStepper } from "@/components/medhealth-catalogue/QtyStepper";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
 import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
 
 const FONT = "Raleway, system-ui, sans-serif";
-const CATALOGUE = "/partners/medhealth-capability-2026";
 
 function ProductImage({ product, fallbackSrc }: { product: Product; fallbackSrc?: string | null }) {
   const [failed, setFailed] = useState(false);
@@ -315,7 +315,7 @@ const MedHealthProduct = () => {
             >
               {PARTNER.preparedFor}
             </span>
-            <MedHealthLogo className="text-xl" />
+            <PartnerLogo className="text-xl" />
           </div>
           <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted-foreground">
             {PARTNER.disclaimer}

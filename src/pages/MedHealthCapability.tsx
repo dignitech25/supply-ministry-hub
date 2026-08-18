@@ -20,8 +20,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MedHealthLogo, SupplyMinistryLogo, PartnerLockup } from "@/components/medhealth-catalogue/Brand";
-import { PARTNER, HOUSE, BRAND_RULE } from "@/partners/medhealth";
+import { PartnerLogo, SupplyMinistryLogo, PartnerLockup } from "@/components/medhealth-catalogue/Brand";
+import { HOUSE, type PartnerConfig } from "@/partners/medhealth";
+import { usePartner } from "@/partners/PartnerThemeProvider";
 import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
 import { ProductCard } from "@/components/medhealth-catalogue/ProductCard";
 import { KitsRow } from "@/components/medhealth-catalogue/KitsRow";
@@ -31,25 +32,28 @@ import { BedPackageSheet } from "@/components/medhealth-catalogue/BedPackageShee
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
 import { SourcingCallout } from "@/components/medhealth-catalogue/SourcingCallout";
 
-const PARTNER_NAME = PARTNER.name;
 const FONT = "Raleway, system-ui, sans-serif";
 
 /** One consistent grid across every category so sections scan as a set. */
 const GRID_CLASS = "lg:grid-cols-3 xl:grid-cols-4";
 
-/** Every partner-specific value comes from src/partners/medhealth.ts. */
-const theme = {
-  "--sm": HOUSE.violet,
-  "--sm-hover": HOUSE.violetHover,
-  "--sm-cream": HOUSE.cream,
-  "--sm-cream-2": HOUSE.cream2,
-  "--p-ink": PARTNER.ink,
-  "--p-accent": PARTNER.accent,
-  "--p-accent-pale": PARTNER.accentPale,
-  "--p-rule": PARTNER.rule,
-} as React.CSSProperties;
+/** Every partner-specific value comes from src/partners/registry.ts. */
+const themeFor = (partner: PartnerConfig) =>
+  ({
+    "--sm": HOUSE.violet,
+    "--sm-hover": HOUSE.violetHover,
+    "--sm-cream": HOUSE.cream,
+    "--sm-cream-2": HOUSE.cream2,
+    "--p-ink": partner.ink,
+    "--p-accent": partner.accent,
+    "--p-accent-pale": partner.accentPale,
+    "--p-rule": partner.rule,
+  }) as React.CSSProperties;
 
 const MedHealthCapability = () => {
+  const { partner, rule: BRAND_RULE } = usePartner();
+  const PARTNER_NAME = partner.name;
+  const theme = themeFor(partner);
   const [tab, setTab] = useState<string>("All");
   const [query, setQuery] = useState("");
   const { selection, toggle, bumpQty, removeItem, addUnique, clear } = useMedHealthSelection();
@@ -265,7 +269,7 @@ const MedHealthCapability = () => {
 
       {/* Branding, then page purpose, then the sticky search and category bar. */}
       <header
-        style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}
+        style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${partner.rule}` }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <PartnerLockup onHome={goHome} />
@@ -296,7 +300,7 @@ const MedHealthCapability = () => {
       <div className="mx-auto max-w-6xl px-4 pb-4 pt-5 sm:px-6">
         <h1
           className="text-balance text-lg font-bold leading-tight tracking-tight sm:text-2xl"
-          style={{ color: PARTNER.ink }}
+          style={{ color: partner.ink }}
         >
           Assistive technology catalogue for the {PARTNER_NAME} team
         </h1>
@@ -468,18 +472,18 @@ const MedHealthCapability = () => {
       </main>
 
       {/* Footer */}
-      <footer style={{ backgroundColor: HOUSE.cream, borderTop: `1px solid ${PARTNER.rule}` }}>
+      <footer style={{ backgroundColor: HOUSE.cream, borderTop: `1px solid ${partner.rule}` }}>
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <SupplyMinistryLogo compact />
-            <span aria-hidden="true" className="h-6 w-px" style={{ backgroundColor: PARTNER.rule }} />
+            <span aria-hidden="true" className="h-6 w-px" style={{ backgroundColor: partner.rule }} />
             <span
               className="text-[10px] font-semibold uppercase tracking-[0.16em]"
               style={{ color: "rgba(1,10,22,0.55)" }}
             >
-              {PARTNER.preparedFor}
+              {partner.preparedFor}
             </span>
-            <MedHealthLogo className="text-xl" />
+            <PartnerLogo className="text-xl" />
           </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-2">
@@ -502,7 +506,7 @@ const MedHealthCapability = () => {
           </div>
 
           <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted-foreground">
-            {PARTNER.disclaimer}
+            {partner.disclaimer}
           </p>
         </div>
       </footer>
