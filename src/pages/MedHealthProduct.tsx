@@ -65,7 +65,12 @@ const MedHealthProduct = () => {
 
   const products = useMemo(() => {
     const hidden = new Set(partner.excludeCodes ?? []);
-    return (data ?? []).filter((p) => !hidden.has(p.product_code));
+    const overrides = partner.categoryOverrides ?? {};
+    return (data ?? [])
+      .filter((p) => !hidden.has(p.product_code))
+      .map((p) =>
+        overrides[p.product_code] ? { ...p, clinical_group: overrides[p.product_code] } : p,
+      );
   }, [data, partner]);
   const product = products.find((p) => p.product_code === code);
   const variants = useMemo(
