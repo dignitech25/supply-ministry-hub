@@ -63,7 +63,10 @@ const MedHealthProduct = () => {
     queryFn: fetchProducts,
   });
 
-  const products = useMemo(() => data ?? [], [data]);
+  const products = useMemo(() => {
+    const hidden = new Set(partner.excludeCodes ?? []);
+    return (data ?? []).filter((p) => !hidden.has(p.product_code));
+  }, [data, partner]);
   const product = products.find((p) => p.product_code === code);
   const variants = useMemo(
     () => (product ? variantsOf(products, product) : []),

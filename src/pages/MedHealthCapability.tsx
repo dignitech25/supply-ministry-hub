@@ -75,7 +75,10 @@ const MedHealthCapability = () => {
     queryFn: fetchProducts,
   });
 
-  const products = useMemo(() => data ?? [], [data]);
+  const products = useMemo(() => {
+    const hidden = new Set(partner.excludeCodes ?? []);
+    return (data ?? []).filter((p) => !hidden.has(p.product_code));
+  }, [data, partner]);
 
   const counts = useMemo(() => {
     // Counts follow the cards on screen: a variant family renders as one card.

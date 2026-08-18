@@ -36,6 +36,8 @@ export interface PartnerConfig {
   logoScale: number;
   /** File stem used for catalogue exports. */
   exportStem: string;
+  /** Product codes hidden from this account's catalogue, grid, kits and exports. */
+  excludeCodes?: readonly string[];
 }
 
 /** Supply Ministry identity. Owns every action colour. */
@@ -85,6 +87,19 @@ export const PARTNERS: Record<string, PartnerConfig> = {
     showBedPackage: false,
     logoScale: 2.2,
     exportStem: "ability-action",
+    // Icare bed frame, boards, rails, bed stick and Forte mattresses are not
+    // offered on this account.
+    excludeCodes: [
+      "SMBRACBS",
+      "SMBRACHSR",
+      "SMBRACLSR",
+      "SMBRIC333KS",
+      "SMBRHB333KS",
+      "SMBRFB333KS",
+      "SMBRIHKSL2000SQC",
+      "SMBRIHKSL2000MQC",
+      "SMBRIHKSL2000FQC",
+    ],
   },
 };
 
