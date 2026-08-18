@@ -23,6 +23,7 @@ export function KitSheet({
   onClose: () => void;
   onAdd: (items: Product[]) => void;
 }) {
+  const productHref = useProductHref();
   return (
     <ModalShell
       title={kit.name}
