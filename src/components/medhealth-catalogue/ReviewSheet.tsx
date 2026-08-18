@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { downloadCsv, makeReference, money, toCsv, type Product } from "@/lib/medhealth-catalogue";
 import { QtyStepper } from "./QtyStepper";
 import { ModalShell } from "./ModalShell";
+import { usePartner } from "@/partners/PartnerThemeProvider";
 
 export interface Line {
   product: Product;
@@ -32,6 +33,7 @@ function formatRequirements(lines: Line[], total: number) {
 }
 
 export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove }: Props) {
+  const { partner } = usePartner();
   const isEmpty = lines.length === 0;
 
   const [name, setName] = useState("");
