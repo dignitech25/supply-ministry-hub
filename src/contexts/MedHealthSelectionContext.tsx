@@ -14,12 +14,17 @@ interface Ctx {
   clear: () => void;
 }
 
-const KEY = "medhealth-selection";
-
 const MedHealthSelectionContext = createContext<Ctx | null>(null);
 
 /** Keeps the catalogue selection alive while moving to a product page and back. */
-export function MedHealthSelectionProvider({ children }: { children: React.ReactNode }) {
+export function MedHealthSelectionProvider({
+  storageKey = "medhealth-selection",
+  children,
+}: {
+  storageKey?: string;
+  children: React.ReactNode;
+}) {
+  const KEY = storageKey;
   const [selection, setSelection] = useState<Selection>(() => {
     try {
       const raw = sessionStorage.getItem(KEY);
@@ -35,7 +40,7 @@ export function MedHealthSelectionProvider({ children }: { children: React.React
     } catch {
       /* storage unavailable, selection simply will not persist */
     }
-  }, [selection]);
+  }, [KEY, selection]);
 
   const value = useMemo<Ctx>(
     () => ({

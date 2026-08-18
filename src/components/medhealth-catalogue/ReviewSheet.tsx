@@ -99,8 +99,8 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
       last_name: rest.join(" ") || (first ?? ""),
       email: email.trim(),
       phone: phone.trim(),
-      organization: "MedHealth",
-      category: "MedHealth catalogue request",
+      organization: partner.name,
+      category: `${partner.name} catalogue request`,
       requirements: formatRequirements(lines, total),
       timeline: "Not specified",
       source_url: typeof window !== "undefined" ? window.location.href : null,
@@ -130,6 +130,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
           client_reference: clientRef.trim(),
           delivery_suburb: suburb.trim(),
           total,
+          partner: partner.name,
           source_url: typeof window !== "undefined" ? window.location.href : "",
           lines: lineItems,
         },
@@ -171,7 +172,7 @@ export function ReviewSheet({ lines, total, onClose, onComplete, onQty, onRemove
           <div className="flex flex-col items-center gap-3 px-6 py-10 text-center">
             <CheckCircle2 className="h-12 w-12" style={{ color: "#3D2D9E" }} strokeWidth={1.5} />
             <p className="text-sm text-muted-foreground">
-              Thanks {name.split(" ")[0]}. Your MedHealth selection is with the Supply Ministry
+              Thanks {name.split(" ")[0]}. Your {partner.name} selection is with the Supply Ministry
               team.
             </p>
             <p
