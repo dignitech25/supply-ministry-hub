@@ -31,7 +31,8 @@ export function PartnerLogo({ className = "" }: { className?: string }) {
     <img
       src={partner.logo}
       alt={partner.name}
-      className={`inline-block h-[1em] w-auto max-w-none shrink-0 translate-y-[0.1em] object-contain align-baseline ${className}`}
+      style={{ height: `${partner.logoScale}em` }}
+      className={`inline-block w-auto max-w-none shrink-0 translate-y-[0.1em] object-contain align-baseline ${className}`}
     />
   );
 }

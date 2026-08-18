@@ -32,6 +32,8 @@ export interface PartnerConfig {
   disclaimer: string;
   /** The IC333 bed package is offered on some accounts only. */
   showBedPackage: boolean;
+  /** Height multiplier for the partner mark, so wide or short logos read evenly. */
+  logoScale: number;
   /** File stem used for catalogue exports. */
   exportStem: string;
 }
@@ -62,6 +64,7 @@ export const PARTNERS: Record<string, PartnerConfig> = {
     disclaimer:
       "Supply Ministry Pty Ltd, a Dignitech brand. Prepared by Supply Ministry for the MedHealth team.",
     showBedPackage: true,
+    logoScale: 1,
     exportStem: "medhealth",
   },
   "ability-action": {
@@ -80,6 +83,7 @@ export const PARTNERS: Record<string, PartnerConfig> = {
     disclaimer:
       "Supply Ministry Pty Ltd, a Dignitech brand. Prepared by Supply Ministry for the Ability Action Australia team.",
     showBedPackage: false,
+    logoScale: 2.2,
     exportStem: "ability-action",
   },
 };
