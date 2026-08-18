@@ -6,7 +6,7 @@
  */
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import { HOUSE, PARTNER } from "@/partners/medhealth";
+import { HOUSE, PARTNERS, type PartnerConfig } from "@/partners/medhealth";
 import { groupOf, money, type Product } from "@/lib/medhealth-catalogue";
 
 export interface ExportKit {
@@ -22,12 +22,18 @@ export interface ExportContext {
   query?: string;
 }
 
+/**
+ * The active account for the export in progress. Set at the top of each
+ * exported function so the helpers below stay simple.
+ */
+let PARTNER: PartnerConfig = PARTNERS.medhealth;
+
 const TITLE = "Assistive Technology Catalogue";
-const SUBTITLE = "Prepared by Supply Ministry for the MedHealth team";
+const SUBTITLE = () => `Prepared by Supply Ministry for the ${PARTNER.name} team`;
 const CONTACT = "0404 593 090   |   david@supplyministry.com.au   |   supplyministry.com.au";
 
 const today = () => new Date().toISOString().slice(0, 10);
-const fileStem = () => `supply-ministry-medhealth-catalogue-${today()}`;
+const fileStem = () => `supply-ministry-${PARTNER.exportStem}-catalogue-${today()}`;
 
 const longDate = () =>
   new Date().toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" });
@@ -94,7 +100,9 @@ export async function exportCataloguePdf(
   products: Product[],
   kits: ExportKit[],
   ctx: ExportContext,
+  partner: PartnerConfig = PARTNERS.medhealth,
 ) {
+  PARTNER = partner;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
   const margin = 16;
@@ -108,9 +116,9 @@ export async function exportCataloguePdf(
   const drawRule = () => {
     const segs: Array<[string, number, number]> = [
       [HOUSE.violet, 0, 0.22],
-      [PARTNER.circle.blue, 0.22, 0.48],
-      [PARTNER.circle.red, 0.48, 0.74],
-      [PARTNER.circle.amber, 0.74, 1],
+      [PARTNER.ruleColors[0], 0.22, 0.48],
+      [PARTNER.ruleColors[1], 0.48, 0.74],
+      [PARTNER.ruleColors[2], 0.74, 1],
     ];
     for (const [hex, from, to] of segs) {
       const [r, g, b] = hexToRgb(hex);
@@ -144,7 +152,7 @@ export async function exportCataloguePdf(
     doc.setTextColor(...INK);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10.5);
-    doc.text(SUBTITLE, margin, y);
+    doc.text(SUBTITLE(), margin, y);
 
     y += 5;
     doc.setFontSize(8.5);
@@ -259,7 +267,9 @@ export async function exportCatalogueXlsx(
   products: Product[],
   kits: ExportKit[],
   ctx: ExportContext,
+  partner: PartnerConfig = PARTNERS.medhealth,
 ) {
+  PARTNER = partner;
   const ExcelJS = (await import("exceljs")).default;
   const wb = new ExcelJS.Workbook();
   wb.creator = "Supply Ministry";
@@ -283,7 +293,7 @@ export async function exportCatalogueXlsx(
     // Row 1: the four-colour house rule.
     const rule = ws.getRow(1);
     rule.height = 5;
-    const segs = [HOUSE.violet, PARTNER.circle.blue, PARTNER.circle.red, PARTNER.circle.amber];
+    const segs = [HOUSE.violet, PARTNER.ruleColors[0], PARTNER.ruleColors[1], PARTNER.ruleColors[2]];
     segs.forEach((hex, i) => {
       rule.getCell(i + 1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: argb(hex) } };
     });
@@ -362,7 +372,7 @@ export async function exportCatalogueXlsx(
     views: [{ state: "frozen", ySplit: 7 }],
     pageSetup: { orientation: "portrait", fitToPage: true, fitToWidth: 1, fitToHeight: 0 },
   });
-  let r = brandHeader(ws, TITLE, SUBTITLE);
+  let r = brandHeader(ws, TITLE, SUBTITLE());
   headerRow(ws, r, ["Category", "Product", "Code", "Price"]);
   const firstBody = r + 1;
   r = firstBody;

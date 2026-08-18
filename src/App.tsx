@@ -25,6 +25,7 @@ const HomeModifications = lazy(() => import("./pages/HomeModifications"));
 const MedHealthCapability = lazy(() => import("./pages/MedHealthCapability"));
 const MedHealthProduct = lazy(() => import("./pages/MedHealthProduct"));
 import { MedHealthSelectionProvider } from "@/contexts/MedHealthSelectionContext";
+import { PartnerThemeProvider } from "@/partners/PartnerThemeProvider";
 
 const queryClient = new QueryClient();
 
@@ -56,17 +57,41 @@ const App = () => (
                   <Route
                     path="/partners/medhealth-capability-2026"
                     element={
-                      <MedHealthSelectionProvider>
-                        <MedHealthCapability />
-                      </MedHealthSelectionProvider>
+                      <PartnerThemeProvider partner="medhealth">
+                        <MedHealthSelectionProvider storageKey="medhealth-selection">
+                          <MedHealthCapability />
+                        </MedHealthSelectionProvider>
+                      </PartnerThemeProvider>
                     }
                   />
                   <Route
                     path="/partners/medhealth-capability-2026/product/:code"
                     element={
-                      <MedHealthSelectionProvider>
-                        <MedHealthProduct />
-                      </MedHealthSelectionProvider>
+                      <PartnerThemeProvider partner="medhealth">
+                        <MedHealthSelectionProvider storageKey="medhealth-selection">
+                          <MedHealthProduct />
+                        </MedHealthSelectionProvider>
+                      </PartnerThemeProvider>
+                    }
+                  />
+                  <Route
+                    path="/partners/ability-action-catalogue"
+                    element={
+                      <PartnerThemeProvider partner="ability-action">
+                        <MedHealthSelectionProvider storageKey="ability-action-selection">
+                          <MedHealthCapability />
+                        </MedHealthSelectionProvider>
+                      </PartnerThemeProvider>
+                    }
+                  />
+                  <Route
+                    path="/partners/ability-action-catalogue/product/:code"
+                    element={
+                      <PartnerThemeProvider partner="ability-action">
+                        <MedHealthSelectionProvider storageKey="ability-action-selection">
+                          <MedHealthProduct />
+                        </MedHealthSelectionProvider>
+                      </PartnerThemeProvider>
                     }
                   />
                   

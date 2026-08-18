@@ -14,24 +14,25 @@ import {
   variantsOf,
   type Product,
 } from "@/lib/medhealth-catalogue";
-import { BRAND_RULE, HOUSE, PARTNER } from "@/partners/medhealth";
-import { PartnerLockup, SupplyMinistryLogo, MedHealthLogo } from "@/components/medhealth-catalogue/Brand";
+import { HOUSE } from "@/partners/medhealth";
+import { usePartner } from "@/partners/PartnerThemeProvider";
+import { PartnerLockup, SupplyMinistryLogo, PartnerLogo } from "@/components/medhealth-catalogue/Brand";
 import { CategoryIcon } from "@/components/medhealth-catalogue/ProductCard";
 import { QtyStepper } from "@/components/medhealth-catalogue/QtyStepper";
 import { ReviewSheet, type Line } from "@/components/medhealth-catalogue/ReviewSheet";
 import { useMedHealthSelection } from "@/contexts/MedHealthSelectionContext";
 
 const FONT = "Raleway, system-ui, sans-serif";
-const CATALOGUE = "/partners/medhealth-capability-2026";
 
 function ProductImage({ product, fallbackSrc }: { product: Product; fallbackSrc?: string | null }) {
+  const { partner } = usePartner();
   const [failed, setFailed] = useState(false);
   const src = product.image_url || fallbackSrc || null;
   const hasImage = src && !failed;
   return (
     <div
       className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-2xl border bg-white p-6"
-      style={{ borderColor: PARTNER.rule, color: PARTNER.ink }}
+      style={{ borderColor: partner.rule, color: partner.ink }}
     >
       {hasImage ? (
         <img
@@ -51,6 +52,8 @@ function ProductImage({ product, fallbackSrc }: { product: Product; fallbackSrc?
 }
 
 const MedHealthProduct = () => {
+  const { partner, rule: BRAND_RULE } = usePartner();
+  const CATALOGUE = partner.basePath;
   const { code = "" } = useParams();
   const [reviewing, setReviewing] = useState(false);
   const { selection, toggle, bumpQty, removeItem, clear } = useMedHealthSelection();
@@ -92,7 +95,7 @@ const MedHealthProduct = () => {
 
       <header
         className="sticky top-0 z-40"
-        style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${PARTNER.rule}` }}
+        style={{ backgroundColor: HOUSE.cream, borderBottom: `1px solid ${partner.rule}` }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <Link to={CATALOGUE} aria-label="Back to catalogue">
@@ -153,7 +156,7 @@ const MedHealthProduct = () => {
               </p>
               <h1
                 className="mt-1.5 text-2xl font-bold leading-tight tracking-tight sm:text-3xl"
-                style={{ color: PARTNER.ink }}
+                style={{ color: partner.ink }}
               >
                 {product.product_name}
               </h1>
@@ -194,7 +197,7 @@ const MedHealthProduct = () => {
                           style={
                             active
                               ? { borderColor: HOUSE.violet, backgroundColor: HOUSE.violet, color: "#F4EFE6" }
-                              : { borderColor: PARTNER.rule, color: PARTNER.ink }
+                              : { borderColor: partner.rule, color: partner.ink }
                           }
                         >
                           {v.variant_label || v.product_name}
@@ -304,21 +307,21 @@ const MedHealthProduct = () => {
         )}
       </main>
 
-      <footer style={{ backgroundColor: HOUSE.cream, borderTop: `1px solid ${PARTNER.rule}` }}>
+      <footer style={{ backgroundColor: HOUSE.cream, borderTop: `1px solid ${partner.rule}` }}>
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <SupplyMinistryLogo compact />
-            <span aria-hidden="true" className="h-6 w-px" style={{ backgroundColor: PARTNER.rule }} />
+            <span aria-hidden="true" className="h-6 w-px" style={{ backgroundColor: partner.rule }} />
             <span
               className="text-[10px] font-semibold uppercase tracking-[0.16em]"
               style={{ color: "rgba(1,10,22,0.55)" }}
             >
-              {PARTNER.preparedFor}
+              {partner.preparedFor}
             </span>
-            <MedHealthLogo className="text-xl" />
+            <PartnerLogo className="text-xl" />
           </div>
           <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted-foreground">
-            {PARTNER.disclaimer}
+            {partner.disclaimer}
           </p>
         </div>
       </footer>

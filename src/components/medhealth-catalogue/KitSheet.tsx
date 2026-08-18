@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { money, type Product } from "@/lib/medhealth-catalogue";
 import { HOUSE } from "@/partners/medhealth";
-import { ProductThumb, productHref } from "./ProductCard";
+import { ProductThumb, useProductHref } from "./ProductCard";
 import { ModalShell } from "./ModalShell";
 
 export interface Kit {
@@ -23,6 +23,7 @@ export function KitSheet({
   onClose: () => void;
   onAdd: (items: Product[]) => void;
 }) {
+  const productHref = useProductHref();
   return (
     <ModalShell
       title={kit.name}
